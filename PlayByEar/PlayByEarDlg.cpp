@@ -75,6 +75,14 @@ BEGIN_MESSAGE_MAP(CPlayByEarDlg, CDialog)
     ON_COMMAND(ID_PREFERENCES_SHOW, &CPlayByEarDlg::OnShowHideKeyNames)
     ON_COMMAND(ID_PREFERENCES_CARNATIC, &CPlayByEarDlg::OnPrefCarnaticMusicMode)
     ON_COMMAND(ID_PREFERENCES_WESTERN, &CPlayByEarDlg::OnPrefWesternMusicMode)
+//    ON_WM_KEYDOWN()
+ON_BN_CLICKED(IDC_RADIO_LEVEL1, &CPlayByEarDlg::OnBnClickedRadioLevel1)
+ON_BN_CLICKED(IDC_RADIO_LEVEL2, &CPlayByEarDlg::OnBnClickedRadioLevel2)
+ON_BN_CLICKED(IDC_RADIO_LEVEL3, &CPlayByEarDlg::OnBnClickedRadioLevel3)
+ON_BN_CLICKED(IDC_RADIO_LEVEL4, &CPlayByEarDlg::OnBnClickedRadioLevel4)
+ON_NOTIFY(NM_CLICK, IDC_SYSLINK_SUBMIT, &CPlayByEarDlg::OnNMClickSyslinkSubmit)
+ON_NOTIFY(NM_CLICK, IDC_SYSLINK_REPLAY, &CPlayByEarDlg::OnNMClickSyslinkReplay)
+ON_NOTIFY(NM_CLICK, IDC_SYSLINK_NEXTQUESTION, &CPlayByEarDlg::OnNMClickSyslinkNextquestion)
 END_MESSAGE_MAP()
 
 
@@ -159,6 +167,9 @@ BOOL CPlayByEarDlg::OnInitDialog()
 
         // MIDI Instrument combo box
         m_GMCombo.SetCurSel(AfxGetApp()->GetProfileInt(gpszKey, _T("Instrument"), 0));
+
+        // Make sure the piano control regains focus when we are done 
+        m_Keys.SetFocus();
     }
     catch(const std::exception &ex)
     {
@@ -435,7 +446,9 @@ void CPlayByEarDlg::OnHelpAbout()
 }
 
 TCHAR* gszKeyNames[] = {_T("S  R2  G3 M1  P  D2  N3"),
-                        _T("C   D    E    F    G    A    B")};
+                        _T("C   D    E    F    G    A   B")};
+TCHAR* gszKeyNames2[] = {_T("R1 G2        M2 D1 N2"),
+                         _T("C# D#        F# G# A#")};
 
 UINT MenuIds[] = {ID_PREFERENCES_CARNATIC, ID_PREFERENCES_WESTERN};
 
@@ -446,6 +459,7 @@ void CPlayByEarDlg::AdjustDisplayForMode()
                                 MenuIds[m_Mode], MF_BYCOMMAND);
 
     this->SetDlgItemText(IDC_STATIC_KEYNAMES, gszKeyNames[m_Mode]);
+    this->SetDlgItemText(IDC_STATIC_KEYNAMES2, gszKeyNames2[m_Mode]);
 }
 
 void CPlayByEarDlg::OnPrefCarnaticMusicMode()
@@ -467,7 +481,57 @@ void CPlayByEarDlg::OnShowHideKeyNames()
     BOOL bVisible = pDlgItem->IsWindowVisible();
 
     pDlgItem->ShowWindow(bVisible ? SW_HIDE : SW_SHOW);
+    this->GetDlgItem(IDC_STATIC_KEYNAMES2)->ShowWindow(bVisible ? SW_HIDE : SW_SHOW);
 
     this->GetMenu()->CheckMenuItem(ID_PREFERENCES_SHOW, MF_BYCOMMAND | bVisible ? MF_UNCHECKED : MF_CHECKED);
 }
 
+
+
+void CPlayByEarDlg::OnBnClickedRadioLevel1()
+{
+    // Make sure the piano control regains focus 
+    m_Keys.SetFocus();
+}
+
+void CPlayByEarDlg::OnBnClickedRadioLevel2()
+{
+    // Make sure the piano control regains focus 
+    m_Keys.SetFocus();
+}
+
+void CPlayByEarDlg::OnBnClickedRadioLevel3()
+{
+    // Make sure the piano control regains focus 
+    m_Keys.SetFocus();
+}
+
+void CPlayByEarDlg::OnBnClickedRadioLevel4()
+{
+    // Make sure the piano control regains focus 
+    m_Keys.SetFocus();
+}
+
+void CPlayByEarDlg::OnNMClickSyslinkSubmit(NMHDR *pNMHDR, LRESULT *pResult)
+{
+    *pResult = 0;
+
+    // Make sure the piano control regains focus 
+    m_Keys.SetFocus();
+}
+
+void CPlayByEarDlg::OnNMClickSyslinkReplay(NMHDR *pNMHDR, LRESULT *pResult)
+{
+    *pResult = 0;
+
+    // Make sure the piano control regains focus 
+    m_Keys.SetFocus();
+}
+
+void CPlayByEarDlg::OnNMClickSyslinkNextquestion(NMHDR *pNMHDR, LRESULT *pResult)
+{
+    *pResult = 0;
+
+    // Make sure the piano control regains focus 
+    m_Keys.SetFocus();
+}

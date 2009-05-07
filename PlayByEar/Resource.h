@@ -17,8 +17,20 @@
 #define IDC_STATIC_WESTERN              1010
 #define IDC_STATIC_KEYNAMES             1010
 #define IDC_STATIC_CARNATIC             1011
+#define IDC_STATIC_KEYNAMES2            1011
 #define IDC_STATIC_RESULTS              1012
 #define IDC_SYSLINK_NEXTQUESTION        1013
+#define IDC_SYSLINK_REPLAY              1014
+#define IDC_RADIO_LEVEL1                1015
+#define IDC_RADIO_LEVEL2                1016
+#define IDC_RADIO_LEVEL3                1017
+#define IDC_RADIO_LEVEL4                1018
+#define IDC_QUESTION_GROUP              1019
+#define IDC_EDIT_ANSWER                 1020
+#define IDC_SYSLINK_SUBMIT              1021
+#define IDC_STATIC_TIP                  1022
+#define IDC_STATIC_STATUS               1023
+#define IDC_STATIC_ANSWER               1024
 #define ID_PREF_NOTE_COLOR              32772
 #define ID_PREF_MIDIDEVICES             32773
 #define ID_HELP_ABOUT                   32774
@@ -35,9 +47,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        131
+#define _APS_NEXT_RESOURCE_VALUE        132
 #define _APS_NEXT_COMMAND_VALUE         32784
-#define _APS_NEXT_CONTROL_VALUE         1015
+#define _APS_NEXT_CONTROL_VALUE         1025
 #define _APS_NEXT_SYMED_VALUE           103
 #endif
 #endif
