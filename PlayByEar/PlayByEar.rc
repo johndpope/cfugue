@@ -98,10 +98,24 @@ BEGIN
     COMBOBOX        IDC_GM_LIST,49,7,102,84,CBS_DROPDOWNLIST | WS_VSCROLL
     CONTROL         "None",IDC_MIDI_KEYS,"PianoCtrl",WS_TABSTOP,7,136,386,51
     LTEXT           "C   D    E    F    G    A    B",IDC_STATIC_KEYNAMES,153,187,110,8
-    GROUPBOX        "Test Area",IDC_STATIC,7,22,386,108
-    LTEXT           "Results:",IDC_STATIC,9,43,25,8
-    LTEXT           "Results:",IDC_STATIC_RESULTS,38,43,151,8
+    GROUPBOX        "Test Area",IDC_STATIC,7,22,386,101
+    LTEXT           "Results:",IDC_STATIC,12,35,25,8
+    LTEXT           "Results:",IDC_STATIC_RESULTS,41,35,283,8
     LTEXT           "Instrument:",IDC_STATIC,7,9,33,8
+    CONTROL         "<a>Next Question</a>",IDC_SYSLINK_NEXTQUESTION,"SysLink",0x0,343,33,48,12,WS_EX_TRANSPARENT
+    GROUPBOX        "Level",IDC_STATIC,9,47,108,73
+    CONTROL         "Single Note - Middle Octave",IDC_RADIO_LEVEL1,"Button",BS_AUTORADIOBUTTON,16,61,96,10
+    CONTROL         "Single Note - Anywhere",IDC_RADIO_LEVEL2,"Button",BS_AUTORADIOBUTTON,16,75,88,10
+    CONTROL         "Multiple Notes",IDC_RADIO_LEVEL3,"Button",BS_AUTORADIOBUTTON,16,89,93,10
+    CONTROL         "Scale / Raga",IDC_RADIO_LEVEL4,"Button",BS_AUTORADIOBUTTON,16,104,93,10
+    LTEXT           "R1 G2        M2 D1 N2",IDC_STATIC_KEYNAMES2,156,126,110,8
+    GROUPBOX        "Question",IDC_QUESTION_GROUP,118,47,273,73
+    LTEXT           "Static",IDC_STATIC_STATUS,125,62,189,8
+    CONTROL         "<a>Replay Notes</a>",IDC_SYSLINK_REPLAY,"SysLink",0x0,324,60,48,12,WS_EX_TRANSPARENT
+    LTEXT           "Answer:",IDC_STATIC,124,83,25,8
+    CONTROL         "<a>Submit</a>",IDC_SYSLINK_SUBMIT,"SysLink",0x0,246,83,31,8,WS_EX_TRANSPARENT
+    LTEXT           "Tip: Use the Piano below to answer the question. When done, press Enter to Submit",IDC_STATIC_TIP,122,104,265,8
+    LTEXT           "Static",IDC_STATIC_ANSWER,153,83,87,8
 END
 
 IDD_MIDI_DEVS_DLG DIALOG  0, 0, 166, 114
@@ -201,16 +215,8 @@ BEGIN
     BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 393
-        VERTGUIDE, 189
-        VERTGUIDE, 195
-        VERTGUIDE, 233
-        VERTGUIDE, 263
-        VERTGUIDE, 268
         TOPMARGIN, 7
         BOTTOMMARGIN, 195
-        HORZGUIDE, 22
-        HORZGUIDE, 50
-        HORZGUIDE, 60
     END
 
     IDD_MIDI_DEVS_DLG, DIALOG
