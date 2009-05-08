@@ -75,14 +75,14 @@ BEGIN_MESSAGE_MAP(CPlayByEarDlg, CDialog)
     ON_COMMAND(ID_PREFERENCES_SHOW, &CPlayByEarDlg::OnShowHideKeyNames)
     ON_COMMAND(ID_PREFERENCES_CARNATIC, &CPlayByEarDlg::OnPrefCarnaticMusicMode)
     ON_COMMAND(ID_PREFERENCES_WESTERN, &CPlayByEarDlg::OnPrefWesternMusicMode)
-//    ON_WM_KEYDOWN()
-ON_BN_CLICKED(IDC_RADIO_LEVEL1, &CPlayByEarDlg::OnBnClickedRadioLevel1)
-ON_BN_CLICKED(IDC_RADIO_LEVEL2, &CPlayByEarDlg::OnBnClickedRadioLevel2)
-ON_BN_CLICKED(IDC_RADIO_LEVEL3, &CPlayByEarDlg::OnBnClickedRadioLevel3)
-ON_BN_CLICKED(IDC_RADIO_LEVEL4, &CPlayByEarDlg::OnBnClickedRadioLevel4)
-ON_NOTIFY(NM_CLICK, IDC_SYSLINK_SUBMIT, &CPlayByEarDlg::OnNMClickSyslinkSubmit)
-ON_NOTIFY(NM_CLICK, IDC_SYSLINK_REPLAY, &CPlayByEarDlg::OnNMClickSyslinkReplay)
-ON_NOTIFY(NM_CLICK, IDC_SYSLINK_NEXTQUESTION, &CPlayByEarDlg::OnNMClickSyslinkNextquestion)
+    ON_COMMAND(ID_HELP_KEYBINDINGS, &CPlayByEarDlg::OnShowKeyBindings)
+    ON_BN_CLICKED(IDC_RADIO_LEVEL1, &CPlayByEarDlg::OnBnClickedRadioLevel1)
+    ON_BN_CLICKED(IDC_RADIO_LEVEL2, &CPlayByEarDlg::OnBnClickedRadioLevel2)
+    ON_BN_CLICKED(IDC_RADIO_LEVEL3, &CPlayByEarDlg::OnBnClickedRadioLevel3)
+    ON_BN_CLICKED(IDC_RADIO_LEVEL4, &CPlayByEarDlg::OnBnClickedRadioLevel4)
+    ON_NOTIFY(NM_CLICK, IDC_SYSLINK_SUBMIT, &CPlayByEarDlg::OnNMClickSyslinkSubmit)
+    ON_NOTIFY(NM_CLICK, IDC_SYSLINK_REPLAY, &CPlayByEarDlg::OnNMClickSyslinkReplay)
+    ON_NOTIFY(NM_CLICK, IDC_SYSLINK_NEXTQUESTION, &CPlayByEarDlg::OnNMClickSyslinkNextquestion)
 END_MESSAGE_MAP()
 
 
@@ -486,6 +486,20 @@ void CPlayByEarDlg::OnShowHideKeyNames()
     this->GetMenu()->CheckMenuItem(ID_PREFERENCES_SHOW, MF_BYCOMMAND | bVisible ? MF_UNCHECKED : MF_CHECKED);
 }
 
+void CPlayByEarDlg::OnShowKeyBindings()
+{
+    TCHAR szImagePath[1024]; DWORD dwSize = _countof(szImagePath);
+    QueryFullProcessImageName(GetCurrentProcess(), 0, szImagePath, &dwSize);
+    CString strPath(szImagePath);
+    strPath = strPath.Mid(0, strPath.ReverseFind(_T('\\')));
+        
+    HINSTANCE hInst = ShellExecute(this->m_hWnd, _T("open"), _T("File:///") + strPath + _T("\\UserManual.html#Key_Bindings"), NULL, NULL, SW_SHOW);
+    switch((long)hInst)
+    {
+    case ERROR_FILE_NOT_FOUND:
+    case ERROR_PATH_NOT_FOUND: MessageBox(_T("Unable to locate UserManual.html"), _T("Error"), MB_OK|MB_ICONERROR); break;
+    }
+}
 
 
 void CPlayByEarDlg::OnBnClickedRadioLevel1()

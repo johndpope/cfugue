@@ -325,6 +325,33 @@
 				RelativePath=".\res\PlayByEar.rc2"
 				>
 			</File>
+			<File
+				RelativePath=".\UserManual.html"
+				DeploymentContent="true"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Copying $(InputPath) to $(TargetDir)$(InputFileName)"
+						CommandLine="copy $(InputPath) &quot;$(TargetDir)$(InputFileName)&quot;"
+						AdditionalDependencies="$(InputPath)"
+						Outputs="$(TargetDir)$(InputFileName)"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Copying $(InputPath) to $(TargetDir)$(InputFileName)"
+						CommandLine="copy $(InputPath) &quot;$(TargetDir)$(InputFileName)&quot;"
+						AdditionalDependencies="$(InputPath)"
+						Outputs="$(TargetDir)$(InputFileName)"
+					/>
+				</FileConfiguration>
+			</File>
 		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt"

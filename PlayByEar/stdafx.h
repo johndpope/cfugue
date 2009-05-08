@@ -47,6 +47,7 @@
 #include "PianoCtrl.h"
 #include "ShortMsg.h"
 #include "MIDIMsg.h"   
+#include <afxdhtml.h>
 
 
 #ifdef _UNICODE
