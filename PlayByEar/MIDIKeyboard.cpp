@@ -52,11 +52,11 @@ m_Oct(0)
     m_KeyMap.SetAt('M', CPianoCtrl::B);
 
     // An octave higher
-    m_KeyMap.SetAt(0xBC, CPianoCtrl::C + NOTE_PER_OCTAVE);
+    m_KeyMap.SetAt(0xBC, CPianoCtrl::C + NOTE_PER_OCTAVE);  // Key ,
     m_KeyMap.SetAt('L', CPianoCtrl::C_SHARP + NOTE_PER_OCTAVE);
-    m_KeyMap.SetAt(0xBE, CPianoCtrl::D + NOTE_PER_OCTAVE);
-    m_KeyMap.SetAt(0xBA, CPianoCtrl::D_SHARP + NOTE_PER_OCTAVE);
-    m_KeyMap.SetAt(0xBF, CPianoCtrl::E + NOTE_PER_OCTAVE);
+    m_KeyMap.SetAt(0xBE, CPianoCtrl::D + NOTE_PER_OCTAVE); // Key .
+    m_KeyMap.SetAt(0xBA, CPianoCtrl::D_SHARP + NOTE_PER_OCTAVE); // Key ;
+    m_KeyMap.SetAt(0xBF, CPianoCtrl::E + NOTE_PER_OCTAVE); // Key /
 }
 
 CMIDIKeyboard::~CMIDIKeyboard()
@@ -105,14 +105,14 @@ void CMIDIKeyboard::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	switch(nChar)
     {
-    // Keys 1-5 are for determining the octave setting
-    case '1':
-    case '2':
-    case '3':
-    case '4':
-    case '5':
-        m_Oct = nChar - '1';
-        break;
+    // Keys F1-F5 are for determining the octave setting
+    case VK_F1: m_Oct = 0; break;
+    case VK_F2: m_Oct = 1; break;
+    case VK_F3: m_Oct = 2; break;
+    case VK_F4: m_Oct = 3; break;
+    case VK_F5: m_Oct = 4; break;  
+    case VK_TAB: m_Oct++; if(m_Oct > 4) m_Oct = 4; break; // Increase one Octave
+    case VK_BACK: if(m_Oct > 0) m_Oct--; break; // Decrease one Octave
 
     default:
         // Make sure the key isn't already down

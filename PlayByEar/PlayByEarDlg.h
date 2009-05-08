@@ -70,6 +70,7 @@ public:
     afx_msg void OnShowHideKeyNames();
     afx_msg void OnPrefCarnaticMusicMode();
     afx_msg void OnPrefWesternMusicMode();
+    afx_msg void OnShowKeyBindings();
     afx_msg void OnBnClickedRadioLevel1();
     afx_msg void OnBnClickedRadioLevel2();
     afx_msg void OnBnClickedRadioLevel3();

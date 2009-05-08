@@ -26,7 +26,6 @@
 #define IDC_RADIO_LEVEL3                1017
 #define IDC_RADIO_LEVEL4                1018
 #define IDC_QUESTION_GROUP              1019
-#define IDC_EDIT_ANSWER                 1020
 #define IDC_SYSLINK_SUBMIT              1021
 #define IDC_STATIC_TIP                  1022
 #define IDC_STATIC_STATUS               1023
@@ -42,14 +41,15 @@
 #define ID_PREFERENCES_SHOW             32781
 #define ID_PREFERENCES_CARNATIC         32782
 #define ID_PREFERENCES_WESTERN          32783
+#define ID_HELP_KEYBINDINGS             32784
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        132
-#define _APS_NEXT_COMMAND_VALUE         32784
-#define _APS_NEXT_CONTROL_VALUE         1025
-#define _APS_NEXT_SYMED_VALUE           103
+#define _APS_NEXT_RESOURCE_VALUE        134
+#define _APS_NEXT_COMMAND_VALUE         32785
+#define _APS_NEXT_CONTROL_VALUE         1027
+#define _APS_NEXT_SYMED_VALUE           104
 #endif
 #endif
