@@ -32,7 +32,7 @@ const int CMIDIKeyboard::MAP_SIZE = 17;
 
 CMIDIKeyboard::CMIDIKeyboard() :
 m_KeyMap(MAP_SIZE),
-m_Oct(0)
+m_Oct(0) // this does not raise the OctaveChange notification !! Use SetCurrentOctave() later.
 {
     //
     // Initialize key map for looking up keys and their note values
@@ -106,13 +106,20 @@ void CMIDIKeyboard::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	switch(nChar)
     {
     // Keys F1-F5 are for determining the octave setting
-    case VK_F1: m_Oct = 0; break;
-    case VK_F2: m_Oct = 1; break;
-    case VK_F3: m_Oct = 2; break;
-    case VK_F4: m_Oct = 3; break;
-    case VK_F5: m_Oct = 4; break;  
-    case VK_TAB: m_Oct++; if(m_Oct > 4) m_Oct = 4; break; // Increase one Octave
-    case VK_BACK: if(m_Oct > 0) m_Oct--; break; // Decrease one Octave
+    case VK_F1: m_Oct = 0; NotifyOctaveChange(m_Oct); break;
+    case VK_F2: m_Oct = 1; NotifyOctaveChange(m_Oct); break;
+    case VK_F3: m_Oct = 2; NotifyOctaveChange(m_Oct); break;
+    case VK_F4: m_Oct = 3; NotifyOctaveChange(m_Oct); break;
+    case VK_F5: m_Oct = 4; NotifyOctaveChange(m_Oct); break;  
+    case VK_TAB: 
+        {
+            if(GetAsyncKeyState(VK_SHIFT) == 0) // Shift Key is not pressed
+            {
+                if(m_Oct < 4) { m_Oct++; NotifyOctaveChange(m_Oct); } break; // Increase one Octave
+            }
+            else ; // Shift Tab pressed .. follow on ..
+        }
+    case VK_BACK: if(m_Oct > 0) { m_Oct--; NotifyOctaveChange(m_Oct); } break; // Decrease one Octave
 
     default:
         // Make sure the key isn't already down

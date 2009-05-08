@@ -15,6 +15,7 @@ public:
 
     void OnNoteOn(CPianoCtrl &PianoCtrl, unsigned char NoteId);
     void OnNoteOff(CPianoCtrl &PianoCtrl, unsigned char NoteId);
+    void OnActiveOctaveChanged(CPianoCtrl &PianoCtrl, unsigned char newOctave);
 
     // Receives short messages
     void ReceiveMsg(DWORD Msg, DWORD TimeStamp);
@@ -45,6 +46,7 @@ protected:
 
     enum MusicMode {CARNATIC = 0, WESTERN = 1};
     MusicMode m_Mode; // Western or Carnatic
+    BOOL m_bDisplayKeyNames; // Show / Hide the key names on the Control
 
 	// Generated message map functions
 	virtual BOOL OnInitDialog();
@@ -78,4 +80,5 @@ public:
     afx_msg void OnNMClickSyslinkSubmit(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnNMClickSyslinkReplay(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnNMClickSyslinkNextquestion(NMHDR *pNMHDR, LRESULT *pResult);
+    afx_msg void OnHelpHowdoi();
 };

@@ -97,7 +97,7 @@ FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     COMBOBOX        IDC_GM_LIST,49,7,102,84,CBS_DROPDOWNLIST | WS_VSCROLL
     CONTROL         "None",IDC_MIDI_KEYS,"PianoCtrl",WS_TABSTOP,7,136,386,51
-    LTEXT           "C   D    E    F    G    A    B",IDC_STATIC_KEYNAMES,153,187,110,8
+    LTEXT           "C   D    E    F    G    A    B",IDC_STATIC_KEYNAMES_2,153,187,110,8,NOT WS_VISIBLE
     GROUPBOX        "Test Area",IDC_STATIC,7,22,386,101
     LTEXT           "Results:",IDC_STATIC,12,35,25,8
     LTEXT           "Results:",IDC_STATIC_RESULTS,41,35,283,8
@@ -108,7 +108,7 @@ BEGIN
     CONTROL         "Single Note - Anywhere",IDC_RADIO_LEVEL2,"Button",BS_AUTORADIOBUTTON,16,75,88,10
     CONTROL         "Multiple Notes",IDC_RADIO_LEVEL3,"Button",BS_AUTORADIOBUTTON,16,89,93,10
     CONTROL         "Scale / Raga",IDC_RADIO_LEVEL4,"Button",BS_AUTORADIOBUTTON,16,104,93,10
-    LTEXT           "R1 G2        M2 D1 N2",IDC_STATIC_KEYNAMES2,156,126,110,8
+    LTEXT           "R1 G2        M2 D1 N2",IDC_STATIC_KEYNAMESTOP_2,156,126,110,8,NOT WS_VISIBLE
     GROUPBOX        "Question",IDC_QUESTION_GROUP,118,47,273,73
     LTEXT           "Static",IDC_STATIC_STATUS,125,62,189,8
     CONTROL         "<a>Replay Notes</a>",IDC_SYSLINK_REPLAY,"SysLink",0x0,324,60,48,12,WS_EX_TRANSPARENT
@@ -116,6 +116,14 @@ BEGIN
     CONTROL         "<a>Submit</a>",IDC_SYSLINK_SUBMIT,"SysLink",0x0,246,83,31,8,WS_EX_TRANSPARENT
     LTEXT           "Tip: Use the Piano below to answer the question. When done, press Enter to Submit",IDC_STATIC_TIP,122,104,265,8
     LTEXT           "Static",IDC_STATIC_ANSWER,153,83,87,8
+    LTEXT           "C   D    E    F    G    A    B",IDC_STATIC_KEYNAMES_0,10,187,110,8,NOT WS_VISIBLE
+    LTEXT           "C   D    E    F    G    A    B",IDC_STATIC_KEYNAMES_1,82,187,110,8,NOT WS_VISIBLE
+    LTEXT           "C   D    E    F    G    A    B",IDC_STATIC_KEYNAMES_3,224,187,110,8,NOT WS_VISIBLE
+    LTEXT           "C   D    E    F    G    A    B",IDC_STATIC_KEYNAMES_4,295,187,85,8,NOT WS_VISIBLE
+    LTEXT           "R1 G2        M2 D1 N2",IDC_STATIC_KEYNAMESTOP_0,14,125,110,8,NOT WS_VISIBLE
+    LTEXT           "R1 G2        M2 D1 N2",IDC_STATIC_KEYNAMESTOP_1,86,125,110,8,NOT WS_VISIBLE
+    LTEXT           "R1 G2        M2 D1 N2",IDC_STATIC_KEYNAMESTOP_3,228,126,110,8,NOT WS_VISIBLE
+    LTEXT           "R1 G2        M2 D1 N2",IDC_STATIC_KEYNAMESTOP_4,298,126,81,8,NOT WS_VISIBLE
 END
 
 IDD_MIDI_DEVS_DLG DIALOG  0, 0, 166, 114
@@ -151,6 +159,7 @@ BEGIN
     END
     POPUP "&Help"
     BEGIN
+        MENUITEM "How do I .. ?",               ID_HELP_HOWDOI
         MENUITEM "Key Bindings",                ID_HELP_KEYBINDINGS
         MENUITEM SEPARATOR
         MENUITEM "&About",                      ID_HELP_ABOUT
