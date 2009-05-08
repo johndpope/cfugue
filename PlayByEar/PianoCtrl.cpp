@@ -501,6 +501,21 @@ void CPianoCtrl::NotifyNoteOff(unsigned char NoteId)
     ::LeaveCriticalSection(&m_CriticalSection);
 }
 
+// Notify listeners that the Active Octave for Keyboard Input has occurred
+void CPianoCtrl::NotifyOctaveChange(unsigned char newOctave)
+{
+    // Protect list with critical section
+    ::EnterCriticalSection(&m_CriticalSection);
+
+    std::list<CPianoCtrlListener *>::iterator i;
+
+    for(i = m_Listeners.begin(); i != m_Listeners.end(); i++)
+    {
+        (*i)->OnActiveOctaveChanged(*this, newOctave);
+    }
+
+    ::LeaveCriticalSection(&m_CriticalSection);
+}
 
 // Register this controls Window class
 void CPianoCtrl::RegisterWindowClass()

@@ -10,7 +10,7 @@
 #endif
 
 
-const TCHAR* gpszKey = _T("Play By Ear"); // Registry Key Section for this Dialog Data
+const TCHAR* gpszKey = _T("LastSettings"); // Registry Key Section for this Dialog Data
 
 
 // CAboutDlg dialog used for App About
@@ -83,6 +83,8 @@ BEGIN_MESSAGE_MAP(CPlayByEarDlg, CDialog)
     ON_NOTIFY(NM_CLICK, IDC_SYSLINK_SUBMIT, &CPlayByEarDlg::OnNMClickSyslinkSubmit)
     ON_NOTIFY(NM_CLICK, IDC_SYSLINK_REPLAY, &CPlayByEarDlg::OnNMClickSyslinkReplay)
     ON_NOTIFY(NM_CLICK, IDC_SYSLINK_NEXTQUESTION, &CPlayByEarDlg::OnNMClickSyslinkNextquestion)
+    ON_COMMAND(ID_HELP_HOWDOI, &CPlayByEarDlg::OnHelpHowdoi)
+//    ON_WM_KEYDOWN()
 END_MESSAGE_MAP()
 
 
@@ -126,10 +128,13 @@ BOOL CPlayByEarDlg::OnInitDialog()
     // Attempt to open MIDI input and output devices
     try
     {
+        UINT inDev = AfxGetApp()->GetProfileInt(gpszKey, _T("InputDevice"), 0);
+        UINT outDev = AfxGetApp()->GetProfileInt(gpszKey, _T("OutputDevice"), 0);
+
         // If there are any MIDI output devices available, open one.
         if(midi::CMIDIOutDevice::GetNumDevs() > 0)
         {
-            m_OutDevice.Open(0);
+            m_OutDevice.Open(outDev);
         }
         // Else there are no MIDI output devices available.
         else
@@ -143,7 +148,7 @@ BOOL CPlayByEarDlg::OnInitDialog()
         if(midi::CMIDIInDevice::GetNumDevs() > 0)
         {
             m_InDevice.SetReceiver(*this);
-            m_InDevice.Open(0);
+            m_InDevice.Open(inDev);
             // Start receiving MIDI events
             m_InDevice.StartRecording();           
         }
@@ -158,12 +163,14 @@ BOOL CPlayByEarDlg::OnInitDialog()
         AdjustDisplayForMode();
 
         // Display Key Names
-        BOOL bVisible = AfxGetApp()->GetProfileInt(gpszKey, _T("KeyNames"), TRUE);               
-        GetDlgItem(IDC_STATIC_KEYNAMES)->ShowWindow(bVisible ? SW_SHOW : SW_HIDE);
-        this->GetMenu()->CheckMenuItem(ID_PREFERENCES_SHOW, MF_BYCOMMAND | bVisible ? MF_CHECKED : MF_UNCHECKED);
+        m_bDisplayKeyNames = AfxGetApp()->GetProfileInt(gpszKey, _T("KeyNames"), TRUE);               
+        this->GetMenu()->CheckMenuItem(ID_PREFERENCES_SHOW, MF_BYCOMMAND | m_bDisplayKeyNames ? MF_CHECKED : MF_UNCHECKED);
 
-        // Note On Color
+        // NoteOn Color
         m_Keys.SetNoteOnColor(AfxGetApp()->GetProfileInt(gpszKey, _T("NoteColor"), CPianoCtrl::DEF_NOTE_ON_COLOR));
+
+        // Octave        
+        m_Keys.SetCurrentOctave(AfxGetApp()->GetProfileInt(gpszKey, _T("Octave"), 3));
 
         // MIDI Instrument combo box
         m_GMCombo.SetCurSel(AfxGetApp()->GetProfileInt(gpszKey, _T("Instrument"), 0));
@@ -242,13 +249,13 @@ void CPlayByEarDlg::OnCancel()
 
 void CPlayByEarDlg::OnClose()
 {
-    CWnd* pDlgItem = this->GetDlgItem(IDC_STATIC_KEYNAMES);
-    BOOL bVisible = pDlgItem->IsWindowVisible();
-
     // Persist the Values to Registry
+    AfxGetApp()->WriteProfileInt(gpszKey, _T("InputDevice"), m_InDevice.IsOpen() ? m_InDevice.GetDevID() : 0);
+    AfxGetApp()->WriteProfileInt(gpszKey, _T("OutputDevice"), m_OutDevice.IsOpen() ? m_OutDevice.GetDevID() : 0);
     AfxGetApp()->WriteProfileInt(gpszKey, _T("Mode"), m_Mode);
-    AfxGetApp()->WriteProfileInt(gpszKey, _T("KeyNames"), bVisible);
+    AfxGetApp()->WriteProfileInt(gpszKey, _T("KeyNames"), m_bDisplayKeyNames);
     AfxGetApp()->WriteProfileInt(gpszKey, _T("NoteColor"), m_Keys.GetNoteOnColor());
+    AfxGetApp()->WriteProfileInt(gpszKey, _T("Octave"), m_Keys.GetCurrentOctave());
     AfxGetApp()->WriteProfileInt(gpszKey, _T("Instrument"), m_GMCombo.GetCurSel());
 
     CDialog::OnOK();
@@ -452,14 +459,47 @@ TCHAR* gszKeyNames2[] = {_T("R1 G2        M2 D1 N2"),
 
 UINT MenuIds[] = {ID_PREFERENCES_CARNATIC, ID_PREFERENCES_WESTERN};
 
+UINT gStaticID1[] = {   IDC_STATIC_KEYNAMES_0, 
+                        IDC_STATIC_KEYNAMES_1, 
+                        IDC_STATIC_KEYNAMES_2,
+                        IDC_STATIC_KEYNAMES_3,
+                        IDC_STATIC_KEYNAMES_4};
+UINT gStaticID2[] = {   IDC_STATIC_KEYNAMESTOP_0, 
+                        IDC_STATIC_KEYNAMESTOP_1, 
+                        IDC_STATIC_KEYNAMESTOP_2,
+                        IDC_STATIC_KEYNAMESTOP_3,
+                        IDC_STATIC_KEYNAMESTOP_4};
+
 // Adjusts the menu and static/text boxes based on the current music mode
+// to display the key names in correct mode (C, C# or S, R1 etc..)
 void CPlayByEarDlg::AdjustDisplayForMode()
 {
     this->GetMenu()->CheckMenuRadioItem(ID_PREFERENCES_CARNATIC, ID_PREFERENCES_WESTERN,
                                 MenuIds[m_Mode], MF_BYCOMMAND);
 
-    this->SetDlgItemText(IDC_STATIC_KEYNAMES, gszKeyNames[m_Mode]);
-    this->SetDlgItemText(IDC_STATIC_KEYNAMES2, gszKeyNames2[m_Mode]);
+    for(unsigned int i=0, nMax = _countof(gStaticID1); i < nMax; ++i)
+    {
+        SetDlgItemText(gStaticID1[i], gszKeyNames[m_Mode]);
+        SetDlgItemText(gStaticID2[i], gszKeyNames2[m_Mode]);
+    }
+}
+ 
+// When the active octave changes, we need to hide and show the 
+// appropriate static controls (key names)
+void CPlayByEarDlg::OnActiveOctaveChanged(CPianoCtrl &PianoCtrl, unsigned char newOctave)
+{
+    // First TurnOff everything
+    for(unsigned int i=0, nMax = _countof(gStaticID1); i < nMax; ++i)
+    {
+        GetDlgItem(gStaticID1[i])->ShowWindow(SW_HIDE);
+        GetDlgItem(gStaticID2[i])->ShowWindow(SW_HIDE);
+    }
+    // Now show only the current octave, if required
+    if(m_bDisplayKeyNames)
+    {
+        GetDlgItem(gStaticID1[m_Keys.GetCurrentOctave()])->ShowWindow(SW_SHOW);
+        GetDlgItem(gStaticID2[m_Keys.GetCurrentOctave()])->ShowWindow(SW_SHOW);
+    }
 }
 
 void CPlayByEarDlg::OnPrefCarnaticMusicMode()
@@ -474,32 +514,17 @@ void CPlayByEarDlg::OnPrefWesternMusicMode()
     AdjustDisplayForMode();    
 }
 
+
 void CPlayByEarDlg::OnShowHideKeyNames()
 {
-    CWnd* pDlgItem = this->GetDlgItem(IDC_STATIC_KEYNAMES);
+    m_bDisplayKeyNames = !m_bDisplayKeyNames;
 
-    BOOL bVisible = pDlgItem->IsWindowVisible();
+    // Show/Hide the Static controls
+    OnActiveOctaveChanged(this->m_Keys, this->m_Keys.GetCurrentOctave());
 
-    pDlgItem->ShowWindow(bVisible ? SW_HIDE : SW_SHOW);
-    this->GetDlgItem(IDC_STATIC_KEYNAMES2)->ShowWindow(bVisible ? SW_HIDE : SW_SHOW);
-
-    this->GetMenu()->CheckMenuItem(ID_PREFERENCES_SHOW, MF_BYCOMMAND | bVisible ? MF_UNCHECKED : MF_CHECKED);
+    this->GetMenu()->CheckMenuItem(ID_PREFERENCES_SHOW, MF_BYCOMMAND | m_bDisplayKeyNames ? MF_CHECKED : MF_UNCHECKED);
 }
 
-void CPlayByEarDlg::OnShowKeyBindings()
-{
-    TCHAR szImagePath[1024]; DWORD dwSize = _countof(szImagePath);
-    QueryFullProcessImageName(GetCurrentProcess(), 0, szImagePath, &dwSize);
-    CString strPath(szImagePath);
-    strPath = strPath.Mid(0, strPath.ReverseFind(_T('\\')));
-        
-    HINSTANCE hInst = ShellExecute(this->m_hWnd, _T("open"), _T("File:///") + strPath + _T("\\UserManual.html#Key_Bindings"), NULL, NULL, SW_SHOW);
-    switch((long)hInst)
-    {
-    case ERROR_FILE_NOT_FOUND:
-    case ERROR_PATH_NOT_FOUND: MessageBox(_T("Unable to locate UserManual.html"), _T("Error"), MB_OK|MB_ICONERROR); break;
-    }
-}
 
 
 void CPlayByEarDlg::OnBnClickedRadioLevel1()
@@ -549,3 +574,35 @@ void CPlayByEarDlg::OnNMClickSyslinkNextquestion(NMHDR *pNMHDR, LRESULT *pResult
     // Make sure the piano control regains focus 
     m_Keys.SetFocus();
 }
+
+void CPlayByEarDlg::OnHelpHowdoi()
+{
+    TCHAR szImagePath[1024]; DWORD dwSize = _countof(szImagePath);
+    QueryFullProcessImageName(GetCurrentProcess(), 0, szImagePath, &dwSize);
+    CString strPath(szImagePath);
+    strPath = strPath.Mid(0, strPath.ReverseFind(_T('\\')));
+        
+    HINSTANCE hInst = ShellExecute(this->m_hWnd, _T("open"), _T("File:///") + strPath + _T("\\UserManual.html##How_It_Works"), NULL, NULL, SW_SHOW);
+    switch((long)hInst)
+    {
+    case ERROR_FILE_NOT_FOUND:
+    case ERROR_PATH_NOT_FOUND: MessageBox(_T("Unable to locate UserManual.html"), _T("Error"), MB_OK|MB_ICONERROR); break;
+    }
+}
+
+void CPlayByEarDlg::OnShowKeyBindings()
+{
+    TCHAR szImagePath[1024]; DWORD dwSize = _countof(szImagePath);
+    QueryFullProcessImageName(GetCurrentProcess(), 0, szImagePath, &dwSize);
+    CString strPath(szImagePath);
+    strPath = strPath.Mid(0, strPath.ReverseFind(_T('\\')));
+        
+    HINSTANCE hInst = ShellExecute(this->m_hWnd, _T("open"), _T("File:///") + strPath + _T("\\UserManual.html#Key_Bindings"), NULL, NULL, SW_SHOW);
+    switch((long)hInst)
+    {
+    case ERROR_FILE_NOT_FOUND:
+    case ERROR_PATH_NOT_FOUND: MessageBox(_T("Unable to locate UserManual.html"), _T("Error"), MB_OK|MB_ICONERROR); break;
+    }
+}
+
+

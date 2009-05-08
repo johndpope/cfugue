@@ -69,6 +69,10 @@ public:
                           unsigned char NoteId) = 0;
     virtual void OnNoteOff(CPianoCtrl &PianoCtrl,
                            unsigned char NoteId) = 0;
+    // Raised when the keyboard active octave is changed
+    virtual void OnActiveOctaveChanged(CPianoCtrl &PianoCtrl,
+                           unsigned char newOctave)
+    { }
 };
 
 
@@ -290,6 +294,14 @@ public:
     void SetNoteOnColor(COLORREF NoteOnColor) 
         { m_NoteOnColor = NoteOnColor; }
 
+protected:
+    // Notify CPianoCtrlListener objects that a note on/off event has
+    // occurred.
+    void NotifyNoteOn(unsigned char NoteId);
+    void NotifyNoteOff(unsigned char NoteId);
+    // Notify about changes to the Active Octave for Keyboard Input
+    void NotifyOctaveChange(unsigned char newOctave);
+
 // Private functions
 private:
     bool IsNoteNatural(unsigned char Note);
@@ -301,10 +313,6 @@ private:
 
     int FindKey(CPoint &point);
 
-    // Notify CPianoCtrlListener objects that a note on/off event has
-    // occurred.
-    void NotifyNoteOn(unsigned char NoteId);
-    void NotifyNoteOff(unsigned char NoteId);
 
     // Register this control's window class
     static void RegisterWindowClass();

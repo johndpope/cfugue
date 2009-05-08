@@ -71,6 +71,14 @@ private:
 
     // Size of key/note map
     static const int MAP_SIZE;
+
+public:
+    inline int GetCurrentOctave() const { return m_Oct; }
+    inline void SetCurrentOctave(int oct) 
+    { 
+        m_Oct = (unsigned char) oct; 
+        NotifyOctaveChange(m_Oct);
+    }
 };
 
 /////////////////////////////////////////////////////////////////////////////
