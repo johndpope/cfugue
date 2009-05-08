@@ -14,10 +14,8 @@
 #define IDC_MIDI_IN_DEVS                1002
 #define IDC_GM_LIST                     1003
 #define IDC_SYSLINK1                    1004
-#define IDC_STATIC_WESTERN              1010
-#define IDC_STATIC_KEYNAMES             1010
-#define IDC_STATIC_CARNATIC             1011
-#define IDC_STATIC_KEYNAMES2            1011
+#define IDC_STATIC_KEYNAMES_2           1010
+#define IDC_STATIC_KEYNAMESTOP_2        1011
 #define IDC_STATIC_RESULTS              1012
 #define IDC_SYSLINK_NEXTQUESTION        1013
 #define IDC_SYSLINK_REPLAY              1014
@@ -26,10 +24,18 @@
 #define IDC_RADIO_LEVEL3                1017
 #define IDC_RADIO_LEVEL4                1018
 #define IDC_QUESTION_GROUP              1019
+#define IDC_STATIC_KEYNAMES_0           1020
 #define IDC_SYSLINK_SUBMIT              1021
 #define IDC_STATIC_TIP                  1022
 #define IDC_STATIC_STATUS               1023
 #define IDC_STATIC_ANSWER               1024
+#define IDC_STATIC_KEYNAMES_1           1025
+#define IDC_STATIC_KEYNAMES_3           1026
+#define IDC_STATIC_KEYNAMES_4           1027
+#define IDC_STATIC_KEYNAMESTOP_0        1028
+#define IDC_STATIC_KEYNAMESTOP_1        1029
+#define IDC_STATIC_KEYNAMESTOP_3        1030
+#define IDC_STATIC_KEYNAMESTOP_4        1031
 #define ID_PREF_NOTE_COLOR              32772
 #define ID_PREF_MIDIDEVICES             32773
 #define ID_HELP_ABOUT                   32774
@@ -42,14 +48,15 @@
 #define ID_PREFERENCES_CARNATIC         32782
 #define ID_PREFERENCES_WESTERN          32783
 #define ID_HELP_KEYBINDINGS             32784
+#define ID_HELP_HOWDOI                  32785
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        134
-#define _APS_NEXT_COMMAND_VALUE         32785
-#define _APS_NEXT_CONTROL_VALUE         1027
+#define _APS_NEXT_COMMAND_VALUE         32786
+#define _APS_NEXT_CONTROL_VALUE         1031
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
 #endif
