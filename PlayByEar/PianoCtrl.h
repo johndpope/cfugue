@@ -73,6 +73,14 @@ public:
     virtual void OnActiveOctaveChanged(CPianoCtrl &PianoCtrl,
                            unsigned char newOctave)
     { }
+    // Raised when the KeyUp event is received
+    virtual void OnKeyUp(CPianoCtrl &PianoCtrl,
+                           UINT nChar, UINT nRepCnt, UINT nFlags)
+    { }
+    // Raised when the KeyDown event is received
+    virtual void OnKeyDown(CPianoCtrl &PianoCtrl,
+                           UINT nChar, UINT nRepCnt, UINT nFlags)
+    { }
 };
 
 
@@ -652,7 +660,7 @@ public:
     static const int NOTE_TABLE[];
 
 // Private attributes
-private:
+protected:
     // For protecting access to the list of listeners
     CRITICAL_SECTION m_CriticalSection;
 

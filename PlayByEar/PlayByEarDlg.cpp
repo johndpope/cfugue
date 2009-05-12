@@ -60,6 +60,7 @@ void CPlayByEarDlg::DoDataExchange(CDataExchange* pDX)
     CDialog::DoDataExchange(pDX);
     DDX_Control(pDX, IDC_GM_LIST, m_GMCombo);
     DDX_Control(pDX, IDC_MIDI_KEYS, m_Keys);
+    DDX_Control(pDX, IDC_CTRL_INFO, m_ctrlInfo);
 }
 
 BEGIN_MESSAGE_MAP(CPlayByEarDlg, CDialog)
@@ -83,6 +84,12 @@ BEGIN_MESSAGE_MAP(CPlayByEarDlg, CDialog)
     ON_NOTIFY(NM_CLICK, IDC_SYSLINK_SUBMIT, &CPlayByEarDlg::OnNMClickSyslinkSubmit)
     ON_NOTIFY(NM_CLICK, IDC_SYSLINK_REPLAY, &CPlayByEarDlg::OnNMClickSyslinkReplay)
     ON_NOTIFY(NM_CLICK, IDC_SYSLINK_NEXTQUESTION, &CPlayByEarDlg::OnNMClickSyslinkNextquestion)
+    ON_NOTIFY(NM_SETFOCUS, IDC_SYSLINK_SUBMIT, &CPlayByEarDlg::OnNMClickSyslinkSubmit)
+    ON_NOTIFY(NM_SETFOCUS, IDC_SYSLINK_REPLAY, &CPlayByEarDlg::OnNMClickSyslinkReplay)
+    ON_NOTIFY(NM_SETFOCUS, IDC_SYSLINK_NEXTQUESTION, &CPlayByEarDlg::OnNMClickSyslinkNextquestion)
+    ON_NOTIFY(NM_RCLICK, IDC_SYSLINK_SUBMIT, &CPlayByEarDlg::OnNMClickSyslinkSubmit)
+    ON_NOTIFY(NM_RCLICK, IDC_SYSLINK_REPLAY, &CPlayByEarDlg::OnNMClickSyslinkReplay)
+    ON_NOTIFY(NM_RCLICK, IDC_SYSLINK_NEXTQUESTION, &CPlayByEarDlg::OnNMClickSyslinkNextquestion)
     ON_COMMAND(ID_HELP_HOWDOI, &CPlayByEarDlg::OnHelpHowdoi)
 //    ON_WM_KEYDOWN()
 END_MESSAGE_MAP()
@@ -107,7 +114,7 @@ BOOL CPlayByEarDlg::OnInitDialog()
 		strAboutMenu.LoadString(IDS_ABOUTBOX);
 		if (!strAboutMenu.IsEmpty())
 		{
-			pSysMenu->AppendMenu(MF_SEPARATOR);
+			pSysMenu->AppendMenu(MF_SEPARATOR); 
 			pSysMenu->AppendMenu(MF_STRING, IDM_ABOUTBOX, strAboutMenu);
 		}
 	}
@@ -553,7 +560,7 @@ void CPlayByEarDlg::OnBnClickedRadioLevel4()
 
 void CPlayByEarDlg::OnNMClickSyslinkSubmit(NMHDR *pNMHDR, LRESULT *pResult)
 {
-    *pResult = 0;
+    *pResult = 0; OutputDebugString(_T("\nClick\n"));
 
     // Make sure the piano control regains focus 
     m_Keys.SetFocus();
@@ -604,5 +611,11 @@ void CPlayByEarDlg::OnShowKeyBindings()
     case ERROR_PATH_NOT_FOUND: MessageBox(_T("Unable to locate UserManual.html"), _T("Error"), MB_OK|MB_ICONERROR); break;
     }
 }
-
-
+    
+void CPlayByEarDlg::OnKeyUp(CPianoCtrl &PianoCtrl, UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+    switch(nChar)
+    {
+    case VK_RETURN: OutputDebugString(_T("Received Enter\n"));break;
+    }
+}

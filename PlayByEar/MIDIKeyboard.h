@@ -56,6 +56,9 @@ protected:
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
+    void NotifyKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+    void NotifyKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
+
 private:
     // Map for holding key/note pairs
     CMap<UINT, UINT, unsigned char, unsigned char> m_KeyMap;

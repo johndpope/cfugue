@@ -17,6 +17,8 @@ public:
     void OnNoteOn(CPianoCtrl &PianoCtrl, unsigned char NoteId);
     void OnNoteOff(CPianoCtrl &PianoCtrl, unsigned char NoteId);
     void OnActiveOctaveChanged(CPianoCtrl &PianoCtrl, unsigned char newOctave);
+    void OnKeyUp(CPianoCtrl &PianoCtrl, UINT nChar, UINT nRepCnt, UINT nFlags);
+
 
     // Receives short messages
     void ReceiveMsg(DWORD Msg, DWORD TimeStamp);
@@ -82,4 +84,6 @@ public:
     afx_msg void OnNMClickSyslinkReplay(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnNMClickSyslinkNextquestion(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnHelpHowdoi();
+protected:
+    CQhtmWnd m_ctrlInfo;
 };

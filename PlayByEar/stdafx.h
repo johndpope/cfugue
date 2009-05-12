@@ -47,7 +47,7 @@
 #include "PianoCtrl.h"
 #include "ShortMsg.h"
 #include "MIDIMsg.h"   
-
+#include "QHtm\QHTM.h"
 
 #ifdef _UNICODE
 #if defined _M_IX86
