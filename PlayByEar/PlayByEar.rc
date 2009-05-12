@@ -148,6 +148,15 @@ END
 
 IDR_MAIN_MENU MENU 
 BEGIN
+    POPUP "File"
+    BEGIN
+        MENUITEM "Exit",                        ID_FILE_EXITAPPLICATION
+    END
+    POPUP "Test"
+    BEGIN
+        MENUITEM "Start",                       ID_TEST_START
+        MENUITEM "Stop",                        ID_TEST_STOP, INACTIVE
+    END
     POPUP "&Preferences"
     BEGIN
         MENUITEM "Carnatic Mode",               ID_PREFERENCES_CARNATIC
@@ -190,13 +199,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "TODO: <Company name>"
-            VALUE "FileDescription", "TODO: <File description>"
+            VALUE "CompanyName", "CineFxLabs"
+            VALUE "FileDescription", "Application to help improve PlayByEar capabilities for Music learners"
             VALUE "FileVersion", "1.0.0.1"
             VALUE "InternalName", "PlayByEar.exe"
-            VALUE "LegalCopyright", "TODO: (c) <Company name>.  All rights reserved."
+            VALUE "LegalCopyright", "(c) CineFxLabs.  All rights reserved."
             VALUE "OriginalFilename", "PlayByEar.exe"
-            VALUE "ProductName", "TODO: <Product name>"
+            VALUE "ProductName", "PlayByEar"
             VALUE "ProductVersion", "1.0.0.1"
         END
     END
@@ -541,6 +550,11 @@ STRINGTABLE
 BEGIN
     IDS_ABOUTBOX            "&About PlayByEar..."
     IDS_REGISTRY_STRING     "CineFxLabs"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_FILE_EXITAPPLICATION "Closes and Exits the Application"
 END
 
 #endif    // English (U.S.) resources

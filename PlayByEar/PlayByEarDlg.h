@@ -86,4 +86,10 @@ public:
     afx_msg void OnHelpHowdoi();
 protected:
     CQhtmWnd m_ctrlInfo;
+    UINT m_nTimer;
+public:
+    afx_msg void OnTimer(UINT_PTR nIDEvent);
+    afx_msg void OnFileExitapplication();
+    afx_msg void OnTestStart();
+    afx_msg void OnTestStop();
 };

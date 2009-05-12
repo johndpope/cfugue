@@ -92,6 +92,10 @@ BEGIN_MESSAGE_MAP(CPlayByEarDlg, CDialog)
     ON_NOTIFY(NM_RCLICK, IDC_SYSLINK_NEXTQUESTION, &CPlayByEarDlg::OnNMClickSyslinkNextquestion)
     ON_COMMAND(ID_HELP_HOWDOI, &CPlayByEarDlg::OnHelpHowdoi)
 //    ON_WM_KEYDOWN()
+ON_WM_TIMER()
+ON_COMMAND(ID_FILE_EXITAPPLICATION, &CPlayByEarDlg::OnFileExitapplication)
+ON_COMMAND(ID_TEST_START, &CPlayByEarDlg::OnTestStart)
+ON_COMMAND(ID_TEST_STOP, &CPlayByEarDlg::OnTestStop)
 END_MESSAGE_MAP()
 
 
@@ -101,23 +105,22 @@ BOOL CPlayByEarDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	// Add "About..." menu item to system menu.
+	//// Add "About..." menu item to system menu.
+	//// IDM_ABOUTBOX must be in the system command range.
+	//ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
+	//ASSERT(IDM_ABOUTBOX < 0xF000);
 
-	// IDM_ABOUTBOX must be in the system command range.
-	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
-	ASSERT(IDM_ABOUTBOX < 0xF000);
-
-	CMenu* pSysMenu = GetSystemMenu(FALSE);
-	if (pSysMenu != NULL)
-	{
-		CString strAboutMenu;
-		strAboutMenu.LoadString(IDS_ABOUTBOX);
-		if (!strAboutMenu.IsEmpty())
-		{
-			pSysMenu->AppendMenu(MF_SEPARATOR); 
-			pSysMenu->AppendMenu(MF_STRING, IDM_ABOUTBOX, strAboutMenu);
-		}
-	}
+	//CMenu* pSysMenu = GetSystemMenu(FALSE);
+	//if (pSysMenu != NULL)
+	//{
+	//	CString strAboutMenu;
+	//	strAboutMenu.LoadString(IDS_ABOUTBOX);
+	//	if (!strAboutMenu.IsEmpty())
+	//	{
+	//		pSysMenu->AppendMenu(MF_SEPARATOR); 
+	//		pSysMenu->AppendMenu(MF_STRING, IDM_ABOUTBOX, strAboutMenu);
+	//	}
+	//}
 
 	// Set the icon for this dialog.  The framework does this automatically
 	//  when the application's main window is not a dialog
@@ -131,6 +134,8 @@ BOOL CPlayByEarDlg::OnInitDialog()
     // when note-on and note-off events occur
     m_Keys.AttachListener(*this);
 
+    // Default Timer to be Invalid
+    m_nTimer = 0;
     
     // Attempt to open MIDI input and output devices
     try
@@ -256,6 +261,8 @@ void CPlayByEarDlg::OnCancel()
 
 void CPlayByEarDlg::OnClose()
 {
+    OnTestStop();
+
     // Persist the Values to Registry
     AfxGetApp()->WriteProfileInt(gpszKey, _T("InputDevice"), m_InDevice.IsOpen() ? m_InDevice.GetDevID() : 0);
     AfxGetApp()->WriteProfileInt(gpszKey, _T("OutputDevice"), m_OutDevice.IsOpen() ? m_OutDevice.GetDevID() : 0);
@@ -618,4 +625,40 @@ void CPlayByEarDlg::OnKeyUp(CPianoCtrl &PianoCtrl, UINT nChar, UINT nRepCnt, UIN
     {
     case VK_RETURN: OutputDebugString(_T("Received Enter\n"));break;
     }
+}
+
+void CPlayByEarDlg::OnTimer(UINT_PTR nIDEvent)
+{
+    static int nRound = 0;
+    
+    nRound = !nRound;
+    
+    GetDlgItem(IDC_STATIC_STATUS)->SetWindowText(nRound ? _T("Awaiting Answer...") : _T(" "));
+
+    this->SetWindowText(nRound ? _T("Play By Ear: Awaiting Answer...") : _T("Play By Ear"));
+
+    __super::OnTimer(nIDEvent);
+}
+
+void CPlayByEarDlg::OnFileExitapplication()
+{
+    OnClose();
+}
+
+void CPlayByEarDlg::OnTestStart()
+{
+    m_nTimer = SetTimer(1, 500, NULL); // 500 ms
+    if(m_nTimer)
+    {
+        this->GetMenu()->EnableMenuItem(ID_TEST_STOP, MF_ENABLED | MF_BYCOMMAND);
+        this->GetMenu()->EnableMenuItem(ID_TEST_START, MF_DISABLED | MF_BYCOMMAND);
+    }
+}
+
+void CPlayByEarDlg::OnTestStop()
+{
+    if(m_nTimer) KillTimer(m_nTimer);
+
+    this->GetMenu()->EnableMenuItem(ID_TEST_START, MF_ENABLED | MF_BYCOMMAND);
+    this->GetMenu()->EnableMenuItem(ID_TEST_STOP, MF_DISABLED | MF_BYCOMMAND);
 }

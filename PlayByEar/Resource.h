@@ -36,7 +36,6 @@
 #define IDC_STATIC_KEYNAMESTOP_1        1029
 #define IDC_STATIC_KEYNAMESTOP_3        1030
 #define IDC_STATIC_KEYNAMESTOP_4        1031
-#define IDC_STATUS_INFO                 1033
 #define IDC_CTRL_INFO                   1033
 #define ID_PREF_NOTE_COLOR              32772
 #define ID_PREF_MIDIDEVICES             32773
@@ -51,13 +50,16 @@
 #define ID_PREFERENCES_WESTERN          32783
 #define ID_HELP_KEYBINDINGS             32784
 #define ID_HELP_HOWDOI                  32785
+#define ID_TEST_START                   32786
+#define ID_TEST_STOP                    32787
+#define ID_FILE_EXITAPPLICATION         32788
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        134
-#define _APS_NEXT_COMMAND_VALUE         32786
+#define _APS_NEXT_COMMAND_VALUE         32789
 #define _APS_NEXT_CONTROL_VALUE         1034
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
