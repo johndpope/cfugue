@@ -3,6 +3,7 @@
 
 #pragma once
 #include "afxwin.h"
+#include "afxcmn.h"
 
 
 // CPlayByEarDlg dialog
