@@ -45,6 +45,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="Dependencies"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -67,7 +68,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="qhtmlight.lib"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="Dependencies/QHtm"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -125,6 +128,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="Dependencies"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG"
 				MinimalRebuild="false"
 				RuntimeLibrary="0"
@@ -147,7 +151,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="QHtm\qhtmlight.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="Dependencies"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -370,7 +376,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Copying &quot;$(InputPath)&quot; to &quot;$(TargetDir)$(InputFileName)&quot;"
-						CommandLine="copy &quot;$(InputPath)&quot; &quot;$(TargetDir)$(InputFileName)&quot;"
+						CommandLine="copy &quot;$(InputPath)&quot; &quot;$(TargetDir)$(InputFileName)&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="$(InputPath)"
 						Outputs="$(TargetDir)$(InputFileName)"
 					/>
@@ -381,7 +387,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Copying &quot;$(InputPath)&quot; to &quot;$(TargetDir)$(InputFileName)&quot;"
-						CommandLine="copy &quot;$(InputPath)&quot; &quot;$(TargetDir)$(InputFileName)&quot;"
+						CommandLine="copy &quot;$(InputPath)&quot; &quot;$(TargetDir)$(InputFileName)&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="$(InputPath)"
 						Outputs="$(TargetDir)$(InputFileName)"
 					/>
@@ -389,17 +395,16 @@
 			</File>
 			<File
 				RelativePath=".\Dependencies\QHtm\qhtmlight.lib"
-				DeploymentContent="true"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying &quot;$(InputPath)&quot; to &quot;$(TargetDir)$(InputFileName)&quot;"
-						CommandLine="copy &quot;$(InputPath)&quot; &quot;$(TargetDir)$(InputFileName)&quot;"
-						AdditionalDependencies="$(InputPath)"
-						Outputs="$(TargetDir)$(InputFileName)"
+						Description=""
+						CommandLine=""
+						AdditionalDependencies=""
+						Outputs=""
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -408,7 +413,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Copying &quot;$(InputPath)&quot; to &quot;$(TargetDir)$(InputFileName)&quot;"
-						CommandLine="copy &quot;$(InputPath)&quot; &quot;$(TargetDir)$(InputFileName)&quot;"
+						CommandLine="copy &quot;$(InputPath)&quot; &quot;$(TargetDir)$(InputFileName)&quot;&#x0D;&#x0A;"
 						AdditionalDependencies="$(InputPath)"
 						Outputs="$(TargetDir)$(InputFileName)"
 					/>

@@ -137,6 +137,9 @@ void CMIDIKeyboard::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
     }
 	
 	CWnd::OnKeyDown(nChar, nRepCnt, nFlags);
+
+    // Notify anyone who wants to know about keyup events we received
+    NotifyKeyDown(nChar, nRepCnt, nFlags);
 }
 
 
@@ -151,6 +154,9 @@ void CMIDIKeyboard::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
     }
 	
 	CWnd::OnKeyUp(nChar, nRepCnt, nFlags);
+
+    // Notify anyone who wants to know about keyup events we received
+    NotifyKeyUp(nChar, nRepCnt, nFlags);
 }
 
 //
@@ -164,6 +170,8 @@ void CMIDIKeyboard::OnPaint()
 
 void CMIDIKeyboard::OnLButtonDown(UINT nFlags, CPoint point) 
 {
+    this->SetFocus(); // Mouse Click on us, set the keyboard input too
+
     CPianoCtrl::OnLButtonDown(nFlags, point);
 }
 
@@ -177,3 +185,36 @@ void CMIDIKeyboard::OnMouseMove(UINT nFlags, CPoint point)
     CPianoCtrl::OnMouseMove(nFlags, point);
 }
 
+// Notify listeners about the Keyboard Input - we do this because 
+// usually we steal the focus always
+void CMIDIKeyboard::NotifyKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+    // Protect list with critical section
+    ::EnterCriticalSection(&m_CriticalSection);
+
+    std::list<CPianoCtrlListener *>::iterator i;
+
+    for(i = m_Listeners.begin(); i != m_Listeners.end(); i++)
+    {
+        (*i)->OnKeyUp(*this, nChar, nRepCnt, nFlags);
+    }
+
+    ::LeaveCriticalSection(&m_CriticalSection);
+}
+
+// Notify listeners about the Keyboard Input - we do this because 
+// usually we steal the focus always
+void CMIDIKeyboard::NotifyKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+    // Protect list with critical section
+    ::EnterCriticalSection(&m_CriticalSection);
+
+    std::list<CPianoCtrlListener *>::iterator i;
+
+    for(i = m_Listeners.begin(); i != m_Listeners.end(); i++)
+    {
+        (*i)->OnKeyDown(*this, nChar, nRepCnt, nFlags);
+    }
+
+    ::LeaveCriticalSection(&m_CriticalSection);
+}

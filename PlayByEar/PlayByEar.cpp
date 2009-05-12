@@ -47,6 +47,9 @@ BOOL CPlayByEarApp::InitInstance()
 
 	CWinAppEx::InitInstance();
 
+    //Initialize the QHtml Control
+    QHTM_Initialize( AfxGetInstanceHandle() );
+
 	AfxEnableControlContainer();
 
 	// Standard initialization
