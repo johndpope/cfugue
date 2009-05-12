@@ -128,16 +128,16 @@ BOOL CPlayByEarDlg::OnInitDialog()
     // Attempt to open MIDI input and output devices
     try
     {
-        UINT inDev = AfxGetApp()->GetProfileInt(gpszKey, _T("InputDevice"), 0);
-        UINT outDev = AfxGetApp()->GetProfileInt(gpszKey, _T("OutputDevice"), 0);
+        UINT inDevID = AfxGetApp()->GetProfileInt(gpszKey, _T("InputDevice"), 0);
+        UINT outDevID = AfxGetApp()->GetProfileInt(gpszKey, _T("OutputDevice"), 0);
 
         // If there are any MIDI output devices available, open one.
-        if(midi::CMIDIOutDevice::GetNumDevs() > 0)
+        UINT nOutDevCount = midi::CMIDIOutDevice::GetNumDevs();
+        if(nOutDevCount > 0)
         {
-            m_OutDevice.Open(outDev);
-        }
-        // Else there are no MIDI output devices available.
-        else
+            m_OutDevice.Open(nOutDevCount > outDevID ? outDevID : 0);
+        }        
+        else // Else there are no MIDI output devices available.
         {
             MessageBox(_T("No MIDI output devices available."), _T("Warning"), 
                 MB_ICONWARNING | MB_OK);
@@ -145,15 +145,15 @@ BOOL CPlayByEarDlg::OnInitDialog()
 
         // If there are any MIDI input devices available, open one and begin
         // recording.
-        if(midi::CMIDIInDevice::GetNumDevs() > 0)
+        UINT nInDevCount = midi::CMIDIInDevice::GetNumDevs();
+        if(nInDevCount > 0)
         {
             m_InDevice.SetReceiver(*this);
-            m_InDevice.Open(inDev);
+            m_InDevice.Open(nInDevCount > inDevID ? inDevID : 0);
             // Start receiving MIDI events
             m_InDevice.StartRecording();           
-        }
-        // Else there are no MIDI input devices available.
-        else
+        }        
+        else // Else there are no MIDI input devices available.
         {
             // MessageBox("No MIDI input devices available.", "Warning", MB_ICONWARNING | MB_OK);
         }
