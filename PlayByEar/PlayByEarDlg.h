@@ -4,6 +4,7 @@
 #pragma once
 #include "afxwin.h"
 #include "afxcmn.h"
+#include "QASession.h"
 
 
 // CPlayByEarDlg dialog
@@ -87,6 +88,7 @@ public:
 protected:
     CQhtmWnd m_ctrlInfo;
     UINT m_nTimer;
+    CQASession m_QASession;
 public:
     afx_msg void OnTimer(UINT_PTR nIDEvent);
     afx_msg void OnFileExitapplication();
