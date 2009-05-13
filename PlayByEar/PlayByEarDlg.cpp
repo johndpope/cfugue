@@ -91,11 +91,10 @@ BEGIN_MESSAGE_MAP(CPlayByEarDlg, CDialog)
     ON_NOTIFY(NM_RCLICK, IDC_SYSLINK_REPLAY, &CPlayByEarDlg::OnNMClickSyslinkReplay)
     ON_NOTIFY(NM_RCLICK, IDC_SYSLINK_NEXTQUESTION, &CPlayByEarDlg::OnNMClickSyslinkNextquestion)
     ON_COMMAND(ID_HELP_HOWDOI, &CPlayByEarDlg::OnHelpHowdoi)
-//    ON_WM_KEYDOWN()
-ON_WM_TIMER()
-ON_COMMAND(ID_FILE_EXITAPPLICATION, &CPlayByEarDlg::OnFileExitapplication)
-ON_COMMAND(ID_TEST_START, &CPlayByEarDlg::OnTestStart)
-ON_COMMAND(ID_TEST_STOP, &CPlayByEarDlg::OnTestStop)
+    ON_WM_TIMER()
+    ON_COMMAND(ID_FILE_EXITAPPLICATION, &CPlayByEarDlg::OnFileExitapplication)
+    ON_COMMAND(ID_TEST_START, &CPlayByEarDlg::OnTestStart)
+    ON_COMMAND(ID_TEST_STOP, &CPlayByEarDlg::OnTestStop)
 END_MESSAGE_MAP()
 
 
@@ -134,8 +133,6 @@ BOOL CPlayByEarDlg::OnInitDialog()
     // when note-on and note-off events occur
     m_Keys.AttachListener(*this);
 
-    // Default Timer to be Invalid
-    m_nTimer = 0;
     
     // Attempt to open MIDI input and output devices
     try
@@ -189,6 +186,11 @@ BOOL CPlayByEarDlg::OnInitDialog()
 
         // Make sure the piano control regains focus when we are done 
         m_Keys.SetFocus();
+
+        // Default to Invalid Timer
+        m_nTimer = 0;
+        // Send an initial timer event, just to initialize the UI Text correctly
+        OnTimer(m_nTimer);
     }
     catch(const std::exception &ex)
     {
@@ -567,7 +569,9 @@ void CPlayByEarDlg::OnBnClickedRadioLevel4()
 
 void CPlayByEarDlg::OnNMClickSyslinkSubmit(NMHDR *pNMHDR, LRESULT *pResult)
 {
-    *pResult = 0; OutputDebugString(_T("\nClick\n"));
+    *pResult = 0;
+
+    m_QASession.SubmitAnswer();
 
     // Make sure the piano control regains focus 
     m_Keys.SetFocus();
@@ -629,15 +633,21 @@ void CPlayByEarDlg::OnKeyUp(CPianoCtrl &PianoCtrl, UINT nChar, UINT nRepCnt, UIN
 
 void CPlayByEarDlg::OnTimer(UINT_PTR nIDEvent)
 {
-    static int nRound = 0;
-    
-    nRound = !nRound;
-    
-    GetDlgItem(IDC_STATIC_STATUS)->SetWindowText(nRound ? _T("Awaiting Answer...") : _T(" "));
+    //static int nRound = 0;
+    //
+    //nRound = !nRound;
+    //
+    //GetDlgItem(IDC_STATIC_STATUS)->SetWindowText(nRound ? _T("Awaiting Answer...") : _T(" "));
 
-    this->SetWindowText(nRound ? _T("Play By Ear: Awaiting Answer...") : _T("Play By Ear"));
+    //this->SetWindowText(nRound ? _T("Play By Ear: Awaiting Answer...") : _T("Play By Ear"));
 
-    __super::OnTimer(nIDEvent);
+    m_QASession.ProcessCurrentState();
+
+    GetDlgItem(IDC_STATIC_STATUS)->SetWindowText(m_QASession.GetStatusString());
+    this->SetWindowText(_T("Play By Ear: ") + m_QASession.GetStatusString());
+    this->m_ctrlInfo.SetWindowText(m_QASession.GetInfoString());
+
+    //__super::OnTimer(nIDEvent);
 }
 
 void CPlayByEarDlg::OnFileExitapplication()
@@ -646,19 +656,21 @@ void CPlayByEarDlg::OnFileExitapplication()
 }
 
 void CPlayByEarDlg::OnTestStart()
-{
+{            
     m_nTimer = SetTimer(1, 500, NULL); // 500 ms
     if(m_nTimer)
     {
         this->GetMenu()->EnableMenuItem(ID_TEST_STOP, MF_ENABLED | MF_BYCOMMAND);
         this->GetMenu()->EnableMenuItem(ID_TEST_START, MF_DISABLED | MF_BYCOMMAND);
+        m_QASession.Start();
     }
 }
 
 void CPlayByEarDlg::OnTestStop()
-{
+{    
     if(m_nTimer) KillTimer(m_nTimer);
-
     this->GetMenu()->EnableMenuItem(ID_TEST_START, MF_ENABLED | MF_BYCOMMAND);
     this->GetMenu()->EnableMenuItem(ID_TEST_STOP, MF_DISABLED | MF_BYCOMMAND);
+
+    m_QASession.Stop();
 }

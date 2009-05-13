@@ -228,6 +228,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\QASession.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\ShortMsg.cpp"
 				>
 			</File>
@@ -295,6 +299,10 @@
 			</File>
 			<File
 				RelativePath=".\PlayByEarDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\QASession.h"
 				>
 			</File>
 			<File
