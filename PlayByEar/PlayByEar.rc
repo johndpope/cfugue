@@ -110,7 +110,7 @@ BEGIN
     CONTROL         "Scale / Raga",IDC_RADIO_LEVEL4,"Button",BS_AUTORADIOBUTTON,16,97,93,10
     LTEXT           "R1 G2        M2 D1 N2",IDC_STATIC_KEYNAMESTOP_2,156,161,110,8,NOT WS_VISIBLE
     GROUPBOX        "Question",IDC_QUESTION_GROUP,118,44,273,68
-    LTEXT           "Static",IDC_STATIC_STATUS,125,60,198,8
+    LTEXT           " - No active QA Session in progress - ",IDC_STATIC_STATUS,125,60,198,8
     CONTROL         "",IDC_SYSLINK_REPLAY,"SysLink",0x0,328,60,56,8,WS_EX_TRANSPARENT
     LTEXT           "Answer:",IDC_STATIC,125,76,25,8
     CONTROL         "",IDC_SYSLINK_SUBMIT,"SysLink",0x0,247,76,31,8,WS_EX_TRANSPARENT
@@ -123,7 +123,7 @@ BEGIN
     LTEXT           "R1 G2        M2 D1 N2",IDC_STATIC_KEYNAMESTOP_1,86,160,110,8,NOT WS_VISIBLE
     LTEXT           "R1 G2        M2 D1 N2",IDC_STATIC_KEYNAMESTOP_3,228,161,110,8,NOT WS_VISIBLE
     LTEXT           "R1 G2        M2 D1 N2",IDC_STATIC_KEYNAMESTOP_4,298,161,81,8,NOT WS_VISIBLE
-    CONTROL         "<font face=""Verdana"" size=""8pt"">Tip: Use the Piano below to answer the question. When done, press Enter to Submit</font>",IDC_CTRL_INFO,
+    CONTROL         "<font face=""Verdana"" size=""8pt"">Use the Piano below to practice the notes or the <i>Test | Start</i> menu option to start a QA Session</font>",IDC_CTRL_INFO,
                     "QHTM_Window_Class_001",0x0,9,114,382,42,WS_EX_CLIENTEDGE
     CONTROL         "",IDC_SYSLINK_PLAYANSWER,"SysLink",0x0,154,90,60,14,WS_EX_TRANSPARENT
     COMBOBOX        IDC_RAGA_LIST,153,74,88,84,CBS_DROPDOWNLIST | NOT WS_VISIBLE | WS_VSCROLL
@@ -157,7 +157,10 @@ BEGIN
     POPUP "Test"
     BEGIN
         MENUITEM "Start",                       ID_TEST_START
-        MENUITEM "Stop",                        ID_TEST_STOP, INACTIVE
+        MENUITEM "Stop",                        ID_TEST_STOP, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "Wait before Retry",           ID_TEST_WAITBEFORERETRY, CHECKED
+        MENUITEM "Wait before New Question",    ID_TEST_WAITBEFORENEWQUESTION, CHECKED
     END
     POPUP "&Preferences"
     BEGIN
@@ -563,6 +566,9 @@ END
 STRINGTABLE 
 BEGIN
     ID_FILE_EXITAPPLICATION "Closes and Exits the Application"
+    ID_TEST_WAITBEFORERETRY "Should wait for 'Enter' key before Attempting a Retry for Failed Answer?"
+    ID_TEST_WAITBEFORENEWQUESTION 
+                            "Should wait for an 'Enter' Key before posing a new question, after a right answer?"
 END
 
 #endif    // English (U.S.) resources

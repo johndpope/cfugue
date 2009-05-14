@@ -8,7 +8,7 @@
 
 // CPlayByEarDlg dialog
 class CPlayByEarDlg : public CDialog, public CPianoCtrlListener,
-                 public midi::CMIDIReceiver
+                      public midi::CMIDIReceiver, public OIL::CEventReceiver
 {
 // Construction
 public:
@@ -71,8 +71,7 @@ protected:
     virtual void OnOK();
     void AdjustDisplayForMode();
     CString ConvertAnswerNotesToString(const CQASession::ANSWERNOTES& AnswerNotes);
-public:
-    CComboBox m_GMCombo;
+
     afx_msg void OnShowHideKeyNames();
     afx_msg void OnPrefCarnaticMusicMode();
     afx_msg void OnPrefWesternMusicMode();
@@ -86,10 +85,14 @@ public:
     afx_msg void OnNMClickSyslinkNextquestion(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnNMClickSyslinkPlayAnswer(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnHelpHowdoi();
+
+    void OnQASessionComplete(const OIL::CEventSource* pSender, OIL::CEventHandlerArgs* pArgs);
 protected:
     CQhtmWnd m_ctrlInfo;
     UINT m_nTimer;
     CQASession m_QASession;
+    CComboBox m_GMCombo;
+    CComboBox m_RagaListCombo;
 public:
     afx_msg void OnTimer(UINT_PTR nIDEvent);
     afx_msg void OnFileExitapplication();
@@ -97,5 +100,7 @@ public:
     afx_msg void OnTestStop();
     afx_msg void OnSelchangeRagaList();
 private:
-    CComboBox m_RagaListCombo;
+public:
+    afx_msg void OnTestWaitBeforeRetry();
+    afx_msg void OnTestWaitBeforeNewQuestion();
 };

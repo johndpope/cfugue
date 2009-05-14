@@ -7,9 +7,12 @@ CQASession::CQASession(void)
     m_nQuestionWaitRound(0),
     m_nAnswerWaitRound(0),
     m_nRetryCount(0),
+    m_nResultAnouncementRound(0),
     m_nCurLevel(SINGLE_NOTE_SINGLE_OCTAVE),
     m_nQuestionCount(0),
-    m_bHaltProcessing(false)
+    m_bHaltProcessing(true),
+    m_bWaitBeforeNewQuestion(true),
+    m_bWaitBeforeRetry(true)
 {
 }
 
@@ -62,20 +65,12 @@ void CQASession::GoToNextQuestion()
 
     if(m_nCurState == RIGHT_ANSWER)
     {
-        m_strCurStatus = _T("Verifying the readiness to go to next question...");
-        m_strInfo = _T(" ");
-
-        //TODO: May be we dont have anymore questions !!
-
         // Nothing to do. User is ready to goto next question. Let him go.
 
         //TODO: Increment the stats in Process_RightAnswer() itself so he gets a chance to see them.
     }
     else // User is trying to skip the present question
     {
-        m_strCurStatus = _T("Processing Request to skip the Question...");
-        m_strInfo = _T(" ");
-
         // TODO: User is skipping the question - Increment the Wrong Answer Count..
     }
 
@@ -147,7 +142,8 @@ void CQASession::ProcessState_PreparingQuestion()
     {
         m_strCurStatus = _T("Test Complete");
         m_strInfo = _T("No more questions");
-        Stop();
+        Stop();        
+        RaiseEvent(&evQASessionComplete, &OIL::CEventHandlerArgs()); // Inform any Listeners
         return; // No more questions. Lets halt here and return.
     }
 
@@ -160,7 +156,7 @@ void CQASession::ProcessState_PreparingQuestion()
 void CQASession::ProcessState_PosingQuestion()
 {
     m_strCurStatus = _T("Playing the Notes ... Listen carefully !!");
-    m_strInfo.Format(_T("Question: %d/%d"), m_nCurQuestion, m_nQuestionCount-1);
+    m_strInfo.Format(_T("Question: %d/%d"), m_nCurQuestion+1, m_nQuestionCount);
 
     if(m_nQuestionWaitRound++ > 3)
         m_nCurState = COMPLETED_QUESTION;
@@ -180,7 +176,11 @@ void CQASession::ProcessState_CompletedQuestion()
 void CQASession::ProcessState_AwaitingAnswer()
 {
     m_strCurStatus = (m_nAnswerWaitRound%2) ? _T("Awaiting Answer...") : _T("");
-    m_strInfo = _T("Use the Piano below to answer the question. When done, press Enter to Submit");
+
+    if(m_nCurLevel <= CQASession::CARNATIC_RAGA)
+        m_strInfo = _T("Use the Piano below to answer the question. When done, press Enter to Submit");
+    else
+        m_strInfo = _T("Use the above ComboBox to answer the question. When done, press Enter to Submit");
 
     m_nAnswerWaitRound++;
 }
@@ -188,7 +188,12 @@ void CQASession::ProcessState_AwaitingAnswer()
 void CQASession::ProcessState_ReceivingAnswer()
 {
     m_strCurStatus = _T("  Submit the Answer..");
-    m_strInfo = _T("Use the Piano below to alter the Answer. When satisfied, press Enter to Submit");
+
+    if(m_nCurLevel <= CQASession::CARNATIC_RAGA)
+        m_strInfo = _T("Use the Piano below to alter the Answer. When satisfied, press Enter to Submit");
+    else
+        m_strInfo = _T("Alter the Answer using the above ComboBox. When satisfied, press Enter to Submit");
+
     m_bHaltProcessing = true;
 }
 
@@ -201,14 +206,22 @@ void CQASession::ProcessState_EvaluatingAnswer()
     m_strInfo = _T("");
 
     m_nCurState = nEvenRound ? WRONG_ANSWER : RIGHT_ANSWER;
+    m_nResultAnouncementRound = 0;
 }
 
 void CQASession::ProcessState_WrongAnswer()
 {
     m_strCurStatus = _T("Wrong Answer...");
-    m_strInfo = _T("Ooops...<br/><p>Press <i>Enter</i> to Retry a new answer..</p>");
+    m_strInfo = _T("Ooops...");
 
-    m_bHaltProcessing = true; // Stop till user presses 'Enter' to try again (or skips to next question)
+    if(m_bWaitBeforeRetry)
+    {
+        m_bHaltProcessing = true; // Stop till user presses 'Enter'
+        m_strInfo += _T("<br/><p>Press <i>Enter</i> to Retry a new answer..</p>");
+    }
+    else
+        if(m_nResultAnouncementRound++ >= 2) // Wait sometime before we go to next question
+            TryAgain();
 }
 
 void CQASession::ProcessState_TryAgain()
@@ -234,15 +247,16 @@ void CQASession::ProcessState_TryAgain()
 void CQASession::ProcessState_RightAnswer()
 {
     m_strCurStatus = _T("Right Answer...");
-    m_strInfo = _T("Good work...<br/><p>Press <i>Enter</i> when ready to goto next question..</p>");
+    m_strInfo = _T("Good work...");
 
-    //if(m_nResultAnouncementRound++ >= 2) // Wait sometime before we go to next question
-    //{
-    //    m_nCurState = PREPARING_QUESTION;
-    //    m_nResultAnouncementRound = 0;
-    //}
-   
-    m_bHaltProcessing = true; // Stop till user presses 'Enter'
+    if(m_bWaitBeforeNewQuestion)
+    {
+        m_bHaltProcessing = true; // Stop till user presses 'Enter'
+        m_strInfo += _T("<br/><p>Press <i>Enter</i> when ready to goto next question..</p>");
+    }
+    else
+        if(m_nResultAnouncementRound++ >= 2) // Wait sometime before we go to next question
+            GoToNextQuestion();
 }
 
 // Answer Notes entered
