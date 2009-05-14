@@ -15,7 +15,6 @@
 #define IDC_GM_LIST                     1003
 #define IDC_SYSLINK1                    1004
 #define IDC_SYSLINK_PLAYANSWER          1004
-#define IDC_GM_LIST2                    1005
 #define IDC_RAGA_LIST                   1005
 #define IDC_STATIC_KEYNAMES_2           1010
 #define IDC_STATIC_KEYNAMESTOP_2        1011
@@ -56,13 +55,15 @@
 #define ID_TEST_START                   32786
 #define ID_TEST_STOP                    32787
 #define ID_FILE_EXITAPPLICATION         32788
+#define ID_TEST_WAITBEFORERETRY         32789
+#define ID_TEST_WAITBEFORENEWQUESTION   32790
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        134
-#define _APS_NEXT_COMMAND_VALUE         32789
+#define _APS_NEXT_COMMAND_VALUE         32791
 #define _APS_NEXT_CONTROL_VALUE         1034
 #define _APS_NEXT_SYMED_VALUE           104
 #endif

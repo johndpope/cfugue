@@ -101,6 +101,8 @@ BEGIN_MESSAGE_MAP(CPlayByEarDlg, CDialog)
     ON_COMMAND(ID_TEST_STOP, &CPlayByEarDlg::OnTestStop)
     ON_CBN_SELCHANGE(IDC_RAGA_LIST, &CPlayByEarDlg::OnSelchangeRagaList)
 //    ON_CBN_DROPDOWN(IDC_RAGA_LIST, &CPlayByEarDlg::OnCbnDropdownRagaList)
+ON_COMMAND(ID_TEST_WAITBEFORERETRY, &CPlayByEarDlg::OnTestWaitBeforeRetry)
+ON_COMMAND(ID_TEST_WAITBEFORENEWQUESTION, &CPlayByEarDlg::OnTestWaitBeforeNewQuestion)
 END_MESSAGE_MAP()
 
 
@@ -203,13 +205,22 @@ BOOL CPlayByEarDlg::OnInitDialog()
             GetDlgItem(IDC_RAGA_LIST)->EnableWindow(false);
         }
 
+        // Set the Question Wait Options
+        m_QASession.SetWaitBeforeRetry(AfxGetApp()->GetProfileInt(gpszKey, _T("WaitBeforeRetry"), true)?true:false);
+        m_QASession.SetWaitBeforeNewQuestion(AfxGetApp()->GetProfileInt(gpszKey, _T("WaitBeforeNewQuestion"), true)?true:false);
+        this->GetMenu()->CheckMenuItem(ID_TEST_WAITBEFORERETRY, 
+        (m_QASession.GetWaitBeforeRetry() ? MF_CHECKED : MF_UNCHECKED) |MF_BYCOMMAND);
+        this->GetMenu()->CheckMenuItem(ID_TEST_WAITBEFORENEWQUESTION, 
+        (m_QASession.GetWaitBeforeNewQuestion() ? MF_CHECKED : MF_UNCHECKED) |MF_BYCOMMAND);
+
         // Make sure the piano control regains focus when we are done 
         m_Keys.SetFocus(); //
 
         // Default to Invalid Timer
         m_nTimer = 0;
-        // Send an initial timer event, just to initialize the UI Text correctly
-        OnTimer(m_nTimer);
+
+        // Subscribe to the QASessionComplete Event
+        m_QASession.evQASessionComplete.Subscribe(this, &CPlayByEarDlg::OnQASessionComplete);
     }
     catch(const std::exception &ex)
     {
@@ -293,6 +304,8 @@ void CPlayByEarDlg::OnClose()
     AfxGetApp()->WriteProfileInt(gpszKey, _T("Octave"), m_Keys.GetCurrentOctave());
     AfxGetApp()->WriteProfileInt(gpszKey, _T("Instrument"), m_GMCombo.GetCurSel());
     AfxGetApp()->WriteProfileInt(gpszKey, _T("QALevel"), m_QASession.GetCurrentLevel());
+    AfxGetApp()->WriteProfileInt(gpszKey, _T("WaitBeforeRetry"), m_QASession.GetWaitBeforeRetry());
+    AfxGetApp()->WriteProfileInt(gpszKey, _T("WaitBeforeNewQuestion"), m_QASession.GetWaitBeforeNewQuestion());
 
     CDialog::OnOK();
 }
@@ -328,6 +341,8 @@ CString CPlayByEarDlg::ConvertAnswerNotesToString(const CQASession::ANSWERNOTES&
         strResult += str;
         iter++;
     }
+
+    if(strResult.IsEmpty()) strResult = _T("-");
 
     return strResult;
 }
@@ -396,9 +411,7 @@ void CPlayByEarDlg::OnSelchangeRagaList()
             {
                 CString strItemText;
                 this->m_RagaListCombo.GetLBText(this->m_RagaListCombo.GetCurSel(), strItemText);
-
-                OutputDebugString(_T("\n") + strItemText);
-                
+               
                 // Add the Note as Answer
                 m_QASession.AnswerEntered(60); // TODO: Take care of entering Raga Notes
                 break;
@@ -604,6 +617,9 @@ void CPlayByEarDlg::AdjustDisplayForMode()
         SetDlgItemText(gStaticID1[i], gszKeyNames[m_Mode]);
         SetDlgItemText(gStaticID2[i], gszKeyNames2[m_Mode]);
     }
+
+    if(m_QASession.IsSessionActive())    // Display the Notes on Answer Control
+        SetDlgItemText(IDC_STATIC_ANSWER, ConvertAnswerNotesToString(m_QASession.GetAnswerNotes()));    
 }
  
 // When the active octave changes, we need to hide and show the 
@@ -626,12 +642,22 @@ void CPlayByEarDlg::OnActiveOctaveChanged(CPianoCtrl &PianoCtrl, unsigned char n
 
 void CPlayByEarDlg::OnPrefCarnaticMusicMode()
 {
+    if(m_QASession.IsSessionActive() && m_QASession.GetCurrentLevel() >= CQASession::CARNATIC_RAGA)
+    {
+        MessageBox(_T("Sorry, You cannot change the Mode on this level while a QA Session is active."), _T("Restricted !!"), MB_OK|MB_ICONINFORMATION);
+        return;
+    }
     this->m_Mode = CARNATIC;
     AdjustDisplayForMode();
 }
 
 void CPlayByEarDlg::OnPrefWesternMusicMode()
 {
+    if(m_QASession.IsSessionActive() && m_QASession.GetCurrentLevel() >= CQASession::CARNATIC_RAGA)
+    {
+        MessageBox(_T("Sorry, You cannot change the Mode on this level while a QA Session is active."), _T("Restricted !!"), MB_OK|MB_ICONINFORMATION);
+        return;
+    }        
     this->m_Mode = WESTERN;
     AdjustDisplayForMode();    
 }
@@ -856,16 +882,16 @@ void CPlayByEarDlg::OnTestStart()
     if(m_nTimer)
     {
         this->GetMenu()->EnableMenuItem(ID_TEST_STOP, MF_ENABLED | MF_BYCOMMAND);
-        this->GetMenu()->EnableMenuItem(ID_TEST_START, MF_DISABLED | MF_BYCOMMAND);
+        this->GetMenu()->EnableMenuItem(ID_TEST_START, MF_GRAYED | MF_BYCOMMAND);
         m_QASession.Start();
     }
 }
 
 void CPlayByEarDlg::OnTestStop()
 {    
-    if(m_nTimer) KillTimer(m_nTimer);
+    if(m_nTimer) { KillTimer(m_nTimer); m_nTimer=0; }
     this->GetMenu()->EnableMenuItem(ID_TEST_START, MF_ENABLED | MF_BYCOMMAND);
-    this->GetMenu()->EnableMenuItem(ID_TEST_STOP, MF_DISABLED | MF_BYCOMMAND);
+    this->GetMenu()->EnableMenuItem(ID_TEST_STOP, MF_GRAYED | MF_BYCOMMAND);
 
     m_QASession.Stop();
 
@@ -874,4 +900,33 @@ void CPlayByEarDlg::OnTestStop()
     GetDlgItem(IDC_RADIO_LEVEL2)->EnableWindow(true);
     GetDlgItem(IDC_RADIO_LEVEL3)->EnableWindow(true);
     GetDlgItem(IDC_RADIO_LEVEL4)->EnableWindow(true);
+}
+    
+void CPlayByEarDlg::OnQASessionComplete(const OIL::CEventSource* pSender, OIL::CEventHandlerArgs* pArgs)
+{
+    OnTestStop();
+}
+
+void CPlayByEarDlg::OnTestWaitBeforeRetry()
+{
+    m_QASession.SetWaitBeforeRetry(!m_QASession.GetWaitBeforeRetry());
+    this->GetMenu()->CheckMenuItem(ID_TEST_WAITBEFORERETRY, 
+        (m_QASession.GetWaitBeforeRetry() ? MF_CHECKED : MF_UNCHECKED) |MF_BYCOMMAND);
+
+    // If we are currently waiting, apply the new 'non-wait' option immediately
+    if(m_QASession.GetWaitBeforeRetry() == false &&
+        m_QASession.GetCurrentState() == CQASession::WRONG_ANSWER)
+        m_QASession.TryAgain();
+}
+
+void CPlayByEarDlg::OnTestWaitBeforeNewQuestion()
+{
+    m_QASession.SetWaitBeforeNewQuestion(!m_QASession.GetWaitBeforeNewQuestion());
+    this->GetMenu()->CheckMenuItem(ID_TEST_WAITBEFORENEWQUESTION, 
+        (m_QASession.GetWaitBeforeNewQuestion() ? MF_CHECKED : MF_UNCHECKED) |MF_BYCOMMAND);
+
+    // If we are currently waiting, apply the new 'non-wait' option immediately
+    if(m_QASession.GetWaitBeforeNewQuestion() == false &&
+        m_QASession.GetCurrentState() == CQASession::RIGHT_ANSWER)
+        m_QASession.GoToNextQuestion();
 }

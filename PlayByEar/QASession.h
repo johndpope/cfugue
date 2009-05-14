@@ -1,7 +1,9 @@
 #ifndef _QASESSION_H__10BEE106_416D_403e_860A_4FD80B33D9C2_
 #define _QASESSION_H__10BEE106_416D_403e_860A_4FD80B33D9C2_
 
-class CQASession
+#include "EventHandler.h"
+
+class CQASession : OIL::CEventSource
 {
 public:     
     enum LEVEL: long
@@ -51,14 +53,20 @@ protected:
     UINT m_nQuestionWaitRound; // Used to 'hold' the question play duration
     UINT m_nAnswerWaitRound; // Used for blinking the answer.
     UINT m_nRetryCount; // Used to keep track of the Retry options
+    UINT m_nResultAnouncementRound; // Used to 'hold' the Results
     bool m_bHaltProcessing; // Should external module stop calling the ProcessCurrentState() ?
 
     UINT m_nQuestionCount; // Total Number of questions
     int  m_nCurQuestion; // Keeps track of the current question index
 
+    bool m_bWaitBeforeNewQuestion;
+    bool m_bWaitBeforeRetry;
+
     std::vector<unsigned char> m_AnswerNotes;   // Sequence of MidiNotes supplied as Answer
 
 public:
+    OIL::CEvent evQASessionComplete; // Raised when a QASession is Complete
+
     CQASession(void);
     ~CQASession(void);
 
@@ -113,6 +121,15 @@ public:
     // Should external module stop calling the ProcessCurrentState() ?
     inline bool ShouldHaltProcessing() const { return m_bHaltProcessing; }
 
+    inline bool GetWaitBeforeRetry() const { return m_bWaitBeforeRetry; }
+
+    inline bool GetWaitBeforeNewQuestion() const { return m_bWaitBeforeNewQuestion; }
+
+    // Should Wait before a retry (after a wrong answer)?
+    inline void SetWaitBeforeRetry(bool bWait=true)  { m_bWaitBeforeRetry = bWait; }
+
+    // Should Wait before posing a new question (after a right answer)?
+    inline void SetWaitBeforeNewQuestion(bool bWait=true)  { m_bWaitBeforeNewQuestion = bWait; }   
 };
 
 #endif // _QASESSION_H__10BEE106_416D_403e_860A_4FD80B33D9C2_
