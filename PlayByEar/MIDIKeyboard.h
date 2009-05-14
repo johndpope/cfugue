@@ -82,6 +82,9 @@ public:
         m_Oct = (unsigned char) oct; 
         NotifyOctaveChange(m_Oct);
     }
+
+    // Takes a MidiNote number and decomposes it into Octave and relative Note number
+    void GetOctaveNote(unsigned char MidiNoteId, int &nOctave, int &nNoteWithInOctave);
 };
 
 /////////////////////////////////////////////////////////////////////////////

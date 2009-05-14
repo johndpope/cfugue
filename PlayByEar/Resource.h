@@ -14,6 +14,9 @@
 #define IDC_MIDI_IN_DEVS                1002
 #define IDC_GM_LIST                     1003
 #define IDC_SYSLINK1                    1004
+#define IDC_SYSLINK_PLAYANSWER          1004
+#define IDC_GM_LIST2                    1005
+#define IDC_RAGA_LIST                   1005
 #define IDC_STATIC_KEYNAMES_2           1010
 #define IDC_STATIC_KEYNAMESTOP_2        1011
 #define IDC_STATIC_RESULTS              1012
