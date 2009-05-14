@@ -64,7 +64,7 @@ CMIDIKeyboard::~CMIDIKeyboard()
 }
 
 
-// Convert key to note
+// Convert key to MIDI note number
 BOOL CMIDIKeyboard::KeyToNote(UINT Char, unsigned char &NoteId)
 {
     BOOL Result = m_KeyMap.Lookup(Char, NoteId);
@@ -75,6 +75,14 @@ BOOL CMIDIKeyboard::KeyToNote(UINT Char, unsigned char &NoteId)
     }
 
     return Result;
+}
+
+// Takes a MidiNote number and decomposes it into Octave and relative Note number
+void CMIDIKeyboard::GetOctaveNote(unsigned char MidiNoteId, int &nOctave, int &nNoteWithInOctave)
+{
+    nOctave = (MidiNoteId - LOW_NOTE) / NOTE_PER_OCTAVE;
+    nNoteWithInOctave = MidiNoteId - (nOctave * NOTE_PER_OCTAVE) - LOW_NOTE;
+    nOctave++; // make it 1-based
 }
 
 

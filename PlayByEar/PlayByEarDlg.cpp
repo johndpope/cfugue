@@ -61,6 +61,7 @@ void CPlayByEarDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_GM_LIST, m_GMCombo);
     DDX_Control(pDX, IDC_MIDI_KEYS, m_Keys);
     DDX_Control(pDX, IDC_CTRL_INFO, m_ctrlInfo);
+    DDX_Control(pDX, IDC_RAGA_LIST, m_RagaListCombo);
 }
 
 BEGIN_MESSAGE_MAP(CPlayByEarDlg, CDialog)
@@ -84,17 +85,22 @@ BEGIN_MESSAGE_MAP(CPlayByEarDlg, CDialog)
     ON_NOTIFY(NM_CLICK, IDC_SYSLINK_SUBMIT, &CPlayByEarDlg::OnNMClickSyslinkSubmit)
     ON_NOTIFY(NM_CLICK, IDC_SYSLINK_REPLAY, &CPlayByEarDlg::OnNMClickSyslinkReplay)
     ON_NOTIFY(NM_CLICK, IDC_SYSLINK_NEXTQUESTION, &CPlayByEarDlg::OnNMClickSyslinkNextquestion)
+    ON_NOTIFY(NM_CLICK, IDC_SYSLINK_PLAYANSWER, &CPlayByEarDlg::OnNMClickSyslinkPlayAnswer)
     ON_NOTIFY(NM_SETFOCUS, IDC_SYSLINK_SUBMIT, &CPlayByEarDlg::OnNMClickSyslinkSubmit)
     ON_NOTIFY(NM_SETFOCUS, IDC_SYSLINK_REPLAY, &CPlayByEarDlg::OnNMClickSyslinkReplay)
     ON_NOTIFY(NM_SETFOCUS, IDC_SYSLINK_NEXTQUESTION, &CPlayByEarDlg::OnNMClickSyslinkNextquestion)
+    ON_NOTIFY(NM_SETFOCUS, IDC_SYSLINK_PLAYANSWER, &CPlayByEarDlg::OnNMClickSyslinkPlayAnswer)
     ON_NOTIFY(NM_RCLICK, IDC_SYSLINK_SUBMIT, &CPlayByEarDlg::OnNMClickSyslinkSubmit)
     ON_NOTIFY(NM_RCLICK, IDC_SYSLINK_REPLAY, &CPlayByEarDlg::OnNMClickSyslinkReplay)
     ON_NOTIFY(NM_RCLICK, IDC_SYSLINK_NEXTQUESTION, &CPlayByEarDlg::OnNMClickSyslinkNextquestion)
+    ON_NOTIFY(NM_RCLICK, IDC_SYSLINK_PLAYANSWER, &CPlayByEarDlg::OnNMClickSyslinkPlayAnswer)
     ON_COMMAND(ID_HELP_HOWDOI, &CPlayByEarDlg::OnHelpHowdoi)
     ON_WM_TIMER()
     ON_COMMAND(ID_FILE_EXITAPPLICATION, &CPlayByEarDlg::OnFileExitapplication)
     ON_COMMAND(ID_TEST_START, &CPlayByEarDlg::OnTestStart)
     ON_COMMAND(ID_TEST_STOP, &CPlayByEarDlg::OnTestStop)
+    ON_CBN_SELCHANGE(IDC_RAGA_LIST, &CPlayByEarDlg::OnSelchangeRagaList)
+//    ON_CBN_DROPDOWN(IDC_RAGA_LIST, &CPlayByEarDlg::OnCbnDropdownRagaList)
 END_MESSAGE_MAP()
 
 
@@ -184,8 +190,21 @@ BOOL CPlayByEarDlg::OnInitDialog()
         // MIDI Instrument combo box
         m_GMCombo.SetCurSel(AfxGetApp()->GetProfileInt(gpszKey, _T("Instrument"), 0));
 
+        // Set the Level
+        CQASession::LEVEL level = (CQASession::LEVEL)AfxGetApp()->GetProfileInt(gpszKey, _T("QALevel"), 0);
+        m_QASession.SetCurrentLevel(level); 
+        if(level == CQASession::WESTERN_SCALE) level = CQASession::CARNATIC_RAGA; // for radio buttons we need this small adjustment
+        CheckRadioButton(IDC_RADIO_LEVEL1, IDC_RADIO_LEVEL4, IDC_RADIO_LEVEL1+level);
+        if(level == CQASession::CARNATIC_RAGA)
+        {
+            // Show the Ragalist combo and Hide the Answer Static Control
+            GetDlgItem(IDC_STATIC_ANSWER)->ShowWindow(SW_HIDE);
+            GetDlgItem(IDC_RAGA_LIST)->ShowWindow(SW_SHOW);
+            GetDlgItem(IDC_RAGA_LIST)->EnableWindow(false);
+        }
+
         // Make sure the piano control regains focus when we are done 
-        m_Keys.SetFocus();
+        m_Keys.SetFocus(); //
 
         // Default to Invalid Timer
         m_nTimer = 0;
@@ -273,6 +292,7 @@ void CPlayByEarDlg::OnClose()
     AfxGetApp()->WriteProfileInt(gpszKey, _T("NoteColor"), m_Keys.GetNoteOnColor());
     AfxGetApp()->WriteProfileInt(gpszKey, _T("Octave"), m_Keys.GetCurrentOctave());
     AfxGetApp()->WriteProfileInt(gpszKey, _T("Instrument"), m_GMCombo.GetCurSel());
+    AfxGetApp()->WriteProfileInt(gpszKey, _T("QALevel"), m_QASession.GetCurrentLevel());
 
     CDialog::OnOK();
 }
@@ -287,12 +307,62 @@ void CPlayByEarDlg::OnOK()
     // handler can make call to OnCancel there as shown above.
 }
 
+TCHAR* gszNoteName[]={
+        _T("S"), _T("R1"), _T("R2"), _T("G2"), _T("G3"), _T("M1"), _T("M2"), _T("P"), _T("D1"), _T("D2"), _T("N2"), _T("N3"),
+        _T("C"), _T("C#"), _T("D"), _T("D#"), _T("E"), _T("F"), _T("F#"), _T("G"), _T("G#"), _T("A"), _T("A#"), _T("B"),
+    };
+
+// Converts the Answer Notes into Display String
+CString CPlayByEarDlg::ConvertAnswerNotesToString(const CQASession::ANSWERNOTES& AnswerNotes)
+{
+    CString str, strResult;
+    int nOctave, nNoteWithInOctave; 
+
+    CQASession::ANSWERNOTES::const_iterator iter = AnswerNotes.begin();
+    CQASession::ANSWERNOTES::const_iterator& iterEnd = AnswerNotes.end();
+    while(iter != iterEnd)
+    {
+        // Decompose the MIDINote Number into Octave and Note
+        m_Keys.GetOctaveNote(*iter, nOctave, nNoteWithInOctave);    
+        str.Format(_T("%s[%d] "), gszNoteName[nNoteWithInOctave + (m_Mode*12)], nOctave);
+        strResult += str;
+        iter++;
+    }
+
+    return strResult;
+}
 
 // Note-on event notification
 void CPlayByEarDlg::OnNoteOn(CPianoCtrl &PianoCtrl, unsigned char NoteId)
 {
+    // Play the note on MIDI output device
     midi::CShortMsg ShortMsg(midi::NOTE_ON, 0, NoteId, 127, 0);
     ShortMsg.SendMsg(m_OutDevice);
+
+    if(m_QASession.GetCurrentLevel() >= CQASession::CARNATIC_RAGA)
+        return;
+
+    if(m_QASession.IsSessionActive())
+    {
+        switch(m_QASession.GetCurrentState())
+        {
+        case CQASession::AWAITING_ANSWER:
+            {
+                // We started Receiving the Answer. Enable the controls
+                GetDlgItem(IDC_SYSLINK_SUBMIT)->SetWindowText(_T("<a>Submit</a>"));
+                GetDlgItem(IDC_SYSLINK_PLAYANSWER)->SetWindowText(_T("<a>Play the Answer</a>"));
+                // follow on ...
+            }
+        case CQASession::RECEIVING_ANSWER:
+            {
+                // Add the Note as Answer
+                m_QASession.AnswerEntered(NoteId);
+                // Display the Notes on Answer Control
+                SetDlgItemText(IDC_STATIC_ANSWER, ConvertAnswerNotesToString(m_QASession.GetAnswerNotes()));    
+                break;
+            }
+        }
+    }
 }
 
 
@@ -303,6 +373,42 @@ void CPlayByEarDlg::OnNoteOff(CPianoCtrl &PianoCtrl, unsigned char NoteId)
     ShortMsg.SendMsg(m_OutDevice);
 }
 
+// User select an entry from the Raga list.
+// If this is the first selection while waiting for answer, 
+// enable the 'submit answer' option.
+void CPlayByEarDlg::OnSelchangeRagaList()
+{
+    if(m_QASession.GetCurrentLevel() < CQASession::CARNATIC_RAGA)
+        return;
+
+    if(m_QASession.IsSessionActive())
+    {
+        switch(m_QASession.GetCurrentState())
+        {
+        case CQASession::AWAITING_ANSWER:
+            {
+                // We started Receiving the Answer. Enable the controls
+                GetDlgItem(IDC_SYSLINK_SUBMIT)->SetWindowText(_T("<a>Submit</a>"));
+                GetDlgItem(IDC_SYSLINK_PLAYANSWER)->SetWindowText(_T("<a>Play the Answer</a>"));
+                // follow on ...
+            }
+        case CQASession::RECEIVING_ANSWER:
+            {
+                CString strItemText;
+                this->m_RagaListCombo.GetLBText(this->m_RagaListCombo.GetCurSel(), strItemText);
+
+                OutputDebugString(_T("\n") + strItemText);
+                
+                // Add the Note as Answer
+                m_QASession.AnswerEntered(60); // TODO: Take care of entering Raga Notes
+                break;
+            }
+        }
+    }
+
+    // Make sure the Paino Control gets the Focus
+    m_Keys.SetFocus();
+}
 
 // Receives MIDI short message
 void CPlayByEarDlg::ReceiveMsg(DWORD Msg, DWORD TimeStamp)
@@ -545,24 +651,48 @@ void CPlayByEarDlg::OnShowHideKeyNames()
 
 void CPlayByEarDlg::OnBnClickedRadioLevel1()
 {
+    m_QASession.SetCurrentLevel(CQASession::SINGLE_NOTE_SINGLE_OCTAVE);
+
+    // Hide the Ragalist combo and Show the Answer Static Control
+    GetDlgItem(IDC_RAGA_LIST)->ShowWindow(SW_HIDE);
+    GetDlgItem(IDC_STATIC_ANSWER)->ShowWindow(SW_SHOW);
+
     // Make sure the piano control regains focus 
     m_Keys.SetFocus();
 }
 
 void CPlayByEarDlg::OnBnClickedRadioLevel2()
 {
+    m_QASession.SetCurrentLevel(CQASession::SINGLE_NOTE_MULTI_OCTAVE);
+
+    // Hide the Ragalist combo and Show the Answer Static Control
+    GetDlgItem(IDC_RAGA_LIST)->ShowWindow(SW_HIDE);
+    GetDlgItem(IDC_STATIC_ANSWER)->ShowWindow(SW_SHOW);
+
     // Make sure the piano control regains focus 
     m_Keys.SetFocus();
 }
 
 void CPlayByEarDlg::OnBnClickedRadioLevel3()
 {
+    m_QASession.SetCurrentLevel(CQASession::MULTINOTE);
+
+    // Hide the Ragalist combo and Show the Answer Static Control
+    GetDlgItem(IDC_RAGA_LIST)->ShowWindow(SW_HIDE);
+    GetDlgItem(IDC_STATIC_ANSWER)->ShowWindow(SW_SHOW);
+
     // Make sure the piano control regains focus 
     m_Keys.SetFocus();
 }
 
 void CPlayByEarDlg::OnBnClickedRadioLevel4()
 {
+    m_QASession.SetCurrentLevel(m_Mode==CARNATIC ? CQASession::CARNATIC_RAGA : CQASession::WESTERN_SCALE);
+
+    // Show the Ragalist combo and Hide the Answer Static Control
+    GetDlgItem(IDC_RAGA_LIST)->ShowWindow(SW_SHOW);
+    GetDlgItem(IDC_STATIC_ANSWER)->ShowWindow(SW_HIDE);
+
     // Make sure the piano control regains focus 
     m_Keys.SetFocus();
 }
@@ -573,6 +703,12 @@ void CPlayByEarDlg::OnNMClickSyslinkSubmit(NMHDR *pNMHDR, LRESULT *pResult)
 
     m_QASession.SubmitAnswer();
 
+    // We have submitted the answer. Disable the controls            
+    GetDlgItem(IDC_SYSLINK_SUBMIT)->SetWindowText(_T(" "));
+    GetDlgItem(IDC_SYSLINK_PLAYANSWER)->SetWindowText(_T(" "));
+    GetDlgItem(IDC_SYSLINK_REPLAY)->SetWindowText(_T(" "));
+    this->m_RagaListCombo.EnableWindow(false);
+
     // Make sure the piano control regains focus 
     m_Keys.SetFocus();
 }
@@ -581,11 +717,23 @@ void CPlayByEarDlg::OnNMClickSyslinkReplay(NMHDR *pNMHDR, LRESULT *pResult)
 {
     *pResult = 0;
 
+    m_QASession.ReplayQuestion();
+
     // Make sure the piano control regains focus 
     m_Keys.SetFocus();
 }
 
 void CPlayByEarDlg::OnNMClickSyslinkNextquestion(NMHDR *pNMHDR, LRESULT *pResult)
+{
+    *pResult = 0;
+
+    m_QASession.GoToNextQuestion();
+
+    // Make sure the piano control regains focus 
+    m_Keys.SetFocus();
+}
+
+void CPlayByEarDlg::OnNMClickSyslinkPlayAnswer(NMHDR *pNMHDR, LRESULT *pResult)
 {
     *pResult = 0;
 
@@ -625,29 +773,69 @@ void CPlayByEarDlg::OnShowKeyBindings()
     
 void CPlayByEarDlg::OnKeyUp(CPianoCtrl &PianoCtrl, UINT nChar, UINT nRepCnt, UINT nFlags)
 {
+    LRESULT result;
     switch(nChar)
     {
-    case VK_RETURN: OutputDebugString(_T("Received Enter\n"));break;
+    case VK_RETURN: 
+        {
+            switch(m_QASession.GetCurrentState())
+            {
+            case CQASession::RECEIVING_ANSWER: OnNMClickSyslinkSubmit(NULL, &result);break; // Simulate Submit
+            case CQASession::WRONG_ANSWER: m_QASession.TryAgain(); break;// Try the same question again
+            case CQASession::RIGHT_ANSWER: m_QASession.GoToNextQuestion(); break; // User is ready to goto next question
+            }
+            break;
+        }
     }
 }
 
 void CPlayByEarDlg::OnTimer(UINT_PTR nIDEvent)
 {
-    //static int nRound = 0;
-    //
-    //nRound = !nRound;
-    //
-    //GetDlgItem(IDC_STATIC_STATUS)->SetWindowText(nRound ? _T("Awaiting Answer...") : _T(" "));
+    if(m_QASession.ShouldHaltProcessing() == false)
+    {
+        switch(m_QASession.GetCurrentState())
+        {
+        case CQASession::PREPARING_QUESTION:
+            {
+                // Clear the Notes on Answer Control        
+                SetDlgItemText(IDC_STATIC_ANSWER, _T("-")); 
+                // Make the current Combo selection Invalid
+                this->m_RagaListCombo.SetCurSel(-1);
+                // Follow on
+            }
+        case CQASession::POSING_QUESTION: 
+            {
+                // Disable Options
+                GetDlgItem(IDC_SYSLINK_REPLAY)->SetWindowText(_T(" ")); 
+                GetDlgItem(IDC_SYSLINK_PLAYANSWER)->SetWindowText(_T(" ")); 
+                GetDlgItem(IDC_SYSLINK_SUBMIT)->SetWindowText(_T(" ")); 
+                GetDlgItem(IDC_SYSLINK_NEXTQUESTION)->SetWindowText(_T(" "));
+                GetDlgItem(IDC_RAGA_LIST)->EnableWindow(false);
+                break;
+            }
+        case CQASession::COMPLETED_QUESTION:
+            {
+                // Enable the 'Replay Question' option (we disable it on submit again)
+                GetDlgItem(IDC_SYSLINK_REPLAY)->SetWindowText(_T("<a>Replay Question</a>"));
+                GetDlgItem(IDC_SYSLINK_NEXTQUESTION)->SetWindowText(_T("<a>Next Question</a>"));
+                GetDlgItem(IDC_RAGA_LIST)->EnableWindow(true);
+                if(m_QASession.GetAnswerNotes().size() != 0) // if answer notes present
+                {
+                    GetDlgItem(IDC_SYSLINK_SUBMIT)->SetWindowText(_T("<a>Submit</a>"));
+                    GetDlgItem(IDC_SYSLINK_PLAYANSWER)->SetWindowText(_T("<a>Play the Answer</a>"));
+                }
+                break;
+            }
+        }
+      
+        // Process the Active State
+        m_QASession.ProcessCurrentState();
 
-    //this->SetWindowText(nRound ? _T("Play By Ear: Awaiting Answer...") : _T("Play By Ear"));
+        GetDlgItem(IDC_STATIC_STATUS)->SetWindowText(m_QASession.GetStatusString());
+        this->SetWindowText(_T("Play By Ear: ") + m_QASession.GetStatusString());
+        this->m_ctrlInfo.SetWindowText(m_QASession.GetInfoString());
 
-    m_QASession.ProcessCurrentState();
-
-    GetDlgItem(IDC_STATIC_STATUS)->SetWindowText(m_QASession.GetStatusString());
-    this->SetWindowText(_T("Play By Ear: ") + m_QASession.GetStatusString());
-    this->m_ctrlInfo.SetWindowText(m_QASession.GetInfoString());
-
-    //__super::OnTimer(nIDEvent);
+    }
 }
 
 void CPlayByEarDlg::OnFileExitapplication()
@@ -656,7 +844,14 @@ void CPlayByEarDlg::OnFileExitapplication()
 }
 
 void CPlayByEarDlg::OnTestStart()
-{            
+{
+    // Disable the Level Options
+    GetDlgItem(IDC_RADIO_LEVEL1)->EnableWindow(false);
+    GetDlgItem(IDC_RADIO_LEVEL2)->EnableWindow(false);
+    GetDlgItem(IDC_RADIO_LEVEL3)->EnableWindow(false);
+    GetDlgItem(IDC_RADIO_LEVEL4)->EnableWindow(false);
+
+    // Start the Timer
     m_nTimer = SetTimer(1, 500, NULL); // 500 ms
     if(m_nTimer)
     {
@@ -673,4 +868,10 @@ void CPlayByEarDlg::OnTestStop()
     this->GetMenu()->EnableMenuItem(ID_TEST_STOP, MF_DISABLED | MF_BYCOMMAND);
 
     m_QASession.Stop();
+
+    // Enable the Level Options
+    GetDlgItem(IDC_RADIO_LEVEL1)->EnableWindow(true);
+    GetDlgItem(IDC_RADIO_LEVEL2)->EnableWindow(true);
+    GetDlgItem(IDC_RADIO_LEVEL3)->EnableWindow(true);
+    GetDlgItem(IDC_RADIO_LEVEL4)->EnableWindow(true);
 }

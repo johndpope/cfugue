@@ -6,7 +6,6 @@
 #include "afxcmn.h"
 #include "QASession.h"
 
-
 // CPlayByEarDlg dialog
 class CPlayByEarDlg : public CDialog, public CPianoCtrlListener,
                  public midi::CMIDIReceiver
@@ -71,6 +70,7 @@ public:
 protected:
     virtual void OnOK();
     void AdjustDisplayForMode();
+    CString ConvertAnswerNotesToString(const CQASession::ANSWERNOTES& AnswerNotes);
 public:
     CComboBox m_GMCombo;
     afx_msg void OnShowHideKeyNames();
@@ -84,6 +84,7 @@ public:
     afx_msg void OnNMClickSyslinkSubmit(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnNMClickSyslinkReplay(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnNMClickSyslinkNextquestion(NMHDR *pNMHDR, LRESULT *pResult);
+    afx_msg void OnNMClickSyslinkPlayAnswer(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnHelpHowdoi();
 protected:
     CQhtmWnd m_ctrlInfo;
@@ -94,4 +95,7 @@ public:
     afx_msg void OnFileExitapplication();
     afx_msg void OnTestStart();
     afx_msg void OnTestStop();
+    afx_msg void OnSelchangeRagaList();
+private:
+    CComboBox m_RagaListCombo;
 };
