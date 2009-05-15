@@ -1,16 +1,16 @@
 #include "StdAfx.h"
 #include "QASession.h"
 
-CQASession::CQASession(void) 
-    : m_nCurState(TO_BE_STARTED), 
+CQASession::CQASession(void) :
     m_bFirstQuestion(true), 
     m_nQuestionWaitRound(0),
     m_nAnswerWaitRound(0),
     m_nRetryCount(0),
     m_nResultAnouncementRound(0),
+    m_nCurState(TO_BE_STARTED),
     m_nCurLevel(SINGLE_NOTE_SINGLE_OCTAVE),
     m_nQuestionCount(0),
-    m_bHaltProcessing(true),
+    m_bHaltProcessing(false),
     m_bWaitBeforeNewQuestion(true),
     m_bWaitBeforeRetry(true)
 {
@@ -31,7 +31,7 @@ void CQASession::Start()
 void CQASession::Stop()
 {
     m_nCurState = TO_BE_STARTED;
-    m_bHaltProcessing = true;
+    m_bHaltProcessing = false;
 }
 
 void CQASession::SubmitAnswer()
@@ -114,6 +114,8 @@ void CQASession::ProcessState_ToBeStarted()
 {
     m_strInfo = _T("Use the Piano below to practice the notes or the <i>Test | Start</i> menu option to start a QA Session");
     m_strCurStatus = _T(" - No active QA Session in progress - ");
+
+    m_bHaltProcessing = true; // Wait till 'Start' is Requested
 }
 
 void CQASession::ProcessState_PreparingQuestionnnaire()
