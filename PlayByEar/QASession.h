@@ -56,7 +56,7 @@ protected:
     UINT m_nResultAnouncementRound; // Used to 'hold' the Results
     bool m_bHaltProcessing; // Should external module stop calling the ProcessCurrentState() ?
 
-    UINT m_nQuestionCount; // Total Number of questions
+    int  m_nQuestionCount; // Total Number of questions
     int  m_nCurQuestion; // Keeps track of the current question index
 
     bool m_bWaitBeforeNewQuestion;
