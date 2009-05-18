@@ -3,7 +3,9 @@
 
 #include "EventHandler.h"
 
-class CQASession : OIL::CEventSource
+class CPlayByEarDlg;
+
+class CQASession : OIL::CEventSource, public OIL::CEventReceiver
 {
 public:     
     enum LEVEL: long
@@ -20,8 +22,8 @@ public:
         TO_BE_STARTED = 0, // Starts Here and Stops Here.
         PREPARING_QUESTIONNAIRE, // Comes From: {TO_BE_STARTED} Goes To: {PREPARING_QUESTION}
         PREPARING_QUESTION, // Comes From: {TO_BE_STARTED, RIGHT_ANSWER} or External Event: GoToNextQuestion(), Goes To: {POSING_QUESTION}
-        POSING_QUESTION, // Comes From: {PREPARING_QUESTION}, Goes To: {COMPLETED_QUESTION}
-        COMPLETED_QUESTION, // Comes From: {POSING_QUESTION}, Goes To: {AWAITING_ANSWER, RECEIVING_ANSWER}
+        POSING_QUESTION, // Comes From: {PREPARING_QUESTION}, Goes To: {COMPLETED_QUESTION} when Question is Complete
+        COMPLETED_QUESTION, // Triggered when Play is Complete; Goes To: {AWAITING_ANSWER, RECEIVING_ANSWER}
         AWAITING_ANSWER, // Comes From: {COMPLETED_QUESTION}, Loops in...
         RECEIVING_ANSWER, // Comes From: {COMPLETED_QUESTION} or External Event: AnswerEntered(), Halts Processing; Goes to: {EVALUATING_ANSWER} on SubmitAnswer()
         EVALUATING_ANSWER, // Comes From: External Event: SubmitAnswer(), Goes to: {WRONG_ANSWER, RIGHT_ANSWER}
@@ -46,6 +48,8 @@ protected:
     void ProcessState_TryAgain();
     void ProcessState_RightAnswer();
 
+    void OnQuestionPlayComplete(const OIL::CEventSource* pSender, OIL::CEventHandlerArgs* pArgs);
+
     CString m_strCurStatus;
     CString m_strInfo;
 
@@ -64,10 +68,12 @@ protected:
 
     std::vector<unsigned char> m_AnswerNotes;   // Sequence of MidiNotes supplied as Answer
 
+    CPlayByEarDlg* m_pDlg; // The Window associated with this QASession
+
 public:
     OIL::CEvent evQASessionComplete; // Raised when a QASession is Complete
 
-    CQASession(void);
+    CQASession(CPlayByEarDlg* pDlg);
     ~CQASession(void);
 
     // Starts (or Resumes a previously stopped) QA Session

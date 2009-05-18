@@ -45,7 +45,7 @@ END_MESSAGE_MAP()
 
 
 // Thread that takes care of playing the answer notes
-UINT __cdecl AnswerPlayingThreadProc( LPVOID pParam )
+UINT __cdecl NotePlayThreadProc( LPVOID pParam )
 {
     CPlayByEarDlg* pDlg = (CPlayByEarDlg*)pParam;
 
@@ -53,12 +53,12 @@ UINT __cdecl AnswerPlayingThreadProc( LPVOID pParam )
 
     DWORD dwWait = INFINITE, dwResult; int nPlayIndex=-1;
     midi::CMIDIOutDevice& OutDevice = pDlg->m_OutDevice;
-    const CQASession::ANSWERNOTES& vecAnswerNotes = pDlg->m_AnswerNotesToPlay;
-    OIL::CInvokableEvent& evPlayComplete = pDlg->m_evAnswerPlayComplete;
+    const CQASession::ANSWERNOTES& vecAnswerNotes = pDlg->m_NotesToPlay;
+    OIL::CInvokableEvent& evPlayComplete = pDlg->m_evPlayComplete;
     
-    HANDLE handles[] = {pDlg->m_evExitAnswerPlayingThread.m_hObject,
-                        pDlg->m_evPlayTheAnswer.m_hObject,
-                        pDlg->m_evStopTheAnswer.m_hObject};
+    HANDLE handles[] = {pDlg->m_evExitPlayThread.m_hObject,
+                        pDlg->m_evPlayNotes.m_hObject,
+                        pDlg->m_evStopNotes.m_hObject};
     do
     {
         switch(dwResult = WaitForMultipleObjects(_countof(handles), handles, false, dwWait))
@@ -123,7 +123,7 @@ UINT __cdecl AnswerPlayingThreadProc( LPVOID pParam )
 
 
 CPlayByEarDlg::CPlayByEarDlg(CWnd* pParent /*=NULL*/)
-	: CDialog(CPlayByEarDlg::IDD, pParent)
+	: CDialog(CPlayByEarDlg::IDD, pParent), m_QASession(this)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -289,10 +289,10 @@ BOOL CPlayByEarDlg::OnInitDialog()
         // Subscribe to the QASessionComplete Event
         m_QASession.evQASessionComplete.Subscribe(this, &CPlayByEarDlg::OnQASessionComplete);
         // Subscribe to AnswerPlayComplete Event
-        m_evAnswerPlayComplete.Subscribe(this, &CPlayByEarDlg::OnAnswerPlayComplete);
+        m_evPlayComplete.Subscribe(this, &CPlayByEarDlg::OnAnswerPlayComplete);
 
         // Start the AnswerPlayingThread
-        AfxBeginThread(AnswerPlayingThreadProc, (LPVOID)this);
+        AfxBeginThread(NotePlayThreadProc, (LPVOID)this);
 
         // Start the Timer
         m_nTimer = SetTimer(1, 500, NULL); // 500 ms
@@ -372,7 +372,7 @@ void CPlayByEarDlg::OnCancel()
 void CPlayByEarDlg::OnClose()
 {
     // Exit the Answer Playing Thread
-    m_evExitAnswerPlayingThread.SetEvent();
+    m_evExitPlayThread.SetEvent();
 
     // Stop the test, if any 
     OnTestStop();
@@ -810,7 +810,7 @@ void CPlayByEarDlg::OnNMClickSyslinkSubmit(NMHDR *pNMHDR, LRESULT *pResult)
     *pResult = 0;
 
     // Stop the answer play, if any
-    m_evStopTheAnswer.SetEvent();
+    m_evStopNotes.SetEvent();
 
     m_QASession.SubmitAnswer();
 
@@ -829,7 +829,7 @@ void CPlayByEarDlg::OnNMClickSyslinkReplay(NMHDR *pNMHDR, LRESULT *pResult)
     *pResult = 0;
 
     // Stop the answer play, if any
-    m_evStopTheAnswer.SetEvent();
+    m_evStopNotes.SetEvent();
 
     m_QASession.ReplayQuestion();
 
@@ -842,7 +842,7 @@ void CPlayByEarDlg::OnNMClickSyslinkNextquestion(NMHDR *pNMHDR, LRESULT *pResult
     *pResult = 0;
 
     // Stop the answer play, if any
-    m_evStopTheAnswer.SetEvent();
+    m_evStopNotes.SetEvent();
 
     m_QASession.GoToNextQuestion();
 
@@ -856,19 +856,22 @@ void CPlayByEarDlg::OnNMClickSyslinkPlayAnswer(NMHDR *pNMHDR, LRESULT *pResult)
 
     GetDlgItem(IDC_SYSLINK_PLAYANSWER)->SetWindowText(_T("Play the Answer"));
 
-    this->m_AnswerNotesToPlay = m_QASession.GetAnswerNotes();
-    m_evPlayTheAnswer.SetEvent();
+    this->m_NotesToPlay = m_QASession.GetAnswerNotes();
+    m_evPlayNotes.SetEvent();
 
     // Make sure the piano control regains focus 
     m_Keys.SetFocus();
 }
 
+// Invoked from the NotePlayThread.
+// Triggered for both question notes and answer notes.
+// Check if state is 'receiving_answer' to make sure this is answer and not question
 void CPlayByEarDlg::OnAnswerPlayComplete(const OIL::CEventSource* pSender, OIL::CEventHandlerArgs* pArgs)
-{
-    if(m_QASession.IsSessionActive() && m_QASession.GetAnswerNotes().size() != 0)
+{    
+    if(m_QASession.IsSessionActive() && m_QASession.GetCurrentState() == CQASession::RECEIVING_ANSWER)
         GetDlgItem(IDC_SYSLINK_PLAYANSWER)->SetWindowText(_T("<a>Play the Answer</a>"));
 
-    // Make sure the piano control regains focus 
+     // Make sure the piano control regains focus 
     m_Keys.SetFocus();
 }
 
@@ -993,7 +996,7 @@ void CPlayByEarDlg::OnTestStart()
 void CPlayByEarDlg::OnTestStop()
 {
     // Stop Playing the Answer, if any
-    this->m_evStopTheAnswer.SetEvent();
+    this->m_evStopNotes.SetEvent();
 
     this->GetMenu()->EnableMenuItem(ID_TEST_START, MF_ENABLED | MF_BYCOMMAND);
     this->GetMenu()->EnableMenuItem(ID_TEST_STOP, MF_GRAYED | MF_BYCOMMAND);
