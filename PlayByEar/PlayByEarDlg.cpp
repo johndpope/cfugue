@@ -76,6 +76,10 @@ UINT __cdecl NotePlayThreadProc( LPVOID pParam )
                 if(dwResult == WAIT_OBJECT_0) 
                     return 0; // request for an exit
 
+                // if we are asked to stop, there is a chance we might be asked
+                // to play notes again immediately. Give sometime to 'settle down' the Silence.
+                Sleep(500); 
+
                 pDlg->m_bPlaying = false; nPlayIndex = -1;
                 dwWait = INFINITE; //Reset to Infinite till we need to play again
 
