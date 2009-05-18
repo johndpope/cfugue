@@ -88,12 +88,6 @@ protected:
 
     void OnQASessionComplete(const OIL::CEventSource* pSender, OIL::CEventHandlerArgs* pArgs);
     void OnAnswerPlayComplete(const OIL::CEventSource* pSender, OIL::CEventHandlerArgs* pArgs);
-protected:
-    CQhtmWnd m_ctrlInfo;
-    UINT m_nTimer;
-    CQASession m_QASession;
-    CComboBox m_GMCombo;
-    CComboBox m_RagaListCombo;
 
 public:
     afx_msg void OnTimer(UINT_PTR nIDEvent);
@@ -107,10 +101,16 @@ public:
     afx_msg void OnTestWaitBeforeNewQuestion();
 public:
     // Answer Thread Related data
-    CEvent  m_evExitAnswerPlayingThread; // set by Dlg to Signale the exit of Thread
-    CEvent  m_evPlayTheAnswer; // set by Dlg to Signale the Play of notes
-    CEvent  m_evStopTheAnswer; // set by Dlg to Signale Stop Playing the notes
+    CEvent  m_evExitPlayThread; // set by Dlg to Signale the exit of Thread
+    CEvent  m_evPlayNotes; // set by Dlg to Signale the Play of notes
+    CEvent  m_evStopNotes; // set by Dlg to Signale Stop Playing the notes
     bool    m_bPlaying; // Set by AnswerThread
-    CQASession::ANSWERNOTES m_AnswerNotesToPlay; // Read by AnswerThread when requested for Play
-    OIL::CInvokableEvent m_evAnswerPlayComplete; // Raised by AnswerPlayThread when Play is complete
+    CQASession::ANSWERNOTES m_NotesToPlay; // Read by AnswerThread when requested for Play
+    OIL::CInvokableEvent m_evPlayComplete; // Raised by AnswerPlayThread when Play is complete
+protected:
+    CQhtmWnd    m_ctrlInfo;
+    UINT        m_nTimer;
+    CQASession  m_QASession;
+    CComboBox   m_GMCombo;
+    CComboBox   m_RagaListCombo;
 };

@@ -1,7 +1,9 @@
 #include "StdAfx.h"
+#include "PlayByEarDlg.h"
 #include "QASession.h"
 
-CQASession::CQASession(void) :
+CQASession::CQASession(CPlayByEarDlg* pDlg) :
+    m_pDlg(pDlg),
     m_bFirstQuestion(true), 
     m_nQuestionWaitRound(0),
     m_nAnswerWaitRound(0),
@@ -14,6 +16,8 @@ CQASession::CQASession(void) :
     m_bWaitBeforeNewQuestion(true),
     m_bWaitBeforeRetry(true)
 {
+    // Subscribe to the 'Play Complete' event
+    m_pDlg->m_evPlayComplete.Subscribe(this, &CQASession::OnQuestionPlayComplete);
 }
 
 CQASession::~CQASession(void)
@@ -56,6 +60,19 @@ void CQASession::ReplayQuestion()
     m_nCurState = POSING_QUESTION;
     m_nQuestionWaitRound = 0;
     m_bHaltProcessing = false;
+}
+
+// Player thread indicated the completion of Play.
+// Raised for both answer notes and questions notes.
+// We check if this is 'posing_question' state to 
+// ensure this is a question that we played.
+void CQASession::OnQuestionPlayComplete(const OIL::CEventSource* pSender, OIL::CEventHandlerArgs* pArgs)
+{
+    if(IsSessionActive() && m_nCurState == POSING_QUESTION)
+    {
+        m_nCurState = COMPLETED_QUESTION;
+        m_bHaltProcessing = false;
+    }
 }
 
 void CQASession::GoToNextQuestion()
@@ -160,8 +177,58 @@ void CQASession::ProcessState_PosingQuestion()
     m_strCurStatus = _T("Playing the Notes ... Listen carefully !!");
     m_strInfo.Format(_T("Question: %d/%d"), m_nCurQuestion+1, m_nQuestionCount);
 
-    if(m_nQuestionWaitRound++ > 3)
-        m_nCurState = COMPLETED_QUESTION;
+    ANSWERNOTES ans;
+    ans.push_back(60);
+    ans.push_back(70);
+    ans.push_back(80);
+    ans.push_back(60);
+    ans.push_back(80);
+    ans.push_back(60);
+
+    // Set the event to play the notes
+    m_pDlg->m_NotesToPlay = ans;
+    m_pDlg->m_evPlayNotes.SetEvent();
+
+    // Wait till we receive 'Play Complete Event'
+    m_bHaltProcessing = true; 
+
+    //else // playing is false - completed 
+    //{
+    //    if(m_nQuestionWaitRound++ > 1)
+    //        m_nCurState = COMPLETED_QUESTION;
+    //}
+
+                //if(m_nQuestionWaitRound++ > 3)
+                //    m_nCurState = COMPLETED_QUESTION;
+
+    //do
+    //{
+    //    _ASSERTE(m_nCurState == POSING_QUESTION);
+
+    //    switch(MsgWaitForMultipleObjects(0, NULL, false, 500, QS_INPUT))
+    //    {
+    //    case WAIT_TIMEOUT:
+    //        {
+    //            if(m_nQuestionWaitRound++ > 3)
+    //            {
+    //                m_nCurState = COMPLETED_QUESTION;
+    //                return; // return from this
+    //            }
+    //            break;
+    //        }
+    //    default: // Some Window Message arrived
+    //        {
+    //            MSG msg;
+    //            while(PeekMessage(&msg, m_hWnd, 0, 0, PM_NOREMOVE))
+    //            {
+    //                //if(msg.message == WM_TIMER) continue; //ignore the timer messages
+    //                //TranslateMessage(&msg);
+    //                //DispatchMessage(&msg);
+    //            }
+    //            break;
+    //        }
+    //    }
+    //}while(true);
 }
 
 void CQASession::ProcessState_CompletedQuestion()
@@ -170,9 +237,13 @@ void CQASession::ProcessState_CompletedQuestion()
     {
         m_nCurState = AWAITING_ANSWER;
         m_nAnswerWaitRound = 0;
+        ProcessState_AwaitingAnswer();
     }
     else // if user has already entered few notes earlier for this question
+    {
         m_nCurState = RECEIVING_ANSWER;
+        ProcessState_ReceivingAnswer();
+    }
 }
 
 void CQASession::ProcessState_AwaitingAnswer()
