@@ -114,7 +114,7 @@ void CQASession::ProcessCurrentState()
     switch(m_nCurState)
     {
     case TO_BE_STARTED: ProcessState_ToBeStarted(); break;
-    case PREPARING_QUESTIONNAIRE: ProcessState_PreparingQuestionnnaire(); break;
+    case PREPARING_QUESTIONNAIRE: ProcessState_PreparingQuestionnaire(); break;
     case PREPARING_QUESTION: ProcessState_PreparingQuestion(); break;
     case POSING_QUESTION: ProcessState_PosingQuestion(); break;
     case COMPLETED_QUESTION: ProcessState_CompletedQuestion(); break;
@@ -135,12 +135,21 @@ void CQASession::ProcessState_ToBeStarted()
     m_bHaltProcessing = true; // Wait till 'Start' is Requested
 }
 
-void CQASession::ProcessState_PreparingQuestionnnaire()
+void CQASession::ProcessState_PreparingQuestionnaire()
 {
-    m_strCurStatus = _T("Preparing Questionnnaire ... ");
+    m_strCurStatus = _T("Preparing Questionnaire ... ");
     m_strInfo = _T(" ");
 
-    m_nQuestionCount = 5;
+    m_nQuestionCount = 0;
+
+    switch(m_nCurLevel)
+    {
+    case SINGLE_NOTE_SINGLE_OCTAVE: PrepareQuestionnaire_Level1(); break;
+    case SINGLE_NOTE_MULTI_OCTAVE: PrepareQuestionnaire_Level2(); break;
+    case MULTINOTE: PrepareQuestionnaire_Level3(); break;
+    case CARNATIC_RAGA:
+    case WESTERN_SCALE: break;
+    }
 
     // When done go to Preparing the first question
     m_nCurState = PREPARING_QUESTION;    
@@ -177,7 +186,7 @@ void CQASession::ProcessState_PosingQuestion()
     m_strCurStatus = _T("Playing the Notes ... Listen carefully !!");
     m_strInfo.Format(_T("Question: %d/%d"), m_nCurQuestion+1, m_nQuestionCount);
 
-    ANSWERNOTES ans;
+    NOTES ans;
     ans.push_back(60);
     ans.push_back(70);
     ans.push_back(80);
@@ -359,3 +368,21 @@ void CQASession::AnswerEntered(unsigned char MidiNoteNumber)
     m_nCurState = RECEIVING_ANSWER;
 }
 
+// Single Note - Middle Octave Level
+void CQASession::PrepareQuestionnaire_Level1()
+{
+
+}
+ 
+void CQASession::PrepareQuestionnaire_Level2()
+{
+}
+
+void CQASession::PrepareQuestionnaire_Level3()
+{
+}
+
+    
+void CQASession::PrepareQuestionnaire_Level4()
+{
+}

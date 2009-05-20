@@ -53,7 +53,7 @@ UINT __cdecl NotePlayThreadProc( LPVOID pParam )
 
     DWORD dwWait = INFINITE, dwResult; int nPlayIndex=-1;
     midi::CMIDIOutDevice& OutDevice = pDlg->m_OutDevice;
-    const CQASession::ANSWERNOTES& vecAnswerNotes = pDlg->m_NotesToPlay;
+    const CQASession::NOTES& vecAnswerNotes = pDlg->m_NotesToPlay;
     OIL::CInvokableEvent& evPlayComplete = pDlg->m_evPlayComplete;
     
     HANDLE handles[] = {pDlg->m_evExitPlayThread.m_hObject,
@@ -412,13 +412,13 @@ TCHAR* gszNoteName[]={
     };
 
 // Converts the Answer Notes into Display String
-CString CPlayByEarDlg::ConvertAnswerNotesToString(const CQASession::ANSWERNOTES& AnswerNotes)
+CString CPlayByEarDlg::ConvertAnswerNotesToString(const CQASession::NOTES& AnswerNotes)
 {
     CString str, strResult;
     int nOctave, nNoteWithInOctave; 
 
-    CQASession::ANSWERNOTES::const_iterator iter = AnswerNotes.begin();
-    CQASession::ANSWERNOTES::const_iterator& iterEnd = AnswerNotes.end();
+    CQASession::NOTES::const_iterator iter = AnswerNotes.begin();
+    CQASession::NOTES::const_iterator& iterEnd = AnswerNotes.end();
     while(iter != iterEnd)
     {
         // Decompose the MIDINote Number into Octave and Note
@@ -500,6 +500,8 @@ void CPlayByEarDlg::OnSelchangeRagaList()
                
                 // Add the Note as Answer
                 m_QASession.AnswerEntered(60); // TODO: Take care of entering Raga Notes
+                // This is a scale/raga section. We need to enter a series 
+                // of notes. Not just single note.
                 break;
             }
         }

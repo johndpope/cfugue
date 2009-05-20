@@ -70,7 +70,7 @@ public:
 protected:
     virtual void OnOK();
     void AdjustDisplayForMode();
-    CString ConvertAnswerNotesToString(const CQASession::ANSWERNOTES& AnswerNotes);
+    CString ConvertAnswerNotesToString(const CQASession::NOTES& AnswerNotes);
 
     afx_msg void OnShowHideKeyNames();
     afx_msg void OnPrefCarnaticMusicMode();
@@ -105,7 +105,7 @@ public:
     CEvent  m_evPlayNotes; // set by Dlg to Signale the Play of notes
     CEvent  m_evStopNotes; // set by Dlg to Signale Stop Playing the notes
     bool    m_bPlaying; // Set by AnswerThread
-    CQASession::ANSWERNOTES m_NotesToPlay; // Read by AnswerThread when requested for Play
+    CQASession::NOTES m_NotesToPlay; // Read by AnswerThread when requested for Play
     OIL::CInvokableEvent m_evPlayComplete; // Raised by AnswerPlayThread when Play is complete
 protected:
     CQhtmWnd    m_ctrlInfo;

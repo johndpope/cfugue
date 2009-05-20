@@ -32,12 +32,14 @@ public:
         RIGHT_ANSWER, // Comes From: {EVALUATING_ANSWER}, Goes to: {PREPARING_QUESTION}
     } ;  
 
+    typedef std::vector<unsigned char> NOTES;
+
 protected:
     STATE m_nCurState; // Keeps track of the current state
     LEVEL m_nCurLevel; // Question Difficulty Level
 
     void ProcessState_ToBeStarted();
-    void ProcessState_PreparingQuestionnnaire();
+    void ProcessState_PreparingQuestionnaire();
     void ProcessState_PreparingQuestion();
     void ProcessState_PosingQuestion();
     void ProcessState_CompletedQuestion();
@@ -50,6 +52,11 @@ protected:
 
     void OnQuestionPlayComplete(const OIL::CEventSource* pSender, OIL::CEventHandlerArgs* pArgs);
 
+    void PrepareQuestionnaire_Level1();
+    void PrepareQuestionnaire_Level2();
+    void PrepareQuestionnaire_Level3();
+    void PrepareQuestionnaire_Level4();
+
     CString m_strCurStatus;
     CString m_strInfo;
 
@@ -59,6 +66,9 @@ protected:
     UINT m_nRetryCount; // Used to keep track of the Retry options
     UINT m_nResultAnouncementRound; // Used to 'hold' the Results
     bool m_bHaltProcessing; // Should external module stop calling the ProcessCurrentState() ?
+
+    typedef std::vector<NOTES> QUESTIONNAIRE;
+    QUESTIONNAIRE m_Questionnaire; // The questions prepeared
 
     int  m_nQuestionCount; // Total Number of questions
     int  m_nCurQuestion; // Keeps track of the current question index
@@ -112,8 +122,7 @@ public:
     inline bool IsSessionActive() const { return m_nCurState != TO_BE_STARTED; } 
 
     // Retrieves the Current Answer Notes
-    typedef std::vector<unsigned char> ANSWERNOTES;
-    const ANSWERNOTES& GetAnswerNotes() { return m_AnswerNotes; }
+    const NOTES& GetAnswerNotes() { return m_AnswerNotes; }
 
     // Sets the current question difficulty level
     inline void SetCurrentLevel(LEVEL level) { m_nCurLevel = level; }
