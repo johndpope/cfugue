@@ -53,7 +53,7 @@ UINT __cdecl NotePlayThreadProc( LPVOID pParam )
 
     DWORD dwWait = INFINITE, dwResult; int nPlayIndex=-1;
     midi::CMIDIOutDevice& OutDevice = pDlg->m_OutDevice;
-    const CQASession::NOTES& vecAnswerNotes = pDlg->m_NotesToPlay;
+    const CQASession::NOTES& vecNotes = pDlg->m_NotesToPlay;
     OIL::CInvokableEvent& evPlayComplete = pDlg->m_evPlayComplete;
     
     HANDLE handles[] = {pDlg->m_evExitPlayThread.m_hObject,
@@ -69,7 +69,7 @@ UINT __cdecl NotePlayThreadProc( LPVOID pParam )
                 if(pDlg->m_bPlaying == true)
                 {
                     // Stop the playing Note
-                    midi::CShortMsg ShortMsg(midi::NOTE_OFF, 0, vecAnswerNotes[nPlayIndex], 0, 0);
+                    midi::CShortMsg ShortMsg(midi::NOTE_OFF, 0, vecNotes[nPlayIndex], 0, 0);
                     ShortMsg.SendMsg(OutDevice);
                 }
                 
@@ -87,8 +87,9 @@ UINT __cdecl NotePlayThreadProc( LPVOID pParam )
             }
         case WAIT_OBJECT_0+1: // request for play
             {
-                pDlg->m_bPlaying = true; dwWait = 250;//250ms
-                // follow on...
+                pDlg->m_bPlaying = true; 
+                dwWait = (vecNotes.size() <= 2 ? 500 : 250); //500 or 250ms for each note
+                break;
             }
         case WAIT_TIMEOUT:
             {
@@ -97,14 +98,14 @@ UINT __cdecl NotePlayThreadProc( LPVOID pParam )
                 // Stop the Previous Note, if any  
                 if(nPlayIndex >= 0)
                 {
-                    midi::CShortMsg ShortMsg(midi::NOTE_OFF, 0, vecAnswerNotes[nPlayIndex], 0, 0);
+                    midi::CShortMsg ShortMsg(midi::NOTE_OFF, 0, vecNotes[nPlayIndex], 0, 0);
                     ShortMsg.SendMsg(OutDevice);
                 }
 
                 //Play the next note in the sequence
-                if(++nPlayIndex < vecAnswerNotes.size())
+                if(++nPlayIndex < vecNotes.size())
                 {
-                    midi::CShortMsg ShortMsg(midi::NOTE_ON, 0, vecAnswerNotes[nPlayIndex], 127, 0);
+                    midi::CShortMsg ShortMsg(midi::NOTE_ON, 0, vecNotes[nPlayIndex], 127, 0);
                     ShortMsg.SendMsg(OutDevice);
                 }
                 else // we have completed all 
@@ -268,6 +269,7 @@ BOOL CPlayByEarDlg::OnInitDialog()
 
         // MIDI Instrument combo box
         m_GMCombo.SetCurSel(AfxGetApp()->GetProfileInt(gpszKey, _T("Instrument"), 0));
+        OnSelchangeGmList();
 
         // Set the Level
         CQASession::LEVEL level = (CQASession::LEVEL)AfxGetApp()->GetProfileInt(gpszKey, _T("QALevel"), 0);
@@ -951,6 +953,15 @@ void CPlayByEarDlg::OnTimer(UINT_PTR nIDEvent)
                 GetDlgItem(IDC_SYSLINK_SUBMIT)->SetWindowText(_T(" ")); 
                 GetDlgItem(IDC_SYSLINK_NEXTQUESTION)->SetWindowText(_T(" "));
                 GetDlgItem(IDC_RAGA_LIST)->EnableWindow(false);
+
+                // Display the Question Number
+                if(m_QASession.GetAnswerNotes().size() == 0 && // this can be a replay. We do this only for first time play.
+                    m_QASession.GetCurrentState() == CQASession::POSING_QUESTION) // PREPARING_QUESTION also comes here, so this check
+                {
+                    CString str; 
+                    str.Format(_T("Question %d/%d"), m_QASession.GetCurrentQuestionNumber()+1, m_QASession.GetQuestionCount());
+                    GetDlgItem(IDC_QUESTION_GROUP)->SetWindowText(str);
+                }
                 break;
             }
         case CQASession::COMPLETED_QUESTION:
@@ -974,7 +985,6 @@ void CPlayByEarDlg::OnTimer(UINT_PTR nIDEvent)
         GetDlgItem(IDC_STATIC_STATUS)->SetWindowText(m_QASession.GetStatusString());
         this->SetWindowText(_T("Play By Ear: ") + m_QASession.GetStatusString());
         this->m_ctrlInfo.SetWindowText(m_QASession.GetInfoString());
-
     }
 }
 
@@ -1025,6 +1035,8 @@ void CPlayByEarDlg::OnTestStop()
     GetDlgItem(IDC_SYSLINK_SUBMIT)->SetWindowText(_T(" ")); 
     GetDlgItem(IDC_SYSLINK_NEXTQUESTION)->SetWindowText(_T(" "));
     GetDlgItem(IDC_RAGA_LIST)->EnableWindow(false);
+    // Erase the Question Number on the Group Box
+    GetDlgItem(IDC_QUESTION_GROUP)->SetWindowText(_T("Question"));
 }
     
 void CPlayByEarDlg::OnQASessionComplete(const OIL::CEventSource* pSender, OIL::CEventHandlerArgs* pArgs)
