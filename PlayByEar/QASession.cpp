@@ -115,6 +115,7 @@ void CQASession::ProcessCurrentState()
     {
     case TO_BE_STARTED: ProcessState_ToBeStarted(); break;
     case PREPARING_QUESTIONNAIRE: ProcessState_PreparingQuestionnaire(); break;
+    case PREPARE_QUESTIONNAIRE: ProcessState_PrepareQuestionnaire(); break;
     case PREPARING_QUESTION: ProcessState_PreparingQuestion(); break;
     case POSING_QUESTION: ProcessState_PosingQuestion(); break;
     case COMPLETED_QUESTION: ProcessState_CompletedQuestion(); break;
@@ -135,11 +136,17 @@ void CQASession::ProcessState_ToBeStarted()
     m_bHaltProcessing = true; // Wait till 'Start' is Requested
 }
 
+// This method is just for UI purpose. PREPARE_QUESTIONNAIRE does the actual work.
 void CQASession::ProcessState_PreparingQuestionnaire()
 {
     m_strCurStatus = _T("Preparing Questionnaire ... ");
     m_strInfo = _T(" ");
 
+    m_nCurState = PREPARE_QUESTIONNAIRE;
+}
+
+void CQASession::ProcessState_PrepareQuestionnaire()
+{
     m_nQuestionCount = 0;
 
     switch(m_nCurLevel)
@@ -186,58 +193,11 @@ void CQASession::ProcessState_PosingQuestion()
     m_strCurStatus = _T("Playing the Notes ... Listen carefully !!");
     m_strInfo.Format(_T("Question: %d/%d"), m_nCurQuestion+1, m_nQuestionCount);
 
-    NOTES ans;
-    ans.push_back(60);
-    ans.push_back(70);
-    ans.push_back(80);
-    ans.push_back(60);
-    ans.push_back(80);
-    ans.push_back(60);
-
-    // Set the event to play the notes
-    m_pDlg->m_NotesToPlay = ans;
+    m_pDlg->m_NotesToPlay = m_Questionnaire.at(m_nCurQuestion);
     m_pDlg->m_evPlayNotes.SetEvent();
 
     // Wait till we receive 'Play Complete Event'
     m_bHaltProcessing = true; 
-
-    //else // playing is false - completed 
-    //{
-    //    if(m_nQuestionWaitRound++ > 1)
-    //        m_nCurState = COMPLETED_QUESTION;
-    //}
-
-                //if(m_nQuestionWaitRound++ > 3)
-                //    m_nCurState = COMPLETED_QUESTION;
-
-    //do
-    //{
-    //    _ASSERTE(m_nCurState == POSING_QUESTION);
-
-    //    switch(MsgWaitForMultipleObjects(0, NULL, false, 500, QS_INPUT))
-    //    {
-    //    case WAIT_TIMEOUT:
-    //        {
-    //            if(m_nQuestionWaitRound++ > 3)
-    //            {
-    //                m_nCurState = COMPLETED_QUESTION;
-    //                return; // return from this
-    //            }
-    //            break;
-    //        }
-    //    default: // Some Window Message arrived
-    //        {
-    //            MSG msg;
-    //            while(PeekMessage(&msg, m_hWnd, 0, 0, PM_NOREMOVE))
-    //            {
-    //                //if(msg.message == WM_TIMER) continue; //ignore the timer messages
-    //                //TranslateMessage(&msg);
-    //                //DispatchMessage(&msg);
-    //            }
-    //            break;
-    //        }
-    //    }
-    //}while(true);
 }
 
 void CQASession::ProcessState_CompletedQuestion()
@@ -287,7 +247,7 @@ void CQASession::ProcessState_EvaluatingAnswer()
     m_strCurStatus = _T("Verifying the Answer...");
     m_strInfo = _T("");
 
-    m_nCurState = nEvenRound ? WRONG_ANSWER : RIGHT_ANSWER;
+    m_nCurState = (m_AnswerNotes == m_Questionnaire.at(m_nCurQuestion)) ? RIGHT_ANSWER : WRONG_ANSWER;
     m_nResultAnouncementRound = 0;
 }
 
@@ -371,18 +331,128 @@ void CQASession::AnswerEntered(unsigned char MidiNoteNumber)
 // Single Note - Middle Octave Level
 void CQASession::PrepareQuestionnaire_Level1()
 {
+    const int MID_C = 60; // Midi Number for Middle C
 
+    // Clear the memory
+    m_Questionnaire.clear();
+
+    // Add three sets of the octave
+    for(int i=0; i < 12; ++i)
+    {
+        NOTES question;
+        question.push_back(MID_C + i);
+        m_Questionnaire.push_back(question);
+    }
+    for(int i=0; i < 12; ++i)
+    {
+        NOTES question;
+        question.push_back(MID_C + i);
+        m_Questionnaire.push_back(question);
+    }
+    for(int i=0; i < 12; ++i)
+    {
+        NOTES question;
+        question.push_back(MID_C + i);
+        m_Questionnaire.push_back(question);
+    }    
+    // Now shuffle them
+    std::random_shuffle(m_Questionnaire.begin(), m_Questionnaire.end());
+
+    this->m_nQuestionCount = m_Questionnaire.size();
+    this->m_nCurQuestion = -1;
 }
  
+// Single Note - All octaves [1-5] Level
 void CQASession::PrepareQuestionnaire_Level2()
 {
+    struct { int LowKey; int HighKey; } KeyLimits[] = 
+    {
+        {36, 55}, // C1 to G2
+        {43, 67}, // G1 to G3
+        {55, 79}, // G2 to G4
+        {67, 91}, // G3 to G5
+        {79, 100} // G5 to E7
+    };
+
+    // Fill and Shuffle the octave numbers. This makes sure
+    // We get different octave order each time.
+    std::vector<int> Octaves;
+    Octaves.push_back(0);   
+    Octaves.push_back(1);    
+    Octaves.push_back(2);
+    Octaves.push_back(3);   
+    Octaves.push_back(4);       
+    Octaves.push_back(1);    
+    Octaves.push_back(2);
+    Octaves.push_back(3);   
+    std::random_shuffle(Octaves.begin(), Octaves.end());
+
+    // Clear the memory
+    m_Questionnaire.clear();
+
+    // We create questions seperately for each octave.
+    // This makes sure that keys are reletively close 
+    // to each other and all notes in an octave
+    // are covered before proceeding with other octaves
+    QUESTIONNAIRE Questionnaire;
+    for(int nOctaveNum=0, nOctaveCount = Octaves.size(); nOctaveNum < nOctaveCount; ++nOctaveNum)
+    {
+        Questionnaire.clear();
+        for(int noteId=KeyLimits[Octaves[nOctaveNum]].LowKey, 
+                nMax = KeyLimits[Octaves[nOctaveNum]].HighKey; 
+                noteId <= nMax; noteId++)
+        {
+            NOTES question;
+            question.push_back(noteId);
+            Questionnaire.push_back(question);
+        }
+        std::random_shuffle(Questionnaire.begin(), Questionnaire.end()); // Randomize
+        m_Questionnaire.insert(m_Questionnaire.end(), Questionnaire.begin(), Questionnaire.end());
+    }  
+    
+    this->m_nQuestionCount = m_Questionnaire.size();
+    this->m_nCurQuestion = -1;
 }
 
+// Mutiple Notes Level
 void CQASession::PrepareQuestionnaire_Level3()
 {
+    std::vector<int> AllNotes;
+    for(int i= 36; i <= 100; ++i) // Insert all notes
+    {
+        AllNotes.push_back(i);
+    }
+    std::random_shuffle(AllNotes.begin(), AllNotes.end());
+    
+    // Clear the memory
+    m_Questionnaire.clear();
+
+    // Randomly compute the length of each question
+    // and pick up the notes of the question from randomized All notes sequentially
+    for(int questionId = 0, nMax = AllNotes.size(); questionId < nMax; ++questionId)
+    {
+        int nLen = (AllNotes[questionId] % 5) + 1;
+           
+        NOTES question;
+        for(int i=0; i < nLen; ++i)        
+            question.push_back(AllNotes[(i + questionId) < nMax ? (i + questionId) : questionId]);
+        
+        std::random_shuffle(question.begin(), question.end());
+        m_Questionnaire.push_back(question);
+    }    
+
+    this->m_nQuestionCount = m_Questionnaire.size();
+    this->m_nCurQuestion = -1;
 }
 
-    
+//Scale-Raga Level
 void CQASession::PrepareQuestionnaire_Level4()
 {
+    // Clear the memory
+    m_Questionnaire.clear();
+
+    _ASSERTE(_T("Currently Not Supported") == NULL);
+
+    this->m_nQuestionCount = m_Questionnaire.size();
+    this->m_nCurQuestion = -1;
 }

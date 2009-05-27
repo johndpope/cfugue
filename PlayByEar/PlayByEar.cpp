@@ -13,7 +13,7 @@
 // CPlayByEarApp
 
 BEGIN_MESSAGE_MAP(CPlayByEarApp, CWinAppEx)
-	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
+	//ON_COMMAND(ID_HELP, &CWinApp::OnHelp) // We selected F1 for other purposes
 END_MESSAGE_MAP()
 
 

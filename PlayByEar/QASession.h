@@ -20,7 +20,8 @@ public:
     enum STATE : long
     {
         TO_BE_STARTED = 0, // Starts Here and Stops Here.
-        PREPARING_QUESTIONNAIRE, // Comes From: {TO_BE_STARTED} Goes To: {PREPARING_QUESTION}
+        PREPARING_QUESTIONNAIRE, // Comes From: {TO_BE_STARTED} Goes To: {PREPARE_QUESTIONNAIRE}; PREPARING_QUESTIONNAIRE is just for UI updates; PREPARE_QUESTIONNAIRE does the actual job
+        PREPARE_QUESTIONNAIRE, // Comes From: {PREPARING_QUESTIONNAIRE} Goes To: {PREPARING_QUESTION}
         PREPARING_QUESTION, // Comes From: {TO_BE_STARTED, RIGHT_ANSWER} or External Event: GoToNextQuestion(), Goes To: {POSING_QUESTION}
         POSING_QUESTION, // Comes From: {PREPARING_QUESTION}, Goes To: {COMPLETED_QUESTION} when Question is Complete
         COMPLETED_QUESTION, // Triggered when Play is Complete; Goes To: {AWAITING_ANSWER, RECEIVING_ANSWER}
@@ -40,6 +41,7 @@ protected:
 
     void ProcessState_ToBeStarted();
     void ProcessState_PreparingQuestionnaire();
+    void ProcessState_PrepareQuestionnaire();
     void ProcessState_PreparingQuestion();
     void ProcessState_PosingQuestion();
     void ProcessState_CompletedQuestion();
@@ -67,14 +69,14 @@ protected:
     UINT m_nResultAnouncementRound; // Used to 'hold' the Results
     bool m_bHaltProcessing; // Should external module stop calling the ProcessCurrentState() ?
 
+    bool m_bWaitBeforeNewQuestion; // Should Wait before posing next question (after correct answer)?
+    bool m_bWaitBeforeRetry; // Should Wait before Reposing the same question (for wrong answer) ?
+
     typedef std::vector<NOTES> QUESTIONNAIRE;
     QUESTIONNAIRE m_Questionnaire; // The questions prepeared
 
     int  m_nQuestionCount; // Total Number of questions
     int  m_nCurQuestion; // Keeps track of the current question index
-
-    bool m_bWaitBeforeNewQuestion;
-    bool m_bWaitBeforeRetry;
 
     std::vector<unsigned char> m_AnswerNotes;   // Sequence of MidiNotes supplied as Answer
 
@@ -132,6 +134,12 @@ public:
 
     // Gets the Current State of the QASession
     inline STATE GetCurrentState() const { return m_nCurState; }
+
+    // Gets the Current Question Number. Valid only if IsSessionActive() is true.
+    inline int GetCurrentQuestionNumber() const { return m_nCurQuestion; }
+
+    // Returns the total number of questions for the present QASession, if any
+    inline int GetQuestionCount() const { return m_nQuestionCount; }
 
     // Should external module stop calling the ProcessCurrentState() ?
     inline bool ShouldHaltProcessing() const { return m_bHaltProcessing; }
