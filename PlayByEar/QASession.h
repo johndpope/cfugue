@@ -66,8 +66,17 @@ protected:
     UINT m_nQuestionWaitRound; // Used to 'hold' the question play duration
     UINT m_nAnswerWaitRound; // Used for blinking the answer.
     UINT m_nRetryCount; // Used to keep track of the Retry options
+    UINT m_nReplayCount; // Used to keep track of number of times questions was replayed
     UINT m_nResultAnouncementRound; // Used to 'hold' the Results
     bool m_bHaltProcessing; // Should external module stop calling the ProcessCurrentState() ?
+    int m_nResultsInfoIndex; // Index of the string to be used to display Results
+    UINT m_nCorrectAnswerCount; // Number of questions answered correctly (even after retries)
+    double m_dAccuracy; // Accuracy of Answers (number of retries decrements this)
+    double m_dEfficiency; // Efficiency of Answers (number of replays decrements this)
+    UINT m_nAnswerNotesEntered; // Keeps track of number of keys pressed as part of answer (Affects Efficiency)
+
+    std::vector<double> vecEfficiencies;
+    std::vector<double> vecAccuracies;
 
     bool m_bWaitBeforeNewQuestion; // Should Wait before posing next question (after correct answer)?
     bool m_bWaitBeforeRetry; // Should Wait before Reposing the same question (for wrong answer) ?
@@ -153,6 +162,12 @@ public:
 
     // Should Wait before posing a new question (after a right answer)?
     inline void SetWaitBeforeNewQuestion(bool bWait=true)  { m_bWaitBeforeNewQuestion = bWait; }   
+
+    inline double GetAccuracy() const { return m_dAccuracy; }
+    inline double GetEfficiency() const { return m_dEfficiency; }
+    inline UINT GetCorrectAnswers() const { return m_nCorrectAnswerCount; }
+
+    void ComputeScore();
 };
 
 #endif // _QASESSION_H__10BEE106_416D_403e_860A_4FD80B33D9C2_

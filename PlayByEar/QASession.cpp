@@ -8,16 +8,24 @@ CQASession::CQASession(CPlayByEarDlg* pDlg) :
     m_nQuestionWaitRound(0),
     m_nAnswerWaitRound(0),
     m_nRetryCount(0),
+    m_nReplayCount(0),
     m_nResultAnouncementRound(0),
     m_nCurState(TO_BE_STARTED),
     m_nCurLevel(SINGLE_NOTE_SINGLE_OCTAVE),
     m_nQuestionCount(0),
     m_bHaltProcessing(false),
     m_bWaitBeforeNewQuestion(true),
-    m_bWaitBeforeRetry(true)
+    m_bWaitBeforeRetry(true),
+    m_nAnswerNotesEntered(0),
+    m_nCorrectAnswerCount(0),
+    m_dAccuracy(1.0f),
+    m_dEfficiency(1.0f)
 {
     // Subscribe to the 'Play Complete' event
     m_pDlg->m_evPlayComplete.Subscribe(this, &CQASession::OnQuestionPlayComplete);
+
+    // Initialize the randomizer
+    srand( (unsigned)time( NULL ) );
 }
 
 CQASession::~CQASession(void)
@@ -60,6 +68,9 @@ void CQASession::ReplayQuestion()
     m_nCurState = POSING_QUESTION;
     m_nQuestionWaitRound = 0;
     m_bHaltProcessing = false;
+
+    m_nReplayCount++; // Increment the Question Replay Count
+    ComputeScore(); // Update the Efficiency
 }
 
 // Player thread indicated the completion of Play.
@@ -162,6 +173,12 @@ void CQASession::ProcessState_PrepareQuestionnaire()
     m_nCurState = PREPARING_QUESTION;    
     m_bFirstQuestion = true;
     m_nCurQuestion = -1;
+    m_nCorrectAnswerCount = 0; // Number of answers correctly answered eventually
+    m_dAccuracy = 1.0f; // Accuracy of Answers (number of retries decrements this)
+    m_dEfficiency = 1.0f; // Efficiency of Answers (number of replays decrements this)
+
+    vecEfficiencies.clear();
+    vecAccuracies.clear();
 }
 
 void CQASession::ProcessState_PreparingQuestion()
@@ -172,6 +189,8 @@ void CQASession::ProcessState_PreparingQuestion()
     // Clear answers from any previous questions
     m_AnswerNotes.clear();
     m_nRetryCount = 0;
+    m_nReplayCount = 0;
+    m_nAnswerNotesEntered = 0;
 
     if(++m_nCurQuestion >= m_nQuestionCount)
     {
@@ -241,20 +260,39 @@ void CQASession::ProcessState_ReceivingAnswer()
 
 void CQASession::ProcessState_EvaluatingAnswer()
 {
-    static bool nEvenRound = 0;
-    nEvenRound = !nEvenRound;
+    //static bool nEvenRound = 0;
+    //nEvenRound = !nEvenRound;
 
     m_strCurStatus = _T("Verifying the Answer...");
     m_strInfo = _T("");
 
     m_nCurState = (m_AnswerNotes == m_Questionnaire.at(m_nCurQuestion)) ? RIGHT_ANSWER : WRONG_ANSWER;
     m_nResultAnouncementRound = 0;
+
+    m_nResultsInfoIndex = (int)((double)rand() * 10 / (double)(RAND_MAX + 1) ); // 10 entries in the szWrong and szCorrect entries below
+
+    if(m_nCurState == RIGHT_ANSWER) // in case of wrong answers, user gets retry chance
+    {
+        m_nCorrectAnswerCount++; // number of times RIGHT_ANSWER state is entered
+    }        
+    //ComputeScore(); // for wrong answer - we compute in ProcessState_TryAgain()
 }
+
+const TCHAR* szWrong[] = {_T("Need to do better...!!"), 
+                    _T("Wrong Guess...!!"), 
+                    _T("Wrong Entry...!!"), 
+                    _T("Wrong Answer...!!"), 
+                    _T("Oooops...!!"), 
+                    _T("Thats not Correct...!!"),
+                    _T("Thats a near miss...!!"),
+                    _T("Answer correctly next time...!!"),
+                    _T("Better luck next time...!!"),
+                    _T("Try again...!!"),};
 
 void CQASession::ProcessState_WrongAnswer()
 {
     m_strCurStatus = _T("Wrong Answer...");
-    m_strInfo = _T("Ooops...");
+    m_strInfo = szWrong[m_nResultsInfoIndex];
 
     if(m_bWaitBeforeRetry)
     {
@@ -271,10 +309,10 @@ void CQASession::ProcessState_TryAgain()
     m_strCurStatus = _T("Verifiying Retry options...");
     m_strInfo = _T(" ");
 
-    if(m_nRetryCount++ >= 2) // If we have run out of tries
+    if(m_nRetryCount++ >= 9) // If we have run out of tries
     {
         m_strCurStatus = _T("Run out of Retries");
-        m_strInfo = _T("No more retries possible...<br/><p>Press <i>Enter</i> when ready to goto next question..</p>");
+        m_strInfo = _T("No more retries possible...<br/><p>Press <i>Enter</i> to go to next question..</p>");
         m_bHaltProcessing = true; // Stop till user presses 'Enter'
         m_nCurState = RIGHT_ANSWER; // So that when pressed enter, user can be redirected to goto next question
         // usually this should not happen. Because with exhaused tries, user 'should'
@@ -284,12 +322,25 @@ void CQASession::ProcessState_TryAgain()
     }
     else
         m_nCurState = POSING_QUESTION; // Pose the same question again.
+
+//    m_nAnswerNotesEntered -= m_Questionnaire[m_nCurQuestion].size(); // Give few keys discount for efficiency calculation
 }
 
+const TCHAR* szCorrect[] = {_T("Good Work...!!"), 
+                    _T("Good Guess...!!"), 
+                    _T("Fantastic Work...!!"), 
+                    _T("Fantastic Job...!!"), 
+                    _T("Thats Wonderful...!!"),
+                    _T("Thats Awesome...!!"),
+                    _T("Thats Correct...!!"),
+                    _T("Excellent Guess...!!"),
+                    _T("Excellent Work...!!"),
+                    _T("Excellent Job...!!")};
+
 void CQASession::ProcessState_RightAnswer()
-{
+{      
     m_strCurStatus = _T("Right Answer...");
-    m_strInfo = _T("Good work...");
+    m_strInfo = szCorrect[m_nResultsInfoIndex];
 
     if(m_bWaitBeforeNewQuestion)
     {
@@ -314,18 +365,24 @@ void CQASession::AnswerEntered(unsigned char MidiNoteNumber)
             m_AnswerNotes.at(0) = MidiNoteNumber; break;
         }
     case MULTINOTE: 
-        {
-            //TODO: Make sure the length is correct as per question
-            m_AnswerNotes.push_back(MidiNoteNumber); break;
+        {            
+            UINT QuestionLength = m_Questionnaire.at(m_nCurQuestion).size();
+            if(m_AnswerNotes.size() >= QuestionLength)
+                m_AnswerNotes.erase(m_AnswerNotes.begin()); // Remove the front element                         
+            m_AnswerNotes.push_back(MidiNoteNumber); // Add the new one at the end
+            break;
         }
     case CARNATIC_RAGA:
     case WESTERN_SCALE:
         {
             //TODO: Make sure this is taken care of
-            m_AnswerNotes.push_back(MidiNoteNumber); break;
+            _ASSERTE(_T("Not Supported") == NULL); break;
         }        
     }
     m_nCurState = RECEIVING_ANSWER;
+
+    // Update the Efficiency Score
+    m_nAnswerNotesEntered++;
 }
 
 // Single Note - Middle Octave Level
@@ -455,4 +512,49 @@ void CQASession::PrepareQuestionnaire_Level4()
 
     this->m_nQuestionCount = m_Questionnaire.size();
     this->m_nCurQuestion = -1;
+}
+
+
+void CQASession::ComputeScore()
+{
+    if(m_nCurQuestion < 0) return;
+
+    if(vecAccuracies.size() <= m_nCurQuestion) vecAccuracies.push_back(0);
+    if(vecEfficiencies.size() <= m_nCurQuestion) vecEfficiencies.push_back(0);
+
+    // Compute Accuracy based on Retry Count
+    double dAccu=1.0f, dNum=10, dDen=12;
+    for(UINT i=0; i < m_nRetryCount; ++i)
+    {
+        dAccu *= (dNum / dDen);
+        dNum--; dDen--;
+    }
+    vecAccuracies.at(m_nCurQuestion) = dAccu;
+
+    // Compute Efficiency based on Replay Count and Keyboard number of inputs
+    double dEff=1.0f; dNum=10, dDen=12;
+    for(UINT i=0; i < m_nReplayCount; ++i)
+    {
+        dEff *= (dNum / dDen);
+        dNum--; dDen--;
+    }
+
+    double dKeyboardEff=1.0f;
+    UINT nKeysReqd = m_Questionnaire[m_nCurQuestion].size();
+    if(m_nAnswerNotesEntered > nKeysReqd) // if extra keys pressed
+    {
+        dKeyboardEff = (double)nKeysReqd/(double)m_nAnswerNotesEntered;
+    }
+
+    vecEfficiencies.at(m_nCurQuestion) =  (dEff + dKeyboardEff)/2.0f;
+
+    dAccu = 0; dEff =0;
+    for(UINT i=0; i <= m_nCurQuestion; ++i)
+    {
+        dAccu += vecAccuracies[i];
+        dEff += vecEfficiencies[i];
+    }
+
+    m_dAccuracy = dAccu/vecAccuracies.size();
+    m_dEfficiency = dEff/vecEfficiencies.size();
 }

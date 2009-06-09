@@ -292,6 +292,13 @@ BOOL CPlayByEarDlg::OnInitDialog()
         this->GetMenu()->CheckMenuItem(ID_TEST_WAITBEFORENEWQUESTION, 
         (m_QASession.GetWaitBeforeNewQuestion() ? MF_CHECKED : MF_UNCHECKED) |MF_BYCOMMAND);
 
+        // Update the Last Score
+        CString strScore = AfxGetApp()->GetProfileString(gpszKey, _T("Score"), _T(""));
+        if(strScore.IsEmpty() == false)
+        {
+            SetDlgItemText(IDC_STATIC_RESULTS, _T("Last ") + strScore);
+        }
+
         // Subscribe to the QASessionComplete Event
         m_QASession.evQASessionComplete.Subscribe(this, &CPlayByEarDlg::OnQASessionComplete);
         // Subscribe to AnswerPlayComplete Event
@@ -395,6 +402,18 @@ void CPlayByEarDlg::OnClose()
     AfxGetApp()->WriteProfileInt(gpszKey, _T("WaitBeforeRetry"), m_QASession.GetWaitBeforeRetry());
     AfxGetApp()->WriteProfileInt(gpszKey, _T("WaitBeforeNewQuestion"), m_QASession.GetWaitBeforeNewQuestion());
 
+    // Store the score
+    if(m_QASession.GetQuestionCount() > 0)
+    {
+        m_QASession.ComputeScore();
+        CString str;
+        str.Format(_T("Score: %d/%d  Accuracy: %0.2f  Efficiency: %0.2f"),
+                        m_QASession.GetCorrectAnswers(), m_QASession.GetQuestionCount(),
+                        m_QASession.GetAccuracy() * 100, 
+                        m_QASession.GetEfficiency() * 100);
+        AfxGetApp()->WriteProfileString(gpszKey, _T("Score"), str);
+    }
+
     CDialog::OnOK();
 }
 
@@ -474,6 +493,22 @@ void CPlayByEarDlg::OnNoteOff(CPianoCtrl &PianoCtrl, unsigned char NoteId)
 {
     midi::CShortMsg ShortMsg(midi::NOTE_OFF, 0, NoteId, 0, 0);
     ShortMsg.SendMsg(m_OutDevice);
+
+    // Update the Efficiency
+    if(m_QASession.IsSessionActive())
+    {
+        m_QASession.ComputeScore();
+
+        CString str;
+        str.Format(_T("Score: %d/%d  Accuracy: %0.2f  Efficiency: %0.2f"),
+                        m_QASession.GetCorrectAnswers(), m_QASession.GetQuestionCount(),
+                        m_QASession.GetAccuracy() * 100, 
+                        m_QASession.GetEfficiency() * 100);
+        SetDlgItemText(IDC_STATIC_RESULTS, str);
+    }
+
+    // Make sure the Paino Control gets the Focus
+    m_Keys.SetFocus();
 }
 
 // User select an entry from the Raga list.
@@ -498,10 +533,10 @@ void CPlayByEarDlg::OnSelchangeRagaList()
         case CQASession::RECEIVING_ANSWER:
             {
                 CString strItemText;
-                this->m_RagaListCombo.GetLBText(this->m_RagaListCombo.GetCurSel(), strItemText);
-               
-                // Add the Note as Answer
-                m_QASession.AnswerEntered(60); // TODO: Take care of entering Raga Notes
+                this->m_RagaListCombo.GetLBText(this->m_RagaListCombo.GetCurSel(), strItemText);              
+                
+                // TODO: Take care of entering Raga Notes based on selected Raga Name
+
                 // This is a scale/raga section. We need to enter a series 
                 // of notes. Not just single note.
                 break;
@@ -839,7 +874,21 @@ void CPlayByEarDlg::OnNMClickSyslinkReplay(NMHDR *pNMHDR, LRESULT *pResult)
     // Stop the answer play, if any
     m_evStopNotes.SetEvent();
 
-    m_QASession.ReplayQuestion();
+    if(m_QASession.IsSessionActive())
+    {
+        // Replay the Question
+        m_QASession.ReplayQuestion();    
+
+        // Update the Efficiency
+        m_QASession.ComputeScore();
+
+        CString str;
+        str.Format(_T("Score: %d/%d  Accuracy: %0.2f  Efficiency: %0.2f"),
+                        m_QASession.GetCorrectAnswers(), m_QASession.GetQuestionCount(),
+                        m_QASession.GetAccuracy() * 100, 
+                        m_QASession.GetEfficiency() * 100);
+        SetDlgItemText(IDC_STATIC_RESULTS, str);
+    }
 
     // Make sure the piano control regains focus 
     m_Keys.SetFocus();
@@ -962,6 +1011,16 @@ void CPlayByEarDlg::OnTimer(UINT_PTR nIDEvent)
                     str.Format(_T("Question %d/%d"), m_QASession.GetCurrentQuestionNumber()+1, m_QASession.GetQuestionCount());
                     GetDlgItem(IDC_QUESTION_GROUP)->SetWindowText(str);
                 }
+                // Update the Results
+                {
+                    m_QASession.ComputeScore();
+                    CString str;
+                    str.Format(_T("Score: %d/%d  Accuracy: %0.2f  Efficiency: %0.2f"),
+                                    m_QASession.GetCorrectAnswers(), m_QASession.GetQuestionCount(),
+                                    m_QASession.GetAccuracy() * 100, 
+                                    m_QASession.GetEfficiency() * 100);
+                    SetDlgItemText(IDC_STATIC_RESULTS, str);
+                }
                 break;
             }
         case CQASession::COMPLETED_QUESTION:
@@ -975,6 +1034,18 @@ void CPlayByEarDlg::OnTimer(UINT_PTR nIDEvent)
                     GetDlgItem(IDC_SYSLINK_SUBMIT)->SetWindowText(_T("<a>Submit</a>"));
                     GetDlgItem(IDC_SYSLINK_PLAYANSWER)->SetWindowText(_T("<a>Play the Answer</a>"));
                 }
+                break;
+            }
+        case CQASession::RIGHT_ANSWER:
+        case CQASession::WRONG_ANSWER:
+            {
+                // Update the Results
+                CString str;
+                str.Format(_T("Score: %d/%d  Accuracy: %0.2f  Efficiency: %0.2f"),
+                                m_QASession.GetCorrectAnswers(), m_QASession.GetQuestionCount(),
+                                m_QASession.GetAccuracy() * 100, 
+                                m_QASession.GetEfficiency() * 100);
+                SetDlgItemText(IDC_STATIC_RESULTS, str);
                 break;
             }
         }
@@ -999,7 +1070,7 @@ void CPlayByEarDlg::OnTestStart()
     GetDlgItem(IDC_RADIO_LEVEL1)->EnableWindow(false);
     GetDlgItem(IDC_RADIO_LEVEL2)->EnableWindow(false);
     GetDlgItem(IDC_RADIO_LEVEL3)->EnableWindow(false);
-    GetDlgItem(IDC_RADIO_LEVEL4)->EnableWindow(false);
+    //GetDlgItem(IDC_RADIO_LEVEL4)->EnableWindow(false);
 
     if(m_nTimer)
     {
@@ -1023,7 +1094,7 @@ void CPlayByEarDlg::OnTestStop()
     GetDlgItem(IDC_RADIO_LEVEL1)->EnableWindow(true);
     GetDlgItem(IDC_RADIO_LEVEL2)->EnableWindow(true);
     GetDlgItem(IDC_RADIO_LEVEL3)->EnableWindow(true);
-    GetDlgItem(IDC_RADIO_LEVEL4)->EnableWindow(true);
+    //GetDlgItem(IDC_RADIO_LEVEL4)->EnableWindow(true);
 
     // Clear the Notes on Answer Control        
     SetDlgItemText(IDC_STATIC_ANSWER, _T("-")); 
