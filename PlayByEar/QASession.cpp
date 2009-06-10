@@ -210,7 +210,9 @@ void CQASession::ProcessState_PreparingQuestion()
 void CQASession::ProcessState_PosingQuestion()
 {
     m_strCurStatus = _T("Playing the Notes ... Listen carefully !!");
-    m_strInfo.Format(_T("Question: %d/%d"), m_nCurQuestion+1, m_nQuestionCount);
+    m_strInfo.Format(_T("%sQuestion: %d/%d"), 
+        ((m_nRetryCount > 0 || m_nReplayCount > 0)? _T("Replaying ") : _T("")), 
+        m_nCurQuestion+1, m_nQuestionCount);
 
     m_pDlg->m_NotesToPlay = m_Questionnaire.at(m_nCurQuestion);
     m_pDlg->m_evPlayNotes.SetEvent();
@@ -278,16 +280,16 @@ void CQASession::ProcessState_EvaluatingAnswer()
     //ComputeScore(); // for wrong answer - we compute in ProcessState_TryAgain()
 }
 
-const TCHAR* szWrong[] = {_T("Need to do better...!!"), 
-                    _T("Wrong Guess...!!"), 
-                    _T("Wrong Entry...!!"), 
-                    _T("Wrong Answer...!!"), 
-                    _T("Oooops...!!"), 
-                    _T("Thats not Correct...!!"),
-                    _T("Thats a near miss...!!"),
-                    _T("Answer correctly next time...!!"),
-                    _T("Better luck next time...!!"),
-                    _T("Try again...!!"),};
+const TCHAR* szWrong[] = {_T("<font color=\"#cc3300\">Need to do better...Try again!!</font>"), 
+                    _T("<font color=\"#cc3300\">Wrong Guess...Try again!!</font>"), 
+                    _T("<font color=\"#cc3300\">Wrong Entry...Try again!!</font>"), 
+                    _T("<font color=\"#cc3300\">Wrong Answer...Try again!!</font>"), 
+                    _T("<font color=\"#cc3300\">Oooops...Try again!!</font>"), 
+                    _T("<font color=\"#cc3300\">Thats not Correct...Try again!!</font>"),
+                    _T("<font color=\"#cc3300\">Thats a near miss...Try again!!</font>"),
+                    _T("<font color=\"#cc3300\">Listen carefully and answer correctly ...!!</font>"),
+                    _T("<font color=\"#cc3300\">Concentrate and Try again...!!</font>"),
+                    _T("<font color=\"#cc3300\">Try again...!!</font>"),};
 
 void CQASession::ProcessState_WrongAnswer()
 {
@@ -326,16 +328,16 @@ void CQASession::ProcessState_TryAgain()
 //    m_nAnswerNotesEntered -= m_Questionnaire[m_nCurQuestion].size(); // Give few keys discount for efficiency calculation
 }
 
-const TCHAR* szCorrect[] = {_T("Good Work...!!"), 
-                    _T("Good Guess...!!"), 
-                    _T("Fantastic Work...!!"), 
-                    _T("Fantastic Job...!!"), 
-                    _T("Thats Wonderful...!!"),
-                    _T("Thats Awesome...!!"),
-                    _T("Thats Correct...!!"),
-                    _T("Excellent Guess...!!"),
-                    _T("Excellent Work...!!"),
-                    _T("Excellent Job...!!")};
+const TCHAR* szCorrect[] = {_T("<font color=green>Good Work...!!</font>"), 
+                    _T("<font color=green>Good Guess...!!</font>"), 
+                    _T("<font color=green>Fantastic Work...!!</font>"), 
+                    _T("<font color=green>Fantastic Job...!!</font>"), 
+                    _T("<font color=green>Thats Wonderful...!!</font>"),
+                    _T("<font color=green>Thats Awesome...!!</font>"),
+                    _T("<font color=green>Thats Correct...!!</font>"),
+                    _T("<font color=green>Excellent Guess...!!</font>"),
+                    _T("<font color=green>Excellent Work...!!</font>"),
+                    _T("<font color=green>Excellent Job...!!</font>")};
 
 void CQASession::ProcessState_RightAnswer()
 {      
@@ -517,7 +519,7 @@ void CQASession::PrepareQuestionnaire_Level4()
 
 void CQASession::ComputeScore()
 {
-    if(m_nCurQuestion < 0) return;
+    if(m_nCurQuestion < 0 || this->IsSessionActive() == false) return;
 
     if(vecAccuracies.size() <= m_nCurQuestion) vecAccuracies.push_back(0);
     if(vecEfficiencies.size() <= m_nCurQuestion) vecEfficiencies.push_back(0);
