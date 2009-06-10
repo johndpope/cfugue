@@ -3,6 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PlayByEar", "PlayByEar.vcproj", "{E4238FC8-B32D-450F-9A14-DC79BE494ABF}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BootStrapper", "BootStrapper\BootStrapper.vcproj", "{3F9F3E97-9A92-4B4E-993D-DB61DEA532E7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E4238FC8-B32D-450F-9A14-DC79BE494ABF} = {E4238FC8-B32D-450F-9A14-DC79BE494ABF}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -17,6 +22,10 @@ Global
 		{E4238FC8-B32D-450F-9A14-DC79BE494ABF}.Debug|Win32.Build.0 = Debug|Win32
 		{E4238FC8-B32D-450F-9A14-DC79BE494ABF}.Release|Win32.ActiveCfg = Release|Win32
 		{E4238FC8-B32D-450F-9A14-DC79BE494ABF}.Release|Win32.Build.0 = Release|Win32
+		{3F9F3E97-9A92-4B4E-993D-DB61DEA532E7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3F9F3E97-9A92-4B4E-993D-DB61DEA532E7}.Debug|Win32.Build.0 = Debug|Win32
+		{3F9F3E97-9A92-4B4E-993D-DB61DEA532E7}.Release|Win32.ActiveCfg = Release|Win32
+		{3F9F3E97-9A92-4B4E-993D-DB61DEA532E7}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -540,7 +540,7 @@ void CQASession::ComputeScore()
     }
 
     double dKeyboardEff=1.0f;
-    UINT nKeysReqd = m_Questionnaire[m_nCurQuestion].size();
+    UINT nKeysReqd = m_Questionnaire[m_nCurQuestion].size() * 2; // *2 to give some free extra keys
     if(m_nAnswerNotesEntered > nKeysReqd) // if extra keys pressed
     {
         dKeyboardEff = (double)nKeysReqd/(double)m_nAnswerNotesEntered;

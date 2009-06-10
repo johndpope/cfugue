@@ -151,9 +151,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="QHtm\qhtmlight.lib"
+				AdditionalDependencies="qhtmlight.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="Dependencies"
+				AdditionalLibraryDirectories="Dependencies/QHtm"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
