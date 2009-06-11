@@ -265,7 +265,7 @@ BOOL CPlayByEarDlg::OnInitDialog()
         m_Keys.SetNoteOnColor(AfxGetApp()->GetProfileInt(gpszKey, _T("NoteColor"), CPianoCtrl::DEF_NOTE_ON_COLOR));
 
         // Octave        
-        m_Keys.SetCurrentOctave(AfxGetApp()->GetProfileInt(gpszKey, _T("Octave"), 3));
+        m_Keys.SetCurrentOctave(AfxGetApp()->GetProfileInt(gpszKey, _T("Octave"), 2));
 
         // MIDI Instrument combo box
         m_GMCombo.SetCurSel(AfxGetApp()->GetProfileInt(gpszKey, _T("Instrument"), 0));
@@ -1074,6 +1074,8 @@ void CPlayByEarDlg::OnTestStart()
 
     if(m_nTimer)
     {
+        if(m_QASession.GetCurrentLevel() == CQASession::SINGLE_NOTE_SINGLE_OCTAVE)
+            m_Keys.SetCurrentOctave(2); // user might have changed the current octave - reset it to Middle C
         this->GetMenu()->EnableMenuItem(ID_TEST_STOP, MF_ENABLED | MF_BYCOMMAND);
         this->GetMenu()->EnableMenuItem(ID_TEST_START, MF_GRAYED | MF_BYCOMMAND);
         m_QASession.Start();
