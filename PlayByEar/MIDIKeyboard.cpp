@@ -32,7 +32,7 @@ const int CMIDIKeyboard::MAP_SIZE = 17;
 
 CMIDIKeyboard::CMIDIKeyboard() :
 m_KeyMap(MAP_SIZE),
-m_Oct(0) // this does not raise the OctaveChange notification !! Use SetCurrentOctave() later.
+m_Oct(2) // this does not raise the OctaveChange notification !! Use SetCurrentOctave() later.
 {
     //
     // Initialize key map for looking up keys and their note values
