@@ -424,10 +424,10 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Copying &quot;$(InputPath)&quot; to &quot;$(TargetDir)$(InputFileName)&quot;"
-						CommandLine="copy &quot;$(InputPath)&quot; &quot;$(TargetDir)$(InputFileName)&quot;&#x0D;&#x0A;"
-						AdditionalDependencies="$(InputPath)"
-						Outputs="$(TargetDir)$(InputFileName)"
+						Description=""
+						CommandLine=""
+						AdditionalDependencies=""
+						Outputs=""
 					/>
 				</FileConfiguration>
 			</File>
