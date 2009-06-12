@@ -11,6 +11,6 @@ The application is designed around simple Question/Answer paradigm. It plays (po
 
 The questions are designed around the concepts of reinforced learning paradigm. With questions designed to be set at multiple levels of difficulty, users of all levels (from beginners to advanced) should be able take advantage of the application starting at their own level of Music Knowledge.
 
-The scoring system is based around advanced behavioral learning patterns that captures users' Music recognition capabilities through different metrics that help them immensly with progressive learning.
+The scoring system is based around advanced behavioral learning patterns that captures users' Music recognition capabilities through different metrics that help them immensely with progressive learning.
 
 Please read the UserManual.html for more details on how to use the application and the various ratings/scoring details.
