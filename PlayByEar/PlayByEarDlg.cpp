@@ -939,7 +939,7 @@ void CPlayByEarDlg::OnHelpHowdoi()
     CString strPath(szImagePath);
     strPath = strPath.Mid(0, strPath.ReverseFind(_T('\\')));
         
-    HINSTANCE hInst = ShellExecute(this->m_hWnd, _T("open"), _T("File:///") + strPath + _T("\\UserManual.html##How_It_Works"), NULL, NULL, SW_SHOW);
+    HINSTANCE hInst = ShellExecute(this->m_hWnd, _T("open"), _T("File:///") + strPath + _T("\\UserManual.html#How_It_Works"), NULL, NULL, SW_SHOW);
     switch((long)hInst)
     {
     case ERROR_FILE_NOT_FOUND:
