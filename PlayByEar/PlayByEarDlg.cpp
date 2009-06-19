@@ -160,6 +160,7 @@ BEGIN_MESSAGE_MAP(CPlayByEarDlg, CDialog)
     ON_BN_CLICKED(IDC_RADIO_LEVEL2, &CPlayByEarDlg::OnBnClickedRadioLevel2)
     ON_BN_CLICKED(IDC_RADIO_LEVEL3, &CPlayByEarDlg::OnBnClickedRadioLevel3)
     ON_BN_CLICKED(IDC_RADIO_LEVEL4, &CPlayByEarDlg::OnBnClickedRadioLevel4)
+    ON_BN_CLICKED(IDC_RADIO_LEVEL5, &CPlayByEarDlg::OnBnClickedRadioLevel5)
     ON_NOTIFY(NM_CLICK, IDC_SYSLINK_SUBMIT, &CPlayByEarDlg::OnNMClickSyslinkSubmit)
     ON_NOTIFY(NM_CLICK, IDC_SYSLINK_REPLAY, &CPlayByEarDlg::OnNMClickSyslinkReplay)
     ON_NOTIFY(NM_CLICK, IDC_SYSLINK_NEXTQUESTION, &CPlayByEarDlg::OnNMClickSyslinkNextquestion)
@@ -275,7 +276,7 @@ BOOL CPlayByEarDlg::OnInitDialog()
         CQASession::LEVEL level = (CQASession::LEVEL)AfxGetApp()->GetProfileInt(gpszKey, _T("QALevel"), 0);
         m_QASession.SetCurrentLevel(level); 
         if(level == CQASession::WESTERN_SCALE) level = CQASession::CARNATIC_RAGA; // for radio buttons we need this small adjustment
-        CheckRadioButton(IDC_RADIO_LEVEL1, IDC_RADIO_LEVEL4, IDC_RADIO_LEVEL1+level);
+        CheckRadioButton(IDC_RADIO_LEVEL1, IDC_RADIO_LEVEL5, IDC_RADIO_LEVEL1+level);
         if(level == CQASession::CARNATIC_RAGA)
         {
             // Show the Ragalist combo and Hide the Answer Static Control
@@ -824,9 +825,10 @@ void CPlayByEarDlg::OnBnClickedRadioLevel2()
     m_Keys.SetFocus();
 }
 
+// Multiple Notes - Mid Octave button
 void CPlayByEarDlg::OnBnClickedRadioLevel3()
 {
-    m_QASession.SetCurrentLevel(CQASession::MULTINOTE);
+    m_QASession.SetCurrentLevel(CQASession::MULTINOTE_SINGLE_OCTAVE);
 
     // Hide the Ragalist combo and Show the Answer Static Control
     GetDlgItem(IDC_RAGA_LIST)->ShowWindow(SW_HIDE);
@@ -836,7 +838,21 @@ void CPlayByEarDlg::OnBnClickedRadioLevel3()
     m_Keys.SetFocus();
 }
 
+// Multiple Notes - Anywhere
 void CPlayByEarDlg::OnBnClickedRadioLevel4()
+{
+    m_QASession.SetCurrentLevel(CQASession::MULTINOTE_MULTI_OCTAVE);
+
+    // Hide the Ragalist combo and Show the Answer Static Control
+    GetDlgItem(IDC_RAGA_LIST)->ShowWindow(SW_HIDE);
+    GetDlgItem(IDC_STATIC_ANSWER)->ShowWindow(SW_SHOW);
+
+    // Make sure the piano control regains focus 
+    m_Keys.SetFocus();
+}
+
+// Scale/Raga radio button
+void CPlayByEarDlg::OnBnClickedRadioLevel5()
 {
     m_QASession.SetCurrentLevel(m_Mode==CARNATIC ? CQASession::CARNATIC_RAGA : CQASession::WESTERN_SCALE);
 
@@ -1070,11 +1086,13 @@ void CPlayByEarDlg::OnTestStart()
     GetDlgItem(IDC_RADIO_LEVEL1)->EnableWindow(false);
     GetDlgItem(IDC_RADIO_LEVEL2)->EnableWindow(false);
     GetDlgItem(IDC_RADIO_LEVEL3)->EnableWindow(false);
-    //GetDlgItem(IDC_RADIO_LEVEL4)->EnableWindow(false);
+    GetDlgItem(IDC_RADIO_LEVEL4)->EnableWindow(false);
+    //GetDlgItem(IDC_RADIO_LEVEL5)->EnableWindow(false);
 
     if(m_nTimer)
     {
-        if(m_QASession.GetCurrentLevel() == CQASession::SINGLE_NOTE_SINGLE_OCTAVE)
+        if(m_QASession.GetCurrentLevel() == CQASession::SINGLE_NOTE_SINGLE_OCTAVE ||
+            m_QASession.GetCurrentLevel() == CQASession::MULTINOTE_SINGLE_OCTAVE)
             m_Keys.SetCurrentOctave(2); // user might have changed the current octave - reset it to Middle C
         this->GetMenu()->EnableMenuItem(ID_TEST_STOP, MF_ENABLED | MF_BYCOMMAND);
         this->GetMenu()->EnableMenuItem(ID_TEST_START, MF_GRAYED | MF_BYCOMMAND);
@@ -1096,7 +1114,8 @@ void CPlayByEarDlg::OnTestStop()
     GetDlgItem(IDC_RADIO_LEVEL1)->EnableWindow(true);
     GetDlgItem(IDC_RADIO_LEVEL2)->EnableWindow(true);
     GetDlgItem(IDC_RADIO_LEVEL3)->EnableWindow(true);
-    //GetDlgItem(IDC_RADIO_LEVEL4)->EnableWindow(true);
+    GetDlgItem(IDC_RADIO_LEVEL4)->EnableWindow(true);
+    //GetDlgItem(IDC_RADIO_LEVEL5)->EnableWindow(true);
 
     // Clear the Notes on Answer Control        
     SetDlgItemText(IDC_STATIC_ANSWER, _T("-")); 

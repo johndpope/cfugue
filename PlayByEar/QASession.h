@@ -12,7 +12,8 @@ public:
     {
         SINGLE_NOTE_SINGLE_OCTAVE = 0,
         SINGLE_NOTE_MULTI_OCTAVE,
-        MULTINOTE,
+        MULTINOTE_SINGLE_OCTAVE,
+        MULTINOTE_MULTI_OCTAVE,
         CARNATIC_RAGA,
         WESTERN_SCALE
     };
@@ -58,6 +59,7 @@ protected:
     void PrepareQuestionnaire_Level2();
     void PrepareQuestionnaire_Level3();
     void PrepareQuestionnaire_Level4();
+    void PrepareQuestionnaire_Level5();
 
     CString m_strCurStatus;
     CString m_strInfo;

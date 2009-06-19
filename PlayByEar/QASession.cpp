@@ -164,7 +164,8 @@ void CQASession::ProcessState_PrepareQuestionnaire()
     {
     case SINGLE_NOTE_SINGLE_OCTAVE: PrepareQuestionnaire_Level1(); break;
     case SINGLE_NOTE_MULTI_OCTAVE: PrepareQuestionnaire_Level2(); break;
-    case MULTINOTE: PrepareQuestionnaire_Level3(); break;
+    case MULTINOTE_SINGLE_OCTAVE: PrepareQuestionnaire_Level3(); break;
+    case MULTINOTE_MULTI_OCTAVE: PrepareQuestionnaire_Level4(); break;
     case CARNATIC_RAGA:
     case WESTERN_SCALE: break;
     }
@@ -366,7 +367,8 @@ void CQASession::AnswerEntered(unsigned char MidiNoteNumber)
             if(m_AnswerNotes.size() == 0) m_AnswerNotes.push_back(MidiNoteNumber);
             m_AnswerNotes.at(0) = MidiNoteNumber; break;
         }
-    case MULTINOTE: 
+    case MULTINOTE_SINGLE_OCTAVE: 
+    case MULTINOTE_MULTI_OCTAVE: 
         {            
             UINT QuestionLength = m_Questionnaire.at(m_nCurQuestion).size();
             if(m_AnswerNotes.size() >= QuestionLength)
@@ -473,8 +475,39 @@ void CQASession::PrepareQuestionnaire_Level2()
     this->m_nCurQuestion = -1;
 }
 
-// Mutiple Notes Level
+// Mutiple Notes - from Mid Octave Level
 void CQASession::PrepareQuestionnaire_Level3()
+{
+    std::vector<int> AllNotes;
+    for(int i= 55; i <= 79; ++i) // Insert G2 to G4 range Mid Octave notes
+    {
+        AllNotes.push_back(i);
+    }
+    std::random_shuffle(AllNotes.begin(), AllNotes.end());
+    
+    // Clear the memory
+    m_Questionnaire.clear();
+
+    // Randomly compute the length of each question
+    // and pick up the notes of the question from randomized All notes sequentially
+    for(int questionId = 0, nMax = AllNotes.size(); questionId < nMax; ++questionId)
+    {
+        int nLen = (AllNotes[questionId] % 3) + 2;
+           
+        NOTES question;
+        for(int i=0; i < nLen; ++i)        
+            question.push_back(AllNotes[(i + questionId) < nMax ? (i + questionId) : questionId]);
+        
+        std::random_shuffle(question.begin(), question.end());
+        m_Questionnaire.push_back(question);
+    }    
+
+    this->m_nQuestionCount = m_Questionnaire.size();
+    this->m_nCurQuestion = -1;
+}
+
+// Multiple Notes from All octaves Level
+void CQASession::PrepareQuestionnaire_Level4()
 {
     std::vector<int> AllNotes;
     for(int i= 36; i <= 100; ++i) // Insert all notes
@@ -505,7 +538,7 @@ void CQASession::PrepareQuestionnaire_Level3()
 }
 
 //Scale-Raga Level
-void CQASession::PrepareQuestionnaire_Level4()
+void CQASession::PrepareQuestionnaire_Level5()
 {
     // Clear the memory
     m_Questionnaire.clear();
@@ -516,13 +549,12 @@ void CQASession::PrepareQuestionnaire_Level4()
     this->m_nCurQuestion = -1;
 }
 
-
 void CQASession::ComputeScore()
 {
     if(m_nCurQuestion < 0 || this->IsSessionActive() == false) return;
 
-    if(vecAccuracies.size() <= m_nCurQuestion) vecAccuracies.push_back(0);
-    if(vecEfficiencies.size() <= m_nCurQuestion) vecEfficiencies.push_back(0);
+    if((int)vecAccuracies.size() <= m_nCurQuestion) vecAccuracies.push_back(0);
+    if((int)vecEfficiencies.size() <= m_nCurQuestion) vecEfficiencies.push_back(0);
 
     // Compute Accuracy based on Retry Count
     double dAccu=1.0f, dNum=10, dDen=12;
@@ -551,7 +583,7 @@ void CQASession::ComputeScore()
     vecEfficiencies.at(m_nCurQuestion) =  (dEff + dKeyboardEff)/2.0f;
 
     dAccu = 0; dEff =0;
-    for(UINT i=0; i <= m_nCurQuestion; ++i)
+    for(int i=0; i <= m_nCurQuestion; ++i)
     {
         dAccu += vecAccuracies[i];
         dEff += vecEfficiencies[i];
