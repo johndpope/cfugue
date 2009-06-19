@@ -25,7 +25,7 @@
 #define IDC_RADIO_LEVEL2                1016
 #define IDC_RADIO_LEVEL3                1017
 #define IDC_RADIO_LEVEL4                1018
-#define IDC_QUESTION_GROUP              1019
+#define IDC_RADIO_LEVEL5                1019
 #define IDC_STATIC_KEYNAMES_0           1020
 #define IDC_SYSLINK_SUBMIT              1021
 #define IDC_STATIC_TIP                  1022
@@ -38,6 +38,7 @@
 #define IDC_STATIC_KEYNAMESTOP_1        1029
 #define IDC_STATIC_KEYNAMESTOP_3        1030
 #define IDC_STATIC_KEYNAMESTOP_4        1031
+#define IDC_QUESTION_GROUP              1032
 #define IDC_CTRL_INFO                   1033
 #define ID_PREF_NOTE_COLOR              32772
 #define ID_PREF_MIDIDEVICES             32773

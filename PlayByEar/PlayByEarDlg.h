@@ -80,6 +80,7 @@ protected:
     afx_msg void OnBnClickedRadioLevel2();
     afx_msg void OnBnClickedRadioLevel3();
     afx_msg void OnBnClickedRadioLevel4();
+    afx_msg void OnBnClickedRadioLevel5();
     afx_msg void OnNMClickSyslinkSubmit(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnNMClickSyslinkReplay(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnNMClickSyslinkNextquestion(NMHDR *pNMHDR, LRESULT *pResult);
