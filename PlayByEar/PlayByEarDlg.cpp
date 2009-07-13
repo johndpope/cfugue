@@ -951,7 +951,7 @@ void CPlayByEarDlg::OnAnswerPlayComplete(const OIL::CEventSource* pSender, OIL::
 void CPlayByEarDlg::OnHelpHowdoi()
 {
     TCHAR szImagePath[1024]; DWORD dwSize = _countof(szImagePath);
-    QueryFullProcessImageName(GetCurrentProcess(), 0, szImagePath, &dwSize);
+    GetModuleFileName(NULL, szImagePath, dwSize);
     CString strPath(szImagePath);
     strPath = strPath.Mid(0, strPath.ReverseFind(_T('\\')));
         
@@ -966,7 +966,7 @@ void CPlayByEarDlg::OnHelpHowdoi()
 void CPlayByEarDlg::OnShowKeyBindings()
 {
     TCHAR szImagePath[1024]; DWORD dwSize = _countof(szImagePath);
-    QueryFullProcessImageName(GetCurrentProcess(), 0, szImagePath, &dwSize);
+    GetModuleFileName(NULL, szImagePath, dwSize);
     CString strPath(szImagePath);
     strPath = strPath.Mid(0, strPath.ReverseFind(_T('\\')));
         
