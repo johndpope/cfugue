@@ -65,6 +65,19 @@ namespace MusicNoteLib
 		return psz - sz;
 	}	
 
+	bool MusicStringParser::Parse(const TCHAR* szTokens, bool* pbNonContinuableErrorOccured /*= NULL*/)
+	{
+		bool bRetVal = false;
+
+		const TCHAR* szNextToken = szTokens;
+
+		while(*szNextToken!= NULL && true == (bRetVal = ParseToken(szNextToken, pbNonContinuableErrorOccured)))
+		{
+			while(*szNextToken!= NULL && isspace(*szNextToken++) == false) ;
+		}
+		return bRetVal;
+	}
+
 	/// <Summary>
 	/// Parses a single token. To Parse a string that contains multiple tokens, 
 	/// use the <code>Parse</code> method. We consider a string to be having multiple
@@ -176,6 +189,8 @@ namespace MusicNoteLib
 			nLen = ParseNoteConnector(szToken, ctx);
 			if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false;}
 			szToken += nLen;
+
+			RaiseNoteEvents(ctx);
 		}
 
 		Trace(szToken[0] != _T('\0') ? (MString(_T("Ignoring: ")) + szToken) : _T(""));
@@ -188,18 +203,21 @@ namespace MusicNoteLib
 	///</Summary>
 	void MusicStringParser::DecideSequentialOrParallel(NoteContext& ctx)
 	{
-		ctx.isSequentialNote = false;
+		ctx.type = Note::FIRST;
+		//ctx.isSequentialNote = false;
 		if(ctx.anotherIsSequential)
 		{
-			ctx.isSequentialNote = true;
+			//ctx.isSequentialNote = true;
+			ctx.type = Note::SEQUENTIAL;
 			ctx.anotherIsSequential = false;
 			Trace(_T("This note is sequential"));
 		}
 
-		ctx.isParallelNote = false;
+		//ctx.isParallelNote = false;
 		if(ctx.anotherIsParallel)
 		{
-			ctx.isParallelNote = true;
+			//ctx.isParallelNote = true;
+			ctx.type = Note::PARALLEL;
 			ctx.anotherIsParallel = false;
 			Trace(_T("This note is parallel"));
 		}
@@ -568,6 +586,32 @@ namespace MusicNoteLib
 		
 		return 0; // No Characters Read
 	}
+
+
+	/// <Summary> Upon completion of parsing a Note token, raises the Events to process the Note</Summary>
+	void MusicStringParser::RaiseNoteEvents(NoteContext& ctx)
+	{
+		if(ctx.isRest)
+		{
+			ctx.attackVelocity = ctx.decayVelocity = 0; // Rest Notes do not make Sound !!
+		}
+
+		RaiseEvent(&evNote, (Note*)&ctx);
+
+		if(ctx.isChord)
+		{
+			for(unsigned short i=0; i < ctx.numHalfSteps; ++i)
+			{
+				Note noteObj;
+				noteObj.noteNumber = ctx.noteNumber + ctx.halfSteps[i];
+				noteObj.duration = ctx.duration;
+				noteObj.decimalDuration = ctx.decimalDuration;
+				noteObj.type = Note::PARALLEL;
+				RaiseEvent(&evNote, (Note*)&ctx);
+			}
+		}
+	}
+
 
 	/// <Summary> 
 	/// Tries to load a value from Dictionary with the given key. 

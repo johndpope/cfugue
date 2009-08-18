@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\Common"
+				AdditionalIncludeDirectories="..\..\Common;..\libjdkmidi\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;MUSICNOTEDLL_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"

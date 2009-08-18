@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\Common"
+				AdditionalIncludeDirectories="..\..\Common;..\libjdkmidi\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -284,6 +284,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Parser.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -322,6 +326,14 @@
 			<File
 				RelativePath=".\TokenParsers.cpp"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
@@ -329,6 +341,14 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\MIDIEventManager.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MIDIRenderer.h"
+				>
+			</File>
 			<File
 				RelativePath=".\MString.h"
 				>
@@ -339,6 +359,22 @@
 			</File>
 			<File
 				RelativePath=".\MusicStringParser.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Note.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Parser.h"
+				>
+			</File>
+			<File
+				RelativePath=".\ParserListener.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Player.h"
 				>
 			</File>
 			<File
@@ -359,14 +395,6 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
-		</Filter>
-		<Filter
-			Name="Common"
-			>
-			<File
-				RelativePath="..\..\Common\EventHandler.h"
-				>
-			</File>
 		</Filter>
 		<File
 			RelativePath=".\ReadMe.txt"
