@@ -4,18 +4,16 @@
 #include "stdafx.h"
 
 //#include "MusicNoteReader.h"
-#include "TokenParsers.h"
 #include "MusicNoteLib.h"
 
-#include "MusicStringParser.h"
 
-void OnParseTrace(const MusicNoteLib::MusicStringParser*, MusicNoteLib::MusicStringParser::TraceEventHandlerArgs* pEvArgs)
+void OnParseTrace(const MusicNoteLib::CParser*, MusicNoteLib::MusicStringParser::TraceEventHandlerArgs* pEvArgs)
 {
 	OutputDebugString(_T("\n"));
 	OutputDebugString(pEvArgs->szTraceMsg);
 }
 
-void OnParseError(const MusicNoteLib::MusicStringParser*, MusicNoteLib::MusicStringParser::ErrorEventHandlerArgs* pEvArgs)
+void OnParseError(const MusicNoteLib::CParser*, MusicNoteLib::MusicStringParser::ErrorEventHandlerArgs* pEvArgs)
 {
 	OutputDebugString(_T("\nError --> "));
 	OutputDebugString(pEvArgs->szErrMsg);
@@ -26,11 +24,12 @@ void OnParseError(const MusicNoteLib::MusicStringParser*, MusicNoteLib::MusicStr
 	}
 }
 
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	MusicNoteLib::GetCarnaticMusicNoteReader();
 
-	MusicNoteLib::MusicStringParser Parser(MusicNoteLib::Western::TokenClassifiers);
+	MusicNoteLib::MusicStringParser Parser;
 
 	// Subscribe to the Events
 	Parser.evTrace.Subscribe(&OnParseTrace);
@@ -93,6 +92,13 @@ int _tmain(int argc, _TCHAR* argv[])
 	bSuccess = Parser.ParseToken(_T("C/*5:4")); // parsing should be able to ignore the /
 	bSuccess = Parser.ParseToken(_T("[260]wq")); // should be able to ceil the numeric note to 127
 
+	MusicNoteLib::Player player;
+
+	player.Play(_T("C D E F G A B"));
+
+	getchar();
+
+	player.Stop();
 
 	return 0;
 }

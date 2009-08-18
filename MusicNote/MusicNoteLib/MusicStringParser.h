@@ -1,19 +1,9 @@
 #ifndef __MUSICNOTEREADER_H__506A239B_50B0_472d_B070_69BFBEF3C6CB__
 #define __MUSICNOTEREADER_H__506A239B_50B0_472d_B070_69BFBEF3C6CB__
 
-/// <Summary>
-/// You can enable or disable tracing events in the MusicStringParser by
-/// defining ENABLE_TRACING to be 1 or 0 before including this header file.
-/// By default, ENABLE_TRACING is defined to be 1 in DEBUG builds, and 0 in
-/// RELEASE builds.
-/// </Summary>
-#if defined(DEBUG) || defined (_DEBUG)
-#define ENABLE_TRACING 1
-#endif // if defined(DEBUG)
-
-#include "MusicNoteLib.h"
 #include "MString.h"
-#include "EventHandler.h"
+#include "Parser.h"
+#include "Note.h"
 #include <map>
 
 namespace MusicNoteLib
@@ -21,7 +11,7 @@ namespace MusicNoteLib
 	/// <Summary>
 	///
 	/// </Summary>
-	class MusicStringParser : public OIL::CEventSource
+	class MusicStringParser : public CParser
 	{
 	protected:
 		/// <Summary>
@@ -116,8 +106,6 @@ namespace MusicNoteLib
 		{
 			DEFAULT_CHORD_OCTAVE		= 3,
 			DEFAULT_NONCHORD_OCTAVE		= 5,
-			DEFAULT_ATTACK_VELOCITY		= 64,
-			DEFAULT_DECAY_VELOCITY		= 64,
 		};
 
 
@@ -140,48 +128,16 @@ namespace MusicNoteLib
 	public:
 		//typedef void (*TOKEN_HANDLER_PROC)(const TCHAR* );
 
-		struct TokenClassifierDef
-		{
-			MusicChar startChar;
-			//TOKEN_HANDLER_PROC proc;
-		};
+		//struct TokenClassifierDef
+		//{
+		//	MusicChar startChar;
+		//	//TOKEN_HANDLER_PROC proc;
+		//};
 
-		const TokenClassifierDef* m_pDef;
-
-#if ENABLE_TRACING
-	public:
-		/// <Summary>
-		/// The structure that is passed as argument to the Trace Event Handler procedure.
-		/// Listeners who want to know about the trace events can subscribe to the evTrace
-		/// event and handle the trace events raised by MusicStringParser as the parsing progresses.
-		/// </Summary>
-		struct TraceEventHandlerArgs : public OIL::CEventHandlerArgs 
-		{  
-			const TCHAR* szTraceMsg;
-			inline TraceEventHandlerArgs(const TCHAR* sz) : szTraceMsg(sz) { }
-		};
-
-		OIL::CEventT<const MusicStringParser, TraceEventHandlerArgs> evTrace;
-	protected:
-		/// <Summary>
-		/// Trace method is called through out parsing process. However, the functionality
-		/// is enabled only if ENABLE_TRACING directive is defined to be 1 (which is default for
-		/// DEBUG builds, but not for RELEASE builds).
-		/// When enabled, Trace will raise events through the MusicStringParser::evTrace event
-		/// variable. Listeners can subscribe to this event to get to know the trace messages.
-		/// </Summary>
-		inline virtual void Trace(const TCHAR* szTraceMsg)
-		{
-			OIL::CEventSource::RaiseEvent(&evTrace, &TraceEventHandlerArgs(szTraceMsg));
-		}
-#else
-
-#define Trace(x) 
-
-#endif // #if ENABLE_TRACING
+		//const TokenClassifierDef* m_pDef;
 
 	public:
-		MusicStringParser(const TokenClassifierDef* pDef) : m_pDef(pDef)
+		MusicStringParser()//const TokenClassifierDef* pDef) : m_pDef(pDef)
 		{
 		}
 
@@ -210,78 +166,7 @@ namespace MusicNoteLib
 		/// </Summary>
 		bool ParseToken(const TCHAR* szToken, bool* pbNonContinuableErrorOccured = NULL); 
 
-		/// <Summary>Error code values used by ErrorEventHandlerArgs</Summary>
-		enum ErrorCode
-		{
-			CRITICAL_ERROR_MEMORY_ALLOCATION,	// Memory allocation failed
-			PARSE_ERROR_MISSING_ASSIGNMENT,		// No Assignment symbol found
-			PARSE_ERROR_NUMERIC_NOTE_END,		// MACRO_END missing while parsing a numeric note.			
-			PARSE_ERROR_NUMERIC_NOTE_VALUE,		// Failure while converting/retrieving a numeric note number.
-			PARSE_ERROR_LETTER_NOTE,			// Invalid Alphabet encountering while trying to read a Note Symbol
-			PARSE_ERROR_OCTAVE_MACRO_END,		// MACRO_END missing while parsing an Octave Macro
-			PARSE_ERROR_OCTAVE_VALUE,			// Failure while conveting/retrieving an Octave macro number
-			PARSE_ERROR_OCTAVE_MAXLIMIT,		// Specified an octave that is beyond the permitted range
-			PARSE_ERROR_DURATION_MACRO_END,		// MACRO_END missing while parsing an Duration Macro
-			PARSE_ERROR_DURATION_VALUE,			// Failure while conveting/retrieving a Duration number
-			PARSE_ERROR_TUPLET_NUMERATOR,		// Failure while conveting/retrieving the Numerator of Tuplet fraction
-			PARSE_ERROR_TUPLET_DENOMINATOR,		// Failure while conveting/retrieving the Denominator of Tuplet fraction
-			PARSE_ERROR_VELOCITY_MACRO_END,		// MACRO_END missing while parsing a Velocity Macro
-			PARSE_ERROR_VELOCITY_VALUE,			// Failure while conveting/retrieving a Velocity number
-			PARSE_ERROR_NOTEVALUE_MAXLIMIT,		// Computed Note Value is going beyond the permitted range [0, 127]
-		};
-		/// <Summary>
-		/// The structure that is passed as argument to the Error Event Handler procedure.
-		/// Listeners who want to know about the error events can subscribe to the evError
-		/// event and handle the trace events raised by MusicStringParser as the parsing progresses.
-		/// 
-		/// Unlike the other programming paradigms that teach greedy methods asking you to exit 
-		/// the moment any error occurs, MusicNote library fights to live its best before it gives up.
-		/// So, usually if there is any error in parsing a token, parser does not abort and tries to continue 
-		/// parsing the rest of the tokens. 
-		/// In case this behavior is not suitable for your application and if you would like to stop the processing
-		/// immediately when there is an error, you can indicate your preference to stop the processing 
-		/// by using the <code>bShouldStopParsing</code> variable. Set it to true in the error handler
-		/// procedure, to halt the processing immediately. By default it would be False (meaning the parser
-		/// should continue its best to resolve the token ignoring the error).
-		///
-		/// Note that, when there are multiple listeners for the event, options set by one listener might be
-		/// overriden by the next listener. Parser only respects the last value it sees. So, use care while
-		/// dealing with multiple listeners, and ensure that they do not use conflicting settings.
-		///
-		/// Ofcourse, in case of critical errors such as memory allocation failure etc.. there is nothing 
-		/// that could be done, so the listener preferences are ignored and processing would be stopped.
-		/// </Summary>
-		struct ErrorEventHandlerArgs : public OIL::CEventHandlerArgs 
-		{  
-			const ErrorCode	errCode; /// Error Code
-			const TCHAR* szErrMsg;	/// The Error message sent by MusicStringParser
-			const TCHAR* szToken;	/// Token the error is applicable for
-			bool bShouldStopParsing; /// Should Parser continue to parse or should stop now? (only for PARSE_ERRORS)
-
-			inline ErrorEventHandlerArgs(ErrorCode argErrCode, const TCHAR* argErrMsg, const TCHAR* argSzToken)
-				: errCode(argErrCode), szErrMsg(argErrMsg), szToken(argSzToken), bShouldStopParsing(false) { }
-		};
-
-		OIL::CEventT<const MusicStringParser, ErrorEventHandlerArgs> evError;
-	protected:
-		/// <Summary>
-		/// Error method is called whenever there is a parse error. 
-		/// This method will raise events through the <code>MusicStringParser::evError</code> event
-		/// variable. Listeners can subscribe to it to get to know about the parse errors.
-		///
-		/// You can override this method in derived classes if you wish to modify this error
-		/// reporting implementation.
-		///
-		/// @param szTraceMsg Error message details
-		/// @param szToken The token that is being parsed while the error happened
-		/// @return Boolean value indicating if the parsing should stop now or should continue
-		/// </Summary>
-		inline virtual bool Error(ErrorCode argErrCode, const TCHAR* szTraceMsg, const TCHAR* szToken)
-		{
-			ErrorEventHandlerArgs evArgs(argErrCode, szTraceMsg, szToken);
-			OIL::CEventSource::RaiseEvent(&evError, &evArgs);
-			return evArgs.bShouldStopParsing;
-		}
+		bool Parse(const TCHAR* szTokens, bool* pbNonContinuableErrorOccured = NULL); 
 
 	private:
 		// Token Parserer Methods. Return value indicates success or failure.
@@ -299,48 +184,32 @@ namespace MusicNoteLib
 		bool ParseDictionaryToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
 		bool ParseNoteToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
 
-		struct NoteContext
+		struct NoteContext : public Note
 		{
-			bool isRest;
 			bool isNumeric;
 			bool isChord;
-			bool isFirstNote;
-			bool isSequentialNote;
-			bool isParallelNote;
+			//bool isFirstNote;
+			//bool isSequentialNote;
+			//bool isParallelNote;
 			bool isNatural;
 			bool existsAnotherNote;
 			bool anotherIsSequential;
 			bool anotherIsParallel;
-			bool isStartOfTie;
-			bool isEndOfTie;
 			unsigned char	halfSteps[8];  
 			unsigned short	numHalfSteps;
-			short			noteNumber;
 			short			octaveNumber;
-			double			decimalDuration;
-			long			duration;
-			unsigned short	attackVelocity;
-			unsigned short	decayVelocity;
-			NoteContext()
-				: isRest(0),
+			NoteContext()	:
 				isNumeric(0),
 				isChord(0),
-				isFirstNote(1),
-				isSequentialNote(0),
-				isParallelNote(0),
+				//isFirstNote(1),
+				//isSequentialNote(0),
+				//isParallelNote(0),
 				isNatural(0),
 				existsAnotherNote(1),
 				anotherIsSequential(0),
 				anotherIsParallel(0),
-				isStartOfTie(0),
-				isEndOfTie(0),
 				numHalfSteps(0),
-				noteNumber(0),
-				octaveNumber(-1),
-				decimalDuration(0.0),
-				duration(0),
-				attackVelocity(DEFAULT_ATTACK_VELOCITY),
-				decayVelocity(DEFAULT_DECAY_VELOCITY)
+				octaveNumber(-1)
 			{
 				memset(halfSteps, 0, sizeof(halfSteps));
 			}
@@ -380,6 +249,9 @@ namespace MusicNoteLib
 		int ParseNoteOctave(TCHAR* szToken, NoteContext& ctx);
 		/// <Summary> Checks & Parses any associated notes </Summary>
 		int ParseNoteConnector(TCHAR* szToken, NoteContext& ctx);
+
+		/// <Summary> Upon completion of parsing a Note token, raises the Events to process the Note</Summary>
+		void RaiseNoteEvents(NoteContext& ctx);
 
 		/// <Summary> 
 		/// Tries to load a value from Dictionary with the given key. 

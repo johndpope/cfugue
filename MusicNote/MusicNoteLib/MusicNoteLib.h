@@ -11,12 +11,10 @@
 #define MUSICNOTELIB_API
 #endif // MUSICNOTELIB_API
 
-#include "TChar.h"
-#include <string>
+#include "Player.h"
 
 namespace MusicNoteLib
 {
-	typedef TCHAR MusicChar;	
 
 extern "C"
 {

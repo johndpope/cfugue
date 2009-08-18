@@ -1,6 +1,7 @@
 #ifndef __MSTRING_H__2B50AFA1_EFB9_428a_A397_3FFEA175FA33__
 #define __MSTRING_H__2B50AFA1_EFB9_428a_A397_3FFEA175FA33__
 
+#include "TChar.h"	// On Non win32 platforms we use a local TChar.h
 #include <string>
 
 namespace MusicNoteLib

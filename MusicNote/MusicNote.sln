@@ -2,6 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MusicNoteLib", "MusicNoteLib\MusicNoteLib.vcproj", "{92734113-E02C-45AE-884E-83923A9E54E5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B} = {F8D83713-D3AB-4201-891D-9AF50BBDBA8B}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleTestApp", "ConsoleTestApp\ConsoleTestApp.vcproj", "{61C7838D-3C3F-4144-B3F7-8B55068DA6DE}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -10,11 +13,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConsoleTestApp", "ConsoleTe
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MusicNoteDLL", "MusicNoteDLL\MusicNoteDLL.vcproj", "{0B3B7A35-6C84-4B92-A76D-D12E5C792E37}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "jdkmidi", "libjdkmidi\build\vc9\jdkmidi.vcproj", "{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}"
+EndProject
 Global
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
 		Release|Win32 = Release|Win32
@@ -46,6 +47,14 @@ Global
 		{0B3B7A35-6C84-4B92-A76D-D12E5C792E37}.StaticDebug|Win32.Build.0 = StaticDebug|Win32
 		{0B3B7A35-6C84-4B92-A76D-D12E5C792E37}.StaticRelease|Win32.ActiveCfg = StaticRelease|Win32
 		{0B3B7A35-6C84-4B92-A76D-D12E5C792E37}.StaticRelease|Win32.Build.0 = StaticRelease|Win32
+		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.Debug|Win32.Build.0 = Debug|Win32
+		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.Release|Win32.ActiveCfg = Release|Win32
+		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.Release|Win32.Build.0 = Release|Win32
+		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.StaticDebug|Win32.ActiveCfg = Debug|Win32
+		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.StaticDebug|Win32.Build.0 = Debug|Win32
+		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.StaticRelease|Win32.ActiveCfg = Release|Win32
+		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.StaticRelease|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
