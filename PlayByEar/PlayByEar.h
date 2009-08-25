@@ -14,7 +14,7 @@
 // See PlayByEar.cpp for the implementation of this class
 //
 
-class CPlayByEarApp : public CWinAppEx
+class CPlayByEarApp : public CWinApp
 {
 public:
 	CPlayByEarApp();

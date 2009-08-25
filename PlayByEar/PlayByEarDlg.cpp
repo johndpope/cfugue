@@ -224,12 +224,15 @@ BOOL CPlayByEarDlg::OnInitDialog()
     // Attempt to open MIDI input and output devices
     try
     {
+		m_bConnectMIDIOut = AfxGetApp()->GetProfileInt(gpszKey, _T("ShouldConnectOutput"), 1);
+		m_bConnectMIDIIn = AfxGetApp()->GetProfileInt(gpszKey, _T("ShouldConnectInput"), 1);
+
         UINT inDevID = AfxGetApp()->GetProfileInt(gpszKey, _T("InputDevice"), 0);
-        UINT outDevID = AfxGetApp()->GetProfileInt(gpszKey, _T("OutputDevice"), 0);
+        UINT outDevID = AfxGetApp()->GetProfileInt(gpszKey, _T("OutputDevice"), 0);        
 
         // If there are any MIDI output devices available, open one.
         UINT nOutDevCount = midi::CMIDIOutDevice::GetNumDevs();
-        if(nOutDevCount > 0)
+        if(nOutDevCount > 0 && m_bConnectMIDIOut)
         {
             m_OutDevice.Open(nOutDevCount > outDevID ? outDevID : 0);
         }        
@@ -242,12 +245,12 @@ BOOL CPlayByEarDlg::OnInitDialog()
         // If there are any MIDI input devices available, open one and begin
         // recording.
         UINT nInDevCount = midi::CMIDIInDevice::GetNumDevs();
-        if(nInDevCount > 0)
+        if(nInDevCount > 0 && m_bConnectMIDIIn)
         {
             m_InDevice.SetReceiver(*this);
             m_InDevice.Open(nInDevCount > inDevID ? inDevID : 0);
             // Start receiving MIDI events
-            m_InDevice.StartRecording();           
+            m_InDevice.StartRecording();
         }        
         else // Else there are no MIDI input devices available.
         {
@@ -391,7 +394,9 @@ void CPlayByEarDlg::OnClose()
     // Stop the test, if any 
     OnTestStop();
 
-    // Persist the Values to Registry
+    // Persist the Values to Registry		 
+	AfxGetApp()->WriteProfileInt(gpszKey, _T("ShouldConnectOutput"), m_bConnectMIDIOut);
+	AfxGetApp()->WriteProfileInt(gpszKey, _T("ShouldConnectInput"), m_bConnectMIDIIn);
     AfxGetApp()->WriteProfileInt(gpszKey, _T("InputDevice"), m_InDevice.IsOpen() ? m_InDevice.GetDevID() : 0);
     AfxGetApp()->WriteProfileInt(gpszKey, _T("OutputDevice"), m_OutDevice.IsOpen() ? m_OutDevice.GetDevID() : 0);
     AfxGetApp()->WriteProfileInt(gpszKey, _T("Mode"), m_Mode);
@@ -627,7 +632,7 @@ void CPlayByEarDlg::OnPrefMididevices()
 {
     try
     {
-	    CMIDIDevsDlg Dlg;
+	    CMIDIDevsDlg Dlg(m_bConnectMIDIOut, m_bConnectMIDIIn, this);
 
         //
         // Initialize MIDI device dialog box
@@ -650,9 +655,15 @@ void CPlayByEarDlg::OnPrefMididevices()
             // MIDI output device
             if(Dlg.IsOutDevChanged())
             {
-                m_OutDevice.Close();
-                m_OutDevice.Open(Dlg.GetOutDevId());   
-                OnSelchangeGmList();
+				if(m_OutDevice.IsOpen())
+					m_OutDevice.Close();
+
+				// Connect only if user opted for connection
+                if(true == (m_bConnectMIDIOut = Dlg.ShouldConnectMidiOut()))
+				{
+					m_OutDevice.Open(Dlg.GetOutDevId());   
+					OnSelchangeGmList();					
+				}
             }
 
             // If the client clicked OK and they chose to change the 
@@ -670,10 +681,13 @@ void CPlayByEarDlg::OnPrefMididevices()
                     m_InDevice.Close(); 	
                 }
 
-                m_InDevice.Open(Dlg.GetInDevId());   	
-                
-                // Start receiving MIDI events 	
-                m_InDevice.StartRecording(); 
+				// Connect only if user opted for connection
+                if(true == (m_bConnectMIDIIn = Dlg.ShouldConnectMidiIn()))
+				{
+					m_InDevice.Open(Dlg.GetInDevId());   		                
+					// Start receiving MIDI events 	
+					m_InDevice.StartRecording(); 
+				}
             }
         }	
     }
