@@ -12,7 +12,7 @@
 
 // CPlayByEarApp
 
-BEGIN_MESSAGE_MAP(CPlayByEarApp, CWinAppEx)
+BEGIN_MESSAGE_MAP(CPlayByEarApp, CWinApp)
 	//ON_COMMAND(ID_HELP, &CWinApp::OnHelp) // We selected F1 for other purposes
 END_MESSAGE_MAP()
 
@@ -43,7 +43,7 @@ BOOL CPlayByEarApp::InitInstance()
 	InitCtrls.dwICC = ICC_WIN95_CLASSES;
 	InitCommonControlsEx(&InitCtrls);
 
-	CWinAppEx::InitInstance();
+	CWinApp::InitInstance();
 
     //Initialize the QHtml Control
     QHTM_Initialize( AfxGetInstanceHandle() );

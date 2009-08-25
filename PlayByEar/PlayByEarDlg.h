@@ -4,6 +4,7 @@
 #pragma once
 #include "afxwin.h"
 #include "afxcmn.h"
+#include "afxmt.h"
 #include "QASession.h"
 
 // CPlayByEarDlg dialog
@@ -102,9 +103,9 @@ public:
     afx_msg void OnTestWaitBeforeNewQuestion();
 public:
     // Answer Thread Related data
-    CEvent  m_evExitPlayThread; // set by Dlg to Signale the exit of Thread
-    CEvent  m_evPlayNotes; // set by Dlg to Signale the Play of notes
-    CEvent  m_evStopNotes; // set by Dlg to Signale Stop Playing the notes
+	::CEvent  m_evExitPlayThread; // set by Dlg to Signale the exit of Thread
+    ::CEvent  m_evPlayNotes; // set by Dlg to Signale the Play of notes
+    ::CEvent  m_evStopNotes; // set by Dlg to Signale Stop Playing the notes
     bool    m_bPlaying; // Set by AnswerThread
     CQASession::NOTES m_NotesToPlay; // Read by AnswerThread when requested for Play
     OIL::CInvokableEvent m_evPlayComplete; // Raised by AnswerPlayThread when Play is complete
@@ -114,4 +115,6 @@ protected:
     CQASession  m_QASession;
     CComboBox   m_GMCombo;
     CComboBox   m_RagaListCombo;
+	UINT		m_bConnectMIDIOut;	// Indicates if MIDIOut should be connected or not
+	UINT		m_bConnectMIDIIn;	// Indicates if MIDIIn should be connected or not
 };

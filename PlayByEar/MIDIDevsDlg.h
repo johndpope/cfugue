@@ -1,3 +1,4 @@
+#include "afxwin.h"
 #if !defined(AFX_MIDIDEVSDLG_H__1BDCC560_1300_11D7_865D_0030BD08B6D9__INCLUDED_)
 #define AFX_MIDIDEVSDLG_H__1BDCC560_1300_11D7_865D_0030BD08B6D9__INCLUDED_
 
@@ -14,7 +15,7 @@ class CMIDIDevsDlg : public CDialog
 {
 // Construction
 public:
-	CMIDIDevsDlg(CWnd* pParent = NULL);   // standard constructor
+	CMIDIDevsDlg(UINT bConnectMidiOut = TRUE, UINT bConnectMidiIn = TRUE, CWnd* pParent = NULL);   // standard constructor
 
     //
     // Accessors
@@ -22,6 +23,9 @@ public:
 
     UINT GetOutDevId() const { return m_OutDevId; }
     UINT GetInDevId() const { return m_InDevId; }
+
+	bool ShouldConnectMidiOut() const { return m_bConnectMIDIOut; }
+	bool ShouldConnectMidiIn() const { return m_bConnectMIDIIn; }
 
     //
     // Mutators
@@ -59,12 +63,20 @@ protected:
     bool m_OutChanged;
     bool m_InChanged;
 
+	bool m_bConnectMIDIOut;	// Indicates if MIDIOut should be connected or not
+	bool m_bConnectMIDIIn;	// Indicates if MIDIIn should be connected or not
+
 	// Generated message map functions
 	//{{AFX_MSG(CMIDIDevsDlg)
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnBnClickedCheckConnectMidiout();
+	CButton m_ctrlConnectMidiOut;
+	CButton m_ctrlConnectMidiIn;
+	afx_msg void OnBnClickedCheckConnectMidiin();
 };
 
 //{{AFX_INSERT_LOCATION}}

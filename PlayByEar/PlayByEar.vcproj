@@ -68,7 +68,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="qhtmlight.lib"
+				AdditionalDependencies="qhtmlight.lib WinMM.Lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="Dependencies/QHtm"
 				GenerateDebugInformation="true"
@@ -151,7 +151,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="qhtmlight.lib"
+				AdditionalDependencies="qhtmlight.lib WinMM.Lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="Dependencies/QHtm"
 				GenerateDebugInformation="true"

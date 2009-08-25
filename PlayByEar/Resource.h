@@ -40,6 +40,9 @@
 #define IDC_STATIC_KEYNAMESTOP_4        1031
 #define IDC_QUESTION_GROUP              1032
 #define IDC_CTRL_INFO                   1033
+#define IDC_CHECK1                      1034
+#define IDC_CHECK_CONNECT_MIDIIN        1034
+#define IDC_CHECK_CONNECT_MIDIOUT       1035
 #define ID_PREF_NOTE_COLOR              32772
 #define ID_PREF_MIDIDEVICES             32773
 #define ID_HELP_ABOUT                   32774
@@ -65,7 +68,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        134
 #define _APS_NEXT_COMMAND_VALUE         32791
-#define _APS_NEXT_CONTROL_VALUE         1034
+#define _APS_NEXT_CONTROL_VALUE         1035
 #define _APS_NEXT_SYMED_VALUE           104
 #endif
 #endif
