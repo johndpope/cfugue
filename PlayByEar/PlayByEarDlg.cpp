@@ -103,7 +103,7 @@ UINT __cdecl NotePlayThreadProc( LPVOID pParam )
                 }
 
                 //Play the next note in the sequence
-                if(++nPlayIndex < vecNotes.size())
+                if(++nPlayIndex < (int)vecNotes.size())
                 {
                     midi::CShortMsg ShortMsg(midi::NOTE_ON, 0, vecNotes[nPlayIndex], 127, 0);
                     ShortMsg.SendMsg(OutDevice);
@@ -503,14 +503,22 @@ void CPlayByEarDlg::OnNoteOff(CPianoCtrl &PianoCtrl, unsigned char NoteId)
     // Update the Efficiency
     if(m_QASession.IsSessionActive())
     {
-        m_QASession.ComputeScore();
+		switch(m_QASession.GetCurrentState())
+		{
+		case CQASession::AWAITING_ANSWER:
+		case CQASession::RECEIVING_ANSWER:
+			{
+				m_QASession.ComputeScore();
 
-        CString str;
-        str.Format(_T("Score: %d/%d  Accuracy: %0.2f  Efficiency: %0.2f"),
-                        m_QASession.GetCorrectAnswers(), m_QASession.GetQuestionCount(),
-                        m_QASession.GetAccuracy() * 100, 
-                        m_QASession.GetEfficiency() * 100);
-        SetDlgItemText(IDC_STATIC_RESULTS, str);
+				CString str;
+				str.Format(_T("Score: %d/%d  Accuracy: %0.2f  Efficiency: %0.2f"),
+								m_QASession.GetCorrectAnswers(), m_QASession.GetQuestionCount(),
+								m_QASession.GetAccuracy() * 100, 
+								m_QASession.GetEfficiency() * 100);
+				SetDlgItemText(IDC_STATIC_RESULTS, str);
+			}
+		default: break;
+		}
     }
 
     // Make sure the Paino Control gets the Focus
@@ -605,6 +613,12 @@ void CPlayByEarDlg::ReceiveMsg(DWORD Msg, DWORD TimeStamp)
             m_Keys.NoteOff(Note);
         }
     }
+	else if(Command == midi::PROGRAM_CHANGE 
+			&& ShortMsg.GetChannel() == 0) // if instrument changed on Channel 0
+	{
+        m_GMCombo.SetCurSel(ShortMsg.GetData1());
+        OnSelchangeGmList();
+	}
 }
 
 
