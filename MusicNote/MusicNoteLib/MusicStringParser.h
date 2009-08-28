@@ -247,7 +247,7 @@ namespace MusicNoteLib
 
 		/// <Summary> Parses any associated note octave </Summary>
 		int ParseNoteOctave(TCHAR* szToken, NoteContext& ctx);
-		/// <Summary> Checks & Parses any associated notes </Summary>
+		/// <Summary> Checks and Parses any associated notes </Summary>
 		int ParseNoteConnector(TCHAR* szToken, NoteContext& ctx);
 
 		/// <Summary> Upon completion of parsing a Note token, raises the Events to process the Note</Summary>

@@ -19,10 +19,30 @@ namespace MusicNoteLib
 extern "C"
 {
     MUSICNOTELIB_API void* GetCarnaticMusicNoteReader();
+
+    MUSICNOTELIB_API void* GetCarnaticMusicNoteReader();
+
 } // extern "C"
 
 
 } // namespace MusicNoteLib
 
+/*! \mainpage MusicNoteLib, C++ Music Programming Library
+
+\section overview Overview
+
+This is the Overview section. The Library allows one to play music notes directly from C/C++ programs
+
+\section usage Usage
+
+\section history History
+
+\section theory Theory of Operation
+
+\section limitations Limitations
+
+\section future The Future
+
+*/
 
 #endif // __MUSICNOTE_LIB_H__EBEE094C_FF6E_43a1_A6CE_D619564F9C6A__
