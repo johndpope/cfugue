@@ -21,11 +21,7 @@ public:
 
 	MIDIEventManager(void) : m_Sequencer(&m_Tracks)
 	{
-		memset(m_CurrentLayer, 0, sizeof(m_CurrentLayer));
-		memset(m_Time, 0, sizeof(m_Time));
-		m_nCurrentTrack = 0;
-		m_nCurrentLayer = 0;
-
+		Clear();
 		m_Tracks.SetClksPerBeat(24); //TODO: Correct this
 	}
 
@@ -35,6 +31,21 @@ public:
 
 	/// <Summary> Returns the Sequencer holding the collection of tracks </Summary>
 	jdkmidi::MIDISequencer* GetSequencer() { return &m_Sequencer; }
+
+	/// <Summary> Returns the Multitrack object </Summary>
+	jdkmidi::MIDIMultiTrack* GetTracks() { return &m_Tracks; }
+
+	/// <Summary>
+	/// Clears all the Events stored in the tracks and Resets the Track Timers
+	/// </Summary>
+	void Clear()
+	{
+		memset(m_CurrentLayer, 0, sizeof(m_CurrentLayer));
+		memset(m_Time, 0, sizeof(m_Time));
+		m_nCurrentTrack = 0;
+		m_nCurrentLayer = 0;
+		m_Tracks.Clear();
+	}
 
 	/// <Summary>Sets the current Track/Channel to which new Events will be added
 	/// </Summary>

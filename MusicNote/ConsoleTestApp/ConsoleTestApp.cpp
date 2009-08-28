@@ -92,14 +92,21 @@ int _tmain(int argc, _TCHAR* argv[])
 	bSuccess = Parser.ParseToken(_T("C/*5:4")); // parsing should be able to ignore the /
 	bSuccess = Parser.ParseToken(_T("[260]wq")); // should be able to ceil the numeric note to 127
 
-	MusicNoteLib::Player player;
+    MusicNoteLib::Player player;
+    // Subscribe to the Events
+    player.Parser().evTrace.Subscribe(&OnParseTrace);
+    player.Parser().evError.Subscribe(&OnParseError);
 
-	player.Play(_T("C D E F G A B"));
+    // Play the Music Notes and then Save them to a MIDI File
+    player.Play(_T("CI CI CI GI FI GI D#I. FI. G#I GI. RI ")
+                _T("CI CI CI GI FI GI D#I. FI. D#I DI."));
+    if(false == player.SaveToMidiFile("PlayedOutput.mid"))
+        printf("\n Unable to Save Played Music content to Midi Output File \n");
 
-	getchar();
+    // Save the Music Notes to Midi file directly, without playing
+    //if(false == player.SaveAsMidiFile(_T("Cq Dw Eq Fw Gq Aw Bw"), "MidiOutput.midi"))
+    //	printf("\n Unable to Save Music String to Midi Output File \n");
 
-	player.Stop();
-
-	return 0;
+    return 0;
 }
 

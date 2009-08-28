@@ -1129,20 +1129,29 @@ namespace jdkmidi
     if ( m2.GetTime() > m1.GetTime() )
       return 2; // m2 is larger
       
-    // if times are the same, a note off is always larger
-    
-    if (     m1.byte1 == m2.byte1
-             && m1.GetStatus() ==NOTE_ON
-             && ( ( m2.GetStatus() ==NOTE_ON && m2.byte2==0 ) || ( m2.GetStatus() ==NOTE_OFF ) )
-       )
-      return 2; // m2 is larger
-      
-    if (  m1.byte1 == m2.byte1
-          && m2.GetStatus() ==NOTE_ON
-          && ( ( m1.GetStatus() ==NOTE_ON && m1.byte2==0 ) || ( m1.GetStatus() ==NOTE_OFF ) )
-       )
-      return 1; // m1 is larger
-      
+    //// if times are the same, a note off is always larger
+    //
+    //if (     m1.byte1 == m2.byte1
+    //         && m1.GetStatus() ==NOTE_ON
+    //         && ( ( m2.GetStatus() ==NOTE_ON && m2.byte2==0 ) || ( m2.GetStatus() ==NOTE_OFF ) )
+    //   )
+    //  return 2; // m2 is larger
+    //if (  m1.byte1 == m2.byte1
+    //      && m2.GetStatus() ==NOTE_ON
+    //      && ( ( m1.GetStatus() ==NOTE_ON && m1.byte2==0 ) || ( m1.GetStatus() ==NOTE_OFF ) )
+    //   )
+    //  return 1; // m1 is larger
+
+	bool m1IsOff = (m1.GetStatus() ==NOTE_OFF || m1.byte2 ==0);
+	bool m2IsOff = (m2.GetStatus() == NOTE_OFF || m2.byte2 ==  0);
+
+    // Fix by Gopalakrishna Palem: if times are the same, a note off should come first. Note on is larger    
+    if (!m1IsOff)
+      return 1; // m1 is larger   
+
+	// Fix by Gopalakrishna Palem
+    if (!m2IsOff)
+      return 2; // m2 is larger      
       
     return 0;  // both are equal.
     
