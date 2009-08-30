@@ -23,7 +23,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="4"
 			CharacterSet="1"
 			>
@@ -51,6 +51,7 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -81,12 +82,14 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				Description="copying  $(TargetPath) to $(TargetDir)..\..\lib\"
+				CommandLine="copy $(TargetPath) $(TargetDir)..\..\lib\"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="4"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -115,6 +118,7 @@
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -144,12 +148,14 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				Description="copying  $(TargetPath) to $(TargetDir)..\..\lib\"
+				CommandLine="copy $(TargetPath) $(TargetDir)..\..\lib\"
 			/>
 		</Configuration>
 		<Configuration
 			Name="StaticDebug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="4"
 			CharacterSet="1"
 			>
@@ -177,6 +183,7 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="2"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -206,12 +213,14 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				Description="copying  $(TargetPath) to $(TargetDir)..\..\lib\"
+				CommandLine="copy $(TargetPath) $(TargetDir)..\..\lib\"
 			/>
 		</Configuration>
 		<Configuration
 			Name="StaticRelease|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="4"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -240,6 +249,7 @@
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -269,6 +279,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				Description="copying  $(TargetPath) to $(TargetDir)..\..\lib\"
+				CommandLine="copy $(TargetPath) $(TargetDir)..\..\lib\"
 			/>
 		</Configuration>
 	</Configurations>

@@ -8,7 +8,9 @@
 extern "C"
 {
     MUSICNOTELIB_API void* GetCarnaticMusicNoteReader()
-	{
+	{	
+		MusicNoteLib::MusicStringParser Parser;
+
 		return NULL;
 	}
 

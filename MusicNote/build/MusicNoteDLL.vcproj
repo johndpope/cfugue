@@ -23,7 +23,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="2"
 			UseOfATL="2"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -63,6 +63,7 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -81,7 +82,6 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="true"
-				LinkLibraryDependencies="false"
 				LinkIncremental="2"
 				ModuleDefinitionFile="..\src\MusicNoteDLL\MusicNoteDLL.def"
 				GenerateDebugInformation="true"
@@ -111,12 +111,14 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				Description="copying $(OutDir)\$(ProjectName).lib to ..\..\lib\"
+				CommandLine="copy  $(TargetPath) $(TargetDir)..\..\bin\&#x0D;&#x0A;copy $(OutDir)\$(ProjectName).lib  $(TargetDir)..\..\lib\"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="2"
 			UseOfATL="2"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -154,6 +156,7 @@
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;_USRDLL;MUSICNOTEDLL_EXPORTS;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -201,12 +204,14 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				Description="copying $(OutDir)\$(ProjectName).lib to ..\..\lib\"
+				CommandLine="copy  $(TargetPath) $(TargetDir)..\..\bin\&#x0D;&#x0A;copy $(OutDir)\$(ProjectName).lib  $(TargetDir)..\..\lib\"
 			/>
 		</Configuration>
 		<Configuration
 			Name="StaticDebug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="2"
 			UseOfATL="2"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -246,6 +251,7 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="2"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -293,12 +299,14 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				Description="copying $(OutDir)\$(ProjectName).lib to ..\..\lib\"
+				CommandLine="copy  $(TargetPath) $(TargetDir)..\..\bin\&#x0D;&#x0A;copy $(OutDir)\$(ProjectName).lib  $(TargetDir)..\..\lib\"
 			/>
 		</Configuration>
 		<Configuration
 			Name="StaticRelease|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="2"
 			UseOfATL="2"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -336,6 +344,7 @@
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;_USRDLL;MUSICNOTEDLL_EXPORTS;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="2"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -383,6 +392,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				Description="copying $(OutDir)\$(ProjectName).lib to ..\..\lib\"
+				CommandLine="copy  $(TargetPath) $(TargetDir)..\..\bin\&#x0D;&#x0A;copy $(OutDir)\$(ProjectName).lib  $(TargetDir)..\..\lib\"
 			/>
 		</Configuration>
 	</Configurations>
@@ -489,6 +500,38 @@
 			<File
 				RelativePath="..\src\MusicNoteLib\MusicNoteLib.cpp"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(ProjectName)_$(InputName).obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(ProjectName)_$(InputName).obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="StaticDebug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(ProjectName)_$(InputName).obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="StaticRelease|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(ProjectName)_$(InputName).obj"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\src\MusicNoteDLL\stdafx.cpp"
