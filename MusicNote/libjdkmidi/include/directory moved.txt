@@ -1,0 +1,1 @@
+the jdimidi directory in this folder is moved to ..\..\include directory.
