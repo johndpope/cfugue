@@ -23,7 +23,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="1"
 			CharacterSet="1"
 			>
@@ -51,6 +51,7 @@
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -66,6 +67,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="..\lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -90,12 +92,14 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				Description="copying $(TargetPath) to $(TargetDir)..\..\bin\"
+				CommandLine="copy $(TargetPath) $(TargetDir)..\..\bin\"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="1"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -119,11 +123,12 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\include;..\..\Common"
+				AdditionalIncludeDirectories="..\include;..\..\Common;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -165,12 +170,14 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				Description="copying $(TargetPath) to $(TargetDir)..\..\bin\"
+				CommandLine="copy $(TargetPath) $(TargetDir)..\..\bin\"
 			/>
 		</Configuration>
 		<Configuration
 			Name="StaticDebug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="1"
 			CharacterSet="1"
 			>
@@ -192,12 +199,13 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\include;..\..\Common"
+				AdditionalIncludeDirectories="..\include;..\..\Common;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				UsePrecompiledHeader="2"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -237,12 +245,14 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				Description="copying $(TargetPath) to $(TargetDir)..\..\bin\"
+				CommandLine="copy $(TargetPath) $(TargetDir)..\..\bin\"
 			/>
 		</Configuration>
 		<Configuration
 			Name="StaticRelease|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="1"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -266,11 +276,12 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\include;..\..\Common"
+				AdditionalIncludeDirectories="..\include;..\..\Common;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -312,6 +323,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
+				Description="copying $(TargetPath) to $(TargetDir)..\..\bin\"
+				CommandLine="copy $(TargetPath) $(TargetDir)..\..\bin\"
 			/>
 		</Configuration>
 	</Configurations>
