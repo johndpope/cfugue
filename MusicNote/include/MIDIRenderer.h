@@ -60,17 +60,26 @@ namespace MusicNoteLib
 		}
 
 		/// <Summary>
-		/// Starts Rendering the MIDI output to MIDI port
-		/// Each BeingPlayAsync call should have a matching EndPlayAsync call.
+		/// Starts Rendering the MIDI output to MIDI port.
+		/// Each BeingPlayAsync call should have a matching EndPlayAsync call (no matter success or failure).
+		/// nMIDIOutPortID is the ID of the MIDI output port to open for play.
+		/// nTimerResolutionMS is the required minimum resolution for the MIDI timer (in MilliSeconds).
+		/// Returns false if Unable to open MIDI port or unable to create timer with specified resolution.
 		/// </Summary>
-		inline virtual void BeginPlayAsync()
+		inline virtual bool BeginPlayAsync(int nMIDIOutPortID = MIDI_MAPPER, unsigned int nTimerResolutionMS = 20)
 		{
 			m_MIDIEventManager.GetSequencer()->GoToZero();
 			m_MIDIManager.SetSeq(m_MIDIEventManager.GetSequencer());
-			m_MIDIDriver.OpenMIDIOutPort(1);//MIDI_MAPPER);
-			m_MIDIDriver.StartTimer(20);
-			m_MIDIManager.SetTimeOffset(timeGetTime());
-			m_MIDIManager.SeqPlay();
+			if(m_MIDIDriver.OpenMIDIOutPort(nMIDIOutPortID))
+			{
+				if(m_MIDIDriver.StartTimer(nTimerResolutionMS))
+				{
+					m_MIDIManager.SetTimeOffset(timeGetTime());
+					m_MIDIManager.SeqPlay();
+					return true;
+				}
+			}
+			return false;
 		}
 
 		/// <Summary>
@@ -80,8 +89,8 @@ namespace MusicNoteLib
 		inline virtual void EndPlayAsync()
 		{
 			m_MIDIDriver.StopTimer();
-			m_MIDIDriver.CloseMIDIOutPort();
 			m_MIDIManager.SeqStop();
+			m_MIDIDriver.CloseMIDIOutPort();
 		}
 
 		/// <Summary>
