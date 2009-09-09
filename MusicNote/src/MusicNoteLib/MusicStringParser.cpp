@@ -65,17 +65,24 @@ namespace MusicNoteLib
 		return psz - sz;
 	}	
 
-	bool MusicStringParser::Parse(const TCHAR* szTokens, bool* pbNonContinuableErrorOccured /*= NULL*/)
+	bool MusicStringParser::Parse(const TCHAR* szTokens)
 	{
-		bool bRetVal = false;
+		bool bNonContinuableErrorOccured = false;
 
 		const TCHAR* szNextToken = szTokens;
 
-		while(*szNextToken!= NULL && true == (bRetVal = ParseToken(szNextToken, pbNonContinuableErrorOccured)))
+		while(*szNextToken!= NULL)
 		{
-			while(*szNextToken!= NULL && isspace(*szNextToken++) == false) ;
+			if(false == ParseToken(szNextToken, &bNonContinuableErrorOccured) && 
+				true == bNonContinuableErrorOccured)
+				return false; // Some irrevocable error Occured. Return false;
+
+			while(*szNextToken!= NULL && _istspace(*szNextToken++) == false) ; // Read past the token characters
+
+			while(*szNextToken!= NULL && _istspace(*szNextToken)) ++szNextToken; // Read all the space characters
 		}
-		return bRetVal;
+
+		return true;
 	}
 
 	/// <Summary>

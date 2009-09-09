@@ -18,9 +18,26 @@ namespace MusicNoteLib
 
 extern "C"
 {
-    MUSICNOTELIB_API void* GetCarnaticMusicNoteReader();
+	MUSICNOTELIB_API typedef void MStringPlayer;
 
     MUSICNOTELIB_API void* GetCarnaticMusicNoteReader();
+
+	/// <Summary>
+	/// Creates a MusicString Player object.
+	/// </Summary>
+    MUSICNOTELIB_API MStringPlayer* CreateMusicStringPlayer();
+
+	/// <Summary>
+	/// Plays Music string notes on default MIDI Output device with default Timer Resolution.
+	/// Use PlayMusicStringWithOpts to use non-default values.
+	/// </Summary>
+	MUSICNOTELIB_API void PlayMusicString(const TCHAR* szMusicNotes);
+	
+	/// <Summary>
+	/// Plays Music string notes on given MIDI Output device using given Timer Resolution.
+	/// Use PlayMusicString to use default values.
+	/// </Summary>
+	MUSICNOTELIB_API void PlayMusicStringWithOpts(const TCHAR* szMusicNotes, int nMidiOutPortID, unsigned int nTimerResMS);
 
 } // extern "C"
 

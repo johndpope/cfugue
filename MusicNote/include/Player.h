@@ -28,9 +28,9 @@ namespace MusicNoteLib
 		/// Plays a string of music notes. Will not return till the play is complete.
 		/// To Play the Notes asynchronously, use the PlayAsync method instead.
 		/// </Summary>
-		void Play(const MString& strMusicNotes)
+		void Play(const MString& strMusicNotes, int nMIDIOutPortID = MIDI_MAPPER, unsigned int nMIDITimerResMS = 20)
 		{
-			PlayAsync(strMusicNotes);
+			PlayAsync(strMusicNotes, nMIDIOutPortID, nMIDITimerResMS);
 			
 			while(m_Renderer.IsPlaying())
 				Sleep(1000);//TODO: Ensure Platform compatibility for Sleep
@@ -39,16 +39,16 @@ namespace MusicNoteLib
 		}
 
 		/// <Summary>Starts playing the notes asynchronously. Use the StopPlay method to stop the play. </Summary>
-		inline void PlayAsync(const MString& strMusicNotes)
+		inline void PlayAsync(const MString& strMusicNotes, int nMIDIOutPortID = MIDI_MAPPER, unsigned int nMIDITimerResMS = 20 )
 		{
 			m_Renderer.Clear(); // Clear any previous Notes
 
 			m_Parser.Parse(strMusicNotes);	// Parse and Load the Notes into MIDI MultiTrack
 
-			m_Renderer.BeginPlayAsync(); // Start Playing
+			m_Renderer.BeginPlayAsync(nMIDIOutPortID, nMIDITimerResMS); // Start Playing on the given MIDIport with supplied resolution
 		}
 
-		/// <Summary>Stops the Play</Summary>
+		/// <Summary>Stops the Play started with PlayAsync</Summary>
 		inline void StopPlay()
 		{
 			m_Renderer.EndPlayAsync();

@@ -1,10 +1,9 @@
 #ifndef __MUSICNOTEREADER_H__506A239B_50B0_472d_B070_69BFBEF3C6CB__
 #define __MUSICNOTEREADER_H__506A239B_50B0_472d_B070_69BFBEF3C6CB__
 
-#include "MString.h"
+#include "Dictionary.h"
 #include "Parser.h"
 #include "Note.h"
-#include <map>
 
 namespace MusicNoteLib
 {
@@ -108,38 +107,7 @@ namespace MusicNoteLib
 			DEFAULT_NONCHORD_OCTAVE		= 5,
 		};
 
-
-		/// <Summary>Implements the less operator for Maps with string case-insensitive comparisions </Summary>
-		template<class _Ty>
-		struct StringLess : public std::binary_function<_Ty, _Ty, bool>
-		{
-			inline bool operator()(const _Ty& _Left, const _Ty& _Right) const
-			{	
-				return _tcsicmp(_Left, _Right) < 0 ? true : false; // check if (_Left < _Right);
-			}
-		};
-
-		/// <Summary> Dictionary type maps a string key to a string value. The string
-		/// value can be an integer or double, in text form, or a string </Summary>
-		typedef std::map<MString, MString, StringLess<const TCHAR*> > DICTIONARY;
-
 		DICTIONARY m_Dictionary;	// Holds the custom MACRO definitions for Music Strings
-
-	public:
-		//typedef void (*TOKEN_HANDLER_PROC)(const TCHAR* );
-
-		//struct TokenClassifierDef
-		//{
-		//	MusicChar startChar;
-		//	//TOKEN_HANDLER_PROC proc;
-		//};
-
-		//const TokenClassifierDef* m_pDef;
-
-	public:
-		MusicStringParser()//const TokenClassifierDef* pDef) : m_pDef(pDef)
-		{
-		}
 
 		/// <Summary>
 		/// Parses a single token. To Parse a string that contains multiple tokens, 
@@ -166,7 +134,44 @@ namespace MusicNoteLib
 		/// </Summary>
 		bool ParseToken(const TCHAR* szToken, bool* pbNonContinuableErrorOccured = NULL); 
 
-		bool Parse(const TCHAR* szTokens, bool* pbNonContinuableErrorOccured = NULL); 
+	public:
+		//typedef void (*TOKEN_HANDLER_PROC)(const TCHAR* );
+
+		//struct TokenClassifierDef
+		//{
+		//	MusicChar startChar;
+		//	//TOKEN_HANDLER_PROC proc;
+		//};
+
+		//const TokenClassifierDef* m_pDef;
+
+		inline MusicStringParser() 
+		{ 
+			ResetDefinitions();
+		}
+
+		/// <Summary>
+		/// Macros defined in the Music Strings are <i>remembered</i> across the <code>Parse</code> method calls.
+		/// Call <code>ResetDefinitions</code> before calling <code>Parse</code> to clear the previous definitions.
+		/// </Summary>
+		inline void ResetDefinitions()
+		{
+			m_Dictionary = MusicNoteLib::GetStandardDefinitions(); // Load standard macro definitions
+		}
+
+		/// <Summary>
+		/// Parses a string that contains multiple tokens. Raises appropriate events as and when
+		/// the tokens are parsed. We consider the input string to be having multiple
+		/// tokens seperated with whitespace charactes such as \n \t or Space. If there are no
+		/// whitespace characters, the whole string will be considered as a single token.
+		///
+		/// Use <code>MusicStringParser::AddListener</code> method to get notified about the parse events.
+		///
+		/// @param szTokens The string to be parsed.
+		///
+		/// @return True if success, False in case of any failures.
+		/// </Summary>
+		bool Parse(const TCHAR* szTokens); 
 
 	private:
 		// Token Parserer Methods. Return value indicates success or failure.
