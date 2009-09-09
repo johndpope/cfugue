@@ -25,6 +25,270 @@
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="4"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="..\include;..\..\common"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				UsePrecompiledHeader="2"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
+				WarningLevel="3"
+				DebugInformationFormat="4"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+				IgnoreAllDefaultLibraries="true"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				Description="copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)cd.lib"
+				CommandLine="copy $(TargetPath) $(TargetDir)..\..\lib\$(TargetName)cd.lib"
+				ExcludedFromBuild="true"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
+			ConfigurationType="4"
+			CharacterSet="2"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="..\include;..\..\common"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="true"
+				UsePrecompiledHeader="2"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				Description="copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)c.lib"
+				CommandLine="copy $(TargetPath) $(TargetDir)..\..\lib\$(TargetName)c.lib"
+			/>
+		</Configuration>
+		<Configuration
+			Name="StaticDebug|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
+			ConfigurationType="4"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="..\include;..\..\common"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="1"
+				UsePrecompiledHeader="2"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
+				WarningLevel="3"
+				DebugInformationFormat="4"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				Description="copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)d.lib"
+				CommandLine="copy $(TargetPath) $(TargetDir)..\..\lib\$(TargetName)d.lib"
+			/>
+		</Configuration>
+		<Configuration
+			Name="StaticRelease|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
+			ConfigurationType="4"
+			CharacterSet="2"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="..\include;..\..\common"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
+				RuntimeLibrary="0"
+				EnableFunctionLevelLinking="true"
+				UsePrecompiledHeader="2"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				Description="copying  $(TargetPath) to $(TargetDir)..\..\lib\"
+				CommandLine="copy $(TargetPath) $(TargetDir)..\..\lib\$(TargetName).lib"
+			/>
+		</Configuration>
+		<Configuration
+			Name="UnicodeDebug|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="4"
 			CharacterSet="1"
 			>
 			<Tool
@@ -82,14 +346,15 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="copying  $(TargetPath) to $(TargetDir)..\..\lib\"
-				CommandLine="copy $(TargetPath) $(TargetDir)..\..\lib\"
+				Description="copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)cud.lib"
+				CommandLine="copy $(TargetPath) $(TargetDir)..\..\lib\$(TargetName)cud.lib"
+				ExcludedFromBuild="true"
 			/>
 		</Configuration>
 		<Configuration
-			Name="Release|Win32"
+			Name="UnicodeRelease|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -148,14 +413,14 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="copying  $(TargetPath) to $(TargetDir)..\..\lib\"
-				CommandLine="copy $(TargetPath) $(TargetDir)..\..\lib\"
+				Description="copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)cu.lib"
+				CommandLine="copy $(TargetPath) $(TargetDir)..\..\lib\$(TargetName)cu.lib"
 			/>
 		</Configuration>
 		<Configuration
-			Name="StaticDebug|Win32"
+			Name="UnicodeStaticDebug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="1"
 			>
@@ -213,14 +478,14 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="copying  $(TargetPath) to $(TargetDir)..\..\lib\"
-				CommandLine="copy $(TargetPath) $(TargetDir)..\..\lib\"
+				Description="copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)ud.lib"
+				CommandLine="copy $(TargetPath) $(TargetDir)..\..\lib\$(TargetName)ud.lib"
 			/>
 		</Configuration>
 		<Configuration
-			Name="StaticRelease|Win32"
+			Name="UnicodeStaticRelease|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -279,8 +544,8 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				Description="copying  $(TargetPath) to $(TargetDir)..\..\lib\"
-				CommandLine="copy $(TargetPath) $(TargetDir)..\..\lib\"
+				Description="copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)u.lib"
+				CommandLine="copy $(TargetPath) $(TargetDir)..\..\lib\$(TargetName)u.lib"
 			/>
 		</Configuration>
 	</Configurations>
@@ -292,6 +557,14 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
+			<File
+				RelativePath="..\src\MusicNoteLib\Dictionary.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\MusicNoteLib\MusicInstrument.cpp"
+				>
+			</File>
 			<File
 				RelativePath="..\src\MusicNoteLib\MusicNoteLib.cpp"
 				>
@@ -339,12 +612,52 @@
 						UsePrecompiledHeader="1"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="UnicodeDebug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="UnicodeRelease|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="UnicodeStaticDebug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="UnicodeStaticRelease|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\src\MusicNoteLib\TokenParsers.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="UnicodeDebug|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -359,6 +672,10 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath="..\include\Dictionary.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\Common\EventHandler.h"
 				>
 			</File>
@@ -372,6 +689,10 @@
 			</File>
 			<File
 				RelativePath="..\include\MString.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\MusicInstrument.h"
 				>
 			</File>
 			<File
