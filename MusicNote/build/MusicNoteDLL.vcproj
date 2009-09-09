@@ -27,6 +27,383 @@
 			ConfigurationType="2"
 			UseOfATL="2"
 			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="_DEBUG"
+				MkTypLibCompatible="false"
+				TargetEnvironment="1"
+				GenerateStublessProxies="true"
+				TypeLibraryName="$(IntDir)/MusicNoteDLL.tlb"
+				HeaderFileName="..\src\MusicNoteDLL\MusicNoteDLL_i.h"
+				DLLDataFileName=""
+				InterfaceIdentifierFileName="..\src\MusicNoteDLL\MusicNoteDLL_i.c"
+				ProxyFileName="MusicNoteDLL_p.c"
+				ValidateParameters="true"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="..\include;..\..\common"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;_USRDLL;MUSICNOTEDLL_EXPORTS;_CRT_SECURE_NO_WARNINGS"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="3"
+				UsePrecompiledHeader="2"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
+				WarningLevel="3"
+				DebugInformationFormat="4"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="1033"
+				AdditionalIncludeDirectories="$(IntDir)"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				IgnoreImportLibrary="true"
+				LinkIncremental="2"
+				ModuleDefinitionFile="..\src\MusicNoteDLL\MusicNoteDLL.def"
+				GenerateDebugInformation="true"
+				SubSystem="2"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+				AssemblyIdentity="$(ProjectName), type=win32, version=1.0.0.0"
+				TypeLibraryFile="$(IntDir)/$(ProjectName).tlb"
+				ComponentFileName="$(ProjectName).dll"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				Description="copying $(OutDir)\$(ProjectName).lib to ..\..\lib\"
+				CommandLine="copy  $(TargetPath) $(TargetDir)..\..\bin\$(TargetName)cd.dll&#x0D;&#x0A;copy $(OutDir)\$(TargetName).lib  $(TargetDir)..\..\lib\$(TargetName)cd.lib&#x0D;&#x0A;"
+				ExcludedFromBuild="true"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
+			ConfigurationType="2"
+			UseOfATL="2"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG"
+				MkTypLibCompatible="false"
+				TargetEnvironment="1"
+				GenerateStublessProxies="true"
+				TypeLibraryName="$(IntDir)/MusicNoteDLL.tlb"
+				HeaderFileName="..\src\MusicNoteDLL\MusicNoteDLL_i.h"
+				DLLDataFileName=""
+				InterfaceIdentifierFileName="..\src\MusicNoteDLL\MusicNoteDLL_i.c"
+				ProxyFileName="..\src\MusicNoteDLL\MusicNoteDLL_p.c"
+				ValidateParameters="true"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				AdditionalIncludeDirectories="..\include;..\..\common"
+				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;_USRDLL;MUSICNOTEDLL_EXPORTS;_CRT_SECURE_NO_WARNINGS"
+				RuntimeLibrary="2"
+				UsePrecompiledHeader="2"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1033"
+				AdditionalIncludeDirectories="$(IntDir)"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				RegisterOutput="true"
+				IgnoreImportLibrary="true"
+				LinkIncremental="1"
+				ModuleDefinitionFile="..\src\MusicNoteDLL\MusicNoteDLL.def"
+				GenerateDebugInformation="true"
+				SubSystem="2"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				Description="copying $(OutDir)\$(ProjectName).lib to ..\..\lib\"
+				CommandLine="copy  $(TargetPath) $(TargetDir)..\..\bin\$(TargetName)c.dll&#x0D;&#x0A;copy $(OutDir)\$(ProjectName).lib  $(TargetDir)..\..\lib\$(TargetName)c.lib&#x0D;&#x0A;"
+			/>
+		</Configuration>
+		<Configuration
+			Name="StaticDebug|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
+			ConfigurationType="2"
+			UseOfATL="1"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="_DEBUG"
+				MkTypLibCompatible="false"
+				TargetEnvironment="1"
+				GenerateStublessProxies="true"
+				TypeLibraryName="$(IntDir)/MusicNoteDLL.tlb"
+				HeaderFileName="..\src\MusicNoteDLL\MusicNoteDLL_i.h"
+				DLLDataFileName=""
+				InterfaceIdentifierFileName="..\src\MusicNoteDLL\MusicNoteDLL_i.c"
+				ProxyFileName="..\src\MusicNoteDLL\MusicNoteDLL_p.c"
+				ValidateParameters="true"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="..\include;..\..\common"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;_USRDLL;MUSICNOTEDLL_EXPORTS;_CRT_SECURE_NO_WARNINGS"
+				MinimalRebuild="true"
+				BasicRuntimeChecks="3"
+				RuntimeLibrary="1"
+				UsePrecompiledHeader="2"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
+				WarningLevel="3"
+				DebugInformationFormat="4"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="1033"
+				AdditionalIncludeDirectories="$(IntDir)"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				IgnoreImportLibrary="true"
+				LinkIncremental="2"
+				ModuleDefinitionFile="..\src\MusicNoteDLL\MusicNoteDLL.def"
+				GenerateDebugInformation="true"
+				SubSystem="2"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+				AssemblyIdentity="$(ProjectName), type=win32, version=1.0.0.0"
+				TypeLibraryFile="$(IntDir)/$(ProjectName).tlb"
+				ComponentFileName="$(ProjectName).dll"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				Description="copying $(OutDir)\$(ProjectName).lib to ..\..\lib\"
+				CommandLine="copy  $(TargetPath) $(TargetDir)..\..\bin\$(TargetName)d.dll&#x0D;&#x0A;copy $(OutDir)\$(ProjectName).lib  $(TargetDir)..\..\lib\$(TargetName)d.lib&#x0D;&#x0A;"
+			/>
+		</Configuration>
+		<Configuration
+			Name="StaticRelease|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
+			ConfigurationType="2"
+			UseOfATL="1"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG"
+				MkTypLibCompatible="false"
+				TargetEnvironment="1"
+				GenerateStublessProxies="true"
+				TypeLibraryName="$(IntDir)/MusicNoteDLL.tlb"
+				HeaderFileName="..\src\MusicNoteDLL\MusicNoteDLL_i.h"
+				DLLDataFileName=""
+				InterfaceIdentifierFileName="..\src\MusicNoteDLL\MusicNoteDLL_i.c"
+				ProxyFileName="..\src\MusicNoteDLL\MusicNoteDLL_p.c"
+				ValidateParameters="true"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				AdditionalIncludeDirectories="..\include;..\..\common"
+				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;_USRDLL;MUSICNOTEDLL_EXPORTS;_CRT_SECURE_NO_WARNINGS"
+				RuntimeLibrary="0"
+				UsePrecompiledHeader="2"
+				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1033"
+				AdditionalIncludeDirectories="$(IntDir)"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				RegisterOutput="true"
+				IgnoreImportLibrary="true"
+				LinkIncremental="1"
+				ModuleDefinitionFile="..\src\MusicNoteDLL\MusicNoteDLL.def"
+				GenerateDebugInformation="true"
+				SubSystem="2"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				Description="copying $(OutDir)\$(ProjectName).lib to ..\..\lib\"
+				CommandLine="copy  $(TargetPath) $(TargetDir)..\..\bin\&#x0D;&#x0A;copy $(OutDir)\$(ProjectName).lib  $(TargetDir)..\..\lib\&#x0D;&#x0A;"
+			/>
+		</Configuration>
+		<Configuration
+			Name="UnicodeDebug|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="2"
+			UseOfATL="2"
+			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="1"
 			>
 			<Tool
@@ -112,13 +489,14 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="copying $(OutDir)\$(ProjectName).lib to ..\..\lib\"
-				CommandLine="copy  $(TargetPath) $(TargetDir)..\..\bin\&#x0D;&#x0A;copy $(OutDir)\$(ProjectName).lib  $(TargetDir)..\..\lib\"
+				CommandLine="copy  $(TargetPath) $(TargetDir)..\..\bin\$(TargetName)cud.dll&#x0D;&#x0A;copy $(OutDir)\$(ProjectName).lib  $(TargetDir)..\..\lib\$(TargetName)cud.lib&#x0D;&#x0A;"
+				ExcludedFromBuild="true"
 			/>
 		</Configuration>
 		<Configuration
-			Name="Release|Win32"
+			Name="UnicodeRelease|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			UseOfATL="2"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -205,15 +583,15 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="copying $(OutDir)\$(ProjectName).lib to ..\..\lib\"
-				CommandLine="copy  $(TargetPath) $(TargetDir)..\..\bin\&#x0D;&#x0A;copy $(OutDir)\$(ProjectName).lib  $(TargetDir)..\..\lib\"
+				CommandLine="copy  $(TargetPath) $(TargetDir)..\..\bin\$(TargetName)cu.dll&#x0D;&#x0A;copy $(OutDir)\$(ProjectName).lib  $(TargetDir)..\..\lib\$(TargetName)cu.lib&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
-			Name="StaticDebug|Win32"
+			Name="UnicodeStaticDebug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
-			UseOfATL="2"
+			UseOfATL="1"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="1"
 			>
@@ -300,15 +678,15 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="copying $(OutDir)\$(ProjectName).lib to ..\..\lib\"
-				CommandLine="copy  $(TargetPath) $(TargetDir)..\..\bin\&#x0D;&#x0A;copy $(OutDir)\$(ProjectName).lib  $(TargetDir)..\..\lib\"
+				CommandLine="copy  $(TargetPath) $(TargetDir)..\..\bin\$(TargetName)ud.dll&#x0D;&#x0A;copy $(OutDir)\$(ProjectName).lib  $(TargetDir)..\..\lib\$(TargetName)ud.lib&#x0D;&#x0A;"
 			/>
 		</Configuration>
 		<Configuration
-			Name="StaticRelease|Win32"
+			Name="UnicodeStaticRelease|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
-			UseOfATL="2"
+			UseOfATL="1"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="1"
 			>
@@ -393,7 +771,7 @@
 			<Tool
 				Name="VCPostBuildEventTool"
 				Description="copying $(OutDir)\$(ProjectName).lib to ..\..\lib\"
-				CommandLine="copy  $(TargetPath) $(TargetDir)..\..\bin\&#x0D;&#x0A;copy $(OutDir)\$(ProjectName).lib  $(TargetDir)..\..\lib\"
+				CommandLine="copy  $(TargetPath) $(TargetDir)..\..\bin\$(TargetName)u.dll&#x0D;&#x0A;copy $(OutDir)\$(ProjectName).lib  $(TargetDir)..\..\lib\$(TargetName)u.lib&#x0D;&#x0A;"
 			/>
 		</Configuration>
 	</Configurations>
@@ -444,6 +822,42 @@
 						CompileAsManaged="0"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="UnicodeDebug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						CompileAsManaged="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="UnicodeRelease|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						CompileAsManaged="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="UnicodeStaticDebug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						CompileAsManaged="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="UnicodeStaticRelease|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						CompileAsManaged="0"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\src\MusicNoteDLL\dllmain.cpp"
@@ -477,6 +891,42 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="StaticRelease|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						CompileAsManaged="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="UnicodeDebug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						CompileAsManaged="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="UnicodeRelease|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						CompileAsManaged="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="UnicodeStaticDebug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						CompileAsManaged="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="UnicodeStaticRelease|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -532,6 +982,38 @@
 						ObjectFile="$(IntDir)\$(ProjectName)_$(InputName).obj"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="UnicodeDebug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(ProjectName)_$(InputName).obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="UnicodeRelease|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(ProjectName)_$(InputName).obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="UnicodeStaticDebug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(ProjectName)_$(InputName).obj"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="UnicodeStaticRelease|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(ProjectName)_$(InputName).obj"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\src\MusicNoteDLL\stdafx.cpp"
@@ -562,6 +1044,38 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="StaticRelease|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="UnicodeDebug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="UnicodeRelease|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="UnicodeStaticDebug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="UnicodeStaticRelease|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
@@ -650,6 +1164,42 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="StaticRelease|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						CompileAsManaged="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="UnicodeDebug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						CompileAsManaged="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="UnicodeRelease|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						CompileAsManaged="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="UnicodeStaticDebug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+						CompileAsManaged="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="UnicodeStaticRelease|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
