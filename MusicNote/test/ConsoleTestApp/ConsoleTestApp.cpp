@@ -90,19 +90,27 @@ int _tmain(int argc, _TCHAR* argv[])
 	bSuccess = Parser.Parse(_T("C/*5:4")); // parsing should be able to ignore the /
 	bSuccess = Parser.Parse(_T("[260]wq")); // should be able to ceil the numeric note to 127
 
-	printf("\nStarting to Play music notes...\n");
 
     MusicNoteLib::Player player;
     // Subscribe to the Events
     player.Parser().evTrace.Subscribe(&OnParseTrace);
     player.Parser().evError.Subscribe(&OnParseError);
 
+	printf("\nStarting to Play DDLJ Theme notes...\n");
     // Play the Music Notes and then Save them to a MIDI File
     player.Play(_T("CI CI CI GI FI GI D#I. FI. G#I GI. RI ")
                 _T("CI CI CI GI FI GI D#I. FI. D#I DI."));
     //if(false == player.SaveToMidiFile("PlayedOutput.mid"))
     //    printf("\n Unable to Save Played Music content to Midi Output File \n");
+	printf("\n...Done !!...\n");
 
+	printf("\nStarting to Play Raghuvamsha Sudha notes...\n");
+    player.Play(_T("ci di f fi ei. di. ci ci cs b4s a4i g4i c ")
+				_T("ci di f fi ei. di. ci ci cs b4s a4i g4i c ")
+				_T("di fi a bi ei. gi. ")
+				_T("ds fs ds fs ")
+				_T("di fi a bi ei. gi. ")
+				_T("c6 b ai c6s bs as gs fs es ds cs"));
 	printf("\n...Done !!...\n");
 
     // Save the Music Notes to Midi file directly, without playing
