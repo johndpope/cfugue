@@ -100,4 +100,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="..\test\PlayerTestApp\Properties\" />
+  </ItemGroup>
 </Project>

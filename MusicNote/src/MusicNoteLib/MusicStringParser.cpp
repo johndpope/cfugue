@@ -73,13 +73,14 @@ namespace MusicNoteLib
 
 		while(*szNextToken!= NULL)
 		{
-			if(false == ParseToken(szNextToken, &bNonContinuableErrorOccured) && 
+			while(*szNextToken!= NULL && _istspace(*szNextToken)) ++szNextToken; // Read all the space characters
+
+			if(*szNextToken!= NULL && 
+				false == ParseToken(szNextToken, &bNonContinuableErrorOccured) && 
 				true == bNonContinuableErrorOccured)
 				return false; // Some irrevocable error Occured. Return false;
 
 			while(*szNextToken!= NULL && _istspace(*szNextToken++) == false) ; // Read past the token characters
-
-			while(*szNextToken!= NULL && _istspace(*szNextToken)) ++szNextToken; // Read all the space characters
 		}
 
 		return true;

@@ -190,6 +190,9 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
+				AssemblyIdentity="$(ProjectName), type=win32, version=1.0.0.0"
+				TypeLibraryFile="$(IntDir)/$(ProjectName).tlb"
+				ComponentFileName="$(ProjectName).dll"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -378,6 +381,9 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
+				AssemblyIdentity="$(ProjectName), type=win32, version=1.0.0.0"
+				TypeLibraryFile="$(IntDir)/$(ProjectName).tlb"
+				ComponentFileName="$(ProjectName).dll"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -400,7 +406,7 @@
 		<Configuration
 			Name="UnicodeDebug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="2"
 			UseOfATL="2"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -496,7 +502,7 @@
 		<Configuration
 			Name="UnicodeRelease|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="2"
 			UseOfATL="2"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -567,6 +573,9 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
+				AssemblyIdentity="$(ProjectName), type=win32, version=1.0.0.0"
+				TypeLibraryFile="$(IntDir)/$(ProjectName).tlb"
+				ComponentFileName="$(ProjectName).dll"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -589,7 +598,7 @@
 		<Configuration
 			Name="UnicodeStaticDebug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="2"
 			UseOfATL="1"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -684,7 +693,7 @@
 		<Configuration
 			Name="UnicodeStaticRelease|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="2"
 			UseOfATL="1"
 			ATLMinimizesCRunTimeLibraryUsage="false"
@@ -755,6 +764,9 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
+				AssemblyIdentity="$(ProjectName), type=win32, version=1.0.0.0"
+				TypeLibraryFile="$(IntDir)/$(ProjectName).tlb"
+				ComponentFileName="$(ProjectName).dll"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"

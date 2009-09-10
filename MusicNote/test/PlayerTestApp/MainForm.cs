@@ -28,8 +28,22 @@ namespace PlayerTestApp
         {
             if (textBox_Notes.Text.Length != 0)
             {
-                PlayMusicString(textBox_Notes.Text);
+                string strNotes="";
+
+                if(checkBox_PlaySelected.Checked) // Do we need to play only the selected text?
+                    strNotes = textBox_Notes.SelectedText;
+
+                if(strNotes.Length == 0 || checkBox_PlaySelected.Checked == false)
+                    strNotes = textBox_Notes.Text; //if selected text is empty or if we need to play complete text
+
+                PlayMusicString(strNotes);
             }
+        }
+
+        private void linkLabel_TextBoxProperties_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            propertyGrid1.Visible = !propertyGrid1.Visible;
+            linkLabel_TextBoxProperties.Text = propertyGrid1.Visible ? "Hide Properties" : "TextBox Properties";
         }
     }
 }
