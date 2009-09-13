@@ -50,7 +50,7 @@ namespace MusicNoteLib
 		{
             EndPlayAsync(); // Stop any current Play in progress
             m_lFirstNoteTime = 0;
-            MIDIEventManager::Clear();
+            MIDIEventManager::Clear(); // Clear the Track content
 		}
 
 		/// <Summary>

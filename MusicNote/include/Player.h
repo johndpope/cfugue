@@ -27,35 +27,50 @@ namespace MusicNoteLib
 		/// <Summary>
 		/// Plays a string of music notes. Will not return till the play is complete.
 		/// To Play the Notes asynchronously, use the <code>PlayAsync</code> method instead.
+        /// Returns false if unable to start the play. Failures can happen if unable to open
+        /// the MIDI output port or if unable to create a MIDI timer with supplied resolution or
+        /// if there any critical parsing errors in the supplied Music String.
 		/// </Summary>
-		inline void Play(const MString& strMusicNotes, int nMIDIOutPortID = MIDI_MAPPER, unsigned int nMIDITimerResMS = 20)
+		inline bool Play(const MString& strMusicNotes, int nMIDIOutPortID = MIDI_MAPPER, unsigned int nMIDITimerResMS = 20)
 		{
-			PlayAsync(strMusicNotes, nMIDIOutPortID, nMIDITimerResMS);
-			
-			while(IsPlaying())
-				Sleep(1000);//TODO: Ensure Platform compatibility for Sleep
+			bool bRetVal = PlayAsync(strMusicNotes, nMIDIOutPortID, nMIDITimerResMS);
 
-			StopPlay();
+            while(IsPlaying())
+			    Sleep(1000);//TODO: Ensure Platform compatibility for Sleep
+			
+            StopPlay();
+
+            return bRetVal;
 		}
 
 		///<Summary>
-		/// Starts playing the notes asynchronously. 
-		/// Use <code>IsPlaying</code> to determine if the play is still in progress.
+		/// Starts playing the notes asynchronously. Returns false if unable to start the Play.
+		/// After Play starts, use <code>IsPlaying</code> method to determine if play is still in progress.
 		/// Use the StopPlay method to stop the play. 
-		/// Each PlayAsync should have a matching StopPlay method call.
+        /// Each <code>PlayAsync</code> should have a matching <code>StopPlay</code> method call.
+        /** <pre>
+			if(PlayAsync(strMusicNotes, nMIDIOutPortID, nMIDITimerResMS))			
+			    while(IsPlaying())
+				    Sleep(1000);
+			StopPlay();
+         </pre> */
+        /// Play failures can happen if unable to open the MIDI output port or if unable to 
+        /// create a MIDI timer with supplied resolution or if there any critical errors in 
+        /// the Music String parsing.
 		///</Summary>
-		inline void PlayAsync(const MString& strMusicNotes, int nMIDIOutPortID = MIDI_MAPPER, unsigned int nMIDITimerResMS = 20 )
+		inline bool PlayAsync(const MString& strMusicNotes, int nMIDIOutPortID = MIDI_MAPPER, unsigned int nMIDITimerResMS = 20 )
 		{
 			m_Renderer.Clear(); // Clear any previous Notes
 
-			m_Parser.Parse(strMusicNotes);	// Parse and Load the Notes into MIDI MultiTrack
+			if(false == m_Parser.Parse(strMusicNotes))	// Parse and Load the Notes into MIDI MultiTrack
+                return false;
 
-			m_Renderer.BeginPlayAsync(nMIDIOutPortID, nMIDITimerResMS); // Start Playing on the given MIDIport with supplied resolution
+			return m_Renderer.BeginPlayAsync(nMIDIOutPortID, nMIDITimerResMS); // Start Playing on the given MIDIport with supplied resolution
 		}
 
 		/// <Summary>
 		/// Stops the Play started with PlayAsync.
-		/// Each PlayAsync should have a matching StopPlay method call.
+        /// Each <code>PlayAsync</code> should have a matching <code>StopPlay</code> method call.
 		/// </Summary>
 		inline void StopPlay()
 		{

@@ -31,13 +31,13 @@ extern "C"
 	/// Plays Music string notes on default MIDI Output device with default Timer Resolution.
 	/// Use PlayMusicStringWithOpts to use non-default values.
 	/// </Summary>
-	MUSICNOTELIB_API void PlayMusicString(const TCHAR* szMusicNotes);
+	MUSICNOTELIB_API bool PlayMusicString(const TCHAR* szMusicNotes);
 	
 	/// <Summary>
 	/// Plays Music string notes on given MIDI Output device using given Timer Resolution.
 	/// Use PlayMusicString to use default values.
 	/// </Summary>
-	MUSICNOTELIB_API void PlayMusicStringWithOpts(const TCHAR* szMusicNotes, int nMidiOutPortID, unsigned int nTimerResMS);
+	MUSICNOTELIB_API bool PlayMusicStringWithOpts(const TCHAR* szMusicNotes, int nMidiOutPortID, unsigned int nTimerResMS);
 
 } // extern "C"
 

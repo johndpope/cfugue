@@ -35,6 +35,12 @@
             this.panel_Commands = new System.Windows.Forms.FlowLayoutPanel();
             this.button1 = new System.Windows.Forms.Button();
             this.button_Play = new System.Windows.Forms.Button();
+            this.flowLayoutPanel_MIDIOutDevices = new System.Windows.Forms.FlowLayoutPanel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.comboBox_MIDIOutDevs = new System.Windows.Forms.ComboBox();
+            this.flowLayoutPanel_TimerResolution = new System.Windows.Forms.FlowLayoutPanel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.numericUpDown_TimerResolution = new System.Windows.Forms.NumericUpDown();
             this.linkLabel_TextBoxProperties = new System.Windows.Forms.LinkLabel();
             this.checkBox_PlaySelected = new System.Windows.Forms.CheckBox();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
@@ -43,6 +49,9 @@
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.panel_Commands.SuspendLayout();
+            this.flowLayoutPanel_MIDIOutDevices.SuspendLayout();
+            this.flowLayoutPanel_TimerResolution.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_TimerResolution)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -135,6 +144,8 @@
             // 
             this.panel_Commands.Controls.Add(this.button1);
             this.panel_Commands.Controls.Add(this.button_Play);
+            this.panel_Commands.Controls.Add(this.flowLayoutPanel_MIDIOutDevices);
+            this.panel_Commands.Controls.Add(this.flowLayoutPanel_TimerResolution);
             this.panel_Commands.Controls.Add(this.linkLabel_TextBoxProperties);
             this.panel_Commands.Controls.Add(this.checkBox_PlaySelected);
             this.panel_Commands.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -156,7 +167,6 @@
             // 
             // button_Play
             // 
-            this.panel_Commands.SetFlowBreak(this.button_Play, true);
             this.button_Play.Location = new System.Drawing.Point(421, 11);
             this.button_Play.Name = "button_Play";
             this.button_Play.Size = new System.Drawing.Size(75, 32);
@@ -164,6 +174,78 @@
             this.button_Play.Text = "Play !!";
             this.button_Play.UseVisualStyleBackColor = true;
             this.button_Play.Click += new System.EventHandler(this.button_Play_Click);
+            // 
+            // flowLayoutPanel_MIDIOutDevices
+            // 
+            this.flowLayoutPanel_MIDIOutDevices.AutoSize = true;
+            this.flowLayoutPanel_MIDIOutDevices.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.flowLayoutPanel_MIDIOutDevices.Controls.Add(this.label1);
+            this.flowLayoutPanel_MIDIOutDevices.Controls.Add(this.comboBox_MIDIOutDevs);
+            this.flowLayoutPanel_MIDIOutDevices.Location = new System.Drawing.Point(151, 11);
+            this.flowLayoutPanel_MIDIOutDevices.Name = "flowLayoutPanel_MIDIOutDevices";
+            this.flowLayoutPanel_MIDIOutDevices.Size = new System.Drawing.Size(264, 32);
+            this.flowLayoutPanel_MIDIOutDevices.TabIndex = 5;
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(70, 24);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "MIDI Out:";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // comboBox_MIDIOutDevs
+            // 
+            this.comboBox_MIDIOutDevs.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_MIDIOutDevs.FormattingEnabled = true;
+            this.comboBox_MIDIOutDevs.Location = new System.Drawing.Point(79, 3);
+            this.comboBox_MIDIOutDevs.Name = "comboBox_MIDIOutDevs";
+            this.comboBox_MIDIOutDevs.Size = new System.Drawing.Size(180, 24);
+            this.comboBox_MIDIOutDevs.TabIndex = 0;
+            // 
+            // flowLayoutPanel_TimerResolution
+            // 
+            this.flowLayoutPanel_TimerResolution.AutoSize = true;
+            this.flowLayoutPanel_TimerResolution.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.flowLayoutPanel_TimerResolution.Controls.Add(this.label2);
+            this.flowLayoutPanel_TimerResolution.Controls.Add(this.numericUpDown_TimerResolution);
+            this.panel_Commands.SetFlowBreak(this.flowLayoutPanel_TimerResolution, true);
+            this.flowLayoutPanel_TimerResolution.Location = new System.Drawing.Point(3, 11);
+            this.flowLayoutPanel_TimerResolution.Name = "flowLayoutPanel_TimerResolution";
+            this.flowLayoutPanel_TimerResolution.Size = new System.Drawing.Size(142, 30);
+            this.flowLayoutPanel_TimerResolution.TabIndex = 6;
+            // 
+            // label2
+            // 
+            this.label2.Location = new System.Drawing.Point(3, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(80, 22);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Timer Res:";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // numericUpDown_TimerResolution
+            // 
+            this.numericUpDown_TimerResolution.Location = new System.Drawing.Point(89, 3);
+            this.numericUpDown_TimerResolution.Maximum = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
+            this.numericUpDown_TimerResolution.Minimum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericUpDown_TimerResolution.Name = "numericUpDown_TimerResolution";
+            this.numericUpDown_TimerResolution.Size = new System.Drawing.Size(48, 22);
+            this.numericUpDown_TimerResolution.TabIndex = 1;
+            this.numericUpDown_TimerResolution.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
             // 
             // linkLabel_TextBoxProperties
             // 
@@ -209,7 +291,7 @@
             this.listView_Log.Location = new System.Drawing.Point(0, 0);
             this.listView_Log.MultiSelect = false;
             this.listView_Log.Name = "listView_Log";
-            this.listView_Log.Size = new System.Drawing.Size(792, 151);
+            this.listView_Log.Size = new System.Drawing.Size(150, 46);
             this.listView_Log.TabIndex = 0;
             this.listView_Log.UseCompatibleStateImageBehavior = false;
             this.listView_Log.View = System.Windows.Forms.View.Details;
@@ -223,12 +305,16 @@
             this.Name = "MainForm";
             this.Text = "MusicString Player Test Application";
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.ResumeLayout(false);
             this.panel_Commands.ResumeLayout(false);
             this.panel_Commands.PerformLayout();
+            this.flowLayoutPanel_MIDIOutDevices.ResumeLayout(false);
+            this.flowLayoutPanel_TimerResolution.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_TimerResolution)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -245,6 +331,12 @@
         private System.Windows.Forms.PropertyGrid propertyGrid1;
         private System.Windows.Forms.ListView listView_Log;
         private System.Windows.Forms.Splitter splitter_PropertyGrid;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox comboBox_MIDIOutDevs;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel_MIDIOutDevices;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel_TimerResolution;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.NumericUpDown numericUpDown_TimerResolution;
 
     }
 }
