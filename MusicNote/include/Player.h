@@ -13,12 +13,12 @@ namespace MusicNoteLib
 		MusicStringParser	m_Parser;
 	public:
 
-		Player(void)
+		inline Player(void)
 		{
 			m_Parser.AddListener(&m_Renderer);
 		}
 
-		~Player(void)
+		inline ~Player(void)
 		{
 		}
 
@@ -28,7 +28,7 @@ namespace MusicNoteLib
 		/// Plays a string of music notes. Will not return till the play is complete.
 		/// To Play the Notes asynchronously, use the <code>PlayAsync</code> method instead.
 		/// </Summary>
-		void Play(const MString& strMusicNotes, int nMIDIOutPortID = MIDI_MAPPER, unsigned int nMIDITimerResMS = 20)
+		inline void Play(const MString& strMusicNotes, int nMIDIOutPortID = MIDI_MAPPER, unsigned int nMIDITimerResMS = 20)
 		{
 			PlayAsync(strMusicNotes, nMIDIOutPortID, nMIDITimerResMS);
 			

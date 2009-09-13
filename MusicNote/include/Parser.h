@@ -18,6 +18,9 @@
 namespace MusicNoteLib
 {
 	// Forward Declarations
+	class Instrument;
+    class Tempo;
+    class Voice;
 	struct Note;
 	class CParserListener;
 
@@ -26,16 +29,16 @@ namespace MusicNoteLib
 	public:
 			
 		OIL::CEventT<const CParser> evController;
-		OIL::CEventT<const CParser> evInstrument; // Parser encountered an Instrument command
+		OIL::CEventT<const CParser, Instrument> evInstrument; // Parser encountered an Instrument command
 		OIL::CEventT<const CParser> evKeySignature;
 		OIL::CEventT<const CParser> evLayer; // Parser encountered a Layer command
 		OIL::CEventT<const CParser> evMeasure;
 		OIL::CEventT<const CParser> evChannelPressure;
 		OIL::CEventT<const CParser> evPolyphonicPressure;
 		OIL::CEventT<const CParser> evPitchBend;
-		OIL::CEventT<const CParser> evTempo; // Parser encountered a Tempo command
+		OIL::CEventT<const CParser, Tempo> evTempo; // Parser encountered a Tempo command
 		OIL::CEventT<const CParser> evTime;
-		OIL::CEventT<const CParser> evVoice; // Parser encountered a Voice command
+		OIL::CEventT<const CParser, Voice> evVoice; // Parser encountered a Voice command
 		OIL::CEventT<const CParser, Note> evNote;	// Raised for a first note in a group of notes
 		OIL::CEventT<const CParser> evSequentialNote; // Encountered a Sequential note after a first note
 		OIL::CEventT<const CParser> evParalleNote; // Encountered a Parallel note after a first note
@@ -56,12 +59,19 @@ namespace MusicNoteLib
 		{
 			CRITICAL_ERROR_MEMORY_ALLOCATION,	// Memory allocation failed
 			PARSE_ERROR_MISSING_ASSIGNMENT,		// No Assignment symbol found
+			PARSE_ERROR_INSTRUMENT_MACRO_END,	// MACRO_END missing while parsing a Instrument Macro.			
+			PARSE_ERROR_INSTRUMENT_VALUE,		// Failure while converting/retrieving a Instrument number.
+			PARSE_ERROR_TEMPO_MACRO_END,	    // MACRO_END missing while parsing a Tempo Macro.			
+			PARSE_ERROR_TEMPO_VALUE,		    // Failure while converting/retrieving a Tempo number.
+			PARSE_ERROR_VOICE_MACRO_END,	    // MACRO_END missing while parsing a Voice Macro.			
+			PARSE_ERROR_VOICE_VALUE,		    // Failure while converting/retrieving a Voice number.
+			PARSE_ERROR_VOICE_MAXLIMIT,		    // Specified a voice that is beyond the permitted range [0, 15]
 			PARSE_ERROR_NUMERIC_NOTE_END,		// MACRO_END missing while parsing a numeric note.			
 			PARSE_ERROR_NUMERIC_NOTE_VALUE,		// Failure while converting/retrieving a numeric note number.
 			PARSE_ERROR_LETTER_NOTE,			// Invalid Alphabet encountering while trying to read a Note Symbol
 			PARSE_ERROR_OCTAVE_MACRO_END,		// MACRO_END missing while parsing an Octave Macro
 			PARSE_ERROR_OCTAVE_VALUE,			// Failure while conveting/retrieving an Octave macro number
-			PARSE_ERROR_OCTAVE_MAXLIMIT,		// Specified an octave that is beyond the permitted range
+			PARSE_ERROR_OCTAVE_MAXLIMIT,		// Specified an octave that is beyond the permitted range [0, 10]
 			PARSE_ERROR_DURATION_MACRO_END,		// MACRO_END missing while parsing an Duration Macro
 			PARSE_ERROR_DURATION_VALUE,			// Failure while conveting/retrieving a Duration number
 			PARSE_ERROR_TUPLET_NUMERATOR,		// Failure while conveting/retrieving the Numerator of Tuplet fraction

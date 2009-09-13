@@ -562,7 +562,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\MusicNoteLib\MusicInstrument.cpp"
+				RelativePath="..\src\MusicNoteLib\Instrument.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\MusicNoteLib\MIDIRenderer.cpp"
 				>
 			</File>
 			<File
@@ -680,6 +684,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\Instrument.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\MIDIEventManager.h"
 				>
 			</File>
@@ -689,10 +697,6 @@
 			</File>
 			<File
 				RelativePath="..\include\MString.h"
-				>
-			</File>
-			<File
-				RelativePath="..\include\MusicInstrument.h"
 				>
 			</File>
 			<File
@@ -725,6 +729,14 @@
 			</File>
 			<File
 				RelativePath="..\src\MusicNoteLib\targetver.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\Tempo.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\Voice.h"
 				>
 			</File>
 		</Filter>

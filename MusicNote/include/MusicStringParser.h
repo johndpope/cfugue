@@ -156,7 +156,8 @@ namespace MusicNoteLib
 		/// </Summary>
 		inline void ResetDefinitions()
 		{
-			m_Dictionary = MusicNoteLib::GetStandardDefinitions(); // Load standard macro definitions
+			m_Dictionary.clear();
+			MusicNoteLib::PopulateStandardDefinitions(m_Dictionary); // Load standard macro definitions
 		}
 
 		/// <Summary>
@@ -175,9 +176,9 @@ namespace MusicNoteLib
 
 	private:
 		// Token Parserer Methods. Return value indicates success or failure.
-		bool ParseVoiceToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured) { return false; }
-		bool ParseTempoToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured) { return false; }
-		bool ParseInstrumentToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured) { return false; }
+		bool ParseVoiceToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+		bool ParseTempoToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+		bool ParseInstrumentToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
 		bool ParseLayerToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured) { return false; } 
 		bool ParseKeySignatureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured) { return false; }
 		bool ParseControllerToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured) { return false; }

@@ -1,13 +1,13 @@
 #include "stdafx.h"
-#include "MusicInstrument.h"
+#include "Instrument.h"
 
 namespace MusicNoteLib
 {
-	/**
-	 * Music Instrument Names in String representation
-	 */
+    /**
+     * Music Instrument Names in String representation
+     */
     static const TCHAR* INSTRUMENT_NAME[] = 
-	{
+    {
          _T("Piano "),
          _T("Bright_Acoustic "),
          _T("Electric_Grand "),
@@ -148,16 +148,16 @@ namespace MusicNoteLib
          _T("Helicopter "),
          _T("Applause "),
          _T("Gunshot ") 
-	};
+    };
 
-	MString MusicInstrument::GetInstrumentName() const
-	{
-		return INSTRUMENT_NAME[m_nInstrumentID];
-	}
+    MString Instrument::GetInstrumentName() const
+    {
+        return INSTRUMENT_NAME[m_nInstrumentID];
+    }
 
-	/// Populates the standard musical instrument Macro defintions into Music String Dictionary
-	void MusicInstrument::PopulateStandardDefinitions(DICTIONARY& stdDefns)
-	{
+    /// Populates the standard musical instrument Macro defintions into Music String Dictionary
+    void Instrument::PopulateStandardDefinitions(DICTIONARY& stdDefns)
+    {
         //
         // Insert Instrument names
         //
@@ -384,6 +384,6 @@ namespace MusicNoteLib
 
         stdDefns[_T("MUTE_TRIANGLE"          )] = _T("80");
         stdDefns[_T("OPEN_TRIANGLE"          )] = _T("81");
-	}
+    }
 
 } // namespace MusicNoteLib

@@ -1,5 +1,8 @@
 #include "stdafx.h"
 #include "MusicStringParser.h"
+#include "Instrument.h"
+#include "Tempo.h"
+#include "Voice.h"
 
 #define STRUTILS_RETURN_TYPE MusicNoteLib::MString
 #include "StrUtils.h"
@@ -141,6 +144,76 @@ namespace MusicNoteLib
 		return bRetVal;
 	}
 
+		
+    bool MusicStringParser::ParseVoiceToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured)
+    {
+		bool bSuccess = *pbNonContinuableErrorOccured = false; unsigned short nVoice = 0;
+
+		int nLen = ParseNumber(szToken, &nVoice, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_VOICE_MACRO_END, PARSE_ERROR_VOICE_VALUE);
+		if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false; } // Some irrevocable error occured
+		if(bSuccess)
+		{
+			Trace(MString(_T("MusicStringParser::ParseVoiceToken: Voice = ")) + OIL::ToString(nVoice));
+
+			if(nVoice > 15)
+			{
+				MString str(_T("Voice ") + OIL::ToString(nVoice) + _T(" is beyond the range [0, 15]"));
+                if(Error(PARSE_ERROR_VOICE_MAXLIMIT, str, szToken)) { *pbNonContinuableErrorOccured = true; return false;}; // if we should stop processing any further
+				nVoice = 15; // if we need to continue despite the error, ceil the value
+			}
+
+			Voice voiceObj((unsigned char)nVoice);
+
+			RaiseEvent(&evVoice, &voiceObj);
+
+			return true;
+		}
+		return false;
+    }
+
+    bool MusicStringParser::ParseTempoToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured)
+    {
+		bool bSuccess = *pbNonContinuableErrorOccured = false; unsigned short nTempo = 0;
+
+		int nLen = ParseNumber(szToken, &nTempo, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_TEMPO_MACRO_END, PARSE_ERROR_TEMPO_VALUE);
+		if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false; } // Some irrevocable error occured
+		if(bSuccess)
+		{
+			Trace(MString(_T("MusicStringParser::ParseTempoToken: Tempo = ")) + OIL::ToString(nTempo));
+
+			Tempo tempoObj(nTempo);
+
+			RaiseEvent(&evTempo, &tempoObj);
+
+			return true;
+		}
+		return false;
+    }
+
+	///<Summary>
+	/// Parses an Instrument Element Token. 
+	/// @param szToken the Token that contains the Music Instrument Element
+	/// @param pbNonContinuableErrorOccured return value that indicates the caller if further parsing should stopped
+	///</Summary>
+	bool MusicStringParser::ParseInstrumentToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured)
+	{
+		bool bSuccess = *pbNonContinuableErrorOccured = false; unsigned short nInstrument = 0;
+
+		int nLen = ParseNumber(szToken, &nInstrument, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_INSTRUMENT_MACRO_END, PARSE_ERROR_INSTRUMENT_VALUE);
+		if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false; } // Some irrevocable error occured
+		if(bSuccess)
+		{
+			Trace(MString(_T("MusicStringParser::ParseInstrumentToken: Instrument = ")) + OIL::ToString(nInstrument));
+
+			Instrument instrumentObj((unsigned char)nInstrument);
+
+			RaiseEvent(&evInstrument, &instrumentObj);
+
+			return true;
+		}
+		return false;
+	}
+
 	///<Summary>Parses a Dictionary Element Token. Creates or Updates the Dictionary Element Value</Summary>		
 	bool MusicStringParser::ParseDictionaryToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured)
 	{
@@ -158,6 +231,8 @@ namespace MusicNoteLib
 		const TCHAR* pszValue = pszAssignSymbol + 1;
 
 		m_Dictionary[pszKey] = pszValue; // Create or Update the value
+			
+		Trace(MString(_T("MusicStringParser::ParseDictionaryToken: Defined [")) + pszKey + MString(_T("]=")) + pszValue);
 
 		return true;
 	}
@@ -667,7 +742,7 @@ namespace MusicNoteLib
 			{
 				*pszEndBracket = _T('\0'); 
 
-				if(false == GetValueFromDictionary(szToken + 1, pRetVal)) // Convert the string between [ and ] to octave Number
+				if(false == GetValueFromDictionary(szToken + 1, pRetVal)) // Convert the string between [ and ] to Number
 				{
 					MString str(_T("Unable to retrieve Number from ") + MString(szToken+1));
 					if(Error(NumberParseErrorCode, str, szToken)) return -1; 	
