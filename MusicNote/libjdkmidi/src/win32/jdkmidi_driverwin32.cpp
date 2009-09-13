@@ -123,8 +123,9 @@ namespace jdkmidi
       if ( timer_res > ( int ) tc.wPeriodMax )
         timer_res = ( int ) tc.wPeriodMax;
         
-        
-      timeBeginPeriod ( timer_res );
+      // Fix by Gopalakrishna Palem
+      if(timeBeginPeriod ( timer_res ) != TIMERR_NOERROR)
+          return false;
       
       timer_id = timeSetEvent (
                    res,
@@ -138,6 +139,8 @@ namespace jdkmidi
       {
         timer_open=true;
       }
+      else 
+          return false; // Fix by Gopalakrishna Palem
     }
     return true;
   }
