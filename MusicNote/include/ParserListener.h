@@ -7,6 +7,9 @@ namespace MusicNoteLib
 {
 	//Forward Declarations
 	class CParser;
+	class Instrument;
+    class Tempo;
+    class Voice;
 	struct Note;
 
 	class CParserListener : public OIL::CEventReceiver
@@ -16,6 +19,12 @@ namespace MusicNoteLib
 		inline CParserListener(void) {	}
 
 		inline virtual ~CParserListener(void)	{	}
+
+		inline virtual void OnInstrumentEvent(const CParser* pParser, Instrument* pInstrument) { } 
+
+		inline virtual void OnTempoEvent(const CParser* pParser, Tempo* pTempo) { } 
+
+		inline virtual void OnVoiceEvent(const CParser* pParser, Voice* pVoice) { } 
 
 		inline virtual void OnNoteEvent(const CParser* pParser, Note* pNote) { } 
 	};

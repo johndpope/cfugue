@@ -14,6 +14,9 @@ namespace PlayerTestApp
         [DllImport("MusicNoteDll.Dll")]
         public static extern void PlayMusicString([MarshalAs(UnmanagedType.LPStr)] String szMusicNotes);
 
+        [DllImport("MusicNoteDll.Dll")]
+        public static extern void PlayMusicStringWithOpts([MarshalAs(UnmanagedType.LPStr)] String szMusicNotes, int nMidiOutPortID, int nTimerResMS);
+
         public MainForm()
         {
             InitializeComponent();

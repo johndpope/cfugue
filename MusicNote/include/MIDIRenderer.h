@@ -1,54 +1,46 @@
 #ifndef MIDIRENDERER_H__9266AE56_84CB_4662_8328_ED088111CFE0__
 #define MIDIRENDERER_H__9266AE56_84CB_4662_8328_ED088111CFE0__
 
-#include "jdkmidi/sequencer.h"
 #include "jdkmidi/manager.h"
-#include "jdkmidi/driver.h"
 #include "jdkmidi/driverwin32.h"
-#include "jdkmidi/filewritemultitrack.h"
 #include "ParserListener.h"
 #include "MIDIEventManager.h"
 
 namespace MusicNoteLib
 {
 	///<Summary>Takes care of Rendering MIDI Output either to file or to MIDI Port</Summary>
-	class MIDIRenderer : public CParserListener
+	class MIDIRenderer : MIDIEventManager, public CParserListener
 	{   
 		jdkmidi::MIDIDriverWin32 m_MIDIDriver;
     
 		jdkmidi::MIDIManager m_MIDIManager;
 
-		MIDIEventManager m_MIDIEventManager;
+		// MIDIEventManager m_MIDIEventManager;
 
 		long m_lFirstNoteTime;
 
+		/// <Summary>Event handler for Instrument event Raised by Parser</Summary>
+        virtual void OnInstrumentEvent(const CParser* pParser, Instrument* pInstrument);
+
+        /// <Summary>Event handler for Tempo event Raised by Tempo </Summary>
+        virtual void OnTempoEvent(const CParser* pParser, Tempo* pTempo);
+
+		/// <Summary>Event handler for Voice event Raised by Parser</Summary>
+        virtual void OnVoiceEvent(const CParser* pParser, Voice* pVoice);
+
+		/// <Summary>Event handler for Note event Raised by Parser</Summary>
+		virtual void OnNoteEvent(const CParser* pParser, Note* pNote);
+
 	public:
 
-		MIDIRenderer(void) :
+		inline MIDIRenderer(void) :
 			m_MIDIDriver(128), m_MIDIManager(&m_MIDIDriver)
 		{
 		}
 
-		~MIDIRenderer(void)
+		inline ~MIDIRenderer(void)
 		{
-		}
-
-		inline virtual void OnNoteEvent(const CParser* pParser, Note* pNote)
-		{
-			if(pNote->duration == 0) return;
-
-			if(pNote->isRest)	// if this is a rest note, simply advance the track timer
-			{
-				m_MIDIEventManager.AdvanceTrackTime(pNote->duration);
-			}
-
-			if(pNote->type == pNote->FIRST) // if this is the first note save its track time. Useful for any later parallel notes
-				m_lFirstNoteTime = m_MIDIEventManager.GetTrackTime();
-
-			if(pNote->type == pNote->PARALLEL) // if this is a parallel note, use the same start time as the last seen first note
-				m_MIDIEventManager.SetTrackTime(m_lFirstNoteTime);
-
-			m_MIDIEventManager.AddNoteEvent(pNote->noteNumber, pNote->attackVelocity, pNote->decayVelocity, pNote->duration, !pNote->isEndOfTie, !pNote->isStartOfTie);
+            Clear();
 		}
 
 		/// <Summary>
@@ -56,7 +48,9 @@ namespace MusicNoteLib
 		/// </Summary>
 		inline void Clear()
 		{
-			m_MIDIEventManager.Clear();
+            EndPlayAsync(); // Stop any current Play in progress
+            m_lFirstNoteTime = 0;
+            MIDIEventManager::Clear();
 		}
 
 		/// <Summary>
@@ -66,10 +60,10 @@ namespace MusicNoteLib
 		/// nTimerResolutionMS is the required minimum resolution for the MIDI timer (in MilliSeconds).
 		/// Returns false if Unable to open MIDI port or unable to create timer with specified resolution.
 		/// </Summary>
-		inline virtual bool BeginPlayAsync(int nMIDIOutPortID = MIDI_MAPPER, unsigned int nTimerResolutionMS = 20)
+		inline bool BeginPlayAsync(int nMIDIOutPortID = MIDI_MAPPER, unsigned int nTimerResolutionMS = 20)
 		{
-			m_MIDIEventManager.GetSequencer()->GoToZero();
-			m_MIDIManager.SetSeq(m_MIDIEventManager.GetSequencer());
+			m_Sequencer.GoToZero();
+			m_MIDIManager.SetSeq(&m_Sequencer);
 			if(m_MIDIDriver.OpenMIDIOutPort(nMIDIOutPortID))
 			{
 				if(m_MIDIDriver.StartTimer(nTimerResolutionMS))
@@ -86,7 +80,7 @@ namespace MusicNoteLib
 		/// Stops Rendering the MIDI output to MIDI port.
 		/// Each BeingPlayAsync call should have a matching EndPlayAsync call.
 		/// </Summary>
-		inline virtual void EndPlayAsync()
+		inline void EndPlayAsync()
 		{
 			m_MIDIDriver.StopTimer();
 			m_MIDIManager.SeqStop();
@@ -96,18 +90,12 @@ namespace MusicNoteLib
 		/// <Summary>
 		/// Indicates if the MIDI output is still being rendered (to MIDI Port) or finished.
 		/// </Summary>
-		inline virtual bool IsPlaying() const { return m_MIDIManager.IsSeqPlay(); }
+		inline bool IsPlaying() const { return m_MIDIManager.IsSeqPlay(); }
 
-		inline bool SaveToFile(const char* szOutputFilePath)
-		{
-			jdkmidi::MIDIFileWriteStreamFileName outFile(szOutputFilePath);
-
-			if(outFile.IsValid() == false) return false;
-					
-			jdkmidi::MIDIFileWriteMultiTrack WriterObj(m_MIDIEventManager.GetTracks(), &outFile);
-
-			return WriterObj.Write();
-		}
+        /// <Summary>
+        /// Saves the current track/sequencer content to a MIDI Output file
+        /// </Summary>
+		bool SaveToFile(const char* szOutputFilePath);
 	};
 
 } // namespace MusicNoteLib

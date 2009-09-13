@@ -39,7 +39,6 @@
             this.checkBox_PlaySelected = new System.Windows.Forms.CheckBox();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.listView_Log = new System.Windows.Forms.ListView();
-            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -63,6 +62,7 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.listView_Log);
+            this.splitContainer1.Panel2Collapsed = true;
             this.splitContainer1.Size = new System.Drawing.Size(792, 555);
             this.splitContainer1.SplitterDistance = 400;
             this.splitContainer1.TabIndex = 0;
@@ -72,7 +72,7 @@
             this.splitter_PropertyGrid.Dock = System.Windows.Forms.DockStyle.Right;
             this.splitter_PropertyGrid.Location = new System.Drawing.Point(593, 0);
             this.splitter_PropertyGrid.Name = "splitter_PropertyGrid";
-            this.splitter_PropertyGrid.Size = new System.Drawing.Size(3, 316);
+            this.splitter_PropertyGrid.Size = new System.Drawing.Size(3, 471);
             this.splitter_PropertyGrid.TabIndex = 8;
             this.splitter_PropertyGrid.TabStop = false;
             // 
@@ -128,7 +128,7 @@
             this.textBox_Notes.Multiline = true;
             this.textBox_Notes.Name = "textBox_Notes";
             this.textBox_Notes.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox_Notes.Size = new System.Drawing.Size(596, 316);
+            this.textBox_Notes.Size = new System.Drawing.Size(596, 471);
             this.textBox_Notes.TabIndex = 7;
             // 
             // panel_Commands
@@ -139,7 +139,7 @@
             this.panel_Commands.Controls.Add(this.checkBox_PlaySelected);
             this.panel_Commands.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel_Commands.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.panel_Commands.Location = new System.Drawing.Point(0, 316);
+            this.panel_Commands.Location = new System.Drawing.Point(0, 471);
             this.panel_Commands.Name = "panel_Commands";
             this.panel_Commands.Padding = new System.Windows.Forms.Padding(0, 8, 16, 8);
             this.panel_Commands.Size = new System.Drawing.Size(596, 84);
@@ -194,7 +194,7 @@
             this.propertyGrid1.Location = new System.Drawing.Point(596, 0);
             this.propertyGrid1.Name = "propertyGrid1";
             this.propertyGrid1.SelectedObject = this.textBox_Notes;
-            this.propertyGrid1.Size = new System.Drawing.Size(196, 400);
+            this.propertyGrid1.Size = new System.Drawing.Size(196, 555);
             this.propertyGrid1.TabIndex = 5;
             this.propertyGrid1.Visible = false;
             // 
@@ -202,16 +202,17 @@
             // 
             this.listView_Log.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("listView_Log.BackgroundImage")));
             this.listView_Log.BackgroundImageTiled = true;
-            this.listView_Log.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1});
             this.listView_Log.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView_Log.FullRowSelect = true;
             this.listView_Log.GridLines = true;
+            this.listView_Log.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.listView_Log.Location = new System.Drawing.Point(0, 0);
+            this.listView_Log.MultiSelect = false;
             this.listView_Log.Name = "listView_Log";
             this.listView_Log.Size = new System.Drawing.Size(792, 151);
             this.listView_Log.TabIndex = 0;
             this.listView_Log.UseCompatibleStateImageBehavior = false;
+            this.listView_Log.View = System.Windows.Forms.View.Details;
             // 
             // MainForm
             // 
@@ -243,7 +244,6 @@
         private System.Windows.Forms.CheckBox checkBox_PlaySelected;
         private System.Windows.Forms.PropertyGrid propertyGrid1;
         private System.Windows.Forms.ListView listView_Log;
-        private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.Splitter splitter_PropertyGrid;
 
     }

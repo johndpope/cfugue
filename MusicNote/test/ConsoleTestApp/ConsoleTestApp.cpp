@@ -90,6 +90,16 @@ int _tmain(int argc, _TCHAR* argv[])
 	bSuccess = Parser.Parse(_T("C/*5:4")); // parsing should be able to ignore the /
 	bSuccess = Parser.Parse(_T("[260]wq")); // should be able to ceil the numeric note to 127
 
+	// Instrument Parsing
+	bSuccess = Parser.Parse(_T("I0")); // Valid Instrument Token
+	if(bSuccess == false) printf("\n Error while parsing I0\n");
+	bSuccess = Parser.Parse(_T("I[13]")); // Valid instrument token
+	if(bSuccess == false) printf("\n Error while parsing I[13]\n");
+	bSuccess = Parser.Parse(_T("I[Acoustic_Grand]")); // Valid instrument token
+	if(bSuccess == false) printf("\n Error while parsing I[Acoustic_Grand]\n");
+	bSuccess = Parser.Parse(_T("IFlute")); // Invalid token. Parser should be able to ignore this
+	if(bSuccess == false) printf("\n Error while parsing IFlute\n");
+
 
     MusicNoteLib::Player player;
     // Subscribe to the Events
@@ -105,7 +115,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	printf("\n...Done !!...\n");
 
 	printf("\nStarting to Play Raghuvamsha Sudha notes...\n");
-    player.Play(_T("ci di f fi ei. di. ci ci cs b4s a4i g4i c ")
+    player.Play(_T("I[VIOLIN] ")
+				_T("ci di f fi ei. di. ci ci cs b4s a4i g4i c ")
 				_T("ci di f fi ei. di. ci ci cs b4s a4i g4i c ")
 				_T("di fi a bi ei. gi. ")
 				_T("ds fs ds fs ")

@@ -1,10 +1,11 @@
 #ifndef __MIDIEVENTMANAGER_H__74C2A3BA_DFCF_4048_BC1D_20E9E04E809A__
 #define __MIDIEVENTMANAGER_H__74C2A3BA_DFCF_4048_BC1D_20E9E04E809A__
 
-#include "jdkmidi/multitrack.h"
+#include "jdkmidi/sequencer.h"
 
 class MIDIEventManager
 {
+protected:
 	unsigned short m_nCurrentTrack;
 	unsigned short m_nCurrentLayer;
 
@@ -19,42 +20,43 @@ class MIDIEventManager
 
 public:
 
-	MIDIEventManager(void) : m_Sequencer(&m_Tracks)
+	inline MIDIEventManager(void) : m_Sequencer(&m_Tracks)
 	{
 		Clear();
 		m_Tracks.SetClksPerBeat(24); //TODO: Correct this
 	}
 
-	~MIDIEventManager(void)
+	inline ~MIDIEventManager(void)
 	{
 	}
 
 	/// <Summary> Returns the Sequencer holding the collection of tracks </Summary>
-	jdkmidi::MIDISequencer* GetSequencer() { return &m_Sequencer; }
+	inline jdkmidi::MIDISequencer* GetSequencer() { return &m_Sequencer; }
 
 	/// <Summary> Returns the Multitrack object </Summary>
-	jdkmidi::MIDIMultiTrack* GetTracks() { return &m_Tracks; }
+	inline jdkmidi::MIDIMultiTrack* GetTracks() { return &m_Tracks; }
 
 	/// <Summary>
 	/// Clears all the Events stored in the tracks and Resets the Track Timers
 	/// </Summary>
-	void Clear()
+	inline void Clear()
 	{
 		memset(m_CurrentLayer, 0, sizeof(m_CurrentLayer));
 		memset(m_Time, 0, sizeof(m_Time));
 		m_nCurrentTrack = 0;
 		m_nCurrentLayer = 0;
 		m_Tracks.Clear();
+        m_Sequencer.ResetAllTracks();
 	}
 
 	/// <Summary>Sets the current Track/Channel to which new Events will be added
 	/// </Summary>
-	void SetCurrentTrack(unsigned short nTrack)
+	inline void SetCurrentTrack(unsigned short nTrack)
 	{
 		m_nCurrentTrack = nTrack;
 	}
 
-	void SetCurrentLayer(unsigned short nLayer)
+	inline void SetCurrentLayer(unsigned short nLayer)
 	{
 		m_CurrentLayer[m_nCurrentTrack] = nLayer;
 	}
@@ -62,7 +64,7 @@ public:
 	/// <Summary>
 	/// Returns the Timer value for the current track (in Pulses Per Quarter)
 	/// </Summary>
-	unsigned long GetTrackTime()
+	inline unsigned long GetTrackTime() const
 	{
 		return m_Time[m_nCurrentTrack][m_CurrentLayer[m_nCurrentTrack]];
 	}
@@ -70,7 +72,7 @@ public:
 	/// <Summary>
 	/// Sets the current Track's time to the supplied new time (specified in Pulses Per Quarter)
 	/// </Summary>
-	void SetTrackTime(unsigned long lNewTime)
+	inline void SetTrackTime(unsigned long lNewTime)
 	{
 		m_Time[m_nCurrentTrack][m_CurrentLayer[m_nCurrentTrack]] = lNewTime;
 	}
@@ -78,10 +80,34 @@ public:
 	/// <Summary>
 	/// Advances the timer for the current Track by the duration (specified in Pulses Per Quarter)
 	/// </Summary>
-	void AdvanceTrackTime(unsigned long lDuration)
+	inline void AdvanceTrackTime(unsigned long lDuration)
 	{
 		m_Time[m_nCurrentTrack][m_CurrentLayer[m_nCurrentTrack]] += lDuration;
 	}
+
+	/// <Summary>
+	/// Adds a short ProgramChange message event to the current track.
+	/// @param nInstrumentID indicates the selected instrument that should be used for playing further notes;
+	/// </Summary>
+    inline void AddProgramChangeEvent(unsigned char nInstrumentID)
+    {
+        jdkmidi::MIDITimedBigMessage msg;
+        msg.SetTime(GetTrackTime());
+        msg.SetProgramChange((unsigned char)m_nCurrentTrack, nInstrumentID);
+        m_Tracks.GetTrack(m_nCurrentTrack)->PutEvent(msg);
+    }
+
+	/// <Summary>
+	/// Adds a short Tempo message event to the current track.
+	/// @param nTempo indicates the selected Tempo value in BPM that should be used for playing further notes;
+	/// </Summary>
+    inline void AddTempoEvent(unsigned short nTempo)
+    {
+        jdkmidi::MIDITimedBigMessage msg;
+        msg.SetTime(GetTrackTime());
+        msg.SetTempo32(nTempo);
+        m_Tracks.GetTrack(m_nCurrentTrack)->PutEvent(msg);
+    }
 
 	/// <Summary>
 	/// Adds a short NoteOn message event to the current track using attack/decay velocities. Automatically
@@ -90,7 +116,7 @@ public:
 	/// @param addNoteOn indicates if NoteOn event should be created automatically. For the end of a tied note, this should be false; otherwise true;
 	/// @param addNoteOff indicates if NoteOff event should be created automatically. For the start of a tied note, this should be false; otherwise true;	
 	/// </Summary>
-	void AddNoteEvent(int noteValue, int attackVel, int decayVel, long lNoteDuration, bool addNoteOn, bool addNoteOff)
+	inline void AddNoteEvent(int noteValue, int attackVel, int decayVel, long lNoteDuration, bool addNoteOn, bool addNoteOff)
 	{
 		if(addNoteOn)
 		{

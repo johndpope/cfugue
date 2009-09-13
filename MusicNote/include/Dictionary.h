@@ -20,8 +20,8 @@ namespace MusicNoteLib
 	/// value can be an integer or double (in text form), or a string </Summary>
 	typedef std::map<MString, MString, StringLess<const TCHAR*> > DICTIONARY;
 
-	/// <Summary> Accessor method for the standard macro definitions </Summary>
-	const DICTIONARY& GetStandardDefinitions();
+	/// <Summary> Accessor method to Populate standard macro definitions </Summary>
+	void PopulateStandardDefinitions(DICTIONARY& dictionaryObj);
 
 } // namespace MusicNoteLib
 
