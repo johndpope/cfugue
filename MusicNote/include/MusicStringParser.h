@@ -1,48 +1,46 @@
 #ifndef __MUSICNOTEREADER_H__506A239B_50B0_472d_B070_69BFBEF3C6CB__
 #define __MUSICNOTEREADER_H__506A239B_50B0_472d_B070_69BFBEF3C6CB__
 
-#include "Dictionary.h"
 #include "Parser.h"
 #include "Note.h"
+#include "KeySignature.h"
 
 namespace MusicNoteLib
 {
-	/// <Summary>
-	///
-	/// </Summary>
+	/// <Summary> Implements a MusicString Parsing functionality </Summary>
 	class MusicStringParser : public CParser
 	{
 	protected:
 		/// <Summary>
 		/// Token constants used in the parsing for classifying their types
 		/// </Summary>
-		enum : TCHAR
+		enum TokenSpecifiers : TCHAR
 		{
-			TOKEN_START_VOICE			= _T('V'),
-			TOKEN_START_TEMP			= _T('T'),
-			TOKEN_START_INSTRUMENT		= _T('I'),
-			TOKEN_START_LAYER			= _T('L'), 
-			TOKEN_START_SIGNATURE		= _T('K'), 
-			TOKEN_START_CONTROLLER		= _T('X'),
-			TOKEN_START_TIME			= _T('@'),
-			TOKEN_START_KEYPRESSURE		= _T('*'),
-			TOKEN_START_CHANNELPRESSURE	= _T('+'), 
-			TOKEN_START_PITCHBEND		= _T('&'),
-			TOKEN_START_MEASURE			= _T('|'),
-			TOKEN_START_DICTIONARY		= _T('$'),
-			TOKEN_START_NOTE			= _T('['),
+			TOKEN_START_VOICE			= _T('V'),  ///< Specifies a Voice token 
+			TOKEN_START_TEMPO			= _T('T'),  ///< Specifies a Tempo token 
+			TOKEN_START_INSTRUMENT		= _T('I'),  ///< Specifies a Instrument token 
+			TOKEN_START_LAYER			= _T('L'),  ///< Specifies a Layer token 
+			TOKEN_START_SIGNATURE		= _T('K'),  ///< Specifies a Signature token 
+			TOKEN_START_CONTROLLER		= _T('X'),  ///< Specifies a Controller token 
+			TOKEN_START_TIME			= _T('@'),  ///< Specifies a Time token
+			TOKEN_START_KEYPRESSURE		= _T('*'),  ///< Specifies a Keypressure token
+			TOKEN_START_CHANNELPRESSURE	= _T('+'),  ///< Specifies a Channel pressure token
+			TOKEN_START_PITCHBEND		= _T('&'),  ///< Specifies a Pitchbend token
+			TOKEN_START_MEASURE			= _T('|'),  ///< Specifies a Measure token
+			TOKEN_START_DICTIONARY		= _T('$'),  ///< Specifies a Dictionary token
+			TOKEN_START_NOTE			= _T('['),  ///< Specifies a Note token
 
 			// Dictionary Related
 			ASSIGNMENT_SYMBOL			= _T('='),
 
 			// Note Related
-			REST_NOTE					= _T('R'),
-			MACRO_START					= _T('['),
-			MACRO_END					= _T(']'),
+			REST_NOTE					= _T('R'),  ///< Specifies a Rest Note token
+			MACRO_START					= _T('['),  ///< Signifies a Macro start symbol
+			MACRO_END					= _T(']'),  ///< Signifies the Macro end symbol
 		};
 
 		/// <Summary> Note Numbers </Summary>
-		enum : unsigned short
+		enum NoteNumbers : unsigned short
 		{
 			NOTE_C	= _T('C'),
 			NOTE_C_Value	= 0,
@@ -61,61 +59,63 @@ namespace MusicNoteLib
 		};
 
 		/// <Summary> Note Modifiers</Summary>
-		enum : TCHAR
+		enum NoteModifiers : TCHAR
 		{
-			NOTE_MODIFIER_SHARP = _T('#'),
-			NOTE_MODIFIER_FLAT	= _T('B'),
-			NOTE_MODIFIER_NATURAL = _T('N')
+			NOTE_MODIFIER_SHARP = _T('#'),  ///< Note Sharp symbol
+			NOTE_MODIFIER_FLAT	= _T('B'),  ///< Note Flat symbol
+			NOTE_MODIFIER_NATURAL = _T('N') ///< Note Natural symbol
 		};
 
 		/// <Summary> Note Durations </Summary>
-		enum : TCHAR
+		enum NoteDurations : TCHAR
 		{
-			NOTE_TIE					= _T('-'),	// Used when decorating durations for ties
-			NOTE_DURATION_NUMERIC		= _T('/'),	// Used when Duration is to be expressed as a numeric value
-			NOTE_DURATION_WHOLE			= _T('W'),
-			NOTE_DURATION_HALF			= _T('H'),
-			NOTE_DURATION_QUARTER		= _T('Q'),
-			NOTE_DURATION_EIGTH			= _T('I'),
-			NOTE_DURATION_SIXTEENTH		= _T('S'),
-			NOTE_DURATION_THIRTYSECOND	= _T('T'),
-			NOTE_DURATION_SIXTYFOURTH	= _T('X'),
-			NOTE_DURATION_128			= _T('O'),
-			NOTE_DURATION_DOT			= _T('.'),
-			NOTE_TUPLET_START			= _T('*'),
-			NOTE_TUPLET_RATIOMARK		= _T(':')
+			NOTE_TIE					= _T('-'),	///< Used when decorating durations for ties
+			NOTE_DURATION_NUMERIC		= _T('/'),	///< Used when Duration is to be expressed as a numeric value
+			NOTE_DURATION_WHOLE			= _T('W'),  ///< Specifies Whole Note 
+			NOTE_DURATION_HALF			= _T('H'),  ///< Specifies Half Note
+			NOTE_DURATION_QUARTER		= _T('Q'),  ///< Specifies Quarter Note
+			NOTE_DURATION_EIGTH			= _T('I'),  ///< Specifies One-Eight Note
+			NOTE_DURATION_SIXTEENTH		= _T('S'),  ///< Specifies One-Sixteenth Note
+			NOTE_DURATION_THIRTYSECOND	= _T('T'),  ///< Specifies One-ThirtySecond Note
+			NOTE_DURATION_SIXTYFOURTH	= _T('X'),  ///< Specifies One-SixtyFourth Note
+			NOTE_DURATION_128			= _T('O'),  ///< Specifies 1/128th Note
+			NOTE_DURATION_DOT			= _T('.'),  ///< Specifies 1.5 times the normal duration
+			NOTE_TUPLET_START			= _T('*'),  ///< Indicates a Tuplet start
+			NOTE_TUPLET_RATIOMARK		= _T(':')   ///< Indicates the Tuplet Ratio
 		};
 
 		/// <Summary> Note Velocities </Summary>
-		enum : TCHAR
+		enum NoteVelocities : TCHAR
 		{
-			NOTE_VELOCITY_ATTACK	= _T('A'),
-			NOTE_VELOCITY_DECAY		= _T('D')
+			NOTE_VELOCITY_ATTACK	= _T('A'),  ///< Note Velocity Attack specifier
+			NOTE_VELOCITY_DECAY		= _T('D')   ///< Note Velocity Decay specifier
 		};
 
 		/// <Summary> Note Connectors </Summary>
-		enum : TCHAR
+		enum NoteConnectors : TCHAR
 		{
-			NOTE_CONNECTOR_SEQUENTIAL	= _T('_'),
-			NOTE_CONNECTOR_PARALLEL		= _T('+')
+			NOTE_CONNECTOR_SEQUENTIAL	= _T('_'),  ///< Note Sequential connector symbol
+			NOTE_CONNECTOR_PARALLEL		= _T('+')   ///< Note Parallel connector symbol
 		};
 
-		/// <Summary> Default Values </Summary>
-		enum : long
+		/// <Summary> Default Octave Values </Summary>
+		enum DefaultOctaves : long
 		{
-			DEFAULT_CHORD_OCTAVE		= 3,
-			DEFAULT_NONCHORD_OCTAVE		= 5,
+			DEFAULT_CHORD_OCTAVE		= 3,    ///< Default chord octave value
+			DEFAULT_NONCHORD_OCTAVE		= 5,    ///< Default non-chord note octave value
 		};
 
 		DICTIONARY m_Dictionary;	// Holds the custom MACRO definitions for Music Strings
 
+        KeySignature m_KeySig;  // Holds the last seen Key Signature. Useful for computing Note value.
+
 		/// <Summary>
 		/// Parses a single token. To Parse a string that contains multiple tokens, 
 		/// use the <code>Parse</code> method. We consider a string to be having multiple
-		/// tokens if there are whitespace charactes in it such as \n \t or Space.
+		/// tokens if there are whitespace charactes in it such as \\n \\t or Space.
 		///
 		/// @param szToken The token to be parsed. We expect this to be a single token 
-		/// free of any whitespace characters, such as \t \n or Space. If the input token
+		/// free of any whitespace characters, such as \\t \\n or Space. If the input token
 		/// contains any of these characters, results are undefined.
 		///
 		/// @param pbNonContinuableErrorOccured Indicates the event handlers' response to
@@ -132,7 +132,7 @@ namespace MusicNoteLib
 		/// error continuability. In any case, return value of false indicates there was an error, but
 		/// if *pbNonContinuableErrorOccured is false, then an error event hanlder is asking you to ignore it.
 		/// </Summary>
-		bool ParseToken(const TCHAR* szToken, bool* pbNonContinuableErrorOccured = NULL); 
+		bool ParseToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured = NULL); 
 
 	public:
 		//typedef void (*TOKEN_HANDLER_PROC)(const TCHAR* );
@@ -151,8 +151,8 @@ namespace MusicNoteLib
 		}
 
 		/// <Summary>
-		/// Macros defined in the Music Strings are <i>remembered</i> across the <code>Parse</code> method calls.
-		/// Call <code>ResetDefinitions</code> before calling <code>Parse</code> to clear the previous definitions.
+        /// Macros defined in the Music Strings are <i>remembered</i> across the Parse() method calls.
+        /// Call ResetDefinitions() before calling Parse() to clear the previous definitions.
 		/// </Summary>
 		inline void ResetDefinitions()
 		{
@@ -163,15 +163,46 @@ namespace MusicNoteLib
 		/// <Summary>
 		/// Parses a string that contains multiple tokens. Raises appropriate events as and when
 		/// the tokens are parsed. We consider the input string to be having multiple
-		/// tokens seperated with whitespace charactes such as \n \t or Space. If there are no
+		/// tokens seperated with whitespace charactes such as \\n \\t or Space. If there are no
 		/// whitespace characters, the whole string will be considered as a single token.
 		///
-		/// Use <code>MusicStringParser::AddListener</code> method to get notified about the parse events.
+		/// Use MusicStringParser::AddListener method to get notified about the token events.
 		///
 		/// @param szTokens The string to be parsed.
 		///
 		/// @return True if success, False in case of any failures.
 		/// </Summary>
+        /// Example Usage:
+        /** <pre>
+            #include "MusicNoteLib.h"
+
+            void OnParseTrace(const MusicNoteLib::CParser*, MusicNoteLib::CParser::TraceEventHandlerArgs* pEvArgs)
+            {
+	            OutputDebugString(_T("\n"));
+	            OutputDebugString(pEvArgs->szTraceMsg);
+            }
+
+            void OnParseError(const MusicNoteLib::CParser*, MusicNoteLib::CParser::ErrorEventHandlerArgs* pEvArgs)
+            {
+	            OutputDebugString(_T("\nError --> "));
+	            OutputDebugString(pEvArgs->szErrMsg);
+	            if(pEvArgs->szToken)
+	            {
+		            OutputDebugString(_T("\t Token: "));	 
+		            OutputDebugString(pEvArgs->szToken);
+	            }
+            }
+        
+            MusicNoteLib::MusicStringParser Parser; // Create the Parser Object
+	        
+	        Parser.evTrace.Subscribe(&OnParseTrace); // To get notified about the Parse Trace Events
+	        Parser.evError.Subscribe(&OnParseError); // To get notified about the Parse Error Events
+
+            MIDIRenderer Renderer; // Create the Listener Object, in this case a MIDI Renderer
+            Parser.AddListener(&Renderer);  // Add Renderer as a listener to get notified about the Tokens encountered during the Parse
+
+            Parser.Parse(_T("I[Flute] C D E F G A B")); // Do the Parsing. Notify the listeners during the process
+         </pre> */
 		bool Parse(const TCHAR* szTokens); 
 
 	private:
@@ -179,10 +210,10 @@ namespace MusicNoteLib
 		bool ParseVoiceToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
 		bool ParseTempoToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
 		bool ParseInstrumentToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
-		bool ParseLayerToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured) { return false; } 
-		bool ParseKeySignatureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured) { return false; }
+		bool ParseLayerToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+		bool ParseKeySignatureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
 		bool ParseControllerToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured) { return false; }
-		bool ParseTimeToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured) { return false; }
+		bool ParseTimeToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
 		bool ParseKeyPressureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured) { return false; }
 		bool ParseChannelPressureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured) { return false; }
 		bool ParsePitchBendToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured) { return false; }

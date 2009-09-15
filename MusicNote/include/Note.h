@@ -3,26 +3,32 @@
 
 namespace MusicNoteLib
 {
+    /// <Summary> Class representing a Musical Note </Summary>
 	struct Note
 	{
-		bool	isRest;
-		short   noteNumber; // Midi Note Value. C5 is 60	
-		double	decimalDuration;
-		long	duration;
-		bool	isStartOfTie;
-		bool	isEndOfTie;
-		unsigned short	attackVelocity;
-		unsigned short	decayVelocity;
-		enum { FIRST, SEQUENTIAL, PARALLEL } type;
+		bool	isRest;             ///< Specifies if this is a Rest Note or not
+		short   noteNumber;         ///< Midi Note Value. C5 is 60	
+		double	decimalDuration;    ///< Specifies the Duration of the note in double
+		long	duration;           ///< Specifies the Duration of the note in long
+		bool	isStartOfTie;       ///< Indicates if this is the first note in a Tie
+		bool	isEndOfTie;         ///< Indciates if this is the last note in a Tie
+		unsigned short	attackVelocity; ///< Specifies the attack velocity of this note
+		unsigned short	decayVelocity;  ///< Specifies the decay velocity of this note
+		enum NoteTypes 
+        { 
+            FIRST,      ///< Indicates if this is a First note in a group of notes
+            SEQUENTIAL, ///< Indicates if this is a Sequential note in a group of notes
+            PARALLEL    ///< Indicates if this is a Parallel note in a group of notes
+        } type;    ///< Specifies the type of this note
 
 		/// <Summary> Default Values </Summary>
-		enum : long
+		enum DefaultVelocities : long
 		{
-			DEFAULT_ATTACK_VELOCITY		= 64,
-			DEFAULT_DECAY_VELOCITY		= 64,
+			DEFAULT_ATTACK_VELOCITY		= 64,   ///< Default Note Attack Velocity
+			DEFAULT_DECAY_VELOCITY		= 64,   ///< Default Note Decay Velocity
 		};
 
-		Note(void)
+		inline Note(void)
 			: isRest(false),
 			noteNumber(0),
 			duration(0),
@@ -35,7 +41,7 @@ namespace MusicNoteLib
 		{
 		}
 
-		~Note(void)
+		inline ~Note(void)
 		{
 		}
 	};

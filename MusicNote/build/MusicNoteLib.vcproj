@@ -688,6 +688,14 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\KeySignature.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\Layer.h"
+				>
+			</File>
+			<File
 				RelativePath="..\include\MIDIEventManager.h"
 				>
 			</File>
@@ -733,6 +741,10 @@
 			</File>
 			<File
 				RelativePath="..\include\Tempo.h"
+				>
+			</File>
+			<File
+				RelativePath="..\include\Time.h"
 				>
 			</File>
 			<File

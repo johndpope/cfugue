@@ -33,7 +33,7 @@
             this.splitter_PropertyGrid = new System.Windows.Forms.Splitter();
             this.textBox_Notes = new System.Windows.Forms.TextBox();
             this.panel_Commands = new System.Windows.Forms.FlowLayoutPanel();
-            this.button1 = new System.Windows.Forms.Button();
+            this.button_ToMIDI = new System.Windows.Forms.Button();
             this.button_Play = new System.Windows.Forms.Button();
             this.flowLayoutPanel_MIDIOutDevices = new System.Windows.Forms.FlowLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
@@ -142,7 +142,7 @@
             // 
             // panel_Commands
             // 
-            this.panel_Commands.Controls.Add(this.button1);
+            this.panel_Commands.Controls.Add(this.button_ToMIDI);
             this.panel_Commands.Controls.Add(this.button_Play);
             this.panel_Commands.Controls.Add(this.flowLayoutPanel_MIDIOutDevices);
             this.panel_Commands.Controls.Add(this.flowLayoutPanel_TimerResolution);
@@ -156,14 +156,15 @@
             this.panel_Commands.Size = new System.Drawing.Size(596, 84);
             this.panel_Commands.TabIndex = 6;
             // 
-            // button1
+            // button_ToMIDI
             // 
-            this.button1.Location = new System.Drawing.Point(502, 11);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 32);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "To MIDI";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button_ToMIDI.Location = new System.Drawing.Point(502, 11);
+            this.button_ToMIDI.Name = "button_ToMIDI";
+            this.button_ToMIDI.Size = new System.Drawing.Size(75, 32);
+            this.button_ToMIDI.TabIndex = 1;
+            this.button_ToMIDI.Text = "To MIDI";
+            this.button_ToMIDI.UseVisualStyleBackColor = true;
+            this.button_ToMIDI.Click += new System.EventHandler(this.button_ToMIDI_Click);
             // 
             // button_Play
             // 
@@ -324,7 +325,7 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.TextBox textBox_Notes;
         private System.Windows.Forms.FlowLayoutPanel panel_Commands;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button_ToMIDI;
         private System.Windows.Forms.Button button_Play;
         private System.Windows.Forms.LinkLabel linkLabel_TextBoxProperties;
         private System.Windows.Forms.CheckBox checkBox_PlaySelected;

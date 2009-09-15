@@ -3,7 +3,10 @@
 #include "MIDIRenderer.h"
 #include "Note.h"
 #include "Instrument.h"
+#include "KeySignature.h"
+#include "Layer.h"
 #include "Tempo.h"
+#include "Time.h"
 #include "Voice.h"
 
 namespace MusicNoteLib
@@ -24,9 +27,24 @@ namespace MusicNoteLib
         AddProgramChangeEvent(pInstrument->GetInstrumentID());
     }
 
+    void MIDIRenderer::OnKeySignatureEvent(const CParser* pParser, KeySignature* pKeySig)
+    {
+        AddKeySignatureEvent(pKeySig->GetKey(), pKeySig->GetMajMin());
+    }
+
+    void MIDIRenderer::OnLayerEvent(const CParser* pParser, Layer* pLayer)
+    {
+        SetCurrentLayer(pLayer->GetLayer());
+    }
+
     void MIDIRenderer::OnTempoEvent(const CParser* pParser, Tempo* pTempo)
     {
         AddTempoEvent(pTempo->GetTempo());
+    }
+
+    void MIDIRenderer::OnTimeEvent(const CParser* pParser, Time* pTime)
+    {
+        SetTrackTime(pTime->GetTime());
     }
 
     void MIDIRenderer::OnVoiceEvent(const CParser* pParser, Voice* pVoice)
@@ -40,7 +58,7 @@ namespace MusicNoteLib
 
         if(pNote->isRest)	// if this is a rest note, simply advance the track timer
         {
-            AdvanceTrackTime(pNote->duration);
+            AdvanceTrackTime(pNote->duration); return;
         }
 
         if(pNote->type == pNote->FIRST) // if this is the first note save its track time. Useful for any later parallel notes

@@ -23,7 +23,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayerTestApp", "PlayerTest
 		{477FF5D0-8AB6-4AA8-8354-169CC979614C} = {477FF5D0-8AB6-4AA8-8354-169CC979614C}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Documentation", "Documentation.vcproj", "{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}"
+EndProject
 Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -252,12 +258,47 @@ Global
 		{1EC47DD7-981D-40F4-96C7-A3F891475F13}.UnicodeStaticRelease|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{1EC47DD7-981D-40F4-96C7-A3F891475F13}.UnicodeStaticRelease|Mixed Platforms.Build.0 = Release|Any CPU
 		{1EC47DD7-981D-40F4-96C7-A3F891475F13}.UnicodeStaticRelease|Win32.ActiveCfg = Release|Any CPU
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.Debug|Win32.Build.0 = Debug|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.Release|Any CPU.ActiveCfg = Release|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.Release|Win32.ActiveCfg = Release|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.Release|Win32.Build.0 = Release|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.StaticDebug|Any CPU.ActiveCfg = Debug|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.StaticDebug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.StaticDebug|Mixed Platforms.Build.0 = Debug|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.StaticDebug|Win32.ActiveCfg = Debug|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.StaticDebug|Win32.Build.0 = Debug|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.StaticRelease|Any CPU.ActiveCfg = Release|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.StaticRelease|Mixed Platforms.ActiveCfg = Release|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.StaticRelease|Mixed Platforms.Build.0 = Release|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.StaticRelease|Win32.ActiveCfg = Release|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.StaticRelease|Win32.Build.0 = Release|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.UnicodeDebug|Any CPU.ActiveCfg = Debug|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.UnicodeDebug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.UnicodeDebug|Mixed Platforms.Build.0 = Debug|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.UnicodeDebug|Win32.ActiveCfg = Debug|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.UnicodeDebug|Win32.Build.0 = Debug|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.UnicodeRelease|Any CPU.ActiveCfg = Release|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.UnicodeRelease|Mixed Platforms.ActiveCfg = Release|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.UnicodeRelease|Mixed Platforms.Build.0 = Release|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.UnicodeRelease|Win32.ActiveCfg = Release|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.UnicodeRelease|Win32.Build.0 = Release|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.UnicodeStaticDebug|Any CPU.ActiveCfg = Debug|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.UnicodeStaticDebug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.UnicodeStaticDebug|Mixed Platforms.Build.0 = Debug|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.UnicodeStaticDebug|Win32.ActiveCfg = Debug|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.UnicodeStaticDebug|Win32.Build.0 = Debug|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.UnicodeStaticRelease|Any CPU.ActiveCfg = Release|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.UnicodeStaticRelease|Mixed Platforms.ActiveCfg = Release|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.UnicodeStaticRelease|Mixed Platforms.Build.0 = Release|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.UnicodeStaticRelease|Win32.ActiveCfg = Release|Win32
+		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.UnicodeStaticRelease|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal

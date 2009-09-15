@@ -13,7 +13,9 @@ namespace MusicNoteLib
     {
         unsigned char m_nInstrumentID; //MIDI instrument ID in range [0, 127]
     public:
-        inline Instrument(unsigned char nInstrumentID) : m_nInstrumentID(nInstrumentID) { }
+        inline Instrument(const unsigned char nInstrumentID) 
+            : m_nInstrumentID(nInstrumentID) 
+        { }
         
         ///<Summary>Returns the MIDI Instrument ID this object represents</Summary>		 
         inline unsigned char GetInstrumentID() const { return m_nInstrumentID; }
