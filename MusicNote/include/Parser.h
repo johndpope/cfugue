@@ -19,66 +19,97 @@ namespace MusicNoteLib
 {
 	// Forward Declarations
 	class Instrument;
+    class KeySignature;
+    class Layer;
     class Tempo;
+    class Time;
     class Voice;
 	struct Note;
 	class CParserListener;
 
+    /// <Summary>
+    /// \brief Base class that represents a Parser Object. 
+    ///
+    /// Parsers are implemented using an event subscription model. For each token encountered
+    /// during the parsing, Parsers raise the appropriate event, which will be handled by the listeners.
+    /// This event model allows any CParser based object to be connected with any CParserListener based object.
+    /// For example, a MIDIParser can be connected to a Sheet Music generator, or a MusicString
+    /// parser can be connected to a MIDI Renderer.
+    ///
+    /// A listener interested in the Parse events can subscribe to all events at once using the CParser::AddListener method,
+    /// or subscribe to only few selected events using the event's Subscribe method.
+    /// 
+    /// Multiple listeners can be connected to a single Parser object. However, the order in which the listeners are 
+    /// notified about the events is not guaranteed to be sequential.
+    /// 
+    /// </Summary>
 	class CParser : public OIL::CEventSource
 	{
 	public:
 			
 		OIL::CEventT<const CParser> evController;
-		OIL::CEventT<const CParser, Instrument> evInstrument; // Parser encountered an Instrument command
-		OIL::CEventT<const CParser> evKeySignature;
-		OIL::CEventT<const CParser> evLayer; // Parser encountered a Layer command
+		OIL::CEventT<const CParser, Instrument> evInstrument; ///< Event Raised when Parser encounters an Instrument command
+		OIL::CEventT<const CParser, KeySignature> evKeySignature; ///< Event Raised when Parser encounters a Key Signature command
+		OIL::CEventT<const CParser, Layer> evLayer; ///< Event Raised when Parser encounters a Layer command
 		OIL::CEventT<const CParser> evMeasure;
 		OIL::CEventT<const CParser> evChannelPressure;
 		OIL::CEventT<const CParser> evPolyphonicPressure;
 		OIL::CEventT<const CParser> evPitchBend;
-		OIL::CEventT<const CParser, Tempo> evTempo; // Parser encountered a Tempo command
-		OIL::CEventT<const CParser> evTime;
-		OIL::CEventT<const CParser, Voice> evVoice; // Parser encountered a Voice command
-		OIL::CEventT<const CParser, Note> evNote;	// Raised for a first note in a group of notes
-		OIL::CEventT<const CParser> evSequentialNote; // Encountered a Sequential note after a first note
-		OIL::CEventT<const CParser> evParalleNote; // Encountered a Parallel note after a first note
+		OIL::CEventT<const CParser, Tempo> evTempo; ///< Event Raised when Parser encounters a Tempo command
+		OIL::CEventT<const CParser, Time> evTime;   ///< Event Raised when Parser encounters a Time command
+		OIL::CEventT<const CParser, Voice> evVoice; ///< Event Raised when Parser encounters a Voice command
+		OIL::CEventT<const CParser, Note> evNote;	///< Event Raised when Parser encounters a Note 
+		OIL::CEventT<const CParser> evSequentialNote; ///< Encountered a Sequential note after a first note
+		OIL::CEventT<const CParser> evParalleNote; ///< Encountered a Parallel note after a first note
 
 		inline CParser(void) { }
 
 		inline virtual ~CParser(void) {	}
 
-		///<Summary> Subscribes a Listener object for all events </Summary>
+		/// <Summary> Subscribes a Listener object for all events </Summary>
 		void AddListener(CParserListener* pListener);
 
-		///<Summary> UnSubscribes the Listener Object from the events </Summary>
+		/// <Summary> UnSubscribes the Listener Object from the events </Summary>
 		void RemoveListener(CParserListener* pListener);
 
+        void* m_pUserData;
+
+        void SetUserData(void* pData) { m_pUserData = pData; }
+
+        const void* GetUserData() const { return m_pUserData; }
 	public:
 		/// <Summary>Error code values used by ErrorEventHandlerArgs</Summary>
 		enum ErrorCode
 		{
-			CRITICAL_ERROR_MEMORY_ALLOCATION,	// Memory allocation failed
-			PARSE_ERROR_MISSING_ASSIGNMENT,		// No Assignment symbol found
-			PARSE_ERROR_INSTRUMENT_MACRO_END,	// MACRO_END missing while parsing a Instrument Macro.			
-			PARSE_ERROR_INSTRUMENT_VALUE,		// Failure while converting/retrieving a Instrument number.
-			PARSE_ERROR_TEMPO_MACRO_END,	    // MACRO_END missing while parsing a Tempo Macro.			
-			PARSE_ERROR_TEMPO_VALUE,		    // Failure while converting/retrieving a Tempo number.
-			PARSE_ERROR_VOICE_MACRO_END,	    // MACRO_END missing while parsing a Voice Macro.			
-			PARSE_ERROR_VOICE_VALUE,		    // Failure while converting/retrieving a Voice number.
-			PARSE_ERROR_VOICE_MAXLIMIT,		    // Specified a voice that is beyond the permitted range [0, 15]
-			PARSE_ERROR_NUMERIC_NOTE_END,		// MACRO_END missing while parsing a numeric note.			
-			PARSE_ERROR_NUMERIC_NOTE_VALUE,		// Failure while converting/retrieving a numeric note number.
-			PARSE_ERROR_LETTER_NOTE,			// Invalid Alphabet encountering while trying to read a Note Symbol
-			PARSE_ERROR_OCTAVE_MACRO_END,		// MACRO_END missing while parsing an Octave Macro
-			PARSE_ERROR_OCTAVE_VALUE,			// Failure while conveting/retrieving an Octave macro number
-			PARSE_ERROR_OCTAVE_MAXLIMIT,		// Specified an octave that is beyond the permitted range [0, 10]
-			PARSE_ERROR_DURATION_MACRO_END,		// MACRO_END missing while parsing an Duration Macro
-			PARSE_ERROR_DURATION_VALUE,			// Failure while conveting/retrieving a Duration number
-			PARSE_ERROR_TUPLET_NUMERATOR,		// Failure while conveting/retrieving the Numerator of Tuplet fraction
-			PARSE_ERROR_TUPLET_DENOMINATOR,		// Failure while conveting/retrieving the Denominator of Tuplet fraction
-			PARSE_ERROR_VELOCITY_MACRO_END,		// MACRO_END missing while parsing a Velocity Macro
-			PARSE_ERROR_VELOCITY_VALUE,			// Failure while conveting/retrieving a Velocity number
-			PARSE_ERROR_NOTEVALUE_MAXLIMIT,		// Computed Note Value is going beyond the permitted range [0, 127]
+			CRITICAL_ERROR_MEMORY_ALLOCATION,	///< Memory allocation failed
+			PARSE_ERROR_MISSING_ASSIGNMENT,		///< No Assignment symbol found
+			PARSE_ERROR_INSTRUMENT_MACRO_END,	///< MACRO_END missing while parsing a Instrument Macro.			
+			PARSE_ERROR_INSTRUMENT_VALUE,		///< Failure while converting/retrieving a Instrument number.
+			PARSE_ERROR_KEYSIGNATURE_MACRO_END,	///< MACRO_END missing while parsing a Key Signature Macro.			
+			PARSE_ERROR_KEYSIGNATURE_VALUE,		///< Failure while converting/retrieving a Key Signature number.
+            PARSE_ERROR_KEYSIGNATURE_MAXLIMIT,  ///< Specified a KeySignature beyond the permitted range [0, 13] , [128, 141]
+			PARSE_ERROR_LAYER_MACRO_END,	    ///< MACRO_END missing while parsing a Layer Macro.			
+			PARSE_ERROR_LAYER_VALUE,		    ///< Failure while converting/retrieving a Layer number.
+			PARSE_ERROR_TEMPO_MACRO_END,	    ///< MACRO_END missing while parsing a Tempo Macro.			
+			PARSE_ERROR_TEMPO_VALUE,		    ///< Failure while converting/retrieving a Tempo number.
+			PARSE_ERROR_TIME_MACRO_END,	        ///< MACRO_END missing while parsing a Time Macro.			
+			PARSE_ERROR_TIME_VALUE,		        ///< Failure while converting/retrieving a Time number.
+			PARSE_ERROR_VOICE_MACRO_END,	    ///< MACRO_END missing while parsing a Voice Macro.			
+			PARSE_ERROR_VOICE_VALUE,		    ///< Failure while converting/retrieving a Voice number.
+			PARSE_ERROR_VOICE_MAXLIMIT,		    ///< Specified a voice that is beyond the permitted range [0, 15]
+			PARSE_ERROR_NUMERIC_NOTE_END,		///< MACRO_END missing while parsing a numeric note.			
+			PARSE_ERROR_NUMERIC_NOTE_VALUE,		///< Failure while converting/retrieving a numeric note number.
+			PARSE_ERROR_LETTER_NOTE,			///< Invalid Alphabet encountering while trying to read a Note Symbol
+			PARSE_ERROR_OCTAVE_MACRO_END,		///< MACRO_END missing while parsing an Octave Macro
+			PARSE_ERROR_OCTAVE_VALUE,			///< Failure while conveting/retrieving an Octave macro number
+			PARSE_ERROR_OCTAVE_MAXLIMIT,		///< Specified an octave that is beyond the permitted range [0, 10]
+			PARSE_ERROR_DURATION_MACRO_END,		///< MACRO_END missing while parsing an Duration Macro
+			PARSE_ERROR_DURATION_VALUE,			///< Failure while conveting/retrieving a Duration number
+			PARSE_ERROR_TUPLET_NUMERATOR,		///< Failure while conveting/retrieving the Numerator of Tuplet fraction
+			PARSE_ERROR_TUPLET_DENOMINATOR,		///< Failure while conveting/retrieving the Denominator of Tuplet fraction
+			PARSE_ERROR_VELOCITY_MACRO_END,		///< MACRO_END missing while parsing a Velocity Macro
+			PARSE_ERROR_VELOCITY_VALUE,			///< Failure while conveting/retrieving a Velocity number
+			PARSE_ERROR_NOTEVALUE_MAXLIMIT,		///< Computed Note Value is going beyond the permitted range [0, 127]
 		};
 		/// <Summary>
 		/// The structure that is passed as argument to the Error Event Handler procedure.
@@ -104,27 +135,28 @@ namespace MusicNoteLib
 		/// </Summary>
 		struct ErrorEventHandlerArgs : public OIL::CEventHandlerArgs 
 		{  
-			const ErrorCode	errCode; /// Error Code
-			const TCHAR* szErrMsg;	/// The Error message sent by MusicStringParser
-			const TCHAR* szToken;	/// Token the error is applicable for
-			bool bShouldStopParsing; /// Should Parser continue to parse or should stop now? (only for PARSE_ERRORS)
+			const ErrorCode	errCode; ///< Error Code
+			const TCHAR* szErrMsg;	///< The Error message sent by Parser
+			const TCHAR* szToken;	///< Token the error is applicable for
+			bool bShouldStopParsing; ///< Should Parser continue to parse or should stop now? (only for PARSE_ERRORS)
 
 			inline ErrorEventHandlerArgs(ErrorCode argErrCode, const TCHAR* argErrMsg, const TCHAR* argSzToken)
 				: errCode(argErrCode), szErrMsg(argErrMsg), szToken(argSzToken), bShouldStopParsing(false) { }
 		};
 
-		OIL::CEventT<const CParser, ErrorEventHandlerArgs> evError;
+		OIL::CEventT<const CParser, ErrorEventHandlerArgs> evError; ///< Raised when a parse error happens
 	protected:
 		/// <Summary>
-		/// Error method is called whenever there is a parse error. 
-		/// This method will raise events through the <code>MusicStringParser::evError</code> event
+        /// Error method is called whenever there is a parse error. 
+		/// This method will raise events through the CParser::evError event
 		/// variable. Listeners can subscribe to it to get to know about the parse errors.
 		///
 		/// You can override this method in derived classes if you wish to modify this error
 		/// reporting implementation.
 		///
+        /// @param argErrCode the Error code
 		/// @param szTraceMsg Error message details
-		/// @param szToken The token that is being parsed while the error happened
+		/// @param szToken The token that is being parsed when the error happened
 		/// @return Boolean value indicating if the parsing should stop now or should continue
 		/// </Summary>
 		inline virtual bool Error(ErrorCode argErrCode, const TCHAR* szTraceMsg, const TCHAR* szToken)
@@ -137,16 +169,16 @@ namespace MusicNoteLib
 	public:
 		/// <Summary>
 		/// The structure that is passed as argument to the Trace Event Handler procedure.
-		/// Listeners who want to know about the trace events can subscribe to the evTrace
-		/// event and handle the trace events raised by MusicStringParser as the parsing progresses.
+        /// Listeners who want to know about the trace events can subscribe to the CParser::evTrace
+		/// event and handle the trace events raised by the Parser as the parsing progresses.
 		/// </Summary>
 		struct TraceEventHandlerArgs : public OIL::CEventHandlerArgs 
 		{  
-			const TCHAR* szTraceMsg;
+			const TCHAR* szTraceMsg; ///< The Error message sent by Parser
 			inline TraceEventHandlerArgs(const TCHAR* sz) : szTraceMsg(sz) { }
 		};
 
-		OIL::CEventT<const CParser, TraceEventHandlerArgs> evTrace;
+		OIL::CEventT<const CParser, TraceEventHandlerArgs> evTrace; ///< Raised by Parser during the Parsing
 
 #if ENABLE_TRACING
 	protected:
@@ -156,6 +188,8 @@ namespace MusicNoteLib
 		/// DEBUG builds, but not for RELEASE builds).
 		/// When enabled, Trace will raise events through the CParser::evTrace event
 		/// variable. Listeners can subscribe to this event to get to know the trace messages.
+        ///
+        /// @param szTraceMsg the Trace message generated by the Parser
 		/// </Summary>
 		inline virtual void Trace(const TCHAR* szTraceMsg)
 		{

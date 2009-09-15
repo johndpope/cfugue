@@ -12,13 +12,6 @@ namespace PlayerTestApp
 {
     public partial class MainForm : Form
     {
-
-        [DllImport("MusicNoteDll.Dll")]
-        public static extern bool PlayMusicString([MarshalAs(UnmanagedType.LPStr)] String szMusicNotes);
-
-        [DllImport("MusicNoteDll.Dll")]
-        public static extern bool PlayMusicStringWithOpts([MarshalAs(UnmanagedType.LPStr)] String szMusicNotes, int nMidiOutPortID, uint nTimerResMS);
-
         public MainForm()
         {
             InitializeComponent();
@@ -54,6 +47,11 @@ namespace PlayerTestApp
         const string regSubkey = "Software\\CineFxLabs\\MusicNoteLib\\PlayerTestApp\\LastSettings";
         const string regKeyName = regUserRoot + "\\" + regSubkey;
 
+        /// <summary>
+        /// Form Closing Event. Save the current settings to registry
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             // Save the currently selected MIDI Output Device ID into the registry
@@ -94,6 +92,12 @@ namespace PlayerTestApp
                 comboBox_MIDIOutDevs.SelectedIndex = nLastSelectedMIDIOutDev;
         }
 
+        public void OnErrorMethod(IntPtr userData, [MarshalAs(UnmanagedType.LPStr)] String szTraceMsg)
+        {
+            MessageBox.Show(szTraceMsg);
+        }
+
+
         private void button_Play_Click(object sender, EventArgs e)
         {
             if (textBox_Notes.Text.Length != 0)
@@ -106,7 +110,8 @@ namespace PlayerTestApp
                 if(strNotes.Length == 0 || checkBox_PlaySelected.Checked == false)
                     strNotes = textBox_Notes.Text; //if selected text is empty or if we need to play complete text
 
-                PlayMusicStringWithOpts(strNotes, comboBox_MIDIOutDevs.SelectedIndex, (uint)numericUpDown_TimerResolution.Value);
+               // MusicNoteLib.PlayMusicStringWithOpts(strNotes, comboBox_MIDIOutDevs.SelectedIndex, (uint)numericUpDown_TimerResolution.Value);
+                MusicNoteLib.Parse(strNotes, new MusicNoteLib.ParserTraceDelegate(OnErrorMethod), IntPtr.Zero);
             }
         }
 
@@ -114,6 +119,20 @@ namespace PlayerTestApp
         {
             propertyGrid1.Visible = !propertyGrid1.Visible;
             linkLabel_TextBoxProperties.Text = propertyGrid1.Visible ? "Hide Properties" : "TextBox Properties";
+        }
+
+        private void button_ToMIDI_Click(object sender, EventArgs e)
+        {
+            if (textBox_Notes.Text.Length != 0)
+            {
+                SaveFileDialog dlg = new SaveFileDialog();
+                dlg.DefaultExt = "midi";
+                dlg.FileName = "Output.midi";
+                if(dlg.ShowDialog() != DialogResult.OK) return;
+
+                MusicNoteLib.SaveAsMidiFile(textBox_Notes.Text, dlg.FileName);
+            }
+            else MessageBox.Show("Text box is empty !! Enter few notes and then use this option to save them to MIDI output file");
         }
 
 

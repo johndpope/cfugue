@@ -7,6 +7,7 @@
 
 namespace MusicNoteLib
 {
+    /// <Summary> MIDI Player for Music Strings </Summary>
 	class Player
 	{			
 		MIDIRenderer		m_Renderer;
@@ -22,56 +23,80 @@ namespace MusicNoteLib
 		{
 		}
 
+        /// Returns the associated Parser object
 		inline MusicStringParser& Parser() { return m_Parser; }
 
-		/// <Summary>
-		/// Plays a string of music notes. Will not return till the play is complete.
-		/// To Play the Notes asynchronously, use the <code>PlayAsync</code> method instead.
+        /// <Summary>
+        /// Plays a string of music notes. Will not return till the play is complete.
+        /// To Play the Notes asynchronously, use the PlayAsync() method instead.
+        ///
         /// Returns false if unable to start the play. Failures can happen if unable to open
         /// the MIDI output port or if unable to create a MIDI timer with supplied resolution or
         /// if there any critical parsing errors in the supplied Music String.
-		/// </Summary>
-		inline bool Play(const MString& strMusicNotes, int nMIDIOutPortID = MIDI_MAPPER, unsigned int nMIDITimerResMS = 20)
-		{
-			bool bRetVal = PlayAsync(strMusicNotes, nMIDIOutPortID, nMIDITimerResMS);
+        ///
+        /// @param strMusicNotes the input Music string to be played on MIDI output port
+		/// @param nMIDIOutPortID the output MIDI port to be used for the play
+		/// @param nMIDITimerResMS timer resolution in Milliseconds
+        /// @return True if play was successful, false otherwise
+        /// </Summary>
+        /// Example Usage:
+        /** <pre>
+            MusicNoteLib::Player player; // Create the Player Object
+            
+            player.Play(_T("ci di f fi")); // Play the Music Notes on the default MIDI output port
+        </pre> */
+        inline bool Play(const MString& strMusicNotes, int nMIDIOutPortID = MIDI_MAPPER, unsigned int nMIDITimerResMS = 20)
+        {
+            bool bRetVal = PlayAsync(strMusicNotes, nMIDIOutPortID, nMIDITimerResMS);
 
             while(IsPlaying())
-			    Sleep(1000);//TODO: Ensure Platform compatibility for Sleep
-			
+                Sleep(1000);//TODO: Ensure Platform compatibility for Sleep
+            
             StopPlay();
 
             return bRetVal;
-		}
+        }
 
-		///<Summary>
-		/// Starts playing the notes asynchronously. Returns false if unable to start the Play.
-		/// After Play starts, use <code>IsPlaying</code> method to determine if play is still in progress.
-		/// Use the StopPlay method to stop the play. 
-        /// Each <code>PlayAsync</code> should have a matching <code>StopPlay</code> method call.
-        /** <pre>
-			if(PlayAsync(strMusicNotes, nMIDIOutPortID, nMIDITimerResMS))			
-			    while(IsPlaying())
-				    Sleep(1000);
-			StopPlay();
-         </pre> */
+        /// <Summary>
+        /// Starts playing the notes asynchronously. Returns false if unable to start the Play. 
         /// Play failures can happen if unable to open the MIDI output port or if unable to 
         /// create a MIDI timer with supplied resolution or if there any critical errors in 
         /// the Music String parsing.
-		///</Summary>
-		inline bool PlayAsync(const MString& strMusicNotes, int nMIDIOutPortID = MIDI_MAPPER, unsigned int nMIDITimerResMS = 20 )
-		{
-			m_Renderer.Clear(); // Clear any previous Notes
+        ///
+        /// After Play starts, use IsPlaying() method to determine if play is still in progress.
+        /// Use the StopPlay() method to stop the play. 
+        ///
+        /// Each PlayAsync() should have a matching StopPlay() method call.
+        ///
+        /// @param strMusicNotes the input Music string to be played on MIDI output port
+		/// @param nMIDIOutPortID the output MIDI port to be used for the play
+		/// @param nMIDITimerResMS timer resolution in Milliseconds
+        /// @return True if play started successfully, false otherwise
+        /// </Summary>
+        /// Example Usage:
+        /** <pre>
+            MusicNoteLib::Player player; // Create the Player object
 
-			if(false == m_Parser.Parse(strMusicNotes))	// Parse and Load the Notes into MIDI MultiTrack
+            if(player.PlayAsync(strMusicNotes, nMIDIOutPortID, nMIDITimerResMS)) // Start Playing Asynchronously 
+                while(player.IsPlaying()) // Wait while the play is still in progress
+                    Sleep(1000);
+
+            player.StopPlay(); // Stop the Play when done
+         </pre> */
+        inline bool PlayAsync(const MString& strMusicNotes, int nMIDIOutPortID = MIDI_MAPPER, unsigned int nMIDITimerResMS = 20 )
+        {
+            m_Renderer.Clear(); // Clear any previous Notes
+
+            if(false == m_Parser.Parse(strMusicNotes))	// Parse and Load the Notes into MIDI MultiTrack
                 return false;
 
-			return m_Renderer.BeginPlayAsync(nMIDIOutPortID, nMIDITimerResMS); // Start Playing on the given MIDIport with supplied resolution
-		}
+            return m_Renderer.BeginPlayAsync(nMIDIOutPortID, nMIDITimerResMS); // Start Playing on the given MIDIport with supplied resolution
+        }
 
-		/// <Summary>
-		/// Stops the Play started with PlayAsync.
-        /// Each <code>PlayAsync</code> should have a matching <code>StopPlay</code> method call.
-		/// </Summary>
+        /// <Summary>
+        /// Stops the Play started with PlayAsync().
+        /// Each PlayAsync() should have a matching StopPlay() method call.
+        /// </Summary>
 		inline void StopPlay()
 		{
 			m_Renderer.EndPlayAsync();
@@ -81,25 +106,45 @@ namespace MusicNoteLib
 		inline bool IsPlaying() const { return m_Renderer.IsPlaying(); }
 
 		/// <Summary>
-		/// Saves the Music Notes into a Midi output file.
-		/// If there are any parsing errors for the Music string, result is undefined.
+		/// Parses the Music String and saves the generated MIDI events to a Midi output file.
+        /// 
+		/// Returns true upon success. If there are any parsing errors for the Music string, result is undefined.
+        ///
 		/// To get notified about the parsing events, retrieve the associated parser 
-		/// object using the <code>Parser()</code> method and subscribe to the <code>evTrace</code>
-		/// and <code>evError</code> events.
-		/** <pre>
-			MusicNoteLib::Player player;
-
-			// Subscribe to the Events
-			player.Parser().evTrace.Subscribe(&OnParseTrace);
-			player.Parser().evError.Subscribe(&OnParseError);
-
-			// Save the Music Notes to Midi file directly, without playing
-			if(false == player.SaveAsMidiFile(_T("Cq Dw Eq Fw Gq Aw Bw"), "MidiOutput.midi"))
-				printf("\n Unable to Save Music String to Midi Output File \n");
-		</pre> */
-		/// @param strMusicNotes the input Music string to be converted to MIDI output
+        /// object using the Player::Parser() method and subscribe to the <code>evTrace</code>
+        /// and <code>evError</code> events.
+        ///
+        /// @param strMusicNotes the input Music string to be converted to MIDI output
 		/// @param szOutputFilePath the output MIDI file path
+        /// @return True if content is saved successfully, False otherwise
 		/// </Summary>
+        /// Example Usage:
+        /** <pre>
+            void OnParseTrace(const MusicNoteLib::CParser*, MusicNoteLib::MusicStringParser::TraceEventHandlerArgs* pEvArgs)
+            {
+                OutputDebugString(_T("\n"));
+                OutputDebugString(pEvArgs->szTraceMsg);
+            }
+
+            void OnParseError(const MusicNoteLib::CParser*, MusicNoteLib::MusicStringParser::ErrorEventHandlerArgs* pEvArgs)
+            {
+                OutputDebugString(_T("\nError --> "));
+                OutputDebugString(pEvArgs->szErrMsg);
+                if(pEvArgs->szToken)
+                {
+                    OutputDebugString(_T("\t Token: "));	 
+                    OutputDebugString(pEvArgs->szToken);
+                }
+            }
+
+            MusicNoteLib::Player player; // Create the Player Object
+            
+            player.Parser().evTrace.Subscribe(&OnParseTrace); // Subscribe to the Trace Events
+            player.Parser().evError.Subscribe(&OnParseError); // Subscribe to the Error Events
+            
+            player.SaveAsMidiFile(_T("Cq Dw Ex"), "MidiOutput.midi"); // Save the Music Notes to Midi file directly, without playing
+
+        </pre> */
 		inline bool SaveAsMidiFile(const MString& strMusicNotes, const char* szOutputFilePath)
 		{
 			m_Renderer.Clear(); // Clear any previous Notes
@@ -111,24 +156,23 @@ namespace MusicNoteLib
 
 		/// <Summary>
 		/// Saves any previously played Music Notes into a Midi output file.
-		/// If <code>Play</code> or <code>PlayAsync</code> is not called on this object previously,
+        /// If Play() or PlayAsync() is not called on this object previously,
 		/// the output MIDI file will be empty.
-		/// To save the notes directly to MIDI file without playing, use <code>SaveAsMidiFile</code>
+        ///
+        /// To save the notes directly to MIDI file without playing, use Player::SaveAsMidiFile 
 		/// method instead.
-		/** <pre>
-			MusicNoteLib::Player player;
-
-			// Subscribe to the Events
-			player.Parser().evTrace.Subscribe(&OnParseTrace);
-			player.Parser().evError.Subscribe(&OnParseError);
-
-			// Play the Music Notes and then Save them to a MIDI File
-			player.Play(_T("ci di f fi ei. di. ci ci cs b4s a4i g4i c "));
-			if(false == player.SaveToMidiFile("PlayedOutput.mid"))
-			    printf("\n Unable to Save Played Music content to Midi Output File \n");
-		</pre> */
-		/// @param szOutputFilePath the output MIDI file path
+        ///
+        /// @param szOutputFilePath the output MIDI file path
+        /// @return True if content is saved successfully, False otherwise
 		/// </Summary>
+        /// Example Usage:
+        /** <pre>
+            MusicNoteLib::Player player; // Create the Player Object
+            
+            player.Play(_T("ci di f fi")); // Play the Music Notes on MIDI output port
+
+            player.SaveToMidiFile("Output.mid"); // Save the played content to MIDI Output file
+        </pre> */
 		inline bool SaveToMidiFile(const char* szOutputFilePath)
 		{
 			return m_Renderer.SaveToFile(szOutputFilePath);

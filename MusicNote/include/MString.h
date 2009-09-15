@@ -6,9 +6,7 @@
 
 namespace MusicNoteLib
 {
-	/// <Summary>
-	/// Helper class for simple string manipulations
-	/// </Summary>
+	/// <Summary> Helper class for simple string manipulations </Summary>
 	class MString : public 
 #ifdef UNICODE
 		std::wstring

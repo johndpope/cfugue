@@ -1,6 +1,10 @@
 #ifndef __DICTIONARY_H__57D24F57_01B6_4fcd_B92E_7B7849C51407__
 #define __DICTIONARY_H__57D24F57_01B6_4fcd_B92E_7B7849C51407__
 
+/** @file Dictionary.h 
+ * \brief Declares Dictionary type used by the Parsers
+ */ 
+
 #include "MString.h"
 #include <map>
 

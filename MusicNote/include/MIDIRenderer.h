@@ -8,7 +8,7 @@
 
 namespace MusicNoteLib
 {
-	///<Summary>Takes care of Rendering MIDI Output either to file or to MIDI Port</Summary>
+	///<Summary>Takes care of Rendering MIDI Output either to a file or to a MIDI out Port</Summary>
 	class MIDIRenderer : MIDIEventManager, public CParserListener
 	{   
 		jdkmidi::MIDIDriverWin32 m_MIDIDriver;
@@ -22,8 +22,17 @@ namespace MusicNoteLib
 		/// <Summary>Event handler for Instrument event Raised by Parser</Summary>
         virtual void OnInstrumentEvent(const CParser* pParser, Instrument* pInstrument);
 
-        /// <Summary>Event handler for Tempo event Raised by Tempo </Summary>
+		/// <Summary>Event handler for KeySignature event Raised by Parser</Summary>
+        virtual void OnKeySignatureEvent(const CParser* pParser, KeySignature* pKeySig);
+
+		/// <Summary>Event handler for Layer event Raised by Parser</Summary>
+        virtual void OnLayerEvent(const CParser* pParser, Layer* pLayer);
+
+        /// <Summary>Event handler for Tempo event Raised by Parser </Summary>
         virtual void OnTempoEvent(const CParser* pParser, Tempo* pTempo);
+
+        /// <Summary>Event handler for Time event Raised by Parser </Summary>
+        virtual void OnTimeEvent(const CParser* pParser, Time* pTime);
 
 		/// <Summary>Event handler for Voice event Raised by Parser</Summary>
         virtual void OnVoiceEvent(const CParser* pParser, Voice* pVoice);

@@ -155,7 +155,6 @@ namespace MusicNoteLib
         return INSTRUMENT_NAME[m_nInstrumentID];
     }
 
-    /// Populates the standard musical instrument Macro defintions into Music String Dictionary
     void Instrument::PopulateStandardDefinitions(DICTIONARY& stdDefns)
     {
         //
