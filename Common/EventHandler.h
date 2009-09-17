@@ -1,9 +1,9 @@
 #ifndef __EVENTHANDLER_H_105D52D8_13EC_4ea3_A86B_076B726541EB_
 #define __EVENTHANDLER_H_105D52D8_13EC_4ea3_A86B_076B726541EB_
 
-#include <AtlColl.h>
+#include "AtlColl.h"
 
-namespace OIL
+namespace OIL /// Object Introspection Library
 {
 	class CEventSource;	//Forward declaration
 
@@ -68,7 +68,7 @@ namespace OIL
 	/// </Summary>
 	/// Following Snippet demonstrates sample usage.
     /** <code><pre>
-    #include "EventHandler.h"
+    \#include "EventHandler.h"
     using namespace OIL;
 
     struct MyEventHandlerArgs : public CEventHandlerArgs
@@ -302,7 +302,7 @@ namespace OIL
 		CEventSource() {}
 
 		// Protected destructor. 
-		// No need to declare as virtual because delete can't be applied on CEventSource pointers.
+		// No need to declare as virtual because delete can not be applied on CEventSource pointers.
 		~CEventSource() { }
 
 		/// <Summary>
@@ -341,7 +341,7 @@ namespace OIL
         int m_nVal;
      };
      
-     CInvokableEventT <MyEventHandlerArgs> Event;
+     CInvokableEventT \<MyEventHandlerArgs\> Event;
     
      class MyPseudoClass
      {
@@ -373,9 +373,9 @@ namespace OIL
          MyListener listener; 
          Event.Subscribe(&listener, &MyListener::EventHandlerProc); // Subscribe a class method
     
-         MyPseudoClass Obj; // Constructors raises Event
+         MyPseudoClass Obj; // Raise the Event in the constructor
     
-         Event.RaiseEvent(&MyEventHandlerArgs()); // Event can be raised from anywhere !!
+         Event.RaiseEvent(&MyEventHandlerArgs()); // Event can be raised explicitly with from anywhere !!
     
          return 0;
      }
