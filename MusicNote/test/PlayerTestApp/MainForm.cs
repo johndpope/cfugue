@@ -94,12 +94,17 @@ namespace PlayerTestApp
 
         public void OnErrorMethod(IntPtr userData, [MarshalAs(UnmanagedType.LPStr)] String szTraceMsg)
         {
-            MessageBox.Show(szTraceMsg);
+            if (splitContainer1.Panel2Collapsed)
+                splitContainer1.Panel2Collapsed = false;
+            listView_Log.Items.Add(szTraceMsg);
+            Application.DoEvents();
         }
 
 
         private void button_Play_Click(object sender, EventArgs e)
         {
+            listView_Log.Items.Clear();
+
             if (textBox_Notes.Text.Length != 0)
             {
                 string strNotes="";
@@ -109,9 +114,11 @@ namespace PlayerTestApp
 
                 if(strNotes.Length == 0 || checkBox_PlaySelected.Checked == false)
                     strNotes = textBox_Notes.Text; //if selected text is empty or if we need to play complete text
-
+                
+                this.Cursor = Cursors.WaitCursor;
                // MusicNoteLib.PlayMusicStringWithOpts(strNotes, comboBox_MIDIOutDevs.SelectedIndex, (uint)numericUpDown_TimerResolution.Value);
                 MusicNoteLib.Parse(strNotes, new MusicNoteLib.ParserTraceDelegate(OnErrorMethod), IntPtr.Zero);
+                this.Cursor = Cursors.Arrow;
             }
         }
 
@@ -133,6 +140,11 @@ namespace PlayerTestApp
                 MusicNoteLib.SaveAsMidiFile(textBox_Notes.Text, dlg.FileName);
             }
             else MessageBox.Show("Text box is empty !! Enter few notes and then use this option to save them to MIDI output file");
+        }
+
+        private void listView_Log_Resize(object sender, EventArgs e)
+        {
+            listView_Log.Columns[0].Width = listView_Log.ClientSize.Width;
         }
 
 

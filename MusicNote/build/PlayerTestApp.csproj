@@ -103,4 +103,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\test\PlayerTestApp\LogBackground.JPG">
+      <Link>LogBackground.JPG</Link>
+    </Content>
+  </ItemGroup>
 </Project>

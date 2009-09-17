@@ -45,6 +45,7 @@
             this.checkBox_PlaySelected = new System.Windows.Forms.CheckBox();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.listView_Log = new System.Windows.Forms.ListView();
+            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -285,6 +286,8 @@
             // 
             this.listView_Log.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("listView_Log.BackgroundImage")));
             this.listView_Log.BackgroundImageTiled = true;
+            this.listView_Log.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1});
             this.listView_Log.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView_Log.FullRowSelect = true;
             this.listView_Log.GridLines = true;
@@ -296,6 +299,7 @@
             this.listView_Log.TabIndex = 0;
             this.listView_Log.UseCompatibleStateImageBehavior = false;
             this.listView_Log.View = System.Windows.Forms.View.Details;
+            this.listView_Log.Resize += new System.EventHandler(this.listView_Log_Resize);
             // 
             // MainForm
             // 
@@ -338,6 +342,7 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel_TimerResolution;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown numericUpDown_TimerResolution;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
 
     }
 }
