@@ -174,34 +174,34 @@ namespace MusicNoteLib
 		/// </Summary>
         /// Example Usage:
         /** <pre>
-            #include "MusicNoteLib.h"
+            \#include "MusicNoteLib.h"
 
             void OnParseTrace(const MusicNoteLib::CParser*, MusicNoteLib::CParser::TraceEventHandlerArgs* pEvArgs)
             {
-	            OutputDebugString(_T("\n"));
-	            OutputDebugString(pEvArgs->szTraceMsg);
+                OutputDebugString(_T("\n"));
+                OutputDebugString(pEvArgs->szTraceMsg);
             }
 
             void OnParseError(const MusicNoteLib::CParser*, MusicNoteLib::CParser::ErrorEventHandlerArgs* pEvArgs)
             {
-	            OutputDebugString(_T("\nError --> "));
-	            OutputDebugString(pEvArgs->szErrMsg);
-	            if(pEvArgs->szToken)
-	            {
-		            OutputDebugString(_T("\t Token: "));	 
-		            OutputDebugString(pEvArgs->szToken);
-	            }
+                OutputDebugString(_T("\nError --> "));
+                OutputDebugString(pEvArgs->szErrMsg);
+                if(pEvArgs->szToken)
+                {
+                    OutputDebugString(_T("\t Token: "));	 
+                    OutputDebugString(pEvArgs->szToken);
+                }
             }
         
             MusicNoteLib::MusicStringParser Parser; // Create the Parser Object
-	        
-	        Parser.evTrace.Subscribe(&OnParseTrace); // To get notified about the Parse Trace Events
-	        Parser.evError.Subscribe(&OnParseError); // To get notified about the Parse Error Events
+            
+              Parser.evTrace.Subscribe(&OnParseTrace); // To get notified about the Parse Trace Events
+              Parser.evError.Subscribe(&OnParseError); // To get notified about the Parse Error Events
 
             MIDIRenderer Renderer; // Create the Listener Object, in this case a MIDI Renderer
             Parser.AddListener(&Renderer);  // Add Renderer as a listener to get notified about the Tokens encountered during the Parse
 
-            Parser.Parse(_T("I[Flute] C D E F G A B")); // Do the Parsing. Notify the listeners during the process
+            Parser.Parse(_T("I[Flute] C D E F G A B")); // Do the Parsing. Notifies the listeners during the process
          </pre> */
 		bool Parse(const TCHAR* szTokens); 
 

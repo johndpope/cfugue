@@ -1,6 +1,10 @@
 #ifndef __MUSICNOTE_LIB_H__EBEE094C_FF6E_43a1_A6CE_D619564F9C6A__
 #define __MUSICNOTE_LIB_H__EBEE094C_FF6E_43a1_A6CE_D619564F9C6A__
 
+/** @file MusicNoteLib.h
+ * \brief Main header file for accessing the MusicNote Library
+ */ 
+
 /// <Summary>
 /// This header file can be included directly in your project or through
 /// MusicNoteLib.h of the MusicNoteDll project. If included directly, this
@@ -103,8 +107,6 @@ Example Usage:
 
 \section copyright Copyright
 
- Copyright (C) 2009 CineFx Digital Media Pvt. Ltd.
-
 This is a product of CineFx Research Labs, distributed under LGPL with the hope that it will be useful. 
 No warranty of what-so-ever is implied, including MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 Refer to LGPL for more details.
@@ -112,6 +114,8 @@ Refer to LGPL for more details.
  Author: Gopalakrishna Palem
 
  Web: http://www.CineFxLabs.com
+
+ Copyright (C) 2009 CineFx Digital Media Pvt. Ltd.
 
 */
 
