@@ -22,37 +22,37 @@ namespace MusicNoteLib
 		return WriterObj.Write();
 	}
 
-    void MIDIRenderer::OnInstrumentEvent(const CParser* pParser, Instrument* pInstrument)
+    void MIDIRenderer::OnInstrumentEvent(const CParser* pParser, const Instrument* pInstrument)
     {
         AddProgramChangeEvent(pInstrument->GetInstrumentID());
     }
 
-    void MIDIRenderer::OnKeySignatureEvent(const CParser* pParser, KeySignature* pKeySig)
+    void MIDIRenderer::OnKeySignatureEvent(const CParser* pParser, const KeySignature* pKeySig)
     {
         AddKeySignatureEvent(pKeySig->GetKey(), pKeySig->GetMajMin());
     }
 
-    void MIDIRenderer::OnLayerEvent(const CParser* pParser, Layer* pLayer)
+    void MIDIRenderer::OnLayerEvent(const CParser* pParser, const Layer* pLayer)
     {
         SetCurrentLayer(pLayer->GetLayer());
     }
 
-    void MIDIRenderer::OnTempoEvent(const CParser* pParser, Tempo* pTempo)
+    void MIDIRenderer::OnTempoEvent(const CParser* pParser, const Tempo* pTempo)
     {
         AddTempoEvent(pTempo->GetTempo());
     }
 
-    void MIDIRenderer::OnTimeEvent(const CParser* pParser, Time* pTime)
+    void MIDIRenderer::OnTimeEvent(const CParser* pParser, const Time* pTime)
     {
         SetTrackTime(pTime->GetTime());
     }
 
-    void MIDIRenderer::OnVoiceEvent(const CParser* pParser, Voice* pVoice)
+    void MIDIRenderer::OnVoiceEvent(const CParser* pParser, const Voice* pVoice)
     {
         SetCurrentTrack(pVoice->GetVoice());
     }
 
-    void MIDIRenderer::OnNoteEvent(const CParser* pParser, Note* pNote)
+    void MIDIRenderer::OnNoteEvent(const CParser* pParser, const Note* pNote)
     {
         if(pNote->duration == 0) return;
 

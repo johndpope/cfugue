@@ -736,6 +736,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\include\Talam.h"
+				>
+			</File>
+			<File
 				RelativePath="..\src\MusicNoteLib\targetver.h"
 				>
 			</File>

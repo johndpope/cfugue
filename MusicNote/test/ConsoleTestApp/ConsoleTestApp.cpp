@@ -52,13 +52,13 @@ int _tmain(int argc, _TCHAR* argv[])
 	if(bSuccess == false) printf("\n Error while parsing Cwx*3:2\n");
 	bSuccess = Parser.Parse(_T("Cwx*")); // Default-C  whole sixteenth Note as a triplet
 	if(bSuccess == false) printf("\n Error while parsing Cwx*\n");
-	bSuccess = Parser.Parse(_T("C*")); // Default-C  whole quarter Note
+	bSuccess = Parser.Parse(_T("C*")); // Default-C quarter Note
 	if(bSuccess == false) printf("\n Error while parsing C*\n");
-	bSuccess = Parser.Parse(_T("C/120")); // Default-C  whole quarter Note with duration 120
+	bSuccess = Parser.Parse(_T("C/120")); // Default-C quarter Note with duration 120
 	if(bSuccess == false) printf("\n Error while parsing C*\n");
-	bSuccess = Parser.Parse(_T("G##/120")); // Default-GSharpSharp  whole quarter Note with duration 120
+	bSuccess = Parser.Parse(_T("G##/120")); // Default-GSharpSharp quarter Note with duration 120
 	if(bSuccess == false) printf("\n Error while parsing G##/120\n");
-	bSuccess = Parser.Parse(_T("Cbb/120")); // Default-CFlatFlat  whole quarter Note with duration 120
+	bSuccess = Parser.Parse(_T("Cbb/120")); // Default-CFlatFlat quarter Note with duration 120
 	if(bSuccess == false) printf("\n Error while parsing Cbb/120\n");
 
 	// Note Velocities

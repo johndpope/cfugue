@@ -34,7 +34,7 @@ namespace MusicNoteLib
 			ASSIGNMENT_SYMBOL			= _T('='),
 
 			// Note Related
-			REST_NOTE					= _T('R'),  ///< Specifies a Rest Note token
+			REST_NOTE			        = _T('R'),  ///< Specifies a Rest Note token [Western Music Only]
 			MACRO_START					= _T('['),  ///< Signifies a Macro start symbol
 			MACRO_END					= _T(']'),  ///< Signifies the Macro end symbol
 		};
@@ -56,6 +56,21 @@ namespace MusicNoteLib
 			NOTE_A_Value	= 9,
 			NOTE_B	= _T('B'),
 			NOTE_B_Value	= 11,
+
+			SWARA_S	= _T('S'),
+			SWARA_S_Value	= 0,
+			SWARA_R	= _T('R'),
+			SWARA_R_Value	= 2,
+			SWARA_G	= _T('G'),
+			SWARA_G_Value   = 4,
+			SWARA_M	= _T('M'),
+			SWARA_M_Value	= 5,
+			SWARA_P	= _T('P'),
+			SWARA_P_Value	= 7,
+			SWARA_D	= _T('D'),
+			SWARA_D_Value	= 9,
+			SWARA_N	= _T('N'),
+			SWARA_N_Value	= 11,
 		};
 
 		/// <Summary> Note Modifiers</Summary>
@@ -81,14 +96,17 @@ namespace MusicNoteLib
 			NOTE_DURATION_128			= _T('O'),  ///< Specifies 1/128th Note
 			NOTE_DURATION_DOT			= _T('.'),  ///< Specifies 1.5 times the normal duration
 			NOTE_TUPLET_START			= _T('*'),  ///< Indicates a Tuplet start
-			NOTE_TUPLET_RATIOMARK		= _T(':')   ///< Indicates the Tuplet Ratio
+			NOTE_TUPLET_RATIOMARK		= _T(':'),  ///< Indicates the Tuplet Ratio
+            SWARA_DURATION_ONE_EXTRA    = _T(','),  ///< Indicates one extra time unit [Carnatic Music Only]
+            SWARA_DURATION_TWO_EXTRA    = _T(';'),  ///< Indicates two extra time units [Carnatic Music Only]
 		};
 
 		/// <Summary> Note Velocities </Summary>
 		enum NoteVelocities : TCHAR
 		{
-			NOTE_VELOCITY_ATTACK	= _T('A'),  ///< Note Velocity Attack specifier
-			NOTE_VELOCITY_DECAY		= _T('D')   ///< Note Velocity Decay specifier
+			NOTE_VELOCITY       	= _T('V'),  ///< Note Attack Velocity specifier (Carnatic Mode)
+			NOTE_VELOCITY_ATTACK	= _T('A'),  ///< Note Attack Velocity specifier (Obsolete. only for compatability with JFugue)
+			NOTE_VELOCITY_DECAY		= _T('D')   ///< Note Decay Velocity specifier
 		};
 
 		/// <Summary> Note Connectors </Summary>
@@ -105,9 +123,19 @@ namespace MusicNoteLib
 			DEFAULT_NONCHORD_OCTAVE		= 5,    ///< Default non-chord note octave value
 		};
 
+        /// <Summary> Note Shruti Modifiers </Summary>
+        enum NoteShrutis : TCHAR
+        {
+            NOTE_SHRUTI_UP      = _T('\''),  ///< Increments Note Shruti one level upward the Tara Sthayi
+            NOTE_SHRUTI_DOWN    = _T('.'),   ///< Decrements Note Shruti one level downward the Mandra Sthayi
+        };
+
 		DICTIONARY m_Dictionary;	// Holds the custom MACRO definitions for Music Strings
 
         KeySignature m_KeySig;  // Holds the last seen Key Signature. Useful for computing Note value.
+
+        unsigned short m_nDefNoteOctave;    // Holds the Default Octave Value to be used for Notes
+        unsigned short m_nDefChordOctave;   // Holds the Default Octave Value to be used for Chords
 
 		/// <Summary>
 		/// Parses a single token. To Parse a string that contains multiple tokens, 
@@ -158,7 +186,23 @@ namespace MusicNoteLib
 		{
 			m_Dictionary.clear();
 			MusicNoteLib::PopulateStandardDefinitions(m_Dictionary); // Load standard macro definitions
+            SetKeySignature(KeySignature());
+            SetOctaveDefaults();
 		}
+
+        /// Sets the KeySignature to be used for further Note parsing
+        /// @param keySig the KeySignature to be used
+        inline void SetKeySignature(const KeySignature& keySig) { m_KeySig = keySig; }
+        /// Returns the KeySignature being used
+        /// @return the KeySignature being used
+        inline const KeySignature& GetKeySignature() const { return m_KeySig; }
+        /// Sets the Default values for Note Octaves
+        inline void SetOctaveDefaults(unsigned short nNoteDefOctave = DEFAULT_NONCHORD_OCTAVE, 
+                                      unsigned short nChordDefOctave = DEFAULT_CHORD_OCTAVE)
+        {
+            m_nDefNoteOctave = nNoteDefOctave;
+            m_nDefChordOctave = nChordDefOctave;
+        }
 
 		/// <Summary>
 		/// Parses a string that contains multiple tokens. Raises appropriate events as and when
@@ -225,9 +269,6 @@ namespace MusicNoteLib
 		{
 			bool isNumeric;
 			bool isChord;
-			//bool isFirstNote;
-			//bool isSequentialNote;
-			//bool isParallelNote;
 			bool isNatural;
 			bool existsAnotherNote;
 			bool anotherIsSequential;
@@ -235,18 +276,17 @@ namespace MusicNoteLib
 			unsigned char	halfSteps[8];  
 			unsigned short	numHalfSteps;
 			short			octaveNumber;
+            unsigned short  numSwaras; // [Carnatic] No.of Swaras the note spans, such as Sa, Pa etc...
 			NoteContext()	:
 				isNumeric(0),
 				isChord(0),
-				//isFirstNote(1),
-				//isSequentialNote(0),
-				//isParallelNote(0),
 				isNatural(0),
 				existsAnotherNote(1),
 				anotherIsSequential(0),
 				anotherIsParallel(0),
 				numHalfSteps(0),
-				octaveNumber(-1)
+				octaveNumber(-1),
+                numSwaras(1)
 			{
 				memset(halfSteps, 0, sizeof(halfSteps));
 			}
