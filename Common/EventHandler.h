@@ -315,6 +315,18 @@ namespace OIL /// Object Introspection Library
 
 			pEvent->Invoke((TEventSource *)this, (TEventHandlerArgs *)pArgs);
 		}
+
+		/// <Summary>
+		/// Invokes the Event.
+		/// </Summary>
+		template<typename TEventSource, typename TEventHandlerArgs>
+		inline void RaiseEvent(CEventT<TEventSource, const TEventHandlerArgs>* pEvent, const TEventHandlerArgs* pArgs)
+		{
+			ATLASSERT(pEvent != NULL);
+
+			pEvent->Invoke((TEventSource *)this, (const TEventHandlerArgs *)pArgs);
+		}
+
 	};
 
 	/// <Summary>
