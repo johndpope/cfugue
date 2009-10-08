@@ -48,17 +48,17 @@ namespace MusicNoteLib
 	public:
 			
 		OIL::CEventT<const CParser> evController;
-		OIL::CEventT<const CParser, Instrument> evInstrument; ///< Event Raised when Parser encounters an Instrument command
-		OIL::CEventT<const CParser, KeySignature> evKeySignature; ///< Event Raised when Parser encounters a Key Signature command
-		OIL::CEventT<const CParser, Layer> evLayer; ///< Event Raised when Parser encounters a Layer command
+		OIL::CEventT<const CParser, const Instrument> evInstrument; ///< Event Raised when Parser encounters an Instrument command
+		OIL::CEventT<const CParser, const KeySignature> evKeySignature; ///< Event Raised when Parser encounters a Key Signature command
+		OIL::CEventT<const CParser, const Layer> evLayer; ///< Event Raised when Parser encounters a Layer command
 		OIL::CEventT<const CParser> evMeasure;
 		OIL::CEventT<const CParser> evChannelPressure;
 		OIL::CEventT<const CParser> evPolyphonicPressure;
 		OIL::CEventT<const CParser> evPitchBend;
-		OIL::CEventT<const CParser, Tempo> evTempo; ///< Event Raised when Parser encounters a Tempo command
-		OIL::CEventT<const CParser, Time> evTime;   ///< Event Raised when Parser encounters a Time command
-		OIL::CEventT<const CParser, Voice> evVoice; ///< Event Raised when Parser encounters a Voice command
-		OIL::CEventT<const CParser, Note> evNote;	///< Event Raised when Parser encounters a Note 
+		OIL::CEventT<const CParser, const Tempo> evTempo; ///< Event Raised when Parser encounters a Tempo command
+		OIL::CEventT<const CParser, const Time> evTime;   ///< Event Raised when Parser encounters a Time command
+		OIL::CEventT<const CParser, const Voice> evVoice; ///< Event Raised when Parser encounters a Voice command
+		OIL::CEventT<const CParser, const Note> evNote;	///< Event Raised when Parser encounters a Note 
 		OIL::CEventT<const CParser> evSequentialNote; ///< Encountered a Sequential note after a first note
 		OIL::CEventT<const CParser> evParalleNote; ///< Encountered a Parallel note after a first note
 
@@ -87,7 +87,13 @@ namespace MusicNoteLib
 			PARSE_ERROR_INSTRUMENT_VALUE,		///< Failure while converting/retrieving a Instrument number.
 			PARSE_ERROR_KEYSIGNATURE_MACRO_END,	///< MACRO_END missing while parsing a Key Signature Macro.			
 			PARSE_ERROR_KEYSIGNATURE_VALUE,		///< Failure while converting/retrieving a Key Signature number.
-            PARSE_ERROR_KEYSIGNATURE_MAXLIMIT,  ///< Specified a KeySignature beyond the permitted range [0, 13] , [128, 141]
+            PARSE_ERROR_KEYSIGNATURE_MAXLIMIT,  ///< Specified a KeySignature beyond permitted range [0, 14] , [64, 78], [129, 200]
+			PARSE_ERROR_TALAM_MACRO_END,	    ///< MACRO_END missing while parsing a Talam Macro.			
+			PARSE_ERROR_TALAM_VALUE,		    ///< Failure while converting/retrieving a Talam number.
+            PARSE_ERROR_TALAM_MAXLIMIT,         ///< Specified a Talam beyond permitted range [0, 35]
+			PARSE_ERROR_SPEED_MACRO_END,	    ///< MACRO_END missing while parsing a Speed Macro.			
+			PARSE_ERROR_SPEED_VALUE,		    ///< Failure while converting/retrieving a Speed number.
+            PARSE_ERROR_SPEED_MAXLIMIT,         ///< Specified a Speed beyond permitted range [0, 3]
 			PARSE_ERROR_LAYER_MACRO_END,	    ///< MACRO_END missing while parsing a Layer Macro.			
 			PARSE_ERROR_LAYER_VALUE,		    ///< Failure while converting/retrieving a Layer number.
 			PARSE_ERROR_TEMPO_MACRO_END,	    ///< MACRO_END missing while parsing a Tempo Macro.			

@@ -20,25 +20,25 @@ namespace MusicNoteLib
 		long m_lFirstNoteTime;
 
 		/// <Summary>Event handler for Instrument event Raised by Parser</Summary>
-        virtual void OnInstrumentEvent(const CParser* pParser, Instrument* pInstrument);
+        virtual void OnInstrumentEvent(const CParser* pParser, const Instrument* pInstrument);
 
 		/// <Summary>Event handler for KeySignature event Raised by Parser</Summary>
-        virtual void OnKeySignatureEvent(const CParser* pParser, KeySignature* pKeySig);
+        virtual void OnKeySignatureEvent(const CParser* pParser, const KeySignature* pKeySig);
 
 		/// <Summary>Event handler for Layer event Raised by Parser</Summary>
-        virtual void OnLayerEvent(const CParser* pParser, Layer* pLayer);
+        virtual void OnLayerEvent(const CParser* pParser, const Layer* pLayer);
 
         /// <Summary>Event handler for Tempo event Raised by Parser </Summary>
-        virtual void OnTempoEvent(const CParser* pParser, Tempo* pTempo);
+        virtual void OnTempoEvent(const CParser* pParser, const Tempo* pTempo);
 
         /// <Summary>Event handler for Time event Raised by Parser </Summary>
-        virtual void OnTimeEvent(const CParser* pParser, Time* pTime);
+        virtual void OnTimeEvent(const CParser* pParser, const Time* pTime);
 
 		/// <Summary>Event handler for Voice event Raised by Parser</Summary>
-        virtual void OnVoiceEvent(const CParser* pParser, Voice* pVoice);
+        virtual void OnVoiceEvent(const CParser* pParser, const Voice* pVoice);
 
 		/// <Summary>Event handler for Note event Raised by Parser</Summary>
-		virtual void OnNoteEvent(const CParser* pParser, Note* pNote);
+		virtual void OnNoteEvent(const CParser* pParser, const Note* pNote);
 
 	public:
 

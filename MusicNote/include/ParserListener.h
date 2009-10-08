@@ -26,19 +26,19 @@ namespace MusicNoteLib
 
 		inline virtual ~CParserListener(void)	{	}
 
-		inline virtual void OnInstrumentEvent(const CParser* pParser, Instrument* pInstrument) { } 
+		inline virtual void OnInstrumentEvent(const CParser* pParser, const Instrument* pInstrument) { } 
 
-		inline virtual void OnKeySignatureEvent(const CParser* pParser, KeySignature* pKeySig) { } 
+		inline virtual void OnKeySignatureEvent(const CParser* pParser, const KeySignature* pKeySig) { } 
 
-		inline virtual void OnLayerEvent(const CParser* pParser, Layer* pLayer) { } 
+		inline virtual void OnLayerEvent(const CParser* pParser, const Layer* pLayer) { } 
 
-		inline virtual void OnTempoEvent(const CParser* pParser, Tempo* pTempo) { } 
+		inline virtual void OnTempoEvent(const CParser* pParser, const Tempo* pTempo) { } 
 
-		inline virtual void OnTimeEvent(const CParser* pParser, Time* pTime) { } 
+		inline virtual void OnTimeEvent(const CParser* pParser, const Time* pTime) { } 
 
-		inline virtual void OnVoiceEvent(const CParser* pParser, Voice* pVoice) { } 
+		inline virtual void OnVoiceEvent(const CParser* pParser, const Voice* pVoice) { } 
 
-		inline virtual void OnNoteEvent(const CParser* pParser, Note* pNote) { } 
+		inline virtual void OnNoteEvent(const CParser* pParser, const Note* pNote) { } 
 	};
 
 } // namespace MusicNoteLib

@@ -255,6 +255,30 @@ namespace MusicNoteLib
 		return false;
     }
 
+    /// <Summary>
+    /// KeySignature plays an important role in differentiating Carnatic and Western style Notes
+    /// and makes it possible to seamlessly integrate both into a single MusicString. 
+    /// While a Western style KeySignature accepts only the Scale value, the Carnatic counterpart 
+    /// on the otherhand supports few more options such as Talam and Speed along with the Ragam.
+    ///
+    /// In other words, the Western syntax for KeySignature token is: K[SCALE]
+    /// where as the Carnatic syntax for the KeySignature token is: K[RAGAM]T[TALAM]S[SPEED]
+    /// 
+    /// SCALE values are specified using any of the pre-defined macro values such as CMAJ, F#MIN etc.
+    /// RAGAM values are specified using the form MELA_x, where x is a number in the range [1, 72].
+    /// TALAM values are specified using numbers in the range [1, 35], and SPEED values are specified
+    /// using numbers in the range [1, 3]. Also, few pre-defined macros are available for RAGAM, TALAM, 
+    /// and SPEED specifiers, such as KALYANI, ADI, VARNAM etc.
+    ///
+    /// The Ragam, Talam and Speed values can be changed any time during the song. For example, to 
+    /// change the Talam while retaining the Ragam and Speed to their current values, use the form: KT[NEW_TALAM]
+    ///
+    /// Similarily, to Change only Ragam without affecting the Talam and Speed, omit the T and S specifiers
+    /// such as K[NEW_RAGAM]. To Change only the Speed, the form then will be KTS[NEW_SPEED].
+    ///
+    /// Note that the T and S sub-tokens are only valid in the Carnatic Music Mode. Specifying them for 
+    /// Western Music will not have any effect and they will not be read or remembered.
+    /// </Summary>
     bool MusicStringParser::ParseKeySignatureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured)
     {
 		bool bSuccess = *pbNonContinuableErrorOccured = false; unsigned short nValue = 0;
@@ -263,29 +287,90 @@ namespace MusicNoteLib
 		if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false; } // Some irrevocable error occured
 		if(bSuccess)
 		{
-            KeySignature::Scale bScale = ((nValue >= 128) ? KeySignature::MAJOR_SCALE : KeySignature::MINOR_SCALE);
+            if(nValue >= 128) // Carnatic Mode Key Signature
+            {
+                nValue = nValue - 128;
 
-            if(nValue >= 128) nValue = nValue - 128;
+			    if(nValue > 72 || nValue <= 0) // Ensure the Range. Valid Range: [1, 72]
+			    {
+				    MString str(_T("KeySignature ") + OIL::ToString(nValue) + _T(" is beyond the range [0~14 / 64~78 / 129~200]"));
+                    if(Error(PARSE_ERROR_KEYSIGNATURE_MAXLIMIT, str, szToken)) { *pbNonContinuableErrorOccured = true; return false;}; // if we should stop processing any further
+                    nValue = KeySignature::DEFAULT_RAGAM; // if we need to continue despite the error, use default Value
+			    }
 
-			Trace(MString(_T("MusicStringParser::ParseKeySignatureToken: KeySignature = ")) + OIL::ToString(nValue)
-                + MString(_T(" Scale = ")) + (bScale == KeySignature::MAJOR_SCALE ? _T("Major") : _T("Minor")) );
+                m_KeySig.SetRagam(nValue);
 
-			if(nValue >= 14) // Ensure the Range
-			{
-				MString str(_T("KeySignature ") + OIL::ToString(nValue) + _T(" is beyond the range [0, 13], [128, 141]"));
-                if(Error(PARSE_ERROR_KEYSIGNATURE_MAXLIMIT, str, szToken)) { *pbNonContinuableErrorOccured = true; return false;}; // if we should stop processing any further
-				nValue = 0; // if we need to continue despite the error, use 0
-			}
+                // NOTE: We do not RaiseEvent for the Carnatic Mode KeySignature
+            }
+            else // Western Mode Key Signature
+            {
+                KeySignature::Scale bScale = ((nValue >= 64) ? KeySignature::MAJOR_SCALE : KeySignature::MINOR_SCALE);
 
-            KeySignature keyObj(nValue > 7 ? (7-nValue) : nValue, bScale);
+                if(nValue >= 64) nValue = nValue - 64;
 
-            m_KeySig = keyObj; // Save a copy to be used while computing the note values further
+			    Trace(MString(_T("MusicStringParser::ParseKeySignatureToken: KeySignature = ")) + OIL::ToString(nValue)
+                    + MString(_T(" Scale = ")) + (bScale == KeySignature::MAJOR_SCALE ? _T("Major") : _T("Minor")) );
 
-			RaiseEvent(&evKeySignature, &keyObj);
+			    if(nValue >= 15) // Ensure the Range. Valid Range: [0, 14]
+			    {
+				    MString str(_T("KeySignature ") + OIL::ToString(nValue) + _T(" is beyond the range [0~14 / 64~78 / 129~200]"));
+                    if(Error(PARSE_ERROR_KEYSIGNATURE_MAXLIMIT, str, szToken)) { *pbNonContinuableErrorOccured = true; return false;}; // if we should stop processing any further
+                    nValue = KeySignature::DEFAULT_KEY; // if we need to continue despite the error, use Default Key
+			    }
 
-			return true;
+                KeySignature keyObj(nValue > 7 ? (7-nValue) : nValue, bScale);
+
+                m_KeySig = keyObj; // Save a copy for computing the note values later
+			
+                RaiseEvent(&evKeySignature, &keyObj);
+
+                return true;
+            }
 		}
-		return false;
+
+        if(m_KeySig.GetMode() != KeySignature::CARNATIC) return false; // [Western Mode] An error reading the KeySig value
+
+        // In case of Carnatic Music, KeySignature can contain an additional Tala specifier. 
+        szToken += nLen; unsigned short nTalam = m_KeySig.GetTalam();
+        if(szToken[0] == _T('T')) // is there a Tala specifier present?
+        {
+            nLen = ParseNumber(++szToken, &nTalam, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_TALAM_MACRO_END, PARSE_ERROR_TALAM_VALUE);
+            if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false; } // Some irrevocable error occured
+            if(bSuccess)
+            {
+                if(nTalam > 35) // Ensure Range
+	            {
+		            MString str(_T("Talam ") + OIL::ToString(nTalam) + _T(" is beyond the range [0 ~ 35]"));
+                    if(Error(PARSE_ERROR_TALAM_MAXLIMIT, str, szToken)) { *pbNonContinuableErrorOccured = true; return false;}; // if we should stop processing any further
+                    nTalam = m_KeySig.GetTalam(); // if we need to continue despite the error, use existing Value
+	            }
+            }
+        }
+        else {  Trace(MString(_T(" No Talam Specified !! Using Talam: ")) + OIL::ToString(nTalam));   }
+
+        m_KeySig.SetTalam(nTalam);
+
+        // Check for Speed specifier
+        szToken += nLen; unsigned short nSpeed = m_KeySig.GetSpeed();
+        if(szToken[0] == _T('S')) // is there a Speed specifier ?
+        {
+            nLen = ParseNumber(++szToken, &nSpeed, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_SPEED_MACRO_END, PARSE_ERROR_SPEED_VALUE);
+            if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false; } // Some irrevocable error occured
+            if(bSuccess)
+            {
+                if(nSpeed > 6) // Ensure Range
+	            {
+		            MString str(_T("Speed ") + OIL::ToString(nSpeed) + _T(" is beyond the range [1 ~ 6]"));
+                    if(Error(PARSE_ERROR_SPEED_MAXLIMIT, str, szToken)) { *pbNonContinuableErrorOccured = true; return false;}; // if we should stop processing any further
+                    nSpeed = m_KeySig.GetSpeed(); // if we need to continue despite the error, use existing Value
+	            }
+            }
+        }
+        else {  Trace(MString(_T(" No Speed Specified !! Using Speed: ")) + OIL::ToString(nSpeed));   }
+
+        m_KeySig.SetSpeed((KeySignature::Speed)nSpeed);
+
+		return true;
     }
 
 
@@ -388,7 +473,13 @@ namespace MusicNoteLib
 		switch(szToken[0])
 		{
 		case MACRO_START : return ParseNumericNote(szToken, ctx);
-		case REST_NOTE : return ParseRest(szToken, ctx);
+        case REST_NOTE: // Rest Note concept is valid only for Western Music
+            {                
+                if(m_KeySig.GetMode() == KeySignature::WESTERN)
+                    return ParseRest(szToken, ctx);
+                else
+                    ; // follow on 
+            }
 		default: return ParseLetterNote(szToken, ctx);
 		}
 	}
@@ -426,6 +517,80 @@ namespace MusicNoteLib
 	/// Returns the number of characaters consumed from the string during the parsing. </Summary>
 	int MusicStringParser::ParseLetterNote(TCHAR* szToken, NoteContext& ctx)
 	{
+        if(m_KeySig.GetMode() == KeySignature::CARNATIC) // Carnatic Mode Notes
+        {
+            const TCHAR* pszToken = szToken;
+            switch(pszToken[0])
+            {
+		    case SWARA_S:
+                {
+                    pszToken++; ctx.noteNumber = SWARA_S_Value;
+                    if(pszToken[0] == _T('A')) { pszToken++; ctx.numSwaras = 2;  }
+                    break;
+                }
+		    case SWARA_P:
+                {
+                    pszToken++; ctx.noteNumber = SWARA_P_Value;
+                    if(pszToken[0] == _T('A')) { pszToken++; ctx.numSwaras = 2; }
+                    break;
+                }
+		    case SWARA_M:
+                {
+                    pszToken++; ctx.noteNumber = SWARA_M_Value; 
+                    if(pszToken[0] == _T('A')) { pszToken++; ctx.numSwaras = 2;  }
+                    if(pszToken[0] == _T('1')) { pszToken++; ctx.isNatural = true; }
+                    else if(pszToken[0] == _T('2')) { pszToken++; ctx.noteNumber++; ctx.isNatural = true; }
+                    break;
+                }
+		    case SWARA_R:
+                {
+                    pszToken++; ctx.noteNumber = SWARA_R_Value; 
+                    if(pszToken[0] == _T('I')) { pszToken++; ctx.numSwaras = 2; }
+                    if(pszToken[0] == _T('1')) { pszToken++; ctx.noteNumber--; ctx.isNatural = true; }
+                    else if(pszToken[0] == _T('2')) { pszToken++; ctx.isNatural = true; }
+                    else if(pszToken[0] == _T('3')) { pszToken++; ctx.noteNumber++; ctx.isNatural = true; }
+                    break;
+                }
+		    case SWARA_G:
+                {
+                    pszToken++; ctx.noteNumber = SWARA_G_Value; 
+                    if(pszToken[0] == _T('A')) { pszToken++; ctx.numSwaras = 2; }
+                    if(pszToken[0] == _T('1')) { pszToken++; ctx.noteNumber-=2; ctx.isNatural = true; }
+                    else if(pszToken[0] == _T('2')) { pszToken++; ctx.noteNumber--; ctx.isNatural = true; }
+                    else if(pszToken[0] == _T('3')) { pszToken++; ctx.isNatural = true; }
+                    break;
+                }
+		    case SWARA_D:
+                {
+                    pszToken++; ctx.noteNumber = SWARA_D_Value; 
+                    if(pszToken[0] == _T('A')) { pszToken++; ctx.numSwaras = 2; }
+                    if(pszToken[0] == _T('1')) { pszToken++; ctx.noteNumber--; ctx.isNatural = true; }
+                    else if(pszToken[0] == _T('2')) { pszToken++; ctx.isNatural = true; }
+                    else if(pszToken[0] == _T('3')) { pszToken++; ctx.noteNumber++; ctx.isNatural = true; }
+                    break;
+                }
+		    case SWARA_N:
+                {
+                    pszToken++; ctx.noteNumber = SWARA_N_Value; 
+                    if(pszToken[0] == _T('I')) { pszToken++; ctx.numSwaras = 2; }
+                    if(pszToken[0] == _T('1')) { pszToken++; ctx.noteNumber-=2; ctx.isNatural = true; }
+                    else if(pszToken[0] == _T('2')) { pszToken++; ctx.noteNumber--; ctx.isNatural = true; }
+                    else if(pszToken[0] == _T('3')) { pszToken++; ctx.isNatural = true; }
+                    break;
+                }
+		    default:
+			    {
+                    ctx.isRest = true; // treat the unknown notes as rest notes
+				    return Error(PARSE_ERROR_LETTER_NOTE, MString(_T("Invalid Note: ")) + pszToken[0], pszToken) ? -1 : 1;
+			    }
+            }
+    		
+		    Trace(_T("Note number within octave: ") + OIL::ToString(ctx.noteNumber));
+
+		    return pszToken - szToken; // return the number of characters read
+        }
+
+        // Western Mode Notes
 		switch(szToken[0])
 		{
 		case NOTE_C: ctx.noteNumber = NOTE_C_Value; break;
@@ -437,6 +602,7 @@ namespace MusicNoteLib
 		case NOTE_B: ctx.noteNumber = NOTE_B_Value; break;
 		default:
 			{
+                ctx.isRest = true; // treat the unknown notes as rest notes
 				return Error(PARSE_ERROR_LETTER_NOTE, MString(_T("Invalid Note: ")) + szToken[0], szToken) ? -1 : 1;
 			}
 		}
@@ -466,28 +632,59 @@ namespace MusicNoteLib
 	{
 		// Rest notes or Numeric Notes do not have Octaves specified
 		if(ctx.isRest || ctx.isNumeric) return 0;
+           
+        ctx.octaveNumber = ctx.isChord ? this->m_nDefChordOctave : this->m_nDefNoteOctave;
 
-		// Octaves are optional - they may or may not be present. 
-		// Only values in the range [0, 10] are valid.
-		// Check if macro is used, otherwise scan it.
-		
-		bool bSuccess = false; unsigned short nOctave=0;
-			
-		int nLen = ParseNumber(szToken, &nOctave, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_OCTAVE_MACRO_END, PARSE_ERROR_OCTAVE_VALUE);
-		if(nLen == -1) return -1;	// Some irrevocable error occured
-		if(bSuccess)
-		{
-			ctx.octaveNumber = nOctave;
+        int nLen = 0;
 
-			if(ctx.octaveNumber > 10)
-			{
-				MString str(_T("Octave ") + OIL::ToString(ctx.octaveNumber) + _T(" is beyond the range [0, 10]"));
-				if(Error(PARSE_ERROR_OCTAVE_MAXLIMIT, str, szToken)) return -1; // if we should stop processing any further, return -1
-				ctx.octaveNumber = 10; // if we need to continue despite the error, ceil the value
-			}
-		}
+        if(m_KeySig.GetMode() == KeySignature::CARNATIC)
+        {
+            // Carnatic Mode:
+            // Unlike Western Music, Octaves are not absolute numbers in Carnatic Music.
+            // They are relative to the Medium Octave, going couple of Octaves above and
+            // couple of Octaves below the Medium.
+            // Use XOctave token to change the default Medium Octave. For example,
+            // XOctave=7 changes the Medium Octave to 7 instead of the default 5.
+
+            // TODO: Implement the XOctave (XShruti) and XChord directives
+
+            bool bCheckForModifiers = true; const TCHAR* pszSymbol = szToken;
+            while(bCheckForModifiers)
+            {
+                switch(pszSymbol[0])
+                {
+                case NOTE_SHRUTI_UP: ctx.octaveNumber ++; pszSymbol++; break;
+                case NOTE_SHRUTI_DOWN: ctx.octaveNumber --; pszSymbol++; break;
+                default: bCheckForModifiers = false; break;
+                }
+            }
+            nLen = pszSymbol - szToken; // Number of Characters consumed
+        }
+        else
+        {
+            // Western Mode:
+		    // Octaves are optional - they may or may not be present. 
+		    // Only values in the range [0, 10] are valid.
+		    // Check if macro is used, otherwise scan it.
+    		
+		    bool bSuccess = false; unsigned short nOctave=0;
+    			
+		    nLen = ParseNumber(szToken, &nOctave, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_OCTAVE_MACRO_END, PARSE_ERROR_OCTAVE_VALUE);
+		    if(nLen == -1) return -1;	// Some irrevocable error occured
+		    if(bSuccess)
+			    ctx.octaveNumber = nOctave;
+        }
+        
+        if(ctx.octaveNumber < 0 || ctx.octaveNumber > 10) // Octave not within range
+        {
+			MString str(_T("Octave ") + OIL::ToString(ctx.octaveNumber) + _T(" is beyond the range [0, 10]"));
+			if(Error(PARSE_ERROR_OCTAVE_MAXLIMIT, str, szToken)) return -1; // if we should stop processing any further, return -1
+
+            if(ctx.octaveNumber < 0) ctx.octaveNumber = 0;
+            else if(ctx.octaveNumber > 10) ctx.octaveNumber = 10;
+        }
 		
-		Trace(ctx.octaveNumber == (short)-1 ? _T("No Octave Specified") : _T("Octave Number: ") + OIL::ToString(ctx.octaveNumber));
+		Trace( _T("Octave Number: ") + OIL::ToString(ctx.octaveNumber));
 
 		return nLen; // Number of characters consumed here
 	}
@@ -496,39 +693,35 @@ namespace MusicNoteLib
 	{
 		if(ctx.isRest) return 0;	// No note values for Rest Notes
 
-		if(ctx.octaveNumber == -1 && !ctx.isNumeric) 	// if Octave is not specified (and if this is non-numeric note) give some default octave value
-		{
-			if(ctx.isChord) 
-				ctx.octaveNumber = DEFAULT_CHORD_OCTAVE;
-			else 
-				ctx.octaveNumber = DEFAULT_NONCHORD_OCTAVE;		
-			
-			Trace(_T("Choosing Default Octave:") + OIL::ToString(ctx.octaveNumber));
-		}
+		//if(ctx.octaveNumber == -1 && !ctx.isNumeric) 	// if Octave is not specified (and if this is non-numeric note) give some default octave value
+		//{
+		//	if(ctx.isChord) 
+		//		ctx.octaveNumber = DEFAULT_CHORD_OCTAVE;
+		//	else 
+		//		ctx.octaveNumber = DEFAULT_NONCHORD_OCTAVE;		
+		//	
+		//	Trace(_T("Choosing Default Octave:") + OIL::ToString(ctx.octaveNumber));
+		//}
 
 		// Adjust the Notes based on KeySignature
         int nKeySig = m_KeySig.GetKey();
 
-        if ((nKeySig != 0) && (!ctx.isNatural) && (!ctx.isNumeric)) /// Key Signatures are applied only to non-numeric Notes
+        if (m_KeySig.GetMode() != KeySignature::CARNATIC && (nKeySig != 0) && (!ctx.isNatural) && (!ctx.isNumeric)) /// Key Signatures are applied only to non-numeric Notes
         {
-            switch(nKeySig)
-            {
-            case -1: if(ctx.noteNumber == 11) ctx.noteNumber = 10; break;
-            case -2: if(ctx.noteNumber == 4) ctx.noteNumber = 3; break;
-            case -3: if(ctx.noteNumber == 9) ctx.noteNumber = 8; break;
-            case -4: if(ctx.noteNumber == 2) ctx.noteNumber = 1; break;
-            case -5: if(ctx.noteNumber == 7) ctx.noteNumber = 6; break;
-            case -6: if(ctx.noteNumber == 0) { ctx.noteNumber = 11; ctx.octaveNumber--; } break;
-            case -7: if(ctx.noteNumber == 5) ctx.noteNumber = 4; break;
-            case 1: if(ctx.noteNumber == 5) ctx.noteNumber = 6; break;
-            case 2: if(ctx.noteNumber == 0) ctx.noteNumber = 1; break;
-            case 3: if(ctx.noteNumber == 7) ctx.noteNumber = 8; break;
-            case 4: if(ctx.noteNumber == 2) ctx.noteNumber = 3; break;
-            case 5: if(ctx.noteNumber == 9) ctx.noteNumber = 10; break;
-            case 6: if(ctx.noteNumber == 4) ctx.noteNumber = 5; break;
-            case 7: if(ctx.noteNumber == 11) { ctx.noteNumber = 0; ctx.octaveNumber++; } break;
-            default: break;
-            }
+            if ((nKeySig <= -1) && (ctx.noteNumber == 11)) ctx.noteNumber = 10;
+            if ((nKeySig <= -2) && (ctx.noteNumber == 4)) ctx.noteNumber = 3;
+            if ((nKeySig <= -3) && (ctx.noteNumber == 9)) ctx.noteNumber = 8;
+            if ((nKeySig <= -4) && (ctx.noteNumber == 2)) ctx.noteNumber = 1;
+            if ((nKeySig <= -5) && (ctx.noteNumber == 7)) ctx.noteNumber = 6;
+            if ((nKeySig <= -6) && (ctx.noteNumber == 0)) { ctx.noteNumber = 11; ctx.octaveNumber--; }
+            if ((nKeySig <= -7) && (ctx.noteNumber == 5)) ctx.noteNumber = 4;
+            if ((nKeySig >= +1) && (ctx.noteNumber == 5)) ctx.noteNumber = 6;
+            if ((nKeySig >= +2) && (ctx.noteNumber == 0)) ctx.noteNumber = 1;
+            if ((nKeySig >= +3) && (ctx.noteNumber == 7)) ctx.noteNumber = 8;
+            if ((nKeySig >= +4) && (ctx.noteNumber == 2)) ctx.noteNumber = 3;
+            if ((nKeySig >= +5) && (ctx.noteNumber == 9)) ctx.noteNumber = 10;
+            if ((nKeySig >= +6) && (ctx.noteNumber == 4)) ctx.noteNumber = 5;
+            if ((nKeySig >= +7) && (ctx.noteNumber == 11)) { ctx.noteNumber = 0; ctx.octaveNumber++; }
 
             Trace(_T("After adjusting for Key Signature, Note Number=") + OIL::ToString(ctx.noteNumber));
         }
@@ -562,32 +755,40 @@ namespace MusicNoteLib
 	{
 		TCHAR* pszDuration = szToken;
 
-		if(szToken[0] == NOTE_DURATION_NUMERIC) // Check if this is a numeric duration
-		{
-			bool bSuccess = false;				
-			int nLen = ParseNumber(szToken+1, &ctx.decimalDuration, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_DURATION_MACRO_END, PARSE_ERROR_DURATION_VALUE);
-			if(nLen == -1)
-				return -1;	// Some irrevocable error occured
-			if(bSuccess)
-			{			
-				pszDuration = szToken + 1 + nLen; // Update the position for next scanning
-			}
-			else
-			{
-				MString str(MString(_T("Error while reading Numeric Duration Value")));
-				if(Error(PARSE_ERROR_DURATION_VALUE, str, szToken)) return -1; 
+        // Western Mode
+        {
+		    if(szToken[0] == NOTE_DURATION_NUMERIC) // Check if this is a numeric duration
+		    {
+			    bool bSuccess = false;				
+			    int nLen = ParseNumber(szToken+1, &ctx.decimalDuration, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_DURATION_MACRO_END, PARSE_ERROR_DURATION_VALUE);
+			    if(nLen == -1)
+				    return -1;	// Some irrevocable error occured
+			    if(bSuccess)
+			    {			
+				    pszDuration = szToken + 1 + nLen; // Update the position for next scanning
+			    }
+			    else
+			    {
+				    MString str(MString(_T("Error while reading Numeric Duration Value")));
+				    if(Error(PARSE_ERROR_DURATION_VALUE, str, szToken)) return -1; 
 
-				pszDuration = szToken + 1; 
+				    pszDuration = szToken + 1; 
 
-				// If we have to ignore this error, ignore this / character	
-				Trace(_T(" Ignoring / and proceeding with ") + MString(pszDuration));
-			}
-		}
+				    // If we have to ignore this error, ignore this / character	
+				    Trace(_T(" Ignoring / and proceeding with ") + MString(pszDuration));
+			    }
+		    }
 
-		// In case Numeric Duration failed or absent, 
-		// Try reading the duration as Alphabets (such as W, H etc..)
-		if(!ctx.decimalDuration) 				
-			pszDuration += ParseLetterDuration(pszDuration, ctx);
+		    // In case Numeric Duration failed or absent, 
+		    // Try reading the duration as Alphabets (such as W, H etc..)
+		    if(!ctx.decimalDuration) 				
+			    pszDuration += ParseLetterDuration(pszDuration, ctx);
+        }
+
+        if(m_KeySig.GetMode() == KeySignature::CARNATIC) // Carnatic Mode does not have explicit Note durations
+        {
+            ctx.decimalDuration = ctx.numSwaras * 1.0f / (unsigned short) m_KeySig.GetTalam();
+        }
 
 		// if No Duration specified, Default to a Quarter note
 		if(ctx.decimalDuration == 0) 
@@ -640,6 +841,8 @@ namespace MusicNoteLib
 			case NOTE_DURATION_THIRTYSECOND: nDurationNumber = 32; break;
 			case NOTE_DURATION_SIXTYFOURTH: nDurationNumber = 64; break;
 			case NOTE_DURATION_128: nDurationNumber = 128; break;
+            case SWARA_DURATION_ONE_EXTRA: ctx.numSwaras++; nDurationNumber++; break;
+            case SWARA_DURATION_TWO_EXTRA: ctx.numSwaras += 2; nDurationNumber++; break;
 			}
 			if(nDurationNumber > 0)
 			{
@@ -709,7 +912,7 @@ namespace MusicNoteLib
 	}
 
 
-	/// <Summary> Parses Attach and Decay velocities of notes </Summary>		
+	/// <Summary> Parses Attack and Decay velocities of notes </Summary>		
 	int MusicStringParser::ParseNoteVelocity(TCHAR* szToken, NoteContext& ctx)
 	{
 		if(ctx.isRest)
@@ -726,6 +929,7 @@ namespace MusicNoteLib
 
 			switch(pszVelocity[0])
 			{
+            case NOTE_VELOCITY:
 			case NOTE_VELOCITY_ATTACK: bAttack = true; break;
 			case NOTE_VELOCITY_DECAY: bDecay = true; break;
 			default: 
