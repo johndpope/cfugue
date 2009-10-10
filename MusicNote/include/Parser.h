@@ -132,7 +132,7 @@ namespace MusicNoteLib
 		/// procedure, to halt the processing immediately. By default it would be False (meaning the parser
 		/// should continue its best to resolve the token ignoring the error).
 		///
-		/// Note that, when there are multiple listeners for the event, options set by one listener might be
+		/// %Note that, when there are multiple listeners for the event, options set by one listener might be
 		/// overriden by the next listener. Parser only respects the last value it sees. So, use care while
 		/// dealing with multiple listeners, and ensure that they do not use conflicting settings.
 		///

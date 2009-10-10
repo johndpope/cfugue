@@ -120,13 +120,13 @@ namespace MusicNoteLib
 		/// </Summary>
         /// Example Usage:
         /** <pre>
-            void OnParseTrace(const MusicNoteLib::CParser*, MusicNoteLib::MusicStringParser::TraceEventHandlerArgs* pEvArgs)
+            void OnParseTrace(const MusicNoteLib::CParser*, MusicNoteLib::CParser::TraceEventHandlerArgs* pEvArgs)
             {
                 OutputDebugString(_T("\n"));
                 OutputDebugString(pEvArgs->szTraceMsg);
             }
 
-            void OnParseError(const MusicNoteLib::CParser*, MusicNoteLib::MusicStringParser::ErrorEventHandlerArgs* pEvArgs)
+            void OnParseError(const MusicNoteLib::CParser*, MusicNoteLib::CParser::ErrorEventHandlerArgs* pEvArgs)
             {
                 OutputDebugString(_T("\nError --> "));
                 OutputDebugString(pEvArgs->szErrMsg);
