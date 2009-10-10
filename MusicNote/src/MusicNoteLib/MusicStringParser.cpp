@@ -787,7 +787,7 @@ namespace MusicNoteLib
 
         if(m_KeySig.GetMode() == KeySignature::CARNATIC) // Carnatic Mode does not have explicit Note durations
         {
-            ctx.decimalDuration = ctx.numSwaras * 1.0f / (unsigned short) m_KeySig.GetTalam();
+            ctx.decimalDuration = ctx.numSwaras * 1.0f / 8.0;//(unsigned short) m_KeySig.GetTalam();
         }
 
 		// if No Duration specified, Default to a Quarter note

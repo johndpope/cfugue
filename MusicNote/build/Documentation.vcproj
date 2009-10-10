@@ -72,6 +72,10 @@
 			RelativePath=".\doxyfooter.html"
 			>
 		</File>
+		<File
+			RelativePath=".\doxygen.css"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
