@@ -93,7 +93,7 @@ namespace MusicNoteLib
             PARSE_ERROR_TALAM_MAXLIMIT,         ///< Specified a Talam beyond permitted range [0, 35]
 			PARSE_ERROR_SPEED_MACRO_END,	    ///< MACRO_END missing while parsing a Speed Macro.			
 			PARSE_ERROR_SPEED_VALUE,		    ///< Failure while converting/retrieving a Speed number.
-            PARSE_ERROR_SPEED_MAXLIMIT,         ///< Specified a Speed beyond permitted range [0, 3]
+            PARSE_ERROR_SPEED_MAXLIMIT,         ///< Specified a Speed beyond permitted range [1, 6]
 			PARSE_ERROR_LAYER_MACRO_END,	    ///< MACRO_END missing while parsing a Layer Macro.			
 			PARSE_ERROR_LAYER_VALUE,		    ///< Failure while converting/retrieving a Layer number.
 			PARSE_ERROR_TEMPO_MACRO_END,	    ///< MACRO_END missing while parsing a Tempo Macro.			

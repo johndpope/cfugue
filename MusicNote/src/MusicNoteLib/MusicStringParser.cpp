@@ -125,6 +125,8 @@ namespace MusicNoteLib
 
         switch(szUppercaseToken[0])
         {
+        case TOKEN_DOUBLESPEED_END:
+        case TOKEN_DOUBLESPEED_START: bRetVal = ParseSpeedModulatorToken(szUppercaseToken, &bNonContinuableErrorOccured); break;
         case TOKEN_START_VOICE: bRetVal = ParseVoiceToken(szUppercaseToken+1, &bNonContinuableErrorOccured); break; 
         case TOKEN_START_TEMPO:	bRetVal = ParseTempoToken(szUppercaseToken+1, &bNonContinuableErrorOccured);  break; 
         case TOKEN_START_INSTRUMENT: bRetVal = ParseInstrumentToken(szUppercaseToken+1, &bNonContinuableErrorOccured);  break; 
@@ -147,6 +149,38 @@ namespace MusicNoteLib
 		return bRetVal;
 	}
 
+    bool MusicStringParser::ParseSpeedModulatorToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured)
+    {
+        TCHAR* pszToken = szToken;
+
+        unsigned short nSpeed = m_KeySig.Speed();
+
+        while(*pszToken != NULL)
+        {
+            switch(pszToken[0])
+            {
+            case TOKEN_DOUBLESPEED_START: nSpeed++; break;
+            case TOKEN_DOUBLESPEED_END: nSpeed--; break;
+            }
+            pszToken++;
+        }
+
+        if(nSpeed > 6 || nSpeed <= 0)
+        {
+			MString str(_T("Speed ") + OIL::ToString(nSpeed) + _T(" is beyond the range [1, 6]"));
+            if(Error(PARSE_ERROR_SPEED_MAXLIMIT, str, szToken)) { *pbNonContinuableErrorOccured = true; return false;}; // if we should stop processing any further
+			if(nSpeed <= 0)
+                nSpeed = 1;
+            else if(nSpeed > 6)
+                nSpeed = 6;
+        }
+
+        m_KeySig.Speed() = nSpeed;
+
+		Trace(MString(_T("MusicStringParser::ParseSpeedModulatorToken Speed = ")) + OIL::ToString(m_KeySig.Speed()));
+
+        return true;
+    }
 		
     bool MusicStringParser::ParseVoiceToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured)
     {
@@ -298,6 +332,8 @@ namespace MusicNoteLib
                     nValue = KeySignature::DEFAULT_RAGAM; // if we need to continue despite the error, use default Value
 			    }
 
+			    Trace(MString(_T(" Mela = ")) + OIL::ToString(nValue));
+
                 m_KeySig.SetRagam(nValue);
 
                 // NOTE: We do not RaiseEvent for the Carnatic Mode KeySignature
@@ -308,7 +344,7 @@ namespace MusicNoteLib
 
                 if(nValue >= 64) nValue = nValue - 64;
 
-			    Trace(MString(_T("MusicStringParser::ParseKeySignatureToken: KeySignature = ")) + OIL::ToString(nValue)
+			    Trace(MString(_T(" KeySignature = ")) + OIL::ToString(nValue)
                     + MString(_T(" Scale = ")) + (bScale == KeySignature::MAJOR_SCALE ? _T("Major") : _T("Minor")) );
 
 			    if(nValue >= 15) // Ensure the Range. Valid Range: [0, 14]
@@ -345,13 +381,15 @@ namespace MusicNoteLib
                     nTalam = m_KeySig.GetTalam(); // if we need to continue despite the error, use existing Value
 	            }
             }
+			    
+            Trace(MString(_T(" Talam = ")) + OIL::ToString(nTalam));
         }
         else {  Trace(MString(_T(" No Talam Specified !! Using Talam: ")) + OIL::ToString(nTalam));   }
 
         m_KeySig.SetTalam(nTalam);
 
         // Check for Speed specifier
-        szToken += nLen; unsigned short nSpeed = m_KeySig.GetSpeed();
+        szToken += nLen; unsigned short nSpeed = m_KeySig.Speed();
         if(szToken[0] == _T('S')) // is there a Speed specifier ?
         {
             nLen = ParseNumber(++szToken, &nSpeed, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_SPEED_MACRO_END, PARSE_ERROR_SPEED_VALUE);
@@ -362,13 +400,15 @@ namespace MusicNoteLib
 	            {
 		            MString str(_T("Speed ") + OIL::ToString(nSpeed) + _T(" is beyond the range [1 ~ 6]"));
                     if(Error(PARSE_ERROR_SPEED_MAXLIMIT, str, szToken)) { *pbNonContinuableErrorOccured = true; return false;}; // if we should stop processing any further
-                    nSpeed = m_KeySig.GetSpeed(); // if we need to continue despite the error, use existing Value
+                    nSpeed = m_KeySig.Speed(); // if we need to continue despite the error, use existing Value
 	            }
             }
+
+            Trace(MString(_T(" Speed = ")) + OIL::ToString(nSpeed));
         }
         else {  Trace(MString(_T(" No Speed Specified !! Using Speed: ")) + OIL::ToString(nSpeed));   }
 
-        m_KeySig.SetSpeed((KeySignature::Speed)nSpeed);
+        m_KeySig.Speed() = nSpeed;
 
 		return true;
     }
@@ -706,25 +746,33 @@ namespace MusicNoteLib
 		// Adjust the Notes based on KeySignature
         int nKeySig = m_KeySig.GetKey();
 
-        if (m_KeySig.GetMode() != KeySignature::CARNATIC && (nKeySig != 0) && (!ctx.isNatural) && (!ctx.isNumeric)) /// Key Signatures are applied only to non-numeric Notes
+        if(m_KeySig.GetMode() == KeySignature::CARNATIC)
         {
-            if ((nKeySig <= -1) && (ctx.noteNumber == 11)) ctx.noteNumber = 10;
-            if ((nKeySig <= -2) && (ctx.noteNumber == 4)) ctx.noteNumber = 3;
-            if ((nKeySig <= -3) && (ctx.noteNumber == 9)) ctx.noteNumber = 8;
-            if ((nKeySig <= -4) && (ctx.noteNumber == 2)) ctx.noteNumber = 1;
-            if ((nKeySig <= -5) && (ctx.noteNumber == 7)) ctx.noteNumber = 6;
-            if ((nKeySig <= -6) && (ctx.noteNumber == 0)) { ctx.noteNumber = 11; ctx.octaveNumber--; }
-            if ((nKeySig <= -7) && (ctx.noteNumber == 5)) ctx.noteNumber = 4;
-            if ((nKeySig >= +1) && (ctx.noteNumber == 5)) ctx.noteNumber = 6;
-            if ((nKeySig >= +2) && (ctx.noteNumber == 0)) ctx.noteNumber = 1;
-            if ((nKeySig >= +3) && (ctx.noteNumber == 7)) ctx.noteNumber = 8;
-            if ((nKeySig >= +4) && (ctx.noteNumber == 2)) ctx.noteNumber = 3;
-            if ((nKeySig >= +5) && (ctx.noteNumber == 9)) ctx.noteNumber = 10;
-            if ((nKeySig >= +6) && (ctx.noteNumber == 4)) ctx.noteNumber = 5;
-            if ((nKeySig >= +7) && (ctx.noteNumber == 11)) { ctx.noteNumber = 0; ctx.octaveNumber++; }
-
-            Trace(_T("After adjusting for Key Signature, Note Number=") + OIL::ToString(ctx.noteNumber));
+            if(!ctx.isNatural && !ctx.isNumeric) // Key Signatures are applied only to non-numeric Notes
+                ctx.noteNumber = KeySignature::LookupSwaraSthanaForMela(ctx.noteNumber, nKeySig);
         }
+        else // Western Mode
+        {
+            if ((nKeySig != 0) && (!ctx.isNatural) && (!ctx.isNumeric)) // Key Signatures are applied only to non-numeric Notes
+            {
+                if ((nKeySig <= -1) && (ctx.noteNumber == 11)) ctx.noteNumber = 10;
+                if ((nKeySig <= -2) && (ctx.noteNumber == 4)) ctx.noteNumber = 3;
+                if ((nKeySig <= -3) && (ctx.noteNumber == 9)) ctx.noteNumber = 8;
+                if ((nKeySig <= -4) && (ctx.noteNumber == 2)) ctx.noteNumber = 1;
+                if ((nKeySig <= -5) && (ctx.noteNumber == 7)) ctx.noteNumber = 6;
+                if ((nKeySig <= -6) && (ctx.noteNumber == 0)) { ctx.noteNumber = 11; ctx.octaveNumber--; }
+                if ((nKeySig <= -7) && (ctx.noteNumber == 5)) ctx.noteNumber = 4;
+                if ((nKeySig >= +1) && (ctx.noteNumber == 5)) ctx.noteNumber = 6;
+                if ((nKeySig >= +2) && (ctx.noteNumber == 0)) ctx.noteNumber = 1;
+                if ((nKeySig >= +3) && (ctx.noteNumber == 7)) ctx.noteNumber = 8;
+                if ((nKeySig >= +4) && (ctx.noteNumber == 2)) ctx.noteNumber = 3;
+                if ((nKeySig >= +5) && (ctx.noteNumber == 9)) ctx.noteNumber = 10;
+                if ((nKeySig >= +6) && (ctx.noteNumber == 4)) ctx.noteNumber = 5;
+                if ((nKeySig >= +7) && (ctx.noteNumber == 11)) { ctx.noteNumber = 0; ctx.octaveNumber++; }
+            }
+        }
+
+        Trace(_T("After adjusting for Key, Note Number=") + OIL::ToString(ctx.noteNumber));
 		
 		if(!ctx.isNumeric) // if this is a non-numeric note, compute its value from octave and local note value
 		{
@@ -787,7 +835,7 @@ namespace MusicNoteLib
 
         if(m_KeySig.GetMode() == KeySignature::CARNATIC) // Carnatic Mode does not have explicit Note durations
         {
-            ctx.decimalDuration = ctx.numSwaras * 1.0f / 8.0;//(unsigned short) m_KeySig.GetTalam();
+            ctx.decimalDuration = ctx.numSwaras * 1.0f / (4.0 * pow((double)2.0f, (double)m_KeySig.Speed()-1));//(unsigned short) m_KeySig.GetTalam();
         }
 
 		// if No Duration specified, Default to a Quarter note
@@ -800,7 +848,7 @@ namespace MusicNoteLib
 		int nTupletLen = ParseTuplet(pszDuration, ctx);
 		if(nTupletLen < 0) return -1; // some irrevocable error happened
 
-		ctx.duration = (long) (120.0 * ctx.decimalDuration);	//TODO: Compute the duration based on the current Tempo
+		ctx.duration = (long) (128.0 * ctx.decimalDuration);	//TODO: Compute the duration based on the current Tempo
 
 		Trace(_T("Actual Duration is: ") + OIL::ToString(ctx.duration));
 
@@ -829,7 +877,7 @@ namespace MusicNoteLib
 				pszDuration++;
 			}
 
-			int nDurationNumber = 0;
+			double nDurationNumber = 0;
 
 			switch(pszDuration[0])
 			{
@@ -841,8 +889,8 @@ namespace MusicNoteLib
 			case NOTE_DURATION_THIRTYSECOND: nDurationNumber = 32; break;
 			case NOTE_DURATION_SIXTYFOURTH: nDurationNumber = 64; break;
 			case NOTE_DURATION_128: nDurationNumber = 128; break;
-            case SWARA_DURATION_ONE_EXTRA: ctx.numSwaras++; nDurationNumber++; break;
-            case SWARA_DURATION_TWO_EXTRA: ctx.numSwaras += 2; nDurationNumber++; break;
+            case SWARA_DURATION_ONE_EXTRA: ctx.numSwaras++; nDurationNumber = 1; break;
+            case SWARA_DURATION_TWO_EXTRA: ctx.numSwaras += 2; nDurationNumber = 0.5; break;
 			}
 			if(nDurationNumber > 0)
 			{

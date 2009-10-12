@@ -30,6 +30,10 @@ namespace MusicNoteLib
 			TOKEN_START_DICTIONARY		= _T('$'),  ///< Specifies a Dictionary token
 			TOKEN_START_NOTE			= _T('['),  ///< Specifies a Note token
 
+            // Talam Related
+            TOKEN_DOUBLESPEED_START     = _T('('),  ///< Specifies the start of 2x speed
+            TOKEN_DOUBLESPEED_END       = _T(')'),  ///< Specifies the end of 2x speed
+
 			// Dictionary Related
 			ASSIGNMENT_SYMBOL			= _T('='),
 
@@ -60,17 +64,17 @@ namespace MusicNoteLib
 			SWARA_S	= _T('S'),
 			SWARA_S_Value	= 0,
 			SWARA_R	= _T('R'),
-			SWARA_R_Value	= 2,
+			SWARA_R_Value	= 1,
 			SWARA_G	= _T('G'),
-			SWARA_G_Value   = 4,
+			SWARA_G_Value   = 2,
 			SWARA_M	= _T('M'),
-			SWARA_M_Value	= 5,
+			SWARA_M_Value	= 3,
 			SWARA_P	= _T('P'),
-			SWARA_P_Value	= 7,
+			SWARA_P_Value	= 4,
 			SWARA_D	= _T('D'),
-			SWARA_D_Value	= 9,
+			SWARA_D_Value	= 5,
 			SWARA_N	= _T('N'),
-			SWARA_N_Value	= 11,
+			SWARA_N_Value	= 6,
 		};
 
 		/// <Summary> Note Modifiers</Summary>
@@ -251,6 +255,7 @@ namespace MusicNoteLib
 
 	private:
 		// Token Parserer Methods. Return value indicates success or failure.
+        bool ParseSpeedModulatorToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
 		bool ParseVoiceToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
 		bool ParseTempoToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
 		bool ParseInstrumentToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
