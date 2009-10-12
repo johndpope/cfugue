@@ -66,30 +66,29 @@ namespace MusicNoteLib
     public:
         enum Scale      { MAJOR_SCALE = 0, MINOR_SCALE = 1 }; ///< Scale Identifiers [Western Mode]
         enum Mode       { WESTERN =0, CARNATIC = 1 };   ///< Music Mode Identifiers
-        enum Speed      { GEETAM = 1, VARNAM = 2,  };   ///< Song Speed Identifiers [Carnatic Mode]
         enum Defaults   { DEFAULT_KEY = 0, DEFAULT_RAGAM = 29 }; ///< Default Values
 
     protected:
         signed short m_nKeySig;   // Values are in the range [-7, 7] for Western, and in the range [1, 72] for Carnatic
         Scale m_bScale; // Indicates Major scale or Minor scale for Western Mode
         Mode  m_bMode;  // Indicates Carnatic Mode or Western Mode
-        Talam m_nTalam; // Indicates Talam (in Carnatic Mode)
-        Speed m_nSpeed; // Indicates Speed (in Carnatic Mode)
+        Talam m_nTalam; // Indicates Talam [Carnatic Mode]
+        unsigned short m_nSpeed; // Indicates Speed [Carnatic Mode]
 
     public:
         /// Default constructor
         inline KeySignature() 
-            : m_nKeySig(DEFAULT_KEY), m_bScale(MAJOR_SCALE), m_bMode(WESTERN), m_nSpeed(VARNAM)
+            : m_nKeySig(DEFAULT_KEY), m_bScale(MAJOR_SCALE), m_bMode(WESTERN), m_nSpeed(1)
         { }
 
         /// Western Mode constructor
         inline KeySignature(const signed short nKeySig, const Scale bScale)
-            : m_nKeySig(nKeySig), m_bScale(bScale), m_bMode(WESTERN), m_nSpeed(VARNAM)
+            : m_nKeySig(nKeySig), m_bScale(bScale), m_bMode(WESTERN), m_nSpeed(1)
         { }
 
         /// Carnatic Mode constructor
         inline KeySignature(const unsigned short nRagam, const unsigned short nTalam)
-            : m_nKeySig(nRagam), m_bScale(MAJOR_SCALE), m_bMode(CARNATIC), m_nTalam(nTalam), m_nSpeed(VARNAM)
+            : m_nKeySig(nRagam), m_bScale(MAJOR_SCALE), m_bMode(CARNATIC), m_nTalam(nTalam), m_nSpeed(1)
         {
         }
 
@@ -126,14 +125,9 @@ namespace MusicNoteLib
         /// @param talam The Talam value to be used from now on
         inline void SetTalam(const Talam& talam) { m_nTalam = talam; }
 
-        /// \brief Sets the Song Speed.
-        /// Valid only when the Mode is set to KeySignature::CARNATIC. Use GetMode()
-        /// to verify the Mode.
-        inline void SetSpeed(const Speed nSpeed) { m_nSpeed = nSpeed; }
-
         /// \brief Returns the current Song speed.
         /// Valid only for Carnatic Mode. Use GetMode() to verify the Mode.
-        inline Speed GetSpeed() const { return m_nSpeed; }
+        inline unsigned short& Speed() { return m_nSpeed; }
 
         /// Populates the standard KeySignature Macro defintions into Music String Dictionary
         inline static void PopulateStandardDefinitions(DICTIONARY& stdDefns)
@@ -300,6 +294,102 @@ namespace MusicNoteLib
             stdDefns[_T("MELA_DEFAULT")]  = _T("157");
             stdDefns[_T("MELA")]          = _T("157");
 
+            // Carnatic name mappings to the Melakartha Janya Ragas
+            stdDefns[_T("KANAKANGI")]     = stdDefns[_T("MELA_1")];
+            stdDefns[_T("RATNANGI")]      = stdDefns[_T("MELA_2")];
+            stdDefns[_T("GANAMURTHI")]    = stdDefns[_T("MELA_3")];
+            stdDefns[_T("VANASPATHI")]    = stdDefns[_T("MELA_4")];
+            stdDefns[_T("MANAVATHI")]     = stdDefns[_T("MELA_5")];
+            stdDefns[_T("TANARUPI")]      = stdDefns[_T("MELA_6")];
+
+            stdDefns[_T("SENAVATHI")]     = stdDefns[_T("MELA_7")];
+            stdDefns[_T("HANUMATHODI")]   = stdDefns[_T("MELA_8")];
+            stdDefns[_T("DHENUKA")]       = stdDefns[_T("MELA_9")];
+            stdDefns[_T("NATAKAPRIYA")]   = stdDefns[_T("MELA_10")];
+            stdDefns[_T("KOKILAPRIYA")]   = stdDefns[_T("MELA_11")];
+            stdDefns[_T("RUPAVATHI")]     = stdDefns[_T("MELA_12")];
+
+            stdDefns[_T("GAYAKAPRIYA")]   = stdDefns[_T("MELA_13")];
+            stdDefns[_T("VAKULABHARANAM")]= stdDefns[_T("MELA_14")];
+            stdDefns[_T("MAYAMALAVAGOWLA")] = stdDefns[_T("MELA_15")];
+            stdDefns[_T("CHAKRAVAKAM")]   = stdDefns[_T("MELA_16")];
+            stdDefns[_T("SURYAKANTHAM")]  = stdDefns[_T("MELA_17")];
+            stdDefns[_T("HATAKAMBARI")]   = stdDefns[_T("MELA_18")];
+
+            stdDefns[_T("JHANKARADHWANI")]= stdDefns[_T("MELA_19")];
+            stdDefns[_T("NATABHAIRAVI")]  = stdDefns[_T("MELA_20")];
+            stdDefns[_T("KEERAVANI")]     = stdDefns[_T("MELA_21")];
+            stdDefns[_T("KHARAHARAPRIYA")]= stdDefns[_T("MELA_22")];
+            stdDefns[_T("GOWRIMANOHARI")] = stdDefns[_T("MELA_23")];
+            stdDefns[_T("VARUNAPRIYA")]   = stdDefns[_T("MELA_24")];
+
+            stdDefns[_T("MARARANJANI")]   = stdDefns[_T("MELA_25")];
+            stdDefns[_T("CHARUKESHI")]    = stdDefns[_T("MELA_26")];
+            stdDefns[_T("SARASANGI")]     = stdDefns[_T("MELA_27")];
+            stdDefns[_T("HARIKHAMBHOJI")] = stdDefns[_T("MELA_28")];
+            stdDefns[_T("DHEERASHANKARABHARANAM")] = stdDefns[_T("MELA_29")];
+            stdDefns[_T("SHANKARABHARANAM")] = stdDefns[_T("MELA_29")];
+            stdDefns[_T("NAGANANDINI")]   = stdDefns[_T("MELA_30")];
+
+            stdDefns[_T("YAGAPRIYA")]     = stdDefns[_T("MELA_31")];
+            stdDefns[_T("RAGAVARDHINI")]  = stdDefns[_T("MELA_32")];
+            stdDefns[_T("GANGEYABHUSHINI")]= stdDefns[_T("MELA_33")];
+            stdDefns[_T("VAGADHISHWARI")] = stdDefns[_T("MELA_34")];
+            stdDefns[_T("SHULINI")]       = stdDefns[_T("MELA_35")];
+            stdDefns[_T("CHALANATTAI")]   = stdDefns[_T("MELA_36")];
+
+            stdDefns[_T("SALAGAM")]       = stdDefns[_T("MELA_37")];
+            stdDefns[_T("JALARNAVAM")]    = stdDefns[_T("MELA_38")];
+            stdDefns[_T("JHALAVARALI")]   = stdDefns[_T("MELA_39")];
+            stdDefns[_T("NAVANEETHAM")]   = stdDefns[_T("MELA_40")];
+            stdDefns[_T("PAVANI")]        = stdDefns[_T("MELA_41")];
+            stdDefns[_T("RAGHUPRIYA")]    = stdDefns[_T("MELA_42")];
+
+            stdDefns[_T("GAVAMBODHI")]    = stdDefns[_T("MELA_43")];
+            stdDefns[_T("BHAVAPRIYA")]    = stdDefns[_T("MELA_44")];
+            stdDefns[_T("SHUBHAPANTUVARALI")] = stdDefns[_T("MELA_45")];
+            stdDefns[_T("PANTUVARALI")]   = stdDefns[_T("MELA_45")];
+            stdDefns[_T("SHADVIDHAMARGINI")]  = stdDefns[_T("MELA_46")];
+            stdDefns[_T("SUVARNANGI")]    = stdDefns[_T("MELA_47")];
+            stdDefns[_T("DIVYAMANI")]     = stdDefns[_T("MELA_48")];
+
+            stdDefns[_T("DHAVALAMBARI")]  = stdDefns[_T("MELA_49")];
+            stdDefns[_T("NAMANARAYANI")]  = stdDefns[_T("MELA_50")];
+            stdDefns[_T("KAMAVARDHINI")]  = stdDefns[_T("MELA_51")];
+            stdDefns[_T("RAMAPRIYA")]     = stdDefns[_T("MELA_52")];
+            stdDefns[_T("GAMANASHRAMA")]  = stdDefns[_T("MELA_53")];
+            stdDefns[_T("VISHWAMBHARI")]  = stdDefns[_T("MELA_54")];
+
+            stdDefns[_T("SHYAMALANGI")]   = stdDefns[_T("MELA_55")];
+            stdDefns[_T("SHANMUKHAPRIYA")]= stdDefns[_T("MELA_56")];
+            stdDefns[_T("SIMHENDRAMADHYAMAM")] = stdDefns[_T("MELA_57")];
+            stdDefns[_T("HEMAVATHI")]     = stdDefns[_T("MELA_58")];
+            stdDefns[_T("DHARMAVATHI")]   = stdDefns[_T("MELA_59")];
+            stdDefns[_T("NEETHIMATHI")]   = stdDefns[_T("MELA_60")];
+
+            stdDefns[_T("KANTHAMANI")]    = stdDefns[_T("MELA_61")];
+            stdDefns[_T("RISHABHAPRIYA")] = stdDefns[_T("MELA_62")];
+            stdDefns[_T("LATHANGI")]      = stdDefns[_T("MELA_63")];
+            stdDefns[_T("VACHASPATHI")]   = stdDefns[_T("MELA_64")];
+            stdDefns[_T("MECHAKALYANI")]  = stdDefns[_T("MELA_65")];
+            stdDefns[_T("KALYANI")]       = stdDefns[_T("MELA_65")];
+            stdDefns[_T("CHITRAMBARI")]   = stdDefns[_T("MELA_66")];
+
+            stdDefns[_T("SUCHARITRA")]    = stdDefns[_T("MELA_67")];
+            stdDefns[_T("JYOTHISWARUPINI")] = stdDefns[_T("MELA_68")];
+            stdDefns[_T("DHATUVARDHINI")] = stdDefns[_T("MELA_69")];
+            stdDefns[_T("NASIKABHUSHINI")]= stdDefns[_T("MELA_70")];
+            stdDefns[_T("KOSALAM")]       = stdDefns[_T("MELA_71")];
+            stdDefns[_T("RASIKAPRIYA")]   = stdDefns[_T("MELA_72")];
+
+            stdDefns[_T("BILAHARI")]      = stdDefns[_T("MELA_29")];
+            stdDefns[_T("HAMSADHWANI")]   = stdDefns[_T("MELA_29")];
+            stdDefns[_T("HINDOLAM")]      = stdDefns[_T("MELA_20")];
+            stdDefns[_T("KAMBHOJI")]      = stdDefns[_T("MELA_28")];
+            stdDefns[_T("MADHYAMAVATHI")] = stdDefns[_T("MELA_22")];
+            stdDefns[_T("MOHANAM")]       = stdDefns[_T("MELA_28")];
+            stdDefns[_T("NEELAMBARI")]    = stdDefns[_T("MELA_29")];
+            
             // Special Identifiers to Restore the Previous Scale/Raga while Switching the Mode
             stdDefns[_T("CARNATIC")]      = _T("256");
             stdDefns[_T("WESTERN")]       = _T("256");
@@ -325,6 +415,132 @@ namespace MusicNoteLib
             stdDefns[_T("FOURTH")]      = _T("4");
             stdDefns[_T("FIFTH")]       = _T("5");
             stdDefns[_T("SIXTH")]       = _T("6");
+       }
+
+       /// Takes a plain Swara and converts it to the correct value based on the supplied Melakartha Raga.
+       /// @param nSwara the Swara to be looked up. A value in the range [0, 6]
+       /// @param nMela the index of the Mela the Swara sthana is being looked for. A value in the range [1, 72]
+       /// @return A value in the range [0, 11] indicating the Swara sthana as per the Mela
+       inline static unsigned short LookupSwaraSthanaForMela(short nSwara, unsigned short nMela)
+       {
+            enum SwaraSthanas 
+                { S=0, R1=1, R2=2, R3=3, 
+                       G1=2, G2=3, G3=4,
+                       M1=5, M2=6,
+                  P=7, D1=8, D2=9, D3=10,
+                       N1=9, N2=10,N3=11
+                } ragaSwaraSthanas[][7]=
+                {
+                    { S, R2, G3, M1, P, D2, N3 }, // Mela_0 same as Mela_29
+                    { S, R1, G1, M1, P, D1, N1 }, // Mela_1
+                    { S, R1, G1, M1, P, D1, N2 }, // Mela_2
+                    { S, R1, G1, M1, P, D1, N3 }, // Mela_3
+                    { S, R1, G1, M1, P, D2, N2 }, // Mela_4
+                    { S, R1, G1, M1, P, D2, N3 }, // Mela_5
+                    { S, R1, G1, M1, P, D3, N3 }, // Mela_6
+                    { S, R1, G2, M1, P, D1, N1 }, // Mela_7
+                    { S, R1, G2, M1, P, D1, N2 }, // Mela_8
+                    { S, R1, G2, M1, P, D1, N3 }, // Mela_9
+                    { S, R1, G2, M1, P, D2, N2 }, // Mela_10
+                    { S, R1, G2, M1, P, D2, N3 }, // Mela_11
+                    { S, R1, G2, M1, P, D3, N3 }, // Mela_12
+                    { S, R1, G3, M1, P, D1, N1 }, // Mela_13
+                    { S, R1, G3, M1, P, D1, N2 }, // Mela_14
+                    { S, R1, G3, M1, P, D1, N3 }, // Mela_15
+                    { S, R1, G3, M1, P, D2, N2 }, // Mela_16
+                    { S, R1, G3, M1, P, D2, N3 }, // Mela_17
+                    { S, R1, G3, M1, P, D3, N3 }, // Mela_18
+                    { S, R2, G2, M1, P, D1, N1 }, // Mela_19
+                    { S, R2, G2, M1, P, D1, N2 }, // Mela_20
+                    { S, R2, G2, M1, P, D1, N3 }, // Mela_21
+                    { S, R2, G2, M1, P, D2, N2 }, // Mela_22
+                    { S, R2, G2, M1, P, D2, N3 }, // Mela_23
+                    { S, R2, G2, M1, P, D3, N3 }, // Mela_24
+                    { S, R2, G3, M1, P, D1, N1 }, // Mela_25
+                    { S, R2, G3, M1, P, D1, N2 }, // Mela_26
+                    { S, R2, G3, M1, P, D1, N3 }, // Mela_27
+                    { S, R2, G3, M1, P, D2, N2 }, // Mela_28
+                    { S, R2, G3, M1, P, D2, N3 }, // Mela_29
+                    { S, R2, G3, M1, P, D3, N3 }, // Mela_30
+                    { S, R3, G3, M1, P, D1, N1 }, // Mela_31
+                    { S, R3, G3, M1, P, D1, N2 }, // Mela_32
+                    { S, R3, G3, M1, P, D1, N3 }, // Mela_33
+                    { S, R3, G3, M1, P, D2, N2 }, // Mela_34
+                    { S, R3, G3, M1, P, D2, N3 }, // Mela_35
+                    { S, R3, G3, M1, P, D3, N3 }, // Mela_36
+                    { S, R1, G1, M2, P, D1, N1 }, // Mela_37
+                    { S, R1, G1, M2, P, D1, N2 }, // Mela_38
+                    { S, R1, G1, M2, P, D1, N3 }, // Mela_39
+                    { S, R1, G1, M2, P, D2, N2 }, // Mela_40
+                    { S, R1, G1, M2, P, D2, N3 }, // Mela_41
+                    { S, R1, G1, M2, P, D3, N3 }, // Mela_42
+                    { S, R1, G2, M2, P, D1, N1 }, // Mela_43
+                    { S, R1, G2, M2, P, D1, N2 }, // Mela_44
+                    { S, R1, G2, M2, P, D1, N3 }, // Mela_45
+                    { S, R1, G2, M2, P, D2, N2 }, // Mela_46
+                    { S, R1, G2, M2, P, D2, N3 }, // Mela_47
+                    { S, R1, G2, M2, P, D3, N3 }, // Mela_48
+                    { S, R1, G3, M2, P, D1, N1 }, // Mela_49
+                    { S, R1, G3, M2, P, D1, N2 }, // Mela_50
+                    { S, R1, G3, M2, P, D1, N3 }, // Mela_51
+                    { S, R1, G3, M2, P, D2, N2 }, // Mela_52
+                    { S, R1, G3, M2, P, D2, N3 }, // Mela_53
+                    { S, R1, G3, M2, P, D3, N3 }, // Mela_54
+                    { S, R2, G2, M2, P, D1, N1 }, // Mela_55
+                    { S, R2, G2, M2, P, D1, N2 }, // Mela_56
+                    { S, R2, G2, M2, P, D1, N3 }, // Mela_57
+                    { S, R2, G2, M2, P, D2, N2 }, // Mela_58
+                    { S, R2, G2, M2, P, D2, N3 }, // Mela_59
+                    { S, R2, G2, M2, P, D3, N3 }, // Mela_60
+                    { S, R2, G3, M2, P, D1, N1 }, // Mela_61
+                    { S, R2, G3, M2, P, D1, N2 }, // Mela_62
+                    { S, R2, G3, M2, P, D1, N3 }, // Mela_63
+                    { S, R2, G3, M2, P, D2, N2 }, // Mela_64
+                    { S, R2, G3, M2, P, D2, N3 }, // Mela_65
+                    { S, R2, G3, M2, P, D3, N3 }, // Mela_66
+                    { S, R3, G3, M2, P, D1, N1 }, // Mela_67
+                    { S, R3, G3, M2, P, D1, N2 }, // Mela_68
+                    { S, R3, G3, M2, P, D1, N3 }, // Mela_69
+                    { S, R3, G3, M2, P, D2, N2 }, // Mela_70
+                    { S, R3, G3, M2, P, D2, N3 }, // Mela_71
+                    { S, R3, G3, M2, P, D3, N3 }, // Mela_72
+                };
+       
+            return ragaSwaraSthanas[nMela][nSwara];
+
+            /* SwaraSthanas generator code
+
+            int nRagaCount = 1;
+
+            printf( "\nenum SwaraSthanas "
+                    "\n    { S=0, R1=1, R2=2, R3=3, "
+                    "\n           G1=2, G2=3, G3=4,"
+                    "\n           M1=5, M2=6,"
+                    "\n      P=7, D1=8, D2=9, D3=10,"
+                    "\n           N1=9, N2=10,N3=11"
+                    "\n    } ragaSwaraSthanas[][7]="
+                    "\n    {"
+                    "\n        { S, R2, G3, M1, P, D2, N3 }, // Mela_0 same as Mela_29" );
+
+            for(int m=1; m <=2 ; ++m)
+            {
+                for(int r=1; r <= 3; ++r)
+                {
+                    for(int g=r; g <= 3; ++g)
+                    {
+                            for(int d=1; d <= 3; ++d)
+                            {
+                                for(int n=d; n <= 3; ++n, nRagaCount++)
+                                {
+                                    printf("\n        { S, R%d, G%d, M%d, P, D%d, N%d }, // Mela_%d", r, g, m, d, n, nRagaCount);
+                                }
+                            }
+                    }
+                }
+            }
+
+            printf("\n    };\n");
+            */
        }
 
     };
