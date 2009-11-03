@@ -35,7 +35,7 @@ namespace PlayerTestApp
         [DllImport("MusicNoteDll.Dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern void Parse([MarshalAs(UnmanagedType.LPStr)] String szMusicNotes, 
                                         [MarshalAs(UnmanagedType.FunctionPtr)] ParserTraceDelegate d,
-                                        IntPtr callbackData);
+                                        IntPtr userData);
 
         [DllImport("MusicNoteDll.Dll")]
         public static extern bool PlayMusicString([MarshalAs(UnmanagedType.LPStr)] String szMusicNotes);

@@ -128,6 +128,19 @@ int _tmain(int argc, _TCHAR* argv[])
     //if(false == player.SaveAsMidiFile(_T("Cq Dw Eq Fw Gq Aw Bw"), "MidiOutput.midi"))
     //	printf("\n Unable to Save Music String to Midi Output File \n");
 
+    /** Vatapi Ganapathim
+        I[PIANO] K[HAMSADHWANI]T8S2 
+        ( S' GA' R'   S' R' S' N     PA N S'   RI' RI' )
+        ( S' , S' , S' N PA )
+        ( G P N P G R S R )
+
+        GA, RI R S N.         P. RI N.          RI ( S N. S R )
+        GA P  GA R S N.       P. RI N.      RI ( S N. S R )
+        ( G P G G RI   R G R R SA  S R S N. )      P. RI N.    RI ( S N. S R )
+
+        ( G P N S' RI  S' N P G RI  S R S N. )  P. RI  N.  RI ( S N. S R )
+    */
+
     return 0;
 }
 

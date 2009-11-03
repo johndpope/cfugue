@@ -61,7 +61,7 @@ extern "C"
     //MUSICNOTELIB_API typedef void (*ParseErrorProc)(const MusicNoteLib::CParser*, MusicNoteLib::CParser::ErrorEventHandlerArgs* pEvArgs);
     MUSICNOTELIB_API typedef void (*ParseTraceProc)(const MusicNoteLib::CParser*, MusicNoteLib::CParser::TraceEventHandlerArgs* pEvArgs);
 
-    MUSICNOTELIB_API void Parse(const TCHAR* szNotes, LPFNTRACEPROC traceCallbackProc, void* pCallbackData);
+    MUSICNOTELIB_API void Parse(const TCHAR* szNotes, LPFNTRACEPROC traceCallbackProc, void* pUserData);
 
 } // extern "C"
     

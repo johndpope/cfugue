@@ -15,8 +15,6 @@ namespace MusicNoteLib
 
     static void OnParseTrace(const MusicNoteLib::CParser* pParser, MusicNoteLib::CParser::TraceEventHandlerArgs* pEvArgs)
     {
-	    OutputDebugString(_T("\n"));
-	    OutputDebugString(pEvArgs->szTraceMsg);
         const PARSETRACEARGS* pCallbackData = (const PARSETRACEARGS*) pParser->GetUserData();
         pCallbackData->lpfnTraceProc(pCallbackData->lpUserData, pEvArgs->szTraceMsg);
     }
