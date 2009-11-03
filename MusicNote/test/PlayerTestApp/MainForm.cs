@@ -92,21 +92,15 @@ namespace PlayerTestApp
                 comboBox_MIDIOutDevs.SelectedIndex = nLastSelectedMIDIOutDev;
         }
 
-        public void OnErrorMethod(IntPtr userData, [MarshalAs(UnmanagedType.LPStr)] String szTraceMsg)
-        {
-            if (splitContainer1.Panel2Collapsed)
-                splitContainer1.Panel2Collapsed = false;
-            listView_Log.Items.Add(szTraceMsg);
-            Application.DoEvents();
-        }
-
-
         private void button_Play_Click(object sender, EventArgs e)
         {
             listView_Log.Items.Clear();
 
             if (textBox_Notes.Text.Length != 0)
             {
+                this.button_ToMIDI.Enabled = false;
+                this.button_Play.Enabled = false;
+
                 string strNotes="";
 
                 if(checkBox_PlaySelected.Checked) // Do we need to play only the selected text?
@@ -115,10 +109,8 @@ namespace PlayerTestApp
                 if(strNotes.Length == 0 || checkBox_PlaySelected.Checked == false)
                     strNotes = textBox_Notes.Text; //if selected text is empty or if we need to play complete text
                 
-                this.Cursor = Cursors.WaitCursor;
-               // MusicNoteLib.PlayMusicStringWithOpts(strNotes, comboBox_MIDIOutDevs.SelectedIndex, (uint)numericUpDown_TimerResolution.Value);
-                MusicNoteLib.Parse(strNotes, new MusicNoteLib.ParserTraceDelegate(OnErrorMethod), IntPtr.Zero);
-                this.Cursor = Cursors.Arrow;
+                // Start playing the notes on background worker thread
+                this.bgWorker_Play.RunWorkerAsync(strNotes);                
             }
         }
 
@@ -137,7 +129,9 @@ namespace PlayerTestApp
                 dlg.FileName = "Output.midi";
                 if(dlg.ShowDialog() != DialogResult.OK) return;
 
+                this.Cursor = Cursors.WaitCursor;
                 MusicNoteLib.SaveAsMidiFile(textBox_Notes.Text, dlg.FileName);
+                this.Cursor = Cursors.Default;
             }
             else MessageBox.Show("Text box is empty !! Enter few notes and then use this option to save them to MIDI output file");
         }
@@ -147,6 +141,36 @@ namespace PlayerTestApp
             listView_Log.Columns[0].Width = listView_Log.ClientSize.Width;
         }
 
+        public void OnParseTrace(IntPtr userData, [MarshalAs(UnmanagedType.LPStr)] String szTraceMsg)
+        {
+            bgWorker_Play.ReportProgress(0, szTraceMsg);
+        }
+
+        private void bgWorker_Play_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker bw = sender as BackgroundWorker;
+
+            string strNotes = (string)e.Argument;
+            
+           // MusicNoteLib.PlayMusicStringWithOpts(strNotes, comboBox_MIDIOutDevs.SelectedIndex, (uint)numericUpDown_TimerResolution.Value);
+            MusicNoteLib.Parse(strNotes, new MusicNoteLib.ParserTraceDelegate(OnParseTrace), IntPtr.Zero);
+        }
+
+        private void bgWorker_Play_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            this.button_Play.Enabled = true;
+            this.button_ToMIDI.Enabled = true;
+        }
+
+        private void bgWorker_Play_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            string szTraceMsg = (string)e.UserState;
+
+            if (splitContainer1.Panel2Collapsed)
+                splitContainer1.Panel2Collapsed = false;
+
+            listView_Log.Items.Add(szTraceMsg);
+        }
 
     }
 }

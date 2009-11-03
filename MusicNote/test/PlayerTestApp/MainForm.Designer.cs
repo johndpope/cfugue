@@ -46,6 +46,7 @@
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.listView_Log = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
+            this.bgWorker_Play = new System.ComponentModel.BackgroundWorker();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -301,6 +302,13 @@
             this.listView_Log.View = System.Windows.Forms.View.Details;
             this.listView_Log.Resize += new System.EventHandler(this.listView_Log_Resize);
             // 
+            // bgWorker_Play
+            // 
+            this.bgWorker_Play.WorkerReportsProgress = true;
+            this.bgWorker_Play.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgWorker_Play_DoWork);
+            this.bgWorker_Play.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgWorker_Play_RunWorkerCompleted);
+            this.bgWorker_Play.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgWorker_Play_ProgressChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -343,6 +351,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown numericUpDown_TimerResolution;
         private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.ComponentModel.BackgroundWorker bgWorker_Play;
 
     }
 }
