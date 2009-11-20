@@ -74,7 +74,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.listView_Log);
             this.splitContainer1.Panel2Collapsed = true;
-            this.splitContainer1.Size = new System.Drawing.Size(792, 555);
+            this.splitContainer1.Size = new System.Drawing.Size(792, 341);
             this.splitContainer1.SplitterDistance = 400;
             this.splitContainer1.TabIndex = 0;
             // 
@@ -83,7 +83,7 @@
             this.splitter_PropertyGrid.Dock = System.Windows.Forms.DockStyle.Right;
             this.splitter_PropertyGrid.Location = new System.Drawing.Point(593, 0);
             this.splitter_PropertyGrid.Name = "splitter_PropertyGrid";
-            this.splitter_PropertyGrid.Size = new System.Drawing.Size(3, 471);
+            this.splitter_PropertyGrid.Size = new System.Drawing.Size(3, 257);
             this.splitter_PropertyGrid.TabIndex = 8;
             this.splitter_PropertyGrid.TabStop = false;
             // 
@@ -139,8 +139,9 @@
             this.textBox_Notes.Multiline = true;
             this.textBox_Notes.Name = "textBox_Notes";
             this.textBox_Notes.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox_Notes.Size = new System.Drawing.Size(596, 471);
+            this.textBox_Notes.Size = new System.Drawing.Size(596, 257);
             this.textBox_Notes.TabIndex = 7;
+            this.textBox_Notes.Text = "I[FLUTE] C D E F G A B";
             // 
             // panel_Commands
             // 
@@ -152,7 +153,7 @@
             this.panel_Commands.Controls.Add(this.checkBox_PlaySelected);
             this.panel_Commands.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel_Commands.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.panel_Commands.Location = new System.Drawing.Point(0, 471);
+            this.panel_Commands.Location = new System.Drawing.Point(0, 257);
             this.panel_Commands.Name = "panel_Commands";
             this.panel_Commands.Padding = new System.Windows.Forms.Padding(0, 8, 16, 8);
             this.panel_Commands.Size = new System.Drawing.Size(596, 84);
@@ -279,7 +280,7 @@
             this.propertyGrid1.Location = new System.Drawing.Point(596, 0);
             this.propertyGrid1.Name = "propertyGrid1";
             this.propertyGrid1.SelectedObject = this.textBox_Notes;
-            this.propertyGrid1.Size = new System.Drawing.Size(196, 555);
+            this.propertyGrid1.Size = new System.Drawing.Size(196, 341);
             this.propertyGrid1.TabIndex = 5;
             this.propertyGrid1.Visible = false;
             // 
@@ -313,7 +314,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(792, 555);
+            this.ClientSize = new System.Drawing.Size(792, 341);
             this.Controls.Add(this.splitContainer1);
             this.Name = "MainForm";
             this.Text = "MusicString Player Test Application";

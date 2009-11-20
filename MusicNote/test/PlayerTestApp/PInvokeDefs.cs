@@ -30,18 +30,29 @@ namespace PlayerTestApp
             void EventHandlerArgs.Method1() { }
 		};
 
-        public delegate void ParserErrorDelegate(IntPtr pParser, ref ErrorEventHandlerArgs evArgs);
+        //public delegate void ParserErrorDelegate(IntPtr pParser, ref ErrorEventHandlerArgs evArgs);
         public delegate void ParserTraceDelegate(IntPtr userData, [MarshalAs(UnmanagedType.LPStr)] String szTraceMsg);
-        [DllImport("MusicNoteDll.Dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void Parse([MarshalAs(UnmanagedType.LPStr)] String szMusicNotes, 
-                                        [MarshalAs(UnmanagedType.FunctionPtr)] ParserTraceDelegate d,
-                                        IntPtr userData);
+        public delegate void ParserErrorDelegate(IntPtr userData, long errCode,
+                [MarshalAs(UnmanagedType.LPStr)] String szErrorMsg,
+                [MarshalAs(UnmanagedType.LPStr)] String szToken);
 
         [DllImport("MusicNoteDll.Dll")]
         public static extern bool PlayMusicString([MarshalAs(UnmanagedType.LPStr)] String szMusicNotes);
 
         [DllImport("MusicNoteDll.Dll")]
         public static extern bool PlayMusicStringWithOpts([MarshalAs(UnmanagedType.LPStr)] String szMusicNotes, int nMidiOutPortID, uint nTimerResMS);
+
+        [DllImport("MusicNoteDll.Dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void PlayMusicStringCB([MarshalAs(UnmanagedType.LPStr)] String szMusicNotes, 
+                                        [MarshalAs(UnmanagedType.FunctionPtr)] ParserTraceDelegate td,
+                                        [MarshalAs(UnmanagedType.FunctionPtr)] ParserErrorDelegate ed,
+                                        IntPtr userData);
+
+        [DllImport("MusicNoteDll.Dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void PlayMusicStringWithOptsCB([MarshalAs(UnmanagedType.LPStr)] String szMusicNotes, int nMidiOutPortID, uint nTimerResMS,
+                                        [MarshalAs(UnmanagedType.FunctionPtr)] ParserTraceDelegate td,
+                                        [MarshalAs(UnmanagedType.FunctionPtr)] ParserErrorDelegate ed,
+                                        IntPtr userData);
 
         [DllImport("MusicNoteDll.Dll")]
         public static extern bool SaveAsMidiFile([MarshalAs(UnmanagedType.LPStr)] String szMusicNotes, [MarshalAs(UnmanagedType.LPStr)] String szOutputFilePath);
