@@ -92,6 +92,13 @@ namespace PlayerTestApp
                 comboBox_MIDIOutDevs.SelectedIndex = nLastSelectedMIDIOutDev;
         }
 
+        struct PlayOpts
+        {
+            public String strNotes;
+            public int nMidiOutPort;
+            public uint nTimerRes;
+        };
+
         private void button_Play_Click(object sender, EventArgs e)
         {
             listView_Log.Items.Clear();
@@ -100,6 +107,8 @@ namespace PlayerTestApp
             {
                 this.button_ToMIDI.Enabled = false;
                 this.button_Play.Enabled = false;
+                this.numericUpDown_TimerResolution.Enabled = false;
+                this.comboBox_MIDIOutDevs.Enabled = false;
 
                 string strNotes="";
 
@@ -108,9 +117,14 @@ namespace PlayerTestApp
 
                 if(strNotes.Length == 0 || checkBox_PlaySelected.Checked == false)
                     strNotes = textBox_Notes.Text; //if selected text is empty or if we need to play complete text
-                
+
+                PlayOpts opts;
+                opts.strNotes = strNotes;
+                opts.nMidiOutPort = comboBox_MIDIOutDevs.SelectedIndex;
+                opts.nTimerRes = (uint)numericUpDown_TimerResolution.Value;
+
                 // Start playing the notes on background worker thread
-                this.bgWorker_Play.RunWorkerAsync(strNotes);                
+                this.bgWorker_Play.RunWorkerAsync(opts);
             }
         }
 
@@ -146,20 +160,28 @@ namespace PlayerTestApp
             bgWorker_Play.ReportProgress(0, szTraceMsg);
         }
 
+        public void OnParseError(IntPtr userData, long errCode, [MarshalAs(UnmanagedType.LPStr)] String szErrorMsg, [MarshalAs(UnmanagedType.LPStr)] String szToken)
+        {
+            bgWorker_Play.ReportProgress(0, szErrorMsg + " : " + szToken);
+        }
+
         private void bgWorker_Play_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker bw = sender as BackgroundWorker;
 
-            string strNotes = (string)e.Argument;
+            PlayOpts opts = (PlayOpts)e.Argument;
             
-           // MusicNoteLib.PlayMusicStringWithOpts(strNotes, comboBox_MIDIOutDevs.SelectedIndex, (uint)numericUpDown_TimerResolution.Value);
-            MusicNoteLib.Parse(strNotes, new MusicNoteLib.ParserTraceDelegate(OnParseTrace), IntPtr.Zero);
+            MusicNoteLib.PlayMusicStringWithOptsCB(opts.strNotes, opts.nMidiOutPort, opts.nTimerRes,
+                new MusicNoteLib.ParserTraceDelegate(OnParseTrace),
+                new MusicNoteLib.ParserErrorDelegate(OnParseError), IntPtr.Zero);
         }
 
         private void bgWorker_Play_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             this.button_Play.Enabled = true;
             this.button_ToMIDI.Enabled = true;
+            this.comboBox_MIDIOutDevs.Enabled = true;
+            this.numericUpDown_TimerResolution.Enabled = true;
         }
 
         private void bgWorker_Play_ProgressChanged(object sender, ProgressChangedEventArgs e)

@@ -20,6 +20,7 @@
 namespace MusicNoteLib /// Music Programming Library
 {
 typedef  void (__stdcall *LPFNTRACEPROC)(void* pUserData, const TCHAR* szTraceMsg);
+typedef  void (__stdcall *LPFNERRORPROC)(void* pUserData, long lErrCode, const TCHAR* szErrorMsg, const TCHAR* szToken);
 
 extern "C"
 {
@@ -39,6 +40,20 @@ extern "C"
     /// @return True if the notes were played successfully, False otherwise
 	/// </Summary>
 	MUSICNOTELIB_API bool PlayMusicString(const TCHAR* szMusicNotes);
+
+	/// <Summary>
+	/// Same as PlayMusicString() except that this method accepts Callbacks.
+    /// The Trace and Error callbacks will be used during the Parse of the Music Notes.
+    /// @param szMusicNotes the Music string to be played on the MIDI output device
+    /// @param traceCallbackProc the Callback to used to report Trace messages
+    /// @param errorCallbackProc the Callback to used to report Error messages
+    /// @param pUserData any user supplied data that should be sent to the Callback
+    /// @return True if the notes were played successfully, False otherwise
+	/// </Summary>
+	MUSICNOTELIB_API bool PlayMusicStringCB(const TCHAR* szMusicNotes,
+											LPFNTRACEPROC traceCallbackProc, 
+											LPFNERRORPROC errorCallbackProc, 
+											void* pUserData);
 	
 	/// <Summary>
 	/// Plays Music string notes on the given MIDI Output device using the given Timer Resolution.
@@ -50,6 +65,23 @@ extern "C"
 	/// </Summary>
 	MUSICNOTELIB_API bool PlayMusicStringWithOpts(const TCHAR* szMusicNotes, int nMidiOutPortID, unsigned int nTimerResMS);
 
+	/// <Summary>
+	/// Same as PlayMusicStringWithOpts() except that this method accepts Callbacks.
+    /// The Trace and Error callbacks will be used during the Parse of the Music Notes.
+    /// @param szMusicNotes the Music notes to be played
+    /// @param nMidiOutPortID the device ID of the MIDI output port to be used for the play
+    /// @param nTimerResMS preferred MIDI timer resolution, in MilliSeconds
+    /// @param traceCallbackProc the Callback to used to report Trace messages
+    /// @param errorCallbackProc the Callback to used to report Error messages
+    /// @param pUserData any user supplied data that should be sent to the Callback
+    /// @return True if Play was successful, False otherwise
+	/// </Summary>
+	MUSICNOTELIB_API bool PlayMusicStringWithOptsCB(const TCHAR* szMusicNotes, 
+													int nMidiOutPortID, 
+													unsigned int nTimerResMS,
+													LPFNTRACEPROC traceCallbackProc, 
+													LPFNERRORPROC errorCallbackProc, 
+													void* pUserData);
     /// <Summary>
     /// Save the given MusicString content into a MIDI output file
     /// @param szMusicNotes Music Notes to be converted to MIDI output
