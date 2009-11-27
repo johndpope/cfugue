@@ -7,46 +7,80 @@
 %\newcommand*{\memfontpack}{newcent}
 \documentclass[oneside,10pt,extrafontsizes]{memoir}
 
-%\usepackage[T1]{fontenc}
-%\usepackage{concmath}
-%\usepackage{helvet}
+\usepackage{xcolor,graphicx}
+
+
+\usepackage{listings}
+\lstset{ %
+language=C++,                % choose the language of the code
+basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+numbers=left,                   % where to put the line-numbers
+numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+stepnumber=2,                   % the step between two line-numbers. If 1 each line will be numbered
+numbersep=5pt,                  % how far the line-numbers are from the code
+backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+showspaces=false,               % show spaces adding particular underscores
+showstringspaces=false,         % underline spaces within strings
+showtabs=false,                 % show tabs within strings adding particular underscores
+frame=single,	                % adds a frame around the code
+tabsize=2,	                % sets default tabsize to 2 spaces
+captionpos=b,                   % sets the caption-position to bottom
+breaklines=true,                % sets automatic line breaking
+breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+escapeinside={\%*}{*)},          % if you want to add a comment within your code
+morecomment=[l]//								% Comment the lines that begin with //
+}
 
 \ifpdf
-\usepackage[colorlinks]{hyperref}
-\usepackage{memhfixc}
+	\definecolor{CodeCommentColor}{rgb}{0,0.50,0} % Use green color for Chapters for PDF
+  \lstset{ morecomment=[l][\color{CodeCommentColor}]//		}% Comment the lines that begin with //
 \fi
+
+\ifpdf
+	\usepackage[colorlinks,pdfauthor={Gopalakrishna Palem},pdfkeywords={C++, CFugue, Gopalakrishna, Music, MIDI},pdftitle={The Complete Guide to CFugue},pdfsubject={Programming Music in C/C++}]{hyperref}
+	\usepackage{memhfixc}
+	\definecolor{TitleColor}{rgb}{.647,.129,.149} % Use Red color for Chapters for PDF
+	\renewcommand\colorchapnum{\color{TitleColor}}
+	\renewcommand\colorchaptitle{\color{TitleColor}}
+\else
+	\definecolor{TitleColor}{rgb}{0,0,0} % Just use black color for Non-Pdf 
+\fi
+
+%\chapterstyle{pedersen}
+\chapterstyle{veelo}
+%\usepackage{xcolor,fix-cm}
 
 
 %%%%%%%%%%%%%%%%%%
-\usepackage{xcolor,fix-cm}
-\definecolor{numbercolor}{gray}{0.7}
-\newif\ifchapternonum
-\makechapterstyle{jenor}{
-\renewcommand\printchaptername{}
-\renewcommand\printchapternum{}
-\renewcommand\printchapternonum{\chapternonumtrue}
-\renewcommand\chaptitlefont{\fontfamily{pbk}\fontseries{db}%
-\fontshape{n}\fontsize{25}{35}\selectfont\raggedleft}
-\renewcommand\chapnumfont{\fontfamily{pbk}\fontseries{m}\fontshape{n}%
-\fontsize{1in}{0in}\selectfont\color{numbercolor}}
-\renewcommand\printchaptertitle[1]{%
-\noindent%
-\ifchapternonum%
-\begin{tabularx}{\textwidth}{X}%
-{\parbox[b]{\linewidth}{\chaptitlefont ##1}%
-\vphantom{\raisebox{-15pt}{\
-chapnumfont 1}}}
-\end{tabularx}%
-\else
-\begin{tabularx}{\textwidth}{Xl}
-{\parbox[b]{\linewidth}{\chaptitlefont ##1}}
-& \raisebox{-15pt}{\chapnumfont \thechapter}%
-\end{tabularx}%
-\fi
-\par\vskip2mm\hrule
-}
-}
-\chapterstyle{jenor}
+%\usepackage{xcolor,fix-cm}
+%\definecolor{numbercolor}{gray}{0.7}
+%\newif\ifchapternonum
+%\makechapterstyle{jenor}{
+%\renewcommand\printchaptername{}
+%\renewcommand\printchapternum{}
+%\renewcommand\printchapternonum{\chapternonumtrue}
+%\renewcommand\chaptitlefont{\fontfamily{pbk}\fontseries{db}%
+%\fontshape{n}\fontsize{25}{35}\selectfont\raggedleft}
+%\renewcommand\chapnumfont{\fontfamily{pbk}\fontseries{m}\fontshape{n}%
+%\fontsize{1in}{0in}\selectfont\color{numbercolor}}
+%\renewcommand\printchaptertitle[1]{%
+%\noindent%
+%\ifchapternonum%
+%\begin{tabularx}{\textwidth}{X}%
+%{\parbox[b]{\linewidth}{\chaptitlefont ##1}%
+%\vphantom{\raisebox{-15pt}{\
+%chapnumfont 1}}}
+%\end{tabularx}%
+%\else
+%\begin{tabularx}{\textwidth}{Xl}
+%{\parbox[b]{\linewidth}{\chaptitlefont ##1}}
+%& \raisebox{-15pt}{\chapnumfont \thechapter}%
+%\end{tabularx}%
+%\fi
+%\par\vskip2mm\hrule
+%}
+%}
+%\chapterstyle{jenor}
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 %\usepackage{color,calc,graphicx,soul,fourier}
 %\definecolor{nicered}{rgb}{.647,.129,.149}
@@ -104,7 +138,7 @@ chapnumfont 1}}}
 \droptitle 8em
 
 \pretitle{\begin{flushright}\LARGE\sffamily}
-\title{The Complete Guide to \par \color{gray} 	\normalfont  \fontsize{48}{48}  \selectfont CFUGUE }
+\title{The Complete Guide to \par \color{TitleColor}\normalfont\fontsize{48}{48}  \selectfont CFUGUE }
 \posttitle{\vskip 0.25em \par \color{black} \Large Programming Music in C/C++ \end{flushright} \vskip 0.5em }
 
 \preauthor{\vskip 2em\begin{flushright}}
@@ -119,7 +153,6 @@ chapnumfont 1}}}
 \thispagestyle{empty} 
 
 
-
 \frontmatter%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %\include{dedic}
@@ -129,12 +162,13 @@ chapnumfont 1}}}
 
 \tableofcontents
 
-\include{acronym}
+%\include{acronym}
 
 \mainmatter%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %\include{part}
 \include{chapter}
+\include{chapter1}
 %\include{appendix}
 
 \backmatter%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
