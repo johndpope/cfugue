@@ -6,7 +6,7 @@ Version=4
 MainFile=guide.tex
 UseBibTeX=1
 UseMakeIndex=1
-ActiveProfile=LaTeX => DVI
-ProjectLanguage=
-ProjectDialect=
+ActiveProfile=LaTeX => PDF
+ProjectLanguage=en
+ProjectDialect=US
 

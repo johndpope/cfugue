@@ -1851,30 +1851,40 @@ to\z@{\kern0.55\wd0\vrule\@height0.45\ht0\hss}\box0}}}}
 
 \def\@maketitle{\newpage
  \null
- \vskip 2em                 % Vertical space above title.
+ %\vskip 2em                 % Vertical space above title.
+ \vskip 16em                 % Vertical space above title.
 \begingroup
   \def\and{\unskip, }
   \parindent=\z@
   \pretolerance=10000
   \rightskip=\z@ \@plus 3cm
-  {\LARGE                   % each author set in \LARGE
-   \lineskip .5em
-   \@author
-   \par}%
-  \vskip 2cm                % Vertical space after author.
+  {\flushright
+%  {\LARGE                   % each author set in \LARGE
+%   \lineskip .5em
+%   \@author
+%   \par}%
+%   \vskip 2cm                % Vertical space after author.
   {\Huge \@title \par}%     % Title set in \Huge size.
-  \vskip 1cm                % Vertical space after title.
+  %\vskip 1cm                % Vertical space after title.
+  \vskip 1em                % Vertical space after title.
   \if!\@subtitle!\else
    {\LARGE\ignorespaces\@subtitle \par}
    \vskip 1cm                % Vertical space after subtitle.
   \fi
-  \if!\@date!\else
-    {\large \@date}%          % Date set in \large size.
-    \par
-    \vskip 1.5em               % Vertical space after date.
-  \fi
+  {\Large                   % each author set in \LARGE
+   \lineskip .5em
+   \@author
+   \par}%
+  } %flushright
+  \vskip 2cm                % Vertical space after author.
+%  \if!\@date!\else
+%    {\large \@date}%          % Date set in \large size.
+%    \par
+%    \vskip 1.5em               % Vertical space after date.
+%  \fi
  \vfill
- {\Large Springer\par}
+ {\Large \par}
+% {\Large Springer\par}
 %\vskip 5\p@
 %\large
 %  Berlin\enspace Heidelberg\enspace New\kern0.1em York\\
@@ -1936,6 +1946,7 @@ to\z@{\kern0.55\wd0\vrule\@height0.45\ht0\hss}\box0}}}}
    \let\sectionmark\@gobble
    \let\subsectionmark\@gobble}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \ps@headings
 
