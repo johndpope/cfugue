@@ -620,7 +620,7 @@ namespace MusicNoteLib
                 }
 		    default:
 			    {
-                    ctx.isRest = true; // treat the unknown notes as rest notes
+                    ctx.isRest = true; // TODO: treat the unknown notes  as rest notes (the commas also ?)
 				    return Error(PARSE_ERROR_LETTER_NOTE, MString(_T("Invalid Note: ")) + pszToken[0], pszToken) ? -1 : 1;
 			    }
             }

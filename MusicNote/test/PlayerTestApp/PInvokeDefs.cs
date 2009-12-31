@@ -32,7 +32,7 @@ namespace PlayerTestApp
 
         //public delegate void ParserErrorDelegate(IntPtr pParser, ref ErrorEventHandlerArgs evArgs);
         public delegate void ParserTraceDelegate(IntPtr userData, [MarshalAs(UnmanagedType.LPStr)] String szTraceMsg);
-        public delegate void ParserErrorDelegate(IntPtr userData, long errCode,
+        public delegate void ParserErrorDelegate(IntPtr userData, int errCode,
                 [MarshalAs(UnmanagedType.LPStr)] String szErrorMsg,
                 [MarshalAs(UnmanagedType.LPStr)] String szToken);
 
