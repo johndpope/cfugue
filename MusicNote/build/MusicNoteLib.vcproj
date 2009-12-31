@@ -661,6 +661,14 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
+					Name="StaticDebug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
 					Name="StaticRelease|Win32"
 					ExcludedFromBuild="true"
 					>

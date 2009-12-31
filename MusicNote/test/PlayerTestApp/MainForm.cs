@@ -160,7 +160,7 @@ namespace PlayerTestApp
             bgWorker_Play.ReportProgress(0, szTraceMsg);
         }
 
-        public void OnParseError(IntPtr userData, long errCode, [MarshalAs(UnmanagedType.LPStr)] String szErrorMsg, [MarshalAs(UnmanagedType.LPStr)] String szToken)
+        public void OnParseError(IntPtr userData, int errCode, [MarshalAs(UnmanagedType.LPStr)] String szErrorMsg, [MarshalAs(UnmanagedType.LPStr)] String szToken)
         {
             bgWorker_Play.ReportProgress(0, szErrorMsg + " : " + szToken);
         }
