@@ -447,6 +447,8 @@ namespace MusicNoteLib
 
 		while(ctx.existsAnotherNote)
 		{
+			ctx = NoteContext(); // Reset the Definitions
+
 			Trace(MString(_T("MusicStringParser::ParseNote: ")) + szToken);
 
 			DecideSequentialOrParallel(ctx);
@@ -805,13 +807,13 @@ namespace MusicNoteLib
 
         // Western Mode
         {
+		    bool bSuccessAsNumeric = false;				
 		    if(szToken[0] == NOTE_DURATION_NUMERIC) // Check if this is a numeric duration
 		    {
-			    bool bSuccess = false;				
-			    int nLen = ParseNumber(szToken+1, &ctx.decimalDuration, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_DURATION_MACRO_END, PARSE_ERROR_DURATION_VALUE);
+			    int nLen = ParseNumber(szToken+1, &ctx.decimalDuration, bSuccessAsNumeric, MACRO_START, MACRO_END, PARSE_ERROR_DURATION_MACRO_END, PARSE_ERROR_DURATION_VALUE);
 			    if(nLen == -1)
 				    return -1;	// Some irrevocable error occured
-			    if(bSuccess)
+			    if(bSuccessAsNumeric)
 			    {			
 				    pszDuration = szToken + 1 + nLen; // Update the position for next scanning
 			    }
@@ -829,7 +831,7 @@ namespace MusicNoteLib
 
 		    // In case Numeric Duration failed or absent, 
 		    // Try reading the duration as Alphabets (such as W, H etc..)
-		    if(!ctx.decimalDuration) 				
+		    if(!bSuccessAsNumeric)
 			    pszDuration += ParseLetterDuration(pszDuration, ctx);
         }
 
