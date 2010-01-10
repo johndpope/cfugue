@@ -162,7 +162,7 @@ namespace PlayerTestApp
 
         public void OnParseError(IntPtr userData, int errCode, [MarshalAs(UnmanagedType.LPStr)] String szErrorMsg, [MarshalAs(UnmanagedType.LPStr)] String szToken)
         {
-            bgWorker_Play.ReportProgress(0, szErrorMsg + " : " + szToken);
+            bgWorker_Play.ReportProgress(0, szErrorMsg + " while parsing: " + szToken);
         }
 
         private void bgWorker_Play_DoWork(object sender, DoWorkEventArgs e)

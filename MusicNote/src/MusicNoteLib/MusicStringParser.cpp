@@ -9,6 +9,8 @@
 #define STRUTILS_RETURN_TYPE MusicNoteLib::MString
 #include "StrUtils.h"
 
+#include "Chords.h"
+
 #include "math.h"
 
 namespace MusicNoteLib
@@ -121,7 +123,7 @@ namespace MusicNoteLib
 
         TCHAR* szUppercaseToken = _tcsupr(szToken); // convert the string to upper case
 
-        Trace(MString(_T("MusicStringParser::ParseToken: ")) + szUppercaseToken);
+        Verbose(MString(_T("MusicStringParser::ParseToken: ")) + szUppercaseToken);
 
         switch(szUppercaseToken[0])
         {
@@ -177,7 +179,7 @@ namespace MusicNoteLib
 
         m_KeySig.Speed() = nSpeed;
 
-		Trace(MString(_T("MusicStringParser::ParseSpeedModulatorToken Speed = ")) + OIL::ToString(m_KeySig.Speed()));
+		Verbose(MString(_T("MusicStringParser::ParseSpeedModulatorToken Speed = ")) + OIL::ToString(m_KeySig.Speed()));
 
         return true;
     }
@@ -190,7 +192,7 @@ namespace MusicNoteLib
 		if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false; } // Some irrevocable error occured
 		if(bSuccess)
 		{
-			Trace(MString(_T("MusicStringParser::ParseVoiceToken: Voice = ")) + OIL::ToString(nVoice));
+			Verbose(MString(_T("MusicStringParser::ParseVoiceToken: Voice = ")) + OIL::ToString(nVoice));
 
 			if(nVoice > 15)
 			{
@@ -216,7 +218,7 @@ namespace MusicNoteLib
 		if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false; } // Some irrevocable error occured
 		if(bSuccess)
 		{
-			Trace(MString(_T("MusicStringParser::ParseTempoToken: Tempo = ")) + OIL::ToString(nTempo));
+			Verbose(MString(_T("MusicStringParser::ParseTempoToken: Tempo = ")) + OIL::ToString(nTempo));
 
 			Tempo tempoObj(nTempo);
 
@@ -235,7 +237,7 @@ namespace MusicNoteLib
 		if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false; } // Some irrevocable error occured
 		if(bSuccess)
 		{
-			Trace(MString(_T("MusicStringParser::ParseTimeToken: Time = ")) + OIL::ToString(nTime));
+			Verbose(MString(_T("MusicStringParser::ParseTimeToken: Time = ")) + OIL::ToString(nTime));
 
 			Time timeObj(nTime);
 
@@ -259,7 +261,7 @@ namespace MusicNoteLib
 		if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false; } // Some irrevocable error occured
 		if(bSuccess)
 		{
-			Trace(MString(_T("MusicStringParser::ParseInstrumentToken: Instrument = ")) + OIL::ToString(nInstrument));
+			Verbose(MString(_T("MusicStringParser::ParseInstrumentToken: Instrument = ")) + OIL::ToString(nInstrument));
 
 			Instrument instrumentObj(nInstrument);
 
@@ -278,7 +280,7 @@ namespace MusicNoteLib
 		if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false; } // Some irrevocable error occured
 		if(bSuccess)
 		{
-			Trace(MString(_T("MusicStringParser::ParseLayerToken: Layer = ")) + OIL::ToString(nLayer));
+			Verbose(MString(_T("MusicStringParser::ParseLayerToken: Layer = ")) + OIL::ToString(nLayer));
 
 			Layer layerObj(nLayer);
 
@@ -332,7 +334,7 @@ namespace MusicNoteLib
                     nValue = KeySignature::DEFAULT_RAGAM; // if we need to continue despite the error, use default Value
 			    }
 
-			    Trace(MString(_T(" Mela = ")) + OIL::ToString(nValue));
+			    Verbose(MString(_T(" Mela = ")) + OIL::ToString(nValue));
 
                 m_KeySig.SetRagam(nValue);
 
@@ -344,7 +346,7 @@ namespace MusicNoteLib
 
                 if(nValue >= 64) nValue = nValue - 64;
 
-			    Trace(MString(_T(" KeySignature = ")) + OIL::ToString(nValue)
+			    Verbose(MString(_T(" KeySignature = ")) + OIL::ToString(nValue)
                     + MString(_T(" Scale = ")) + (bScale == KeySignature::MAJOR_SCALE ? _T("Major") : _T("Minor")) );
 
 			    if(nValue >= 15) // Ensure the Range. Valid Range: [0, 14]
@@ -382,9 +384,9 @@ namespace MusicNoteLib
 	            }
             }
 			    
-            Trace(MString(_T(" Talam = ")) + OIL::ToString(nTalam));
+            Verbose(MString(_T(" Talam = ")) + OIL::ToString(nTalam));
         }
-        else {  Trace(MString(_T(" No Talam Specified !! Using Talam: ")) + OIL::ToString(nTalam));   }
+        else { nLen = 0;  Trace(MString(_T(" No Talam Specified !! Using Talam: ")) + OIL::ToString(nTalam));   }
 
         m_KeySig.SetTalam(nTalam);
 
@@ -404,7 +406,7 @@ namespace MusicNoteLib
 	            }
             }
 
-            Trace(MString(_T(" Speed = ")) + OIL::ToString(nSpeed));
+            Verbose(MString(_T(" Speed = ")) + OIL::ToString(nSpeed));
         }
         else {  Trace(MString(_T(" No Speed Specified !! Using Speed: ")) + OIL::ToString(nSpeed));   }
 
@@ -432,7 +434,7 @@ namespace MusicNoteLib
 
 		m_Dictionary[pszKey] = pszValue; // Create or Update the value
 			
-		Trace(MString(_T("MusicStringParser::ParseDictionaryToken: Defined [")) + pszKey + MString(_T("]=")) + pszValue);
+		Verbose(MString(_T("MusicStringParser::ParseDictionaryToken: Defined [")) + pszKey + MString(_T("]=")) + pszValue);
 
 		return true;
 	}
@@ -447,9 +449,7 @@ namespace MusicNoteLib
 
 		while(ctx.existsAnotherNote)
 		{
-			ctx = NoteContext(); // Reset the Definitions
-
-			Trace(MString(_T("MusicStringParser::ParseNote: ")) + szToken);
+			Verbose(MString(_T("MusicStringParser::ParseNote: ")) + szToken);
 
 			DecideSequentialOrParallel(ctx);
 		
@@ -458,6 +458,10 @@ namespace MusicNoteLib
 			szToken += nLen;
 
 			nLen = ParseNoteOctave(szToken, ctx);
+			if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false;}
+			szToken += nLen;
+
+			nLen = ParseNoteChord(szToken, ctx);
 			if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false;}
 			szToken += nLen;
 
@@ -478,7 +482,7 @@ namespace MusicNoteLib
 			RaiseNoteEvents(ctx);
 		}
 
-		Trace(szToken[0] != _T('\0') ? (MString(_T("Ignoring: ")) + szToken) : _T(""));
+		if(szToken[0] != _T('\0')) Trace(MString(_T("Ignoring: ")) + szToken);
 
 		return true;
 	}
@@ -488,24 +492,23 @@ namespace MusicNoteLib
 	///</Summary>
 	void MusicStringParser::DecideSequentialOrParallel(NoteContext& ctx)
 	{
-		ctx.type = Note::FIRST;
-		//ctx.isSequentialNote = false;
+        Note::NoteTypes type = Note::FIRST;
+
 		if(ctx.anotherIsSequential)
 		{
-			//ctx.isSequentialNote = true;
-			ctx.type = Note::SEQUENTIAL;
-			ctx.anotherIsSequential = false;
-			Trace(_T("This note is sequential"));
+			type = Note::SEQUENTIAL;
+			Verbose(_T("About to read a sequential Note ..."));
 		}
-
-		//ctx.isParallelNote = false;
 		if(ctx.anotherIsParallel)
 		{
-			//ctx.isParallelNote = true;
-			ctx.type = Note::PARALLEL;
-			ctx.anotherIsParallel = false;
-			Trace(_T("This note is parallel"));
+			type = Note::PARALLEL;
+			Verbose(_T("About to read a parallel Note ..."));
 		}
+        if(type != Note::FIRST)
+        {
+            ctx = NoteContext(); // We are reading Connected Notes. Reset the Previous Note Context
+            ctx.type = type;
+        }
 	}
 
 	/// <Summary> Parses Numeric, Rest and Letter Notes. 
@@ -538,7 +541,7 @@ namespace MusicNoteLib
 		{
 			ctx.isNumeric = true; 
 			ctx.noteNumber = nNoteNumber;
-			Trace(_T("Numeric Note with value: ") +	OIL::ToString(ctx.noteNumber));
+			Verbose(_T("Numeric Note with value: ") +	OIL::ToString(ctx.noteNumber));
 		}
 
 		return nLen; // Number of characters consumed
@@ -548,7 +551,7 @@ namespace MusicNoteLib
 	/// Returns the number of characaters consumed from the string during the parsing </Summary>
 	int MusicStringParser::ParseRest(TCHAR* szToken, NoteContext& ctx)
 	{
-		Trace(_T("This Note is a Rest"));
+		Verbose(_T("This Note is a Rest"));
 
 		ctx.isRest = true;
 
@@ -622,12 +625,12 @@ namespace MusicNoteLib
                 }
 		    default:
 			    {
-                    ctx.isRest = true; // TODO: treat the unknown notes  as rest notes (the commas also ?)
+                    ctx.isRest = true; // treat the unknown notes as rest notes
 				    return Error(PARSE_ERROR_LETTER_NOTE, MString(_T("Invalid Note: ")) + pszToken[0], pszToken) ? -1 : 1;
 			    }
             }
     		
-		    Trace(_T("Note number within octave: ") + OIL::ToString(ctx.noteNumber));
+		    Verbose(_T("Note number within octave: ") + OIL::ToString(ctx.noteNumber));
 
 		    return pszToken - szToken; // return the number of characters read
         }
@@ -663,7 +666,7 @@ namespace MusicNoteLib
 			}
 		}
 		
-		Trace(_T("Note number within octave: ") + OIL::ToString(ctx.noteNumber));
+		Verbose(_T("Note number within octave: ") + OIL::ToString(ctx.noteNumber));
 
 		return pszSymbol - szToken; // return the number of characters read
 	}
@@ -726,10 +729,29 @@ namespace MusicNoteLib
             else if(ctx.octaveNumber > 10) ctx.octaveNumber = 10;
         }
 		
-		Trace( _T("Octave Number: ") + OIL::ToString(ctx.octaveNumber));
+		Verbose( _T("Octave Number: ") + OIL::ToString(ctx.octaveNumber));
 
 		return nLen; // Number of characters consumed here
 	}
+
+    int MusicStringParser::ParseNoteChord(TCHAR* szToken, NoteContext& ctx)
+    {
+        if(ctx.isRest)
+        {
+            Verbose(_T("ParseNoteChord: Skipping Chords inspection for Rest Note..."));
+            return 0;    // No Chords for Rest Notes
+        }
+
+        unsigned int nChordNameLen = this->m_Chords.ExtractMatchingChord(szToken, ctx.pChord);
+
+        if(nChordNameLen > 0)
+        {
+            ctx.isChord = true;
+            Verbose(_T("ParseNoteChord: Found Chord ") + MString(ctx.pChord->szChordName));
+        }
+
+        return nChordNameLen;
+    }
 
 	int MusicStringParser::ComputeNoteValue(NoteContext& ctx)
 	{
@@ -774,13 +796,13 @@ namespace MusicNoteLib
             }
         }
 
-        Trace(_T("After adjusting for Key, Note Number=") + OIL::ToString(ctx.noteNumber));
+        Verbose(_T("After adjusting for Key, Note Number=") + OIL::ToString(ctx.noteNumber));
 		
 		if(!ctx.isNumeric) // if this is a non-numeric note, compute its value from octave and local note value
 		{
 			ctx.noteNumber = (ctx.octaveNumber * 12) + ctx.noteNumber;
 
-			Trace(_T("Computed Note Number:") + OIL::ToString(ctx.noteNumber));
+			Verbose(_T("Computed Note Number:") + OIL::ToString(ctx.noteNumber));
 		}	
 		
 		// Check the limits
@@ -807,13 +829,13 @@ namespace MusicNoteLib
 
         // Western Mode
         {
-		    bool bSuccessAsNumeric = false;				
 		    if(szToken[0] == NOTE_DURATION_NUMERIC) // Check if this is a numeric duration
 		    {
-			    int nLen = ParseNumber(szToken+1, &ctx.decimalDuration, bSuccessAsNumeric, MACRO_START, MACRO_END, PARSE_ERROR_DURATION_MACRO_END, PARSE_ERROR_DURATION_VALUE);
+			    bool bSuccess = false;				
+			    int nLen = ParseNumber(szToken+1, &ctx.decimalDuration, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_DURATION_MACRO_END, PARSE_ERROR_DURATION_VALUE);
 			    if(nLen == -1)
 				    return -1;	// Some irrevocable error occured
-			    if(bSuccessAsNumeric)
+			    if(bSuccess)
 			    {			
 				    pszDuration = szToken + 1 + nLen; // Update the position for next scanning
 			    }
@@ -831,7 +853,7 @@ namespace MusicNoteLib
 
 		    // In case Numeric Duration failed or absent, 
 		    // Try reading the duration as Alphabets (such as W, H etc..)
-		    if(!bSuccessAsNumeric)
+		    if(!ctx.decimalDuration) 				
 			    pszDuration += ParseLetterDuration(pszDuration, ctx);
         }
 
@@ -844,7 +866,7 @@ namespace MusicNoteLib
 		if(ctx.decimalDuration == 0) 
 			ctx.decimalDuration = 1.0 / 4.0;
 
-		Trace(_T("Decimal Duration is: ") + OIL::ToString(ctx.decimalDuration));
+		Verbose(_T("Decimal Duration is: ") + OIL::ToString(ctx.decimalDuration));
 
 		// Scan for any optional Tuplet specifications
 		int nTupletLen = ParseTuplet(pszDuration, ctx);
@@ -852,7 +874,7 @@ namespace MusicNoteLib
 
 		ctx.duration = (long) (128.0 * ctx.decimalDuration);	//TODO: Compute the duration based on the current Tempo
 
-		Trace(_T("Actual Duration is: ") + OIL::ToString(ctx.duration));
+		Verbose(_T("Actual Duration is: ") + OIL::ToString(ctx.duration));
 
 		return pszDuration - szToken + nTupletLen; // Return the number of characters consumed
 	}
@@ -918,7 +940,7 @@ namespace MusicNoteLib
 	{
 		if(szToken[0] == NOTE_TUPLET_START)
 		{
-			Trace(_T("Scanning a Tuplet..."));
+			Verbose(_T("Scanning a Tuplet..."));
 		
 			TCHAR* pszTuplet = szToken + 1;
 
@@ -952,8 +974,8 @@ namespace MusicNoteLib
 			
 			ctx.decimalDuration *= tupletRatio;
 
-			Trace(_T("Tuplet Ratio is: ") + OIL::ToString((unsigned int)dNumerator) + _T(":") + OIL::ToString((unsigned int)dDenominator));
-			Trace(_T("Decimal Duration after applying Tuplet: ") + OIL::ToString(ctx.decimalDuration));
+			Verbose(_T("Tuplet Ratio is: ") + OIL::ToString((unsigned int)dNumerator) + _T(":") + OIL::ToString((unsigned int)dDenominator));
+			Verbose(_T("Decimal Duration after applying Tuplet: ") + OIL::ToString(ctx.decimalDuration));
 
 			return pszTuplet - szToken; // return number of characters consumed
 		}
@@ -967,7 +989,7 @@ namespace MusicNoteLib
 	{
 		if(ctx.isRest)
 		{
-			Trace(_T("This is a Rest note .. Skipping the Velocities"));
+			Verbose(_T("This is a Rest note .. Skipping the Velocities"));
 			return 0;
 		}
 
@@ -984,7 +1006,7 @@ namespace MusicNoteLib
 			case NOTE_VELOCITY_DECAY: bDecay = true; break;
 			default: 
 				{
-					Trace(_T("Attack Velocity: ") + OIL::ToString(ctx.attackVelocity) + _T(" Decay Velocity: ") + OIL::ToString(ctx.decayVelocity));
+					Verbose(_T("Attack Velocity: ") + OIL::ToString(ctx.attackVelocity) + _T(" Decay Velocity: ") + OIL::ToString(ctx.decayVelocity));
 					return pszVelocity - szToken;
 				}
 			}
@@ -1000,6 +1022,7 @@ namespace MusicNoteLib
 				if(bAttack) ctx.attackVelocity = nVelocity;
 				if(bDecay) ctx.decayVelocity = nVelocity;
 			}
+            else Trace(MString(_T("Unable to find Attack/Decay velocity for note, while parsing: ")) + szToken);
 
 			pszVelocity += nLen;
 		}while(true);	// we can have both attack and decay specified for the same note. so loop again.
@@ -1016,7 +1039,7 @@ namespace MusicNoteLib
 		{
 		case NOTE_CONNECTOR_SEQUENTIAL: ctx.anotherIsSequential = true; return 1;
 		case NOTE_CONNECTOR_PARALLEL: ctx.anotherIsParallel = true; return 1;
-		default: Trace(_T("No Connector Notes Found in: ") + MString(szToken)); break;
+		default: Verbose(_T("No Connector Notes Found in: ") + MString(szToken)); break;
 		}
 
 		ctx.existsAnotherNote = false;
@@ -1037,14 +1060,14 @@ namespace MusicNoteLib
 
 		if(ctx.isChord)
 		{
-			for(unsigned short i=0; i < ctx.numHalfSteps; ++i)
+            for(unsigned short i=0; i < ctx.pChord->nIntervalCount; ++i)
 			{
 				Note noteObj;
-				noteObj.noteNumber = ctx.noteNumber + ctx.halfSteps[i];
+                noteObj.noteNumber = ctx.noteNumber + ctx.pChord->Intervals[i];
 				noteObj.duration = ctx.duration;
 				noteObj.decimalDuration = ctx.decimalDuration;
 				noteObj.type = Note::PARALLEL;
-				RaiseEvent(&evNote, (Note*)&ctx);
+				RaiseEvent(&evNote, &noteObj);
 			}
 		}
 	}
