@@ -192,7 +192,11 @@ we hope to have this Limitations section to be empty.
 
 CFugue aims to be platform independent. However, the primary development is happening on Win32 system
 with enough precautions taken into view to make it portable. Yet, the real work of porting and testing
-it to ensure the full platform independence is still pending.
+to ensure the full platform compliance is still pending.
+
+\section download Download
+
+CFugue is ready to be used in your code at the downloads section of http://sourceforge.net/projects/musicnote/
 
 \section future The Future
 
@@ -204,9 +208,11 @@ the new developments in the work as and when we discover the scope for improveme
 
 \section copyright Copyright
 
-This is a product of CineFx Research Labs, distributed under LGPL with the hope that it will be useful. 
+This is a product of CineFx Research Labs, made available free of charge for personal and research use. 
+For commercial usage, please contact the author. 
+
+CFugue is distributed with the hope that it will be useful.
 No warranty of what-so-ever is implied, including MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-Refer to LGPL for more details.
 
  Author: <a href="http://gpalem.web.officelive.com/index.html">Gopalakrishna Palem</a>
 
