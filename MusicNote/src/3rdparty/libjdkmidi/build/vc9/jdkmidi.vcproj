@@ -75,6 +75,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="WinMM.Lib"
+				OutputFile="$(OutDir)\$(ProjectName).lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -123,7 +124,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\..\include;"
+				AdditionalIncludeDirectories="..\..\..\..\..\include;"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;WIN32"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -150,7 +151,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="WinMM.Lib"
-				OutputFile=".\Release\jdkmidi.lib"
+				OutputFile="$(OutDir)\$(ProjectName).lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -198,7 +199,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\include;"
+				AdditionalIncludeDirectories="..\..\..\..\..\include;"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -227,6 +228,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="WinMM.Lib"
+				OutputFile="$(OutDir)\$(ProjectName).lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -275,7 +277,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\..\include;"
+				AdditionalIncludeDirectories="..\..\..\..\..\include;"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;WIN32"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -302,7 +304,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="WinMM.Lib"
-				OutputFile=".\Release\jdkmidi.lib"
+				OutputFile="$(OutDir)\$(ProjectName).lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -350,7 +352,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\include;"
+				AdditionalIncludeDirectories="..\..\..\..\..\include;"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -379,6 +381,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="WinMM.Lib"
+				OutputFile="$(OutDir)\$(ProjectName).lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -427,7 +430,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\..\include;"
+				AdditionalIncludeDirectories="..\..\..\..\..\include;"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;WIN32"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -454,7 +457,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="WinMM.Lib"
-				OutputFile=".\Release\jdkmidi.lib"
+				OutputFile="$(OutDir)\$(ProjectName).lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -502,7 +505,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\include;"
+				AdditionalIncludeDirectories="..\..\..\..\..\include;"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -531,6 +534,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="WinMM.Lib"
+				OutputFile="$(OutDir)\$(ProjectName).lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
@@ -579,7 +583,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\..\include;"
+				AdditionalIncludeDirectories="..\..\..\..\..\include;"
 				PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;WIN32"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -606,7 +610,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies="WinMM.Lib"
-				OutputFile=".\Release\jdkmidi.lib"
+				OutputFile="$(OutDir)\$(ProjectName).lib"
 				SuppressStartupBanner="true"
 			/>
 			<Tool
