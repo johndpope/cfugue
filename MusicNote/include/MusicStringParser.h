@@ -4,6 +4,7 @@
 #include "Parser.h"
 #include "Note.h"
 #include "KeySignature.h"
+#include "Chords.h"
 
 namespace MusicNoteLib
 {
@@ -134,12 +135,15 @@ namespace MusicNoteLib
             NOTE_SHRUTI_DOWN    = _T('.'),   ///< Decrements Note Shruti one level downward the Mandra Sthayi
         };
 
+        Chords m_Chords; // Holds the Chord Definitions
+
 		DICTIONARY m_Dictionary;	// Holds the custom MACRO definitions for Music Strings
 
         KeySignature m_KeySig;  // Holds the last seen Key Signature. Useful for computing Note value.
 
         unsigned short m_nDefNoteOctave;    // Holds the Default Octave Value to be used for Notes
         unsigned short m_nDefChordOctave;   // Holds the Default Octave Value to be used for Chords
+
 
 		/// <Summary>
 		/// Parses a single token. To Parse a string that contains multiple tokens, 
@@ -192,6 +196,7 @@ namespace MusicNoteLib
 			MusicNoteLib::PopulateStandardDefinitions(m_Dictionary); // Load standard macro definitions
             SetKeySignature(KeySignature());
             SetOctaveDefaults();
+            m_Chords.LoadDefinitions();
 		}
 
         /// Sets the KeySignature to be used for further Note parsing
@@ -206,6 +211,32 @@ namespace MusicNoteLib
         {
             m_nDefNoteOctave = nNoteDefOctave;
             m_nDefChordOctave = nChordDefOctave;
+        }
+
+        /// <Summary>
+        /// \brief Resets the Chord definitions to the supplied values.
+        /// Only refernce to the ChordDefs is hold by the parser. So, the internal
+        /// ChordDef objects used by the input chords object should not be freed
+        /// before this parser object is released.
+        /// See Chords::LoadDefinitions() for more details.
+        /// </Summary>
+        inline void LoadChords(const Chords& chords)
+        {
+            m_Chords = chords;
+        }
+
+        /// <Summary>
+        /// \brief Adds the supplied chord definitions to the existing definitions.
+        /// Only references to the ChordDef are stored in the parser object.
+        /// Hence the input pChords should be ensure to live longer than this
+        /// parser object to avoid any memory access errors.
+        /// @param pChords the array that holds the definitions of Chords to be added
+        /// @param nSize the size of the pChords array
+        /// \remarks It is caller's responsibility to avoid duplicate values that might collide with existing definitions.
+        /// </Summary>
+        inline void AddChordDefinitions(const ChordDef* pChords, int nSize)
+        {
+            m_Chords.AddDefinitions(pChords, nSize);
         }
 
 		/// <Summary>
@@ -272,16 +303,16 @@ namespace MusicNoteLib
 
 		struct NoteContext : public Note
 		{
+            typedef ChordDef::HALFSTEP HALFSTEP;
 			bool isNumeric;
 			bool isChord;
 			bool isNatural;
 			bool existsAnotherNote;
 			bool anotherIsSequential;
 			bool anotherIsParallel;
-			unsigned char	halfSteps[8];  
-			unsigned short	numHalfSteps;
 			short			octaveNumber;
             unsigned short  numSwaras; // [Carnatic] No.of Swaras the note spans, such as Sa, Pa etc...
+            const ChordDef* pChord; // Holds the Chord details, if isChord is true
 			NoteContext()	:
 				isNumeric(0),
 				isChord(0),
@@ -289,11 +320,10 @@ namespace MusicNoteLib
 				existsAnotherNote(1),
 				anotherIsSequential(0),
 				anotherIsParallel(0),
-				numHalfSteps(0),
 				octaveNumber(-1),
-                numSwaras(1)
+                numSwaras(1),
+                pChord(NULL)
 			{
-				memset(halfSteps, 0, sizeof(halfSteps));
 			}
 		};
 
@@ -329,6 +359,8 @@ namespace MusicNoteLib
 
 		/// <Summary> Parses any associated note octave </Summary>
 		int ParseNoteOctave(TCHAR* szToken, NoteContext& ctx);
+		/// <Summary> Parses any chords specified for the note </Summary>
+		int ParseNoteChord(TCHAR* szToken, NoteContext& ctx);
 		/// <Summary> Checks and Parses any associated notes </Summary>
 		int ParseNoteConnector(TCHAR* szToken, NoteContext& ctx);
 

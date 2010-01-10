@@ -13,6 +13,21 @@
 #endif // if defined(DEBUG)
 #endif // ifndef ENABLE_TRACING
 
+/// <Summary>
+/// Verbose is another mode of tracing where more verbose details of Parsing are reported.
+/// Verbose mode requires the Tracing to be enabled with ENABLE_TRACING defined apriori.
+/// Verbose more reports all possible internal details for the notes being parsed.
+/// It is possible to limit the Tracing the output by defining NO_VERBOSE.
+/// Using NO_VERBOSE with ENABLE_TRACING will only report significant parsing information and not everything.
+/// </Summary>
+//#if ENABLE_TRACING
+#ifndef NO_VERBOSE 
+#define Verbose(x)  Trace(x)
+#else
+#define Verbose(x)
+#endif
+//#endif
+
 #include "EventHandler.h"
 
 namespace MusicNoteLib
