@@ -91,7 +91,7 @@ extern "C"
     MUSICNOTELIB_API bool SaveAsMidiFile(const TCHAR* szMusicNotes, const char* szOutputFilePath);
 
     //MUSICNOTELIB_API typedef void (*ParseErrorProc)(const MusicNoteLib::CParser*, MusicNoteLib::CParser::ErrorEventHandlerArgs* pEvArgs);
-    MUSICNOTELIB_API typedef void (*ParseTraceProc)(const MusicNoteLib::CParser*, MusicNoteLib::CParser::TraceEventHandlerArgs* pEvArgs);
+    //MUSICNOTELIB_API typedef void (*ParseTraceProc)(const MusicNoteLib::CParser*, MusicNoteLib::CParser::TraceEventHandlerArgs* pEvArgs);
 
     MUSICNOTELIB_API void Parse(const TCHAR* szNotes, LPFNTRACEPROC traceCallbackProc, void* pUserData);
 
