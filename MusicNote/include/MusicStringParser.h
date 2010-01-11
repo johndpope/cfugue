@@ -47,6 +47,7 @@ namespace MusicNoteLib
 		/// <Summary> Note Numbers </Summary>
 		enum NoteNumbers : unsigned short
 		{
+			// These are relative half-step values in an octave
 			NOTE_C	= _T('C'),
 			NOTE_C_Value	= 0,
 			NOTE_D	= _T('D'),
@@ -62,6 +63,7 @@ namespace MusicNoteLib
 			NOTE_B	= _T('B'),
 			NOTE_B_Value	= 11,
 
+			// These are array indices for SwaraSthanas[] based on KeySignature Mela
 			SWARA_S	= _T('S'),
 			SWARA_S_Value	= 0,
 			SWARA_R	= _T('R'),
