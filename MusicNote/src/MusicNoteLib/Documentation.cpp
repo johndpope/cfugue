@@ -281,6 +281,7 @@ Typical examples of note tokens are notes, chords, ties and so on, while MIDI in
 When CFugue parses a MusicString, it uses the first character of the tokens to identify the notes and commands. If no decision can be made about a token, CFugue will simply ignore the token and moves on. This is unlike any typical parser behavior, where an unrecognized token will halt the parsing.
 
 Below are the first characters and their associated token classifications for CFugue MusicStrings:
+\htmlonly
 <table align="center">    
     <tr><td class="indexkey">Character</td> <td class="indexkey">API Constant</td>  <td class="indexkey">Significance</td>  </tr>
     <tr><td class="indexkey">V </td> <td class="indexvalue">TOKEN_START_VOICE  </td> <td class="indexvalue">Specifies a Voice token.</td></tr> 
@@ -296,6 +297,8 @@ Below are the first characters and their associated token classifications for CF
     <tr><td class="indexkey">| </td> <td class="indexvalue">TOKEN_START_MEASURE  </td> <td class="indexvalue">Specifies a Measure token.</td></tr> 
     <tr><td class="indexkey">$ </td> <td class="indexvalue">TOKEN_START_DICTIONARY  </td> <td class="indexvalue">Specifies a Dictionary token.</td></tr><!--     <tr><td>[ </td> <td>TOKEN_START_NOTE  </td> <td>Specifies a numeric Note token.</td></tr>  -->
 </table>
+\endhtmlonly
+
 When a token starts with a different character other than any of the above, CFugue tries to read the token as a note token. If it succeeds in that, it will generate note events for further processing. And if it fails, it will ignore the token and moves on.
 
 CFugue MusicStrings are case-insensitive. That is, the above characters, and any character for that matter, can be used in any case for the MusicStrings. CFugue will internally convert all the MusicStrings to upper case before processing them. Use this fact to your advantage by mixing the case for your MusicString tokens and making them more readable and easy to understand. Examples of few valid MusicStrings that showcase this advantage are:
@@ -311,13 +314,17 @@ CFugue MusicStrings are case-insensitive. That is, the above characters, and any
 
 \subsection subsecNotes Specifying Notes
 Specifying music notes in CFugue MusicStrings is simple and straight forward. Just indicate the root of the note followed by its optional attributes, such as octave, duration, any additional connectors etc. and you are done. Thus the structure of a valid note token is:
+\htmlonly
 <table align="center">
-    <tr> <td class="indexvalue">Root[Octave][Chord][Duration][Velocity][Connectors]</td> </tr>
+<tr> <td class="indexvalue">Root[Octave][Chord][Duration][Velocity][Connectors]</td> </tr>
 </table>
+\endhtmlonly
+
 Except for the Root, all others in the above are optional. And when they are present, they have to be in the order specified above. Changing the order will cause incorrect output.
 
 \subsubsection subsubRoot Root
 The root is specified either by the note name or by its MIDI value. Alphabets such as C, D, E .. indicate the names for the Western style and S, R, G .. indicate the names for the Carnatic style. The complete list is as shown below for the two systems:
+\htmlonly
 <table align="center">
  <tr> <td class="indexkey">Halfstep index</td>	<td class="indexkey">Western Note</td>	<td class="indexkey">Carnatic Swara</td> </tr>
  <tr> <td class="indexvalue">0</td>				<td class="indexvalue">C</td>				<td class="indexvalue">S</td>				</tr>
@@ -333,6 +340,8 @@ The root is specified either by the note name or by its MIDI value. Alphabets su
  <tr> <td class="indexvalue">10</td>			<td class="indexvalue">Bb</td>				<td class="indexvalue">N2</td>				</tr>
  <tr> <td class="indexvalue">11</td>			<td class="indexvalue">B</td>				<td class="indexvalue">N3</td>				</tr>
 </table>
+\endhtmlonly
+
 In addition, CFugue allows <i>#</i> and <i>b</i> modifiers for the Western style notes to access one halfstep up or down the given note. Thus, one can use <i>D#</i> to indicate the note <i>Eb</i>, <i>Fb</i> to indicate the note <i>E</i> and so on. Repeating a modifier more than once is also supported. For example, <i>C##</i> signifies <i>D</i>. However, it is advised to refrain from mixing <i>#</i> and <i>b</i> in the same token. For example, do not try something like <i>C\#b</i> to get back to <i>C</i>. Though CFugue understands such notation correctly, you are advised against practicing it.
 
 Similarily, for Carnatic music, CFugue allows <i>R3</i>, <i>G1</i>, <i>D3</i> and <i>N1</i> Swaras which essentially are the same as <i>G2</i>, <i>R2</i>, <i>N2</i> and <i>D2</i> from the above, respectively.
