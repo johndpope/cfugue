@@ -581,46 +581,46 @@ namespace MusicNoteLib
                 }
 		    case SWARA_M:
                 {
-                    pszToken++; ctx.noteNumber = SWARA_M_Value; 
-                    if(pszToken[0] == _T('A')) { pszToken++; ctx.numSwaras = 2;  }
-                    if(pszToken[0] == _T('1')) { pszToken++; ctx.isNatural = true; }
-                    else if(pszToken[0] == _T('2')) { pszToken++; ctx.noteNumber++; ctx.isNatural = true; }
+                    pszToken++; ctx.noteNumber = SWARA_M_Value; // if a note isNatural it will be played as is. No lookups or alterations.
+                    if(pszToken[0] == _T('A')) { pszToken++; ctx.numSwaras = 2;  } 
+                    if(pszToken[0] == _T('1')) { pszToken++; ctx.noteNumber = 5; ctx.isNatural = true; }
+                    else if(pszToken[0] == _T('2')) { pszToken++; ctx.noteNumber = 6; ctx.isNatural = true; }
                     break;
                 }
 		    case SWARA_R:
                 {
                     pszToken++; ctx.noteNumber = SWARA_R_Value; 
                     if(pszToken[0] == _T('I')) { pszToken++; ctx.numSwaras = 2; }
-                    if(pszToken[0] == _T('1')) { pszToken++; ctx.noteNumber--; ctx.isNatural = true; }
-                    else if(pszToken[0] == _T('2')) { pszToken++; ctx.isNatural = true; }
-                    else if(pszToken[0] == _T('3')) { pszToken++; ctx.noteNumber++; ctx.isNatural = true; }
+                    if(pszToken[0] == _T('1')) { pszToken++; ctx.noteNumber = 1; ctx.isNatural = true; }
+                    else if(pszToken[0] == _T('2')) { pszToken++; ctx.noteNumber = 2; ctx.isNatural = true; }
+                    else if(pszToken[0] == _T('3')) { pszToken++; ctx.noteNumber = 3; ctx.isNatural = true; }
                     break;
                 }
 		    case SWARA_G:
                 {
                     pszToken++; ctx.noteNumber = SWARA_G_Value; 
                     if(pszToken[0] == _T('A')) { pszToken++; ctx.numSwaras = 2; }
-                    if(pszToken[0] == _T('1')) { pszToken++; ctx.noteNumber-=2; ctx.isNatural = true; }
-                    else if(pszToken[0] == _T('2')) { pszToken++; ctx.noteNumber--; ctx.isNatural = true; }
-                    else if(pszToken[0] == _T('3')) { pszToken++; ctx.isNatural = true; }
+                    if(pszToken[0] == _T('1')) { pszToken++; ctx.noteNumber = 2; ctx.isNatural = true; }
+                    else if(pszToken[0] == _T('2')) { pszToken++; ctx.noteNumber = 3; ctx.isNatural = true; }
+                    else if(pszToken[0] == _T('3')) { pszToken++; ctx.noteNumber = 4; ctx.isNatural = true; }
                     break;
                 }
 		    case SWARA_D:
                 {
                     pszToken++; ctx.noteNumber = SWARA_D_Value; 
                     if(pszToken[0] == _T('A')) { pszToken++; ctx.numSwaras = 2; }
-                    if(pszToken[0] == _T('1')) { pszToken++; ctx.noteNumber--; ctx.isNatural = true; }
-                    else if(pszToken[0] == _T('2')) { pszToken++; ctx.isNatural = true; }
-                    else if(pszToken[0] == _T('3')) { pszToken++; ctx.noteNumber++; ctx.isNatural = true; }
+                    if(pszToken[0] == _T('1')) { pszToken++; ctx.noteNumber = 8; ctx.isNatural = true; }
+                    else if(pszToken[0] == _T('2')) { pszToken++; ctx.noteNumber = 9; ctx.isNatural = true; }
+                    else if(pszToken[0] == _T('3')) { pszToken++; ctx.noteNumber = 10; ctx.isNatural = true; }
                     break;
                 }
 		    case SWARA_N:
                 {
                     pszToken++; ctx.noteNumber = SWARA_N_Value; 
                     if(pszToken[0] == _T('I')) { pszToken++; ctx.numSwaras = 2; }
-                    if(pszToken[0] == _T('1')) { pszToken++; ctx.noteNumber-=2; ctx.isNatural = true; }
-                    else if(pszToken[0] == _T('2')) { pszToken++; ctx.noteNumber--; ctx.isNatural = true; }
-                    else if(pszToken[0] == _T('3')) { pszToken++; ctx.isNatural = true; }
+                    if(pszToken[0] == _T('1')) { pszToken++; ctx.noteNumber = 9; ctx.isNatural = true; }
+                    else if(pszToken[0] == _T('2')) { pszToken++; ctx.noteNumber = 10; ctx.isNatural = true; }
+                    else if(pszToken[0] == _T('3')) { pszToken++; ctx.noteNumber = 11; ctx.isNatural = true; }
                     break;
                 }
 		    default:
