@@ -271,14 +271,14 @@ the two notations with same ease.
 
 \note In addition, the same principles can be adapted for Hindustani music also to make it work side by side with Western music.
 -->
-Here we discuss at length the details of what constitues a MusicString and how it can be defined for using with CFugue.
+In the following we discuss at length the details of what constitues a MusicString and how it can be used for creating music with CFugue.
 
 \section secMusicString Components of MusicString
-In CFugue, a valid MusicString is formed out of a series of music tokens. Seperated with whitespace, each of them represents either a music note related data or a CFugue related command. The first character of a token usually determines if the token should be considered as a note token or a command token. 
+In CFugue, a valid MusicString is formed out of a series of music tokens. Tokens are nothing but sequence of alpha numeric charaters. Seperated with whitespace, each of them represents either a music note related data or a CFugue related command. The first character of a token usually determines if the token should be considered as a note token or a command token. 
 
 Typical examples of note tokens are notes, chords, ties and so on, while MIDI instructions, such as instrument change, voice command etc. are few examples of CFugue related commands.
 
-When CFugue parses a MusicString, it uses the first character of the tokens to identify the notes and commands. If no decision can be made about a token, CFugue will simply ignore the token and moves on. This is unlike any typical parser behavior, where an unrecognized token will halt the parsing.
+When CFugue parses a MusicString, it uses the first character of the tokens to identify the notes and commands. If no decision can be made about a token, CFugue will simply ignore the token and moves on (note that this is unlike any typical parser behavior, where an unrecognized token will halt the parsing).
 
 Below are the first characters and their associated token classifications for CFugue MusicStrings:
 \htmlonly
@@ -299,11 +299,10 @@ Below are the first characters and their associated token classifications for CF
 </table>
 \endhtmlonly
 
-When a token starts with a different character other than any of the above, CFugue tries to read the token as a note token. If it succeeds in that, it will generate note events for further processing. And if it fails, it will ignore the token and moves on.
+Each of these will be explained in detail in later parts of this discussion. For now, when a token starts with a character that is different from all of these shown above, CFugue tries to read that token as a note token. If it succeeds in that, it will generate note events for further processing. And if it fails, it will ignore the token and moves on.
 
-CFugue MusicStrings are case-insensitive. That is, the above characters, and any character for that matter, can be used in any case for the MusicStrings. CFugue will internally convert all the MusicStrings to upper case before processing them. Use this fact to your advantage by mixing the case for your MusicString tokens and making them more readable and easy to understand. Examples of few valid MusicStrings that showcase this advantage are:
+CFugue MusicStrings are case-insensitive. That is, the characters can be used in any case, either upper or lower, while creating the MusicStrings. CFugue will internally convert all the supplied MusicStrings to upper case before processing them. Use this fact to your advantage by mixing the case for your MusicString tokens and making them more readable and easy to understand. Examples of few valid MusicStrings that showcase this advantage are:
 <pre  class="fragment">
-    MusicNoteLib::Player player;
     player.Play("C");
     player.Play("FMaj");
     player.Play("Cq+Eh+Gq");
@@ -320,7 +319,7 @@ Specifying music notes in CFugue MusicStrings is simple and straight forward. Ju
 </table>
 \endhtmlonly
 
-Except for the Root, all others in the above are optional. And when they are present, they have to be in the order specified above. Changing the order will cause incorrect output.
+Except for the Root, all others in the above are optional. And when they are present, they have to be in the order specified above. Changing the order will cause incorrect results.
 
 \subsubsection subsubRoot Root
 The root is specified either by the note name or by its MIDI value. Alphabets such as C, D, E .. indicate the names for the Western style and S, R, G .. indicate the names for the Carnatic style. The complete list is as shown below for the two systems:
@@ -330,36 +329,187 @@ The root is specified either by the note name or by its MIDI value. Alphabets su
  <tr> <td class="indexvalue">0</td>				<td class="indexvalue">C</td>				<td class="indexvalue">S</td>				</tr>
  <tr> <td class="indexvalue">1</td>				<td class="indexvalue">C#</td>				<td class="indexvalue">R1</td>				</tr>
  <tr> <td class="indexvalue">2</td>				<td class="indexvalue">D</td>				<td class="indexvalue">R2</td>				</tr>
- <tr> <td class="indexvalue">3</td>				<td class="indexvalue">Eb</td>				<td class="indexvalue">G2</td>				</tr>
+ <tr> <td class="indexvalue">3</td>				<td class="indexvalue">E<i>b</i></td>				<td class="indexvalue">G2</td>				</tr>
  <tr> <td class="indexvalue">4</td>				<td class="indexvalue">E</td>				<td class="indexvalue">G3</td>				</tr>
  <tr> <td class="indexvalue">5</td>				<td class="indexvalue">F</td>				<td class="indexvalue">M1</td>				</tr>
  <tr> <td class="indexvalue">6</td>				<td class="indexvalue">F#</td>				<td class="indexvalue">M2</td>				</tr>
  <tr> <td class="indexvalue">7</td>				<td class="indexvalue">G</td>				<td class="indexvalue">P</td>				</tr>
  <tr> <td class="indexvalue">8</td>				<td class="indexvalue">G#</td>				<td class="indexvalue">D1</td>				</tr>
  <tr> <td class="indexvalue">9</td>				<td class="indexvalue">A</td>				<td class="indexvalue">D2</td>				</tr>
- <tr> <td class="indexvalue">10</td>			<td class="indexvalue">Bb</td>				<td class="indexvalue">N2</td>				</tr>
+ <tr> <td class="indexvalue">10</td>			<td class="indexvalue">B<i>b</i></td>				<td class="indexvalue">N2</td>				</tr>
  <tr> <td class="indexvalue">11</td>			<td class="indexvalue">B</td>				<td class="indexvalue">N3</td>				</tr>
 </table>
 \endhtmlonly
 
-In addition, CFugue allows <i>#</i> and <i>b</i> modifiers for the Western style notes to access one halfstep up or down the given note. Thus, one can use <i>D#</i> to indicate the note <i>Eb</i>, <i>Fb</i> to indicate the note <i>E</i> and so on. Repeating a modifier more than once is also supported. For example, <i>C##</i> signifies <i>D</i>. However, it is advised to refrain from mixing <i>#</i> and <i>b</i> in the same token. For example, do not try something like <i>C\#b</i> to get back to <i>C</i>. Though CFugue understands such notation correctly, you are advised against practicing it.
+In addition, CFugue allows <i>#</i> and <i>b</i> modifiers for the Western style notes to access one halfstep up or down the given note. Thus, one can use <i>D#</i> to indicate the note <i>Eb</i>, <i>Fb</i> to indicate the note <i>E</i> and so on. Repeating a modifier more than once is also supported. For example, <i>C##</i> signifies <i>D</i> and <i>Bbb</i> signifies <i>A</i>. However, it is advised to refrain from mixing <i>#</i> and <i>b</i> in the same token. For example, do not try something like <i>C\#b</i> to get back to <i>C</i>. Though CFugue understands such notation correctly, it is not always guaranteed to work.
 
 Similarily, for Carnatic music, CFugue allows <i>R3</i>, <i>G1</i>, <i>D3</i> and <i>N1</i> Swaras which essentially are the same as <i>G2</i>, <i>R2</i>, <i>N2</i> and <i>D2</i> from the above, respectively.
 
-\note However, there is one thing that should be taken care though. Before we can pass any Carnatic music notes to CFugue for parsing, it need to be informed that we are indeed passing a Carnatic style of notes and not Western style of notes. That is, we need to tell CFugue to use Carnatic note parser and not the default Western note parser for the notes we are about to supply. We do this by using the \ref subKeySignatures "Key Signature" directive as shown below:
-<pre class="fragment">
-    MusicNoteLib::Player player;
-    <span class="comment">// Switch to Carnatic mode and play some notes</span>
-    player.Play("K[MELA] S R G M P D N");
-</pre> The K[MELA] directive informs the parser to switch to Carnatic mode of parsing and to interpret the subsequent notes in that mode. For further discussion on this please refer \ref subKeySignatures "Key Signatures".
+\note Before we can pass any Carnatic music notes to CFugue for parsing, it need to be informed that we are indeed passing Carnatic style of notes and not Western style of notes. That is, we need to tell CFugue to use Carnatic note parser and not the default Western note parser for the notes we are about to supply. We do this by using the \ref subKeySignatures "Key Signature" directive as shown below:
+<pre class="fragment">   
+    player.Play("K[MELA] S R G M P D N"); <span class="comment">// Switch to Carnatic mode and play some notes</span>
+</pre> The K[MELA] directive informs the parser to switch to Carnatic mode of parsing and to interpret the subsequent notes in that mode. For further discussion on this, please refer \ref subKeySignatures "Key Signatures".
 
-A note can also be specified using its MIDI number directly. Usually, when a note is specified using its name, such as C, D, E .. or S, R, G.., it is treated as a relative note. Its absolute position will be computed based on the Octave specifiers and the Scale/Raga settings later. On the otherhand, when a note is specified with its MIDI number value, it is treated as an absolute note and will not be affected by the current Scale or Octave settings. An example of such numeric note is:
+A note can also be specified using its MIDI number directly. Usually, when a note is specified using its name, such as C, D, E .. or S, R, G.., it is treated as a relative note. Its absolute position will be internally re-computed based on the Octave specifiers and the Scale/Raga settings later once the parsing is complete. On the otherhand, when a note is specified with its MIDI number value, it is treated as an absolute note and will not be affected by the current Scale or Octave settings. An example of such numeric note is:
 <pre class="fragment">
-    MusicNoteLib::Player player;
     <span class="comment">// Play a Mid-C </span>
     player.Play("[60]");
 </pre>
-Observe that we need to include the MIDI number of the note with in the square brackets [].
+Observe that we need to include the MIDI number of the note with in the square brackets []. Below is the complete listing of MIDI numbers for all the notes.
+\htmlonly
+<table>
+<tr><td align="center" class="indexkey">Octave</td><td align="center" class="indexkey">C<br>S</td> <td align="center" class="indexkey">C#/D<i>b</i><br>R1</td> <td align="center" class="indexkey">D<br>R2/G1</td> <td align="center" class="indexkey">D#/E<i>b</i><br>R3/G2</td><td align="center" class="indexkey">E<br>G3</td><td align="center" class="indexkey">F<br>M1</td><td align="center" class="indexkey">F#/G<i>b</i><br>M2</td><td align="center" class="indexkey">G<br>P</td><td align="center" class="indexkey">G#/A<i>b</i><br>D1</td><td align="center" class="indexkey">A<br>D2/N1</td><td align="center" class="indexkey">A#/B<i>b</i><br>N2</td><td align="center" class="indexkey">B<br>N3</td>  </tr>
+<tr> <td align="center" class="indexkey">0</td>
+        <td align="center" class="indexvalue">0</td>
+        <td align="center" class="indexvalue">1</td>
+        <td align="center" class="indexvalue">2</td>
+        <td align="center" class="indexvalue">3</td>
+        <td align="center" class="indexvalue">4</td>
+        <td align="center" class="indexvalue">5</td>
+        <td align="center" class="indexvalue">6</td>
+        <td align="center" class="indexvalue">7</td>
+        <td align="center" class="indexvalue">8</td>
+        <td align="center" class="indexvalue">9</td>
+        <td align="center" class="indexvalue">10</td>
+        <td align="center" class="indexvalue">11</td>
+</tr>
+<tr> <td align="center" class="indexkey">1</td>
+        <td align="center" class="indexvalue">12</td>
+        <td align="center" class="indexvalue">13</td>
+        <td align="center" class="indexvalue">14</td>
+        <td align="center" class="indexvalue">15</td>
+        <td align="center" class="indexvalue">16</td>
+        <td align="center" class="indexvalue">17</td>
+        <td align="center" class="indexvalue">18</td>
+        <td align="center" class="indexvalue">19</td>
+        <td align="center" class="indexvalue">20</td>
+        <td align="center" class="indexvalue">21</td>
+        <td align="center" class="indexvalue">22</td>
+        <td align="center" class="indexvalue">23</td>
+</tr>
+<tr> <td align="center" class="indexkey">2</td>
+        <td align="center" class="indexvalue">24</td>
+        <td align="center" class="indexvalue">25</td>
+        <td align="center" class="indexvalue">26</td>
+        <td align="center" class="indexvalue">27</td>
+        <td align="center" class="indexvalue">28</td>
+        <td align="center" class="indexvalue">29</td>
+        <td align="center" class="indexvalue">30</td>
+        <td align="center" class="indexvalue">31</td>
+        <td align="center" class="indexvalue">32</td>
+        <td align="center" class="indexvalue">33</td>
+        <td align="center" class="indexvalue">34</td>
+        <td align="center" class="indexvalue">35</td>
+</tr>
+<tr> <td align="center" class="indexkey">3</td>
+        <td align="center" class="indexvalue">36</td>
+        <td align="center" class="indexvalue">37</td>
+        <td align="center" class="indexvalue">38</td>
+        <td align="center" class="indexvalue">39</td>
+        <td align="center" class="indexvalue">40</td>
+        <td align="center" class="indexvalue">41</td>
+        <td align="center" class="indexvalue">42</td>
+        <td align="center" class="indexvalue">43</td>
+        <td align="center" class="indexvalue">44</td>
+        <td align="center" class="indexvalue">45</td>
+        <td align="center" class="indexvalue">46</td>
+        <td align="center" class="indexvalue">47</td>
+</tr>
+<tr> <td align="center" class="indexkey">4</td>
+        <td align="center" class="indexvalue">48</td>
+        <td align="center" class="indexvalue">49</td>
+        <td align="center" class="indexvalue">50</td>
+        <td align="center" class="indexvalue">51</td>
+        <td align="center" class="indexvalue">52</td>
+        <td align="center" class="indexvalue">53</td>
+        <td align="center" class="indexvalue">54</td>
+        <td align="center" class="indexvalue">55</td>
+        <td align="center" class="indexvalue">56</td>
+        <td align="center" class="indexvalue">57</td>
+        <td align="center" class="indexvalue">58</td>
+        <td align="center" class="indexvalue">59</td>
+</tr>
+<tr> <td align="center" class="indexkey">5</td>
+        <td align="center" class="indexvalue">60</td>
+        <td align="center" class="indexvalue">61</td>
+        <td align="center" class="indexvalue">62</td>
+        <td align="center" class="indexvalue">63</td>
+        <td align="center" class="indexvalue">64</td>
+        <td align="center" class="indexvalue">65</td>
+        <td align="center" class="indexvalue">66</td>
+        <td align="center" class="indexvalue">67</td>
+        <td align="center" class="indexvalue">68</td>
+        <td align="center" class="indexvalue">69</td>
+        <td align="center" class="indexvalue">70</td>
+        <td align="center" class="indexvalue">71</td>
+</tr>
+<tr> <td align="center" class="indexkey">6</td>
+        <td align="center" class="indexvalue">72</td>
+        <td align="center" class="indexvalue">73</td>
+        <td align="center" class="indexvalue">74</td>
+        <td align="center" class="indexvalue">75</td>
+        <td align="center" class="indexvalue">76</td>
+        <td align="center" class="indexvalue">77</td>
+        <td align="center" class="indexvalue">78</td>
+        <td align="center" class="indexvalue">79</td>
+        <td align="center" class="indexvalue">80</td>
+        <td align="center" class="indexvalue">81</td>
+        <td align="center" class="indexvalue">82</td>
+        <td align="center" class="indexvalue">83</td>
+</tr>
+<tr> <td align="center" class="indexkey">7</td>
+        <td align="center" class="indexvalue">84</td>
+        <td align="center" class="indexvalue">85</td>
+        <td align="center" class="indexvalue">86</td>
+        <td align="center" class="indexvalue">87</td>
+        <td align="center" class="indexvalue">88</td>
+        <td align="center" class="indexvalue">89</td>
+        <td align="center" class="indexvalue">90</td>
+        <td align="center" class="indexvalue">91</td>
+        <td align="center" class="indexvalue">92</td>
+        <td align="center" class="indexvalue">93</td>
+        <td align="center" class="indexvalue">94</td>
+        <td align="center" class="indexvalue">95</td>
+</tr>
+<tr> <td align="center" class="indexkey">8</td>
+        <td align="center" class="indexvalue">96</td>
+        <td align="center" class="indexvalue">97</td>
+        <td align="center" class="indexvalue">98</td>
+        <td align="center" class="indexvalue">99</td>
+        <td align="center" class="indexvalue">100</td>
+        <td align="center" class="indexvalue">101</td>
+        <td align="center" class="indexvalue">102</td>
+        <td align="center" class="indexvalue">103</td>
+        <td align="center" class="indexvalue">104</td>
+        <td align="center" class="indexvalue">105</td>
+        <td align="center" class="indexvalue">106</td>
+        <td align="center" class="indexvalue">107</td>
+</tr>
+<tr> <td align="center" class="indexkey">9</td>
+        <td align="center" class="indexvalue">108</td>
+        <td align="center" class="indexvalue">109</td>
+        <td align="center" class="indexvalue">110</td>
+        <td align="center" class="indexvalue">111</td>
+        <td align="center" class="indexvalue">112</td>
+        <td align="center" class="indexvalue">113</td>
+        <td align="center" class="indexvalue">114</td>
+        <td align="center" class="indexvalue">115</td>
+        <td align="center" class="indexvalue">116</td>
+        <td align="center" class="indexvalue">117</td>
+        <td align="center" class="indexvalue">118</td>
+        <td align="center" class="indexvalue">119</td>
+</tr>
+<tr> <td align="center" class="indexkey">10</td>
+        <td align="center" class="indexvalue">120</td>
+        <td align="center" class="indexvalue">121</td>
+        <td align="center" class="indexvalue">122</td>
+        <td align="center" class="indexvalue">123</td>
+        <td align="center" class="indexvalue">124</td>
+        <td align="center" class="indexvalue">125</td>
+        <td align="center" class="indexvalue">126</td>
+        <td align="center" class="indexvalue">127</td>
+</tr>
+</table>\endhtmlonly
 
 \subsubsection subsubOctave Octave
 --Octave details go here..to be completed on..--
@@ -380,4 +530,26 @@ automated Music analysis, recognition and generation to experimental cross genre
 are going to benefit immesenly from this work. We have kept all the options open, to ensure we include
 the new developments in the work as and when we discover the scope for improvements.
 
+*/
+
+/* Code that generates MIDI Note numbers for all notes
+#include <stdio.h>
+#include <stdlib.h>
+void main(int argc, char* argv[])
+{
+    printf("\n<table>");
+    printf("\n<tr><td align=\"center\" class=\"indexkey\">Octave</td><td align=\"center\" class=\"indexkey\">C<br>S</td> <td align=\"center\" class=\"indexkey\">C#/D<i>b</i><br>R1</td> <td align=\"center\" class=\"indexkey\">D<br>R2/G1</td> <td align=\"center\" class=\"indexkey\">D#/E<i>b</i><br>R3/G2</td><td align=\"center\" class=\"indexkey\">E<br>G3</td><td align=\"center\" class=\"indexkey\">F<br>M1</td><td align=\"center\" class=\"indexkey\">F#/G<i>b</i><br>M2</td><td align=\"center\" class=\"indexkey\">G<br>P</td><td align=\"center\" class=\"indexkey\">G#/A<i>b</i><br>D1</td><td align=\"center\" class=\"indexkey\">A<br>D2/N1</td><td align=\"center\" class=\"indexkey\">A#/B<i>b</i><br>N2</td><td align=\"center\" class=\"indexkey\">B<br>N3</td>  </tr>");
+
+    for(int octave=0, nMidiNumber=0; octave <= 10; ++octave)
+    {
+        printf("\n<tr> <td align=\"center\" class=\"indexkey\">%d</td>", octave);
+        for(int halfstep = 0; halfstep <= 11; ++halfstep, nMidiNumber++)
+        {
+            if(nMidiNumber < 128) printf("\n\t<td align=\"center\" class=\"indexvalue\">%d</td>", nMidiNumber);
+        }
+        printf("\n</tr>");
+    }
+
+    printf("\n</table>\n");
+}
 */
