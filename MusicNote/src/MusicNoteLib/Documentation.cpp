@@ -12,12 +12,12 @@
 /*! \mainpage MusicNoteLib, The C++ Music Programming Library
 
 \section mainPageContents Contents
-	- \ref overview
-	- \ref features
-	- \ref pageExamples "How to use CFugue API"
-	- \ref pageMusicString "CFugue MusicString Specifications"
-	- \ref download "Download CFugue"
-	- \ref copyright "Contact us"
+    - \ref overview
+    - \ref features
+    - \ref pageExamples "How to use CFugue API"
+    - \ref pageMusicString "CFugue MusicString Specifications"
+    - \ref download "Download CFugue"
+    - \ref copyright "Contact us"
 
 \section overview Overview
 
@@ -36,7 +36,7 @@ based systems.
 \section usage Usage
 
 Using this library to play music is as easy as writing plain music notes. Just create
-a Player object and call the Play method on it supplying the Music notes to be played. Simple.
+a Player object and call the Play method on it, supplying the Music notes to be played. Simple.
 <pre class="fragment">
     \#include "MusicNoteLib.h"
 
@@ -47,7 +47,7 @@ a Player object and call the Play method on it supplying the Music notes to be p
     }
 </pre>
 And the music notes are not restricted to be of just Western sytle either. CFugue fully 
-supports both Western and Carnatic Music notations - with a simple hint from the KeySignature
+supports both Western and Carnatic Music notations - with a simple hint from the \ref subKeySignatures "KeySignature"
 directive, one should be able to switch between them seemlessly.
 
 For more usage demonstrations, please refer to \ref pageExamples "CFugue examples".
@@ -247,6 +247,8 @@ Play or Save methods is invoked on the player. A sample demonstrating the proced
         - \ref subsecNotes
             - \ref subsubRoot
             - \ref subsubOctave
+        - \ref subKeySignatures
+    - \ref secInteroperation
     - \ref index "Back to main page"
 
 \section introduction Introduction
@@ -278,7 +280,7 @@ In CFugue, a valid MusicString is formed out of a series of music tokens. Tokens
 
 Typical examples of note tokens are notes, chords, ties and so on, while MIDI instructions, such as instrument change, voice command etc. are few examples of CFugue related commands.
 
-When CFugue parses a MusicString, it uses the first character of the tokens to identify the notes and commands. If no decision can be made about a token, CFugue will simply ignore the token and moves on (note that this is unlike any typical parser behavior, where an unrecognized token will halt the parsing).
+When CFugue parses a MusicString, it uses the first character of the tokens to identify the notes and commands. If no decision can be made about a token, CFugue will simply ignore the token and moves on (observe that this is unlike any typical parser behavior, where an unrecognized token will halt the parsing).
 
 Below are the first characters and their associated token classifications for CFugue MusicStrings:
 \htmlonly
@@ -322,7 +324,7 @@ Specifying music notes in CFugue MusicStrings is simple and straight forward. Ju
 Except for the Root, all others in the above are optional. And when they are present, they have to be in the order specified above. Changing the order will cause incorrect results.
 
 \subsubsection subsubRoot Root
-The root is specified either by the note name or by its MIDI value. Alphabets such as C, D, E .. indicate the names for the Western style and S, R, G .. indicate the names for the Carnatic style. The complete list is as shown below for the two systems:
+The root is specified either by a note name or by its MIDI numeric value. Alphabets such as C, D, E .. indicate the names for the Western style and S, R, G .. indicate the names for the Carnatic style. The complete list is as shown below for the two systems:
 \htmlonly
 <table align="center">
  <tr> <td class="indexkey">Halfstep index</td>	<td class="indexkey">Western Note</td>	<td class="indexkey">Carnatic Swara</td> </tr>
@@ -341,23 +343,24 @@ The root is specified either by the note name or by its MIDI value. Alphabets su
 </table>
 \endhtmlonly
 
-In addition, CFugue allows <i>#</i> and <i>b</i> modifiers for the Western style notes to access one halfstep up or down the given note. Thus, one can use <i>D#</i> to indicate the note <i>Eb</i>, <i>Fb</i> to indicate the note <i>E</i> and so on. Repeating a modifier more than once is also supported. For example, <i>C##</i> signifies <i>D</i> and <i>Bbb</i> signifies <i>A</i>. However, it is advised to refrain from mixing <i>#</i> and <i>b</i> in the same token. For example, do not try something like <i>C\#b</i> to get back to <i>C</i>. Though CFugue understands such notation correctly, it is not always guaranteed to work.
+In addition, CFugue allows <i>#</i> and <i>b</i> modifiers for the Western style of notes to access one halfstep up or down the given note. Thus, one can use <i>D#</i> to indicate the note <i>Eb</i>, <i>Fb</i> to indicate the note <i>E</i> and so on. Repeating a modifier more than once is also supported. For example, <i>C##</i> signifies <i>D</i> and <i>Bbb</i> signifies <i>A</i>. However, it is advised to refrain from mixing <i>#</i> and <i>b</i> in the same token. For example, do not try something like <i>C\#b</i> to get back to <i>C</i>. Though CFugue understands such notation correctly, it is not always guaranteed to work.
 
-Similarily, for Carnatic music, CFugue allows <i>R3</i>, <i>G1</i>, <i>D3</i> and <i>N1</i> Swaras which essentially are the same as <i>G2</i>, <i>R2</i>, <i>N2</i> and <i>D2</i> from the above, respectively.
+Similarily, for Carnatic music, CFugue allows <i>R3</i>, <i>G1</i>, <i>D3</i> and <i>N1</i> Swaras, which essentially are the same as <i>G2</i>, <i>R2</i>, <i>N2</i> and <i>D2</i> from the above, respectively.
 
 \note Before we can pass any Carnatic music notes to CFugue for parsing, it need to be informed that we are indeed passing Carnatic style of notes and not Western style of notes. That is, we need to tell CFugue to use Carnatic note parser and not the default Western note parser for the notes we are about to supply. We do this by using the \ref subKeySignatures "Key Signature" directive as shown below:
-<pre class="fragment">   
-    player.Play("K[MELA] S R G M P D N"); <span class="comment">// Switch to Carnatic mode and play some notes</span>
+<pre class="fragment">
+    <span class="comment">// Switch to Carnatic mode and play some notes</span>
+    player.Play("K[MELA] S R G M P D N"); 
 </pre> The K[MELA] directive informs the parser to switch to Carnatic mode of parsing and to interpret the subsequent notes in that mode. For further discussion on this, please refer \ref subKeySignatures "Key Signatures".
 
-A note can also be specified using its MIDI number directly. Usually, when a note is specified using its name, such as C, D, E .. or S, R, G.., it is treated as a relative note. Its absolute position will be internally re-computed based on the Octave specifiers and the Scale/Raga settings later once the parsing is complete. On the otherhand, when a note is specified with its MIDI number value, it is treated as an absolute note and will not be affected by the current Scale or Octave settings. An example of such numeric note is:
+A note can also be specified using its MIDI numeric value directly. Usually, when a note is specified using its name, such as C, D, E .. or S, R, G.., it is treated as a relative note. Its absolute position will be internally re-computed based on the Octave specifiers and the Scale/Raga settings later once the parsing is complete. On the otherhand, when a note is specified with its MIDI numeric value, it is treated as an absolute note and will not be affected by the current Scale or Octave settings. An example of such numeric note is:
 <pre class="fragment">
     <span class="comment">// Play a Mid-C </span>
     player.Play("[60]");
 </pre>
-Observe that we need to include the MIDI number of the note with in the square brackets []. Below is the complete listing of MIDI numbers for all the notes.
+Observe that we need to include the numeric value with in square brackets []. Failing to do so will make the CFugue ignore the token. Below is the complete listing of MIDI numeric values for all the notes.
 \htmlonly
-<table>
+<table align="center">
 <tr><td align="center" class="indexkey">Octave</td><td align="center" class="indexkey">C<br>S</td> <td align="center" class="indexkey">C#/D<i>b</i><br>R1</td> <td align="center" class="indexkey">D<br>R2/G1</td> <td align="center" class="indexkey">D#/E<i>b</i><br>R3/G2</td><td align="center" class="indexkey">E<br>G3</td><td align="center" class="indexkey">F<br>M1</td><td align="center" class="indexkey">F#/G<i>b</i><br>M2</td><td align="center" class="indexkey">G<br>P</td><td align="center" class="indexkey">G#/A<i>b</i><br>D1</td><td align="center" class="indexkey">A<br>D2/N1</td><td align="center" class="indexkey">A#/B<i>b</i><br>N2</td><td align="center" class="indexkey">B<br>N3</td>  </tr>
 <tr> <td align="center" class="indexkey">0</td>
         <td align="center" class="indexvalue">0</td>
@@ -511,11 +514,46 @@ Observe that we need to include the MIDI number of the note with in the square b
 </tr>
 </table>\endhtmlonly
 
+Be informed that when you specify a note using its MIDI numeric value, you cannot use the Octave field in the token anymore. Octave fields are only applicable for notes specified using their names.
 \subsubsection subsubOctave Octave
 --Octave details go here..to be completed on..--
 
 \subsection subKeySignatures Specifying Key Signatures
---Key Signature information goes here...to be completed..--
+KeySignature specification is one of the powerful features of CFugue MusicStrings that makes it easy to write music notes and keep them simple and clean. A KeySignature essentially indicates how CFugue should interpret the notes it encouters during the MusicString parsing.
+
+In CFugue, KeySignature tokens are identified with character <b>K</b> at their beginning. Below are few examples of valid KeySignature tokens:
+<pre class="fragment">
+    player.Play("K[CMAJ]"); 
+    player.Play("K[F#MAJ]"); 
+    player.Play("K[KANAKANGI]"); 
+</pre>
+Ofcourse, the above does not produce any music output since there are no notes specified in the input. Usually one supplies a series of note tokens after a KeySignature token for generting music as per the supplied Key. Examples are as shown below:
+<pre class="fragment">
+    player.Play("K[CMaj] C D E F G A B"); <span class="comment">// Play an Octave in CMajor Scale </span>
+    player.Play("K[FMaj] C D E F G A B"); <span class="comment">// Play an Octave in FMajor Scale </span>
+    player.Play("K[Kalyani] S R G M P D N"); <span class="comment">// Play an Octave in Kalyani Ragam</span> 
+    player.Play("K[Kanakangi] S R G M P D N"); <span class="comment">// Play an Octave in Kanakangi Ragam</span> 
+</pre>
+
+When a note is specified using its name, CFugue considers it as a relative half-step value within an octave. The KeySignature directive helps CFugue compute the absolute MIDI numeric value of the note based on the selected Scale/Ragam value. When one specifies tokens such as K[CMaj] or K[Kalyani] in the MusicStrings, CFugue starts interpreting the named notes C, D, E.. S, R, G.. according to their values in CMajor Scale or Kalyani Raga.
+
+For example, in the above, when K[FMaj] is specified, the B note in the octave will be treated as B<i>b</i> automatically. Similarily, for K[Kalyani], the M note will be treated as M2 automatically. This makes it very convenient to change the Scale/Raga easily without modifying the notes.
+
+When no KeySignature is specified, CFugue assumes these default Values: K[CMaj] for Western and K[Shankarabharanam] for Carnatic.
+
+When a KeySignature is specified, it will be applied for all subsequent notes. However, if you do not want the KeySignature to be applied to any specific note, you have to either use the MIDI numeric value directly or use the note modifier <i>n</i> to declare it as a natural note. (Note modifiers are not applicable for Carnatic music. You have to explicitly specify the complete name, such as R1, R2 etc. to make it a natural note.) Natural notes are not affected by KeySignature. By definition, all MIDI numeric notes are natural notes. Thus, the below all five produce the same result.
+<pre class="fragment">
+    player.Play("K[CMaj] C D E F G A B"); <span class="comment">// Play an Octave in CMajor Scale </span>
+    player.Play("K[FMaj] C D E F G A Bn"); <span class="comment">// B is declared as natural. FMaj is ignored for B</span>
+    player.Play("K[Shankarabharanam] S R G M P D N"); <span class="comment">// Play an Octave in Shankarabharanam Ragam</span> 
+    player.Play("K[Kalyani] S R G M1 P D N"); <span class="comment">// M1 declared explicitly. Kalyani is ignored for M</span> 
+    player.Play("K[FMaj] C D E F G A [71]"); <span class="comment">// [71] is numeric note. FMaj is ignored for it</span>
+</pre>
+
+For details on how to interoperate between Western and Carnatic style of music, refer \ref secInteroperation.
+
+\section secInteroperation Interoperating Western and Carnatic Music
+By default CFugue starts parsing the notes in Western mode. However, 
 */
 
 /////////////////////////////////////////////////////////////////
