@@ -21,7 +21,7 @@ namespace MusicNoteLib
 			TOKEN_START_TEMPO			= _T('T'),  ///< Specifies a Tempo token 
 			TOKEN_START_INSTRUMENT		= _T('I'),  ///< Specifies a Instrument token 
 			TOKEN_START_LAYER			= _T('L'),  ///< Specifies a Layer token 
-			TOKEN_START_SIGNATURE		= _T('K'),  ///< Specifies a Signature token 
+			TOKEN_START_KEYSIGNATURE	= _T('K'),  ///< Specifies a KeySignature token 
 			TOKEN_START_CONTROLLER		= _T('X'),  ///< Specifies a Controller token 
 			TOKEN_START_TIME			= _T('@'),  ///< Specifies a Time token
 			TOKEN_START_KEYPRESSURE		= _T('*'),  ///< Specifies a Keypressure token
