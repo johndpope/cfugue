@@ -266,13 +266,7 @@ as opposed to the usual complex binary data byte form. This makes it easy to lea
         player.Play("C CMaj"); <span class="comment">// Play a Mid-C followed by C-Major Chord </span>
     }
 </pre>
-<!-- A powerful feature of CFugue's MusicString is its ability to work with both Western and Carnatic music 
-with same ease. For the first time in the music world, it is now not only possible to specify 
-Carnatic music Swaras side by side with Western Notes, it is also possible to transform between 
-the two notations with same ease. 
 
-\note In addition, the same principles can be adapted for Hindustani music also to make it work side by side with Western music.
--->
 In the following we discuss at length the details of what constitues a MusicString and how it can be used for creating music with CFugue.
 
 \section secMusicString Components of MusicString
@@ -290,7 +284,7 @@ Below are the first characters and their associated token classifications for CF
     <tr><td class="indexkey">T </td> <td class="indexvalue">TOKEN_START_TEMPO  </td> <td class="indexvalue">Specifies a Tempo token.</td></tr>
     <tr><td class="indexkey">I </td> <td class="indexvalue">TOKEN_START_INSTRUMENT  </td> <td class="indexvalue">Specifies a Instrument token.</td></tr> 
     <tr><td class="indexkey">L </td> <td class="indexvalue">TOKEN_START_LAYER  </td> <td class="indexvalue">Specifies a Layer token.</td></tr> 
-    <tr><td class="indexkey">K </td> <td class="indexvalue">TOKEN_START_SIGNATURE  </td> <td class="indexvalue">Specifies a Signature token.</td></tr> 
+    <tr><td class="indexkey">K </td> <td class="indexvalue">TOKEN_START_SIGNATURE  </td> <td class="indexvalue">Specifies a KeySignature token.</td></tr> 
     <tr><td class="indexkey">X </td> <td class="indexvalue">TOKEN_START_CONTROLLER  </td> <td class="indexvalue">Specifies a Controller token.</td></tr> 
     <tr><td class="indexkey">@ </td> <td class="indexvalue">TOKEN_START_TIME  </td> <td class="indexvalue">Specifies a Time token.</td></tr> 
     <tr><td class="indexkey">* </td> <td class="indexvalue">TOKEN_START_KEYPRESSURE  </td> <td class="indexvalue">Specifies a Keypressure token.</td></tr>  
@@ -516,7 +510,22 @@ Observe that we need to include the numeric value with in square brackets []. Fa
 
 Be informed that when you specify a note using its MIDI numeric value, you cannot use the Octave field in the token anymore. Octave fields are only applicable for notes specified using their names.
 \subsubsection subsubOctave Octave
---Octave details go here..to be completed on..--
+For Western music, CFugue supports octaves in the range [0, 10]. You can specify an octave for a non-numeric note by appending the octave number to it, such as <i>C2</i> to signify C note in 2nd octave or <i>Bb8</i> to signify B-flat note in 8th octave. (Observe that some notations start the octave values from -1 instead of 0. CFugue starts the octave numbering at 0. Middle-C in CFugue is C5, which is MIDI note value 60.)
+
+Octaves are optional. If you do not specify any octave value for a note, a default value of Octave 5 will be used for that note (unless it is a chord note, in which case a default value of 3 will be used). 
+
+For Carnatic music, there is no concept of absolute octaves. Instead it supports the concept of <i>Sthayis</i>, which is a relative value that changes from instrument to instrument and from person to person. Typically each singer will be having his/her own base <i>Sthayi</i>, which is usually referred to as medium sthayi, and varies above and below it, leading to upper sthayi notes and lower sthayi notes.
+
+In CFugue's Carnatic music notation, a plain note indicates a medium sthayi note. One can append the character <i>'</i> to get an upper sthayi note of it, and the character <i>.</i> to get a lower sthayi note of it. For example, <i>S'</i> is the upper sthayi note of the medium note <i>S</i>, with <i>S.</i> being its lower sthayi correspondent.
+
+Multiple <i>'</i> and <i>.</i> can be appended to a note to get more upper and lower sthayis, such as <i>P'''</i> or <i>D...</i>. However, do not mix <i>'</i> and <i>.</i> in a single token. For example, usage such as <i>S'.</i> is not valid. <i>S'.</i> is not same as <i>S</i> in CFugue.
+
+Below are few valid examples of notes with Octaves and Sthayis. 
+<pre class="fragment">
+    player.Play(" C4 D4 E4 F4 G4 A4 B4    C D E F G A B    C6 C#6 E6 F#6 G6 Ab6 B6 "); 
+    player.Play(" S. R. G. M. P. D. N.    S R G M P D N    S' R1' G' M2' P' D1' N' "); 
+</pre>
+For compatibility between Western and Carnatic music, CFugue defines the default medium sthayi as Octave 5. Thus, both of the above two lines produce the same results. For further details on how to interoperate between Western and Carnatic style of music, refer \ref secInteroperation.
 
 \subsection subKeySignatures Specifying Key Signatures
 KeySignature specification is one of the powerful features of CFugue MusicStrings that makes it easy to write music notes and keep them simple and clean. A KeySignature essentially indicates how CFugue should interpret the notes it encouters during the MusicString parsing.
@@ -537,7 +546,7 @@ Ofcourse, the above does not produce any music output since there are no notes s
 
 When a note is specified using its name, CFugue considers it as a relative half-step value within an octave. The KeySignature directive helps CFugue compute the absolute MIDI numeric value of the note based on the selected Scale/Ragam value. When one specifies tokens such as K[CMaj] or K[Kalyani] in the MusicStrings, CFugue starts interpreting the named notes C, D, E.. S, R, G.. according to their values in CMajor Scale or Kalyani Raga.
 
-For example, in the above, when K[FMaj] is specified, the B note in the octave will be treated as B<i>b</i> automatically. Similarily, for K[Kalyani], the M note will be treated as M2 automatically. This makes it very convenient to change the Scale/Raga easily without modifying the notes.
+For example, in the above, when K[FMaj] is specified, the B note in the octave will be treated as B<i>b</i> automatically. Similarily, for K[Kalyani], the M note will be treated as M2 automatically. 
 
 When no KeySignature is specified, CFugue assumes these default Values: K[CMaj] for Western and K[Shankarabharanam] for Carnatic.
 
@@ -549,11 +558,173 @@ When a KeySignature is specified, it will be applied for all subsequent notes. H
     player.Play("K[Kalyani] S R G M1 P D N"); <span class="comment">// M1 declared explicitly. Kalyani is ignored for M</span> 
     player.Play("K[FMaj] C D E F G A [71]"); <span class="comment">// [71] is numeric note. FMaj is ignored for it</span>
 </pre>
+ KeySignatures are applicable for the whole song, independent of tracks. They can be redefined as many times as one wants throughout the song. CFugue will use the latest definition that precedes a note to process the note.
 
-For details on how to interoperate between Western and Carnatic style of music, refer \ref secInteroperation.
+ KeySignatures support both Carnatic and Western music modes. In Western mode, a total of 15 KeySignatures are present. These are accessible through their names, such as CMAJ, DMAJ, F\#MIN etc. Complete list of the names is given in the \ref KeySignatureTable "KeySignatures table".
+
+ In Carnatic mode, all the basic 72 KeySignatures, known as Melakartha Janya Ragas, are supported. These are accessible through MELA_x macro, where x specifies a number in the range [1, 72]. In addition, for convenience, MELA_0 and MELA_DEFAULT are available, that map to Melakartha 29 (Shankarabharanam). Further, numerous ragas are accessible directly through their names, such as KALYANI, MOHANA etc. Thus one can either use the MELA_x macro or the raga name for the KeySignature. For example, K[Mela_65] and K[Kalyani] both give same results. Refer to the below listing for complete set of mappings between raga names and their associated Melakartha janyas. Note that when using an incomplete raga (one that does not use all the seven swaras), the missing notes in the raga will default to their corresponding values in the Melakartha janya of the raga. 
+
+ \anchor KeySignatureTable \htmlonly
+ <table align="center" border="1">
+  <caption ALIGN=bottom><br/>KeySignatures supported by CFugue</caption>
+ <tr>
+ <td valign=top> 
+     <table align="center">
+	 <tr><td class="indexkey">Scale Name</td><td class="indexkey">Note Values</td></tr>
+     <tr><td class="indexvalue">CBMAJ</td><td class="indexvalue">{ Cb Db Eb Fb Gb Ab Bb }</td></tr>   
+     <tr><td class="indexvalue">ABMIN</td><td class="indexvalue">{ Cb Db Eb Fb Gb Ab Bb }</td></tr>   
+
+     <tr><td class="indexvalue">GBMAJ</td><td class="indexvalue">{ Cb Db Eb F  Gb Ab Bb }</td></tr>   
+     <tr><td class="indexvalue">EBMIN</td><td class="indexvalue">{ Cb Db Eb F  Gb Ab Bb }</td></tr>   
+
+     <tr><td class="indexvalue">DBMAJ</td><td class="indexvalue">{ C  Db Eb F  Gb Ab Bb }</td></tr>   
+     <tr><td class="indexvalue">BBMIN</td><td class="indexvalue">{ C  Db Eb F  Gb Ab Bb }</td></tr>   
+
+     <tr><td class="indexvalue">ABMAJ</td><td class="indexvalue">{ C  Db Eb F  G  Ab Bb }</td></tr>   
+     <tr><td class="indexvalue">FMIN</td><td class="indexvalue">{ C  Db Eb F  G  Ab Bb }</td></tr>  
+
+     <tr><td class="indexvalue">EBMAJ</td><td class="indexvalue">{ C  D  Eb F  G  Ab Bb }</td></tr>   
+     <tr><td class="indexvalue">CMIN</td><td class="indexvalue">{ C  D  Eb F  G  Ab Bb }</td></tr>  
+
+     <tr><td class="indexvalue">BBMAJ</td><td class="indexvalue">{ C  D  Eb F  G  A  Bb }</td></tr>   
+     <tr><td class="indexvalue">GMIN</td><td class="indexvalue">{ C  D  Eb F  G  A  Bb }</td></tr>  
+
+     <tr><td class="indexvalue">FMAJ</td><td class="indexvalue">{ C  D  E  F  G  A  Bb }</td></tr>   
+     <tr><td class="indexvalue">DMIN</td><td class="indexvalue">{ C  D  E  F  G  A  Bb }</td></tr>  
+
+     <tr><td class="indexvalue">CMAJ</td><td class="indexvalue">{ C  D  E  F  G  A  B  }</td></tr>   
+     <tr><td class="indexvalue">AMIN</td><td class="indexvalue">{ C  D  E  F  G  A  B  }</td></tr>   
+
+     <tr><td class="indexvalue">GMAJ</td><td class="indexvalue">{ C  D  E  F# G  A  B  }</td></tr>    
+     <tr><td class="indexvalue">EMIN</td><td class="indexvalue">{ C  D  E  F# G  A  B  }</td></tr>    
+
+     <tr><td class="indexvalue">DMAJ</td><td class="indexvalue">{ C# D  E  F# G  A  B  }</td></tr>    
+     <tr><td class="indexvalue">BMIN</td><td class="indexvalue">{ C# D  E  F# G  A  B  }</td></tr>    
+
+     <tr><td class="indexvalue">AMAJ</td><td class="indexvalue">{ C# D  E  F# G# A  B  }</td></tr>   
+     <tr><td class="indexvalue">F#MIN</td><td class="indexvalue">{ C# D  E  F# G# A  B  }</td></tr>   
+
+     <tr><td class="indexvalue">EMAJ</td><td class="indexvalue">{ C# D# E  F# G# A  B  }</td></tr>   
+     <tr><td class="indexvalue">C#MIN</td><td class="indexvalue">{ C# D# E  F# G# A  B  }</td></tr>   
+
+     <tr><td class="indexvalue">BMAJ</td><td class="indexvalue">{ C# D# E  F# G# A# B  }</td></tr>   
+     <tr><td class="indexvalue">G#MIN</td><td class="indexvalue">{ C# D# E  F# G# A# B  }</td></tr>   
+
+     <tr><td class="indexvalue">F#MAJ</td><td class="indexvalue">{ C# D# E# F# G# A# B  }</td></tr>   
+     <tr><td class="indexvalue">D#MIN</td><td class="indexvalue">{ C# D# E# F# G# A# B  }</td></tr>   
+
+     <tr><td class="indexvalue">C#MAJ</td><td class="indexvalue">{ C# D# E# F# G# A# B# }</td></tr>   
+     <tr><td class="indexvalue">A#MIN</td><td class="indexvalue">{ C# D# E# F# G# A# B# }</td></tr>   
+     </table>
+ </td>
+ <td valign=top>
+    <table align="center">
+	 <tr><td class="indexkey">Raga Name</td><td class="indexkey">Mela_x</td><td class="indexkey">Swara Values</td></tr>
+    <tr><td class="indexvalue">KANAKANGI</td><td class="indexvalue">MELA_1 </td><td class="indexvalue">{ S R1 G1 M1 P D1 N1 }</td></tr>
+    <tr><td class="indexvalue">RATNANGI</td><td class="indexvalue">MELA_2 </td><td class="indexvalue">{ S R1 G1 M1 P D1 N2 }</td></tr>
+    <tr><td class="indexvalue">GANAMURTHI</td><td class="indexvalue">MELA_3 </td><td class="indexvalue">{ S R1 G1 M1 P D1 N3 }</td></tr>
+    <tr><td class="indexvalue">VANASPATHI</td><td class="indexvalue">MELA_4 </td><td class="indexvalue">{ S R1 G1 M1 P D2 N2 }</td></tr>
+    <tr><td class="indexvalue">MANAVATHI</td><td class="indexvalue">MELA_5 </td><td class="indexvalue">{ S R1 G1 M1 P D2 N3 }</td></tr>
+    <tr><td class="indexvalue">TANARUPI</td><td class="indexvalue">MELA_6 </td><td class="indexvalue">{ S R1 G1 M1 P D3 N3 }</td></tr>
+    <tr><td class="indexvalue">SENAVATHI</td><td class="indexvalue">MELA_7 </td><td class="indexvalue">{ S R1 G2 M1 P D1 N1 }</td></tr>
+    <tr><td class="indexvalue">HANUMATHODI</td><td class="indexvalue">MELA_8 </td><td class="indexvalue">{ S R1 G2 M1 P D1 N2 }</td></tr>
+    <tr><td class="indexvalue">DHENUKA</td><td class="indexvalue">MELA_9 </td><td class="indexvalue">{ S R1 G2 M1 P D1 N3 }</td></tr>
+    <tr><td class="indexvalue">NATAKAPRIYA</td><td class="indexvalue">MELA_10</td><td class="indexvalue">{ S R1 G2 M1 P D2 N2 }</td></tr>
+    <tr><td class="indexvalue">KOKILAPRIYA</td><td class="indexvalue">MELA_11</td><td class="indexvalue">{ S R1 G2 M1 P D2 N3 }</td></tr>
+    <tr><td class="indexvalue">RUPAVATHI</td><td class="indexvalue">MELA_12</td><td class="indexvalue">{ S R1 G2 M1 P D3 N3 }</td></tr>
+    <tr><td class="indexvalue">GAYAKAPRIYA</td><td class="indexvalue">MELA_13</td><td class="indexvalue">{ S R1 G3 M1 P D1 N1 }</td></tr>
+    <tr><td class="indexvalue">VAKULABHARANAM</td><td class="indexvalue">MELA_14</td><td class="indexvalue">{ S R1 G3 M1 P D1 N2 }</td></tr>
+    <tr><td class="indexvalue">MAYAMALAVAGOWLA</td><td class="indexvalue">MELA_15</td><td class="indexvalue">{ S R1 G3 M1 P D1 N3 }</td></tr>
+    <tr><td class="indexvalue">CHAKRAVAKAM</td><td class="indexvalue">MELA_16</td><td class="indexvalue">{ S R1 G3 M1 P D2 N2 }</td></tr>
+    <tr><td class="indexvalue">SURYAKANTHAM</td><td class="indexvalue">MELA_17</td><td class="indexvalue">{ S R1 G3 M1 P D2 N3 }</td></tr>
+    <tr><td class="indexvalue">HATAKAMBARI</td><td class="indexvalue">MELA_18</td><td class="indexvalue">{ S R1 G3 M1 P D3 N3 }</td></tr>
+    <tr><td class="indexvalue">JHANKARADHWANI</td><td class="indexvalue">MELA_19</td><td class="indexvalue">{ S R2 G2 M1 P D1 N1 }</td></tr>
+    <tr><td class="indexvalue">NATABHAIRAVI</td><td class="indexvalue">MELA_20</td><td class="indexvalue">{ S R2 G2 M1 P D1 N2 }</td></tr>
+    <tr><td class="indexvalue">KEERAVANI</td><td class="indexvalue">MELA_21</td><td class="indexvalue">{ S R2 G2 M1 P D1 N3 }</td></tr>
+    <tr><td class="indexvalue">KHARAHARAPRIYA</td><td class="indexvalue">MELA_22</td><td class="indexvalue">{ S R2 G2 M1 P D2 N2 }</td></tr>
+    <tr><td class="indexvalue">GOWRIMANOHARI</td><td class="indexvalue">MELA_23</td><td class="indexvalue">{ S R2 G2 M1 P D2 N3 }</td></tr>
+    <tr><td class="indexvalue">VARUNAPRIYA</td><td class="indexvalue">MELA_24</td><td class="indexvalue">{ S R2 G2 M1 P D3 N3 }</td></tr>
+    <tr><td class="indexvalue">MARARANJANI</td><td class="indexvalue">MELA_25</td><td class="indexvalue">{ S R2 G3 M1 P D1 N1 }</td></tr>
+    <tr><td class="indexvalue">CHARUKESHI</td><td class="indexvalue">MELA_26</td><td class="indexvalue">{ S R2 G3 M1 P D1 N2 }</td></tr>
+    <tr><td class="indexvalue">SARASANGI</td><td class="indexvalue">MELA_27</td><td class="indexvalue">{ S R2 G3 M1 P D1 N3 }</td></tr>
+    <tr><td class="indexvalue">HARIKHAMBHOJI</td><td class="indexvalue">MELA_28</td><td class="indexvalue">{ S R2 G3 M1 P D2 N2 }</td></tr>
+    <tr><td class="indexvalue">DHEERASHANKARABHARANAM</td><td class="indexvalue">MELA_29</td><td class="indexvalue">{ S R2 G3 M1 P D2 N3 }</td></tr>
+    <tr><td class="indexvalue">SHANKARABHARANAM</td><td class="indexvalue">MELA_29</td><td class="indexvalue">{ S R2 G3 M1 P D2 N3 }</td></tr>
+    <tr><td class="indexvalue">NAGANANDINI</td><td class="indexvalue">MELA_30</td><td class="indexvalue">{ S R2 G3 M1 P D3 N3 }</td></tr>
+    <tr><td class="indexvalue">YAGAPRIYA</td><td class="indexvalue">MELA_31</td><td class="indexvalue">{ S R3 G3 M1 P D1 N1 }</td></tr>
+    <tr><td class="indexvalue">RAGAVARDHINI</td><td class="indexvalue">MELA_32</td><td class="indexvalue">{ S R3 G3 M1 P D1 N2 }</td></tr>
+    <tr><td class="indexvalue">GANGEYABHUSHINI</td><td class="indexvalue">MELA_33</td><td class="indexvalue">{ S R3 G3 M1 P D1 N3 }</td></tr>
+    <tr><td class="indexvalue">VAGADHISHWARI</td><td class="indexvalue">MELA_34</td><td class="indexvalue">{ S R3 G3 M1 P D2 N2 }</td></tr>
+    <tr><td class="indexvalue">SHULINI</td><td class="indexvalue">MELA_35</td><td class="indexvalue">{ S R3 G3 M1 P D2 N3 }</td></tr>
+    <tr><td class="indexvalue">CHALANATTAI</td><td class="indexvalue">MELA_36</td><td class="indexvalue">{ S R3 G3 M1 P D3 N3 }</td></tr>
+    <tr><td class="indexvalue">SALAGAM</td><td class="indexvalue">MELA_37</td><td class="indexvalue">{ S R1 G1 M2 P D1 N1 }</td></tr>
+    <tr><td class="indexvalue">JALARNAVAM</td><td class="indexvalue">MELA_38</td><td class="indexvalue">{ S R1 G1 M2 P D1 N2 }</td></tr>
+    <tr><td class="indexvalue">JHALAVARALI</td><td class="indexvalue">MELA_39</td><td class="indexvalue">{ S R1 G1 M2 P D1 N3 }</td></tr>
+    <tr><td class="indexvalue">NAVANEETHAM</td><td class="indexvalue">MELA_40</td><td class="indexvalue">{ S R1 G1 M2 P D2 N2 }</td></tr>
+    <tr><td class="indexvalue">PAVANI</td><td class="indexvalue">MELA_41</td><td class="indexvalue">{ S R1 G1 M2 P D2 N3 }</td></tr>
+    <tr><td class="indexvalue">RAGHUPRIYA</td><td class="indexvalue">MELA_42</td><td class="indexvalue">{ S R1 G1 M2 P D3 N3 }</td></tr>
+    <tr><td class="indexvalue">GAVAMBODHI</td><td class="indexvalue">MELA_43</td><td class="indexvalue">{ S R1 G2 M2 P D1 N1 }</td></tr>
+    <tr><td class="indexvalue">BHAVAPRIYA</td><td class="indexvalue">MELA_44</td><td class="indexvalue">{ S R1 G2 M2 P D1 N2 }</td></tr>
+    <tr><td class="indexvalue">SHUBHAPANTUVARALI</td><td class="indexvalue">MELA_45</td><td class="indexvalue">{ S R1 G2 M2 P D1 N3 }</td></tr>
+    <tr><td class="indexvalue">PANTUVARALI</td><td class="indexvalue">MELA_45</td><td class="indexvalue">{ S R1 G2 M2 P D1 N3 }</td></tr>
+    <tr><td class="indexvalue">SHADVIDHAMARGINI</td><td class="indexvalue">MELA_46</td><td class="indexvalue">{ S R1 G2 M2 P D2 N2 }</td></tr>
+    <tr><td class="indexvalue">SUVARNANGI</td><td class="indexvalue">MELA_47</td><td class="indexvalue">{ S R1 G2 M2 P D2 N3 }</td></tr>
+    <tr><td class="indexvalue">DIVYAMANI</td><td class="indexvalue">MELA_48</td><td class="indexvalue">{ S R1 G2 M2 P D3 N3 }</td></tr>
+    <tr><td class="indexvalue">DHAVALAMBARI</td><td class="indexvalue">MELA_49</td><td class="indexvalue">{ S R1 G3 M2 P D1 N1 }</td></tr>
+    <tr><td class="indexvalue">NAMANARAYANI</td><td class="indexvalue">MELA_50</td><td class="indexvalue">{ S R1 G3 M2 P D1 N2 }</td></tr>
+    <tr><td class="indexvalue">KAMAVARDHINI</td><td class="indexvalue">MELA_51</td><td class="indexvalue">{ S R1 G3 M2 P D1 N3 }</td></tr>
+    <tr><td class="indexvalue">RAMAPRIYA</td><td class="indexvalue">MELA_52</td><td class="indexvalue">{ S R1 G3 M2 P D2 N2 }</td></tr>
+    <tr><td class="indexvalue">GAMANASHRAMA</td><td class="indexvalue">MELA_53</td><td class="indexvalue">{ S R1 G3 M2 P D2 N3 }</td></tr>
+    <tr><td class="indexvalue">VISHWAMBHARI</td><td class="indexvalue">MELA_54</td><td class="indexvalue">{ S R1 G3 M2 P D3 N3 }</td></tr>
+    <tr><td class="indexvalue">SHYAMALANGI</td><td class="indexvalue">MELA_55</td><td class="indexvalue">{ S R2 G2 M2 P D1 N1 }</td></tr>
+    <tr><td class="indexvalue">SHANMUKHAPRIYA</td><td class="indexvalue">MELA_56</td><td class="indexvalue">{ S R2 G2 M2 P D1 N2 }</td></tr>
+    <tr><td class="indexvalue">SIMHENDRAMADHYAMAM</td><td class="indexvalue">MELA_57</td><td class="indexvalue">{ S R2 G2 M2 P D1 N3 }</td></tr>
+    <tr><td class="indexvalue">HEMAVATHI</td><td class="indexvalue">MELA_58</td><td class="indexvalue">{ S R2 G2 M2 P D2 N2 }</td></tr>
+    <tr><td class="indexvalue">DHARMAVATHI</td><td class="indexvalue">MELA_59</td><td class="indexvalue">{ S R2 G2 M2 P D2 N3 }</td></tr>
+    <tr><td class="indexvalue">NEETHIMATHI</td><td class="indexvalue">MELA_60</td><td class="indexvalue">{ S R2 G2 M2 P D3 N3 }</td></tr>
+    <tr><td class="indexvalue">KANTHAMANI</td><td class="indexvalue">MELA_61</td><td class="indexvalue">{ S R2 G3 M2 P D1 N1 }</td></tr>
+    <tr><td class="indexvalue">RISHABHAPRIYA</td><td class="indexvalue">MELA_62</td><td class="indexvalue">{ S R2 G3 M2 P D1 N2 }</td></tr>
+    <tr><td class="indexvalue">LATHANGI</td><td class="indexvalue">MELA_63</td><td class="indexvalue">{ S R2 G3 M2 P D1 N3 }</td></tr>
+    <tr><td class="indexvalue">VACHASPATHI</td><td class="indexvalue">MELA_64</td><td class="indexvalue">{ S R2 G3 M2 P D2 N2 }</td></tr>
+    <tr><td class="indexvalue">MECHAKALYANI</td><td class="indexvalue">MELA_65</td><td class="indexvalue">{ S R2 G3 M2 P D2 N3 }</td></tr>
+    <tr><td class="indexvalue">KALYANI</td><td class="indexvalue">MELA_65</td><td class="indexvalue">{ S R2 G3 M2 P D2 N3 }</td></tr>
+    <tr><td class="indexvalue">CHITRAMBARI</td><td class="indexvalue">MELA_66</td><td class="indexvalue">{ S R2 G3 M2 P D3 N3 }</td></tr>
+    <tr><td class="indexvalue">SUCHARITRA</td><td class="indexvalue">MELA_67</td><td class="indexvalue">{ S R3 G3 M2 P D1 N1 }</td></tr>
+    <tr><td class="indexvalue">JYOTHISWARUPINI</td><td class="indexvalue">MELA_68</td><td class="indexvalue">{ S R3 G3 M2 P D1 N2 }</td></tr>
+    <tr><td class="indexvalue">DHATUVARDHINI</td><td class="indexvalue">MELA_69</td><td class="indexvalue">{ S R3 G3 M2 P D1 N3 }</td></tr>
+    <tr><td class="indexvalue">NASIKABHUSHINI</td><td class="indexvalue">MELA_70</td><td class="indexvalue">{ S R3 G3 M2 P D2 N2 }</td></tr>
+    <tr><td class="indexvalue">KOSALAM</td><td class="indexvalue">MELA_71</td><td class="indexvalue">{ S R3 G3 M2 P D2 N3 }</td></tr>
+    <tr><td class="indexvalue">RASIKAPRIYA</td><td class="indexvalue">MELA_72</td><td class="indexvalue">{ S R3 G3 M2 P D3 N3 }</td></tr>
+    </table>
+ </td>
+ <td valign=top>
+	 <table align="center">
+	 	 <tr><td class="indexkey">Somemore Ragas</td><td class="indexkey">Mela Mapping</td></tr>
+		<tr><td class="indexvalue">BILAHARI</td><td class="indexvalue">MELA_29</td></tr>
+		<tr><td class="indexvalue">HAMSADHWANI</td><td class="indexvalue">MELA_29</td></tr>
+		<tr><td class="indexvalue">HINDOLAM</td><td class="indexvalue">MELA_20</td></tr>
+		<tr><td class="indexvalue">KAMBHOJI</td><td class="indexvalue">MELA_28</td></tr>
+		<tr><td class="indexvalue">MADHYAMAVATHI</td><td class="indexvalue">MELA_22</td></tr>
+		<tr><td class="indexvalue">MOHANAM</td><td class="indexvalue">MELA_28</td></tr>
+		<tr><td class="indexvalue">NEELAMBARI</td><td class="indexvalue">MELA_29</td></tr> 
+	 </table>
+ </td>
+ </tr>
+ </table>
+ \endhtmlonly
+
+For CFugue, Western is the default mode, and CMajor is the default KeySignature. All Parsers start in Western mode with CMajor scale set to their default. If you rather want the Parser to use a Carnatic mode, then you should explicitly supply a KeySignature token with an appropriate value before passing on any Carnatic music notes.
+
+For further details on how to interoperate between Western and Carnatic style of music, refer \ref secInteroperation.
 
 \section secInteroperation Interoperating Western and Carnatic Music
-By default CFugue starts parsing the notes in Western mode. However, 
+A powerful feature of CFugue's MusicString is its ability to work with both Western and Carnatic music with same ease. For the first time in the music world, it is now not only possible to specify 
+Carnatic music Swaras side by side with Western Notes, it is also possible to transform between 
+the two notations with same ease. 
+
+\note In addition, the same principles can be adapted for Hindustani music also to make it work side by side with Western music.
+
+By default CFugue starts parsing the notes in Western mode. However, ...
 */
 
 /////////////////////////////////////////////////////////////////
