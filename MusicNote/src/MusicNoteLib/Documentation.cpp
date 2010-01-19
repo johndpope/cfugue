@@ -247,12 +247,17 @@ Play or Save methods is invoked on the player. A sample demonstrating the proced
         - \ref subsecNotes
             - \ref subsubRoot
             - \ref subsubOctave
+            - \ref subsubChord
+            - \ref subsubDuration
+            - \ref subsubVelocity
+            - \ref subsubConnectors
+        - \ref subInstruments
         - \ref subKeySignatures
     - \ref secInteroperation
     - \ref index "Back to main page"
 
 \section introduction Introduction
-One of the capabilities of CFugue that makes it so elegant and easy to use, is the concept of Music Note Strings 
+One of the capabilities of CFugue that makes it so elegant and easy to use is the concept of Music Note Strings 
 (or simply <i>MusicString</i>s, as referred to by JFugue). MusicStrings provide the ability to specify 
 Music Notes and MIDI instructions as a sequence of characters (and tokens) in human readable form,
 as opposed to the usual complex binary data byte form. This makes it easy to learn and master. Below is an example of a MusicString that plays a Mid-C note followed by a C-Major chord. (Please refer \ref pageExamples "CFugue API examples" for more such examples.)
@@ -270,7 +275,7 @@ as opposed to the usual complex binary data byte form. This makes it easy to lea
 In the following we discuss at length the details of what constitues a MusicString and how it can be used for creating music with CFugue.
 
 \section secMusicString Components of MusicString
-In CFugue, a valid MusicString is formed out of a series of music tokens. Tokens are nothing but sequence of alpha numeric charaters. Seperated with whitespace, each of them represents either a music note related data or a CFugue related command. The first character of a token usually determines if the token should be considered as a note token or a command token. 
+In CFugue, a valid MusicString is formed out of a series of music tokens. Tokens are nothing but sequences of alpha numeric charaters. Seperated with whitespace, each of them represents either a music note related data or a CFugue related command. The first character of a token usually determines if the token should be considered as a note token or a command token. 
 
 Typical examples of note tokens are notes, chords, ties and so on, while MIDI instructions, such as instrument change, voice command etc. are few examples of CFugue related commands.
 
@@ -284,7 +289,7 @@ Below are the first characters and their associated token classifications for CF
     <tr><td class="indexkey">T </td> <td class="indexvalue">TOKEN_START_TEMPO  </td> <td class="indexvalue">Specifies a Tempo token.</td></tr>
     <tr><td class="indexkey">I </td> <td class="indexvalue">TOKEN_START_INSTRUMENT  </td> <td class="indexvalue">Specifies a Instrument token.</td></tr> 
     <tr><td class="indexkey">L </td> <td class="indexvalue">TOKEN_START_LAYER  </td> <td class="indexvalue">Specifies a Layer token.</td></tr> 
-    <tr><td class="indexkey">K </td> <td class="indexvalue">TOKEN_START_SIGNATURE  </td> <td class="indexvalue">Specifies a KeySignature token.</td></tr> 
+    <tr><td class="indexkey">K </td> <td class="indexvalue">TOKEN_START_KEYSIGNATURE  </td> <td class="indexvalue">Specifies a KeySignature token.</td></tr> 
     <tr><td class="indexkey">X </td> <td class="indexvalue">TOKEN_START_CONTROLLER  </td> <td class="indexvalue">Specifies a Controller token.</td></tr> 
     <tr><td class="indexkey">@ </td> <td class="indexvalue">TOKEN_START_TIME  </td> <td class="indexvalue">Specifies a Time token.</td></tr> 
     <tr><td class="indexkey">* </td> <td class="indexvalue">TOKEN_START_KEYPRESSURE  </td> <td class="indexvalue">Specifies a Keypressure token.</td></tr>  
@@ -345,14 +350,15 @@ Similarily, for Carnatic music, CFugue allows <i>R3</i>, <i>G1</i>, <i>D3</i> an
 <pre class="fragment">
     <span class="comment">// Switch to Carnatic mode and play some notes</span>
     player.Play("K[MELA] S R G M P D N"); 
-</pre> The K[MELA] directive informs the parser to switch to Carnatic mode of parsing and to interpret the subsequent notes in that mode. For further discussion on this, please refer \ref subKeySignatures "Key Signatures".
+</pre> The K[MELA] directive informs the parser to switch to Carnatic mode of parsing and to interpret the subsequent notes in that mode. For further discussion on this, please refer \ref secInteroperation.
 
-A note can also be specified using its MIDI numeric value directly. Usually, when a note is specified using its name, such as C, D, E .. or S, R, G.., it is treated as a relative note. Its absolute position will be internally re-computed based on the Octave specifiers and the Scale/Raga settings later once the parsing is complete. On the otherhand, when a note is specified with its MIDI numeric value, it is treated as an absolute note and will not be affected by the current Scale or Octave settings. An example of such numeric note is:
+A note can also be specified using its MIDI numeric value directly. Usually, when a note is specified using its name, such as C, D, E .. or S, R, G.., it is treated as a relative note. Its absolute position will be internally re-computed based on the Octave specifiers and the Scale/Raga settings. On the otherhand, when a note is specified with its MIDI numeric value directly, it is treated as an absolute note and will not be affected by the current Scale or Octave settings. An example of such numeric note is:
 <pre class="fragment">
     <span class="comment">// Play a Mid-C </span>
     player.Play("[60]");
 </pre>
-Observe that we need to include the numeric value with in square brackets []. Failing to do so will make the CFugue ignore the token. Below is the complete listing of MIDI numeric values for all the notes.
+Observe that we need to enclose the numeric value in square brackets []. Failing to do so will make the CFugue ignore the token. Below is the complete listing of MIDI numeric values for all the notes.
+
 \htmlonly
 <table align="center">
 <tr><td align="center" class="indexkey">Octave</td><td align="center" class="indexkey">C<br>S</td> <td align="center" class="indexkey">C#/D<i>b</i><br>R1</td> <td align="center" class="indexkey">D<br>R2/G1</td> <td align="center" class="indexkey">D#/E<i>b</i><br>R3/G2</td><td align="center" class="indexkey">E<br>G3</td><td align="center" class="indexkey">F<br>M1</td><td align="center" class="indexkey">F#/G<i>b</i><br>M2</td><td align="center" class="indexkey">G<br>P</td><td align="center" class="indexkey">G#/A<i>b</i><br>D1</td><td align="center" class="indexkey">A<br>D2/N1</td><td align="center" class="indexkey">A#/B<i>b</i><br>N2</td><td align="center" class="indexkey">B<br>N3</td>  </tr>
@@ -509,6 +515,7 @@ Observe that we need to include the numeric value with in square brackets []. Fa
 </table>\endhtmlonly
 
 Be informed that when you specify a note using its MIDI numeric value, you cannot use the Octave field in the token anymore. Octave fields are only applicable for notes specified using their names.
+
 \subsubsection subsubOctave Octave
 For Western music, CFugue supports octaves in the range [0, 10]. You can specify an octave for a non-numeric note by appending the octave number to it, such as <i>C2</i> to signify C note in 2nd octave or <i>Bb8</i> to signify B-flat note in 8th octave. (Observe that some notations start the octave values from -1 instead of 0. CFugue starts the octave numbering at 0. Middle-C in CFugue is C5, which is MIDI note value 60.)
 
@@ -526,6 +533,271 @@ Below are few valid examples of notes with Octaves and Sthayis.
     player.Play(" S. R. G. M. P. D. N.    S R G M P D N    S' R1' G' M2' P' D1' N' "); 
 </pre>
 For compatibility between Western and Carnatic music, CFugue defines the default medium sthayi as Octave 5. Thus, both of the above two lines produce the same results. For further details on how to interoperate between Western and Carnatic style of music, refer \ref secInteroperation.
+
+\subsubsection subsubChord Chord
+CFugue supports the below specified chords:
+\htmlonly
+<table align="center">
+        <tr><td align></td><td class="indexkey">Chord Name</td><td class="indexkey">Haflstep intervals</td></tr>
+
+        <tr><td align="right">Major</td><td class="indexvalue">MAJ</td><td class="indexvalue">         {0,4,7}</td></tr>
+        <tr><td align="right">Minor</td><td class="indexvalue">MIN</td><td class="indexvalue">         {0,3,7}</td></tr>
+        <tr><td align="right">Augmented</td><td class="indexvalue">AUG</td><td class="indexvalue">         {0,4,8}</td></tr>
+        <tr><td align="right">Diminished</td><td class="indexvalue">DIM</td><td class="indexvalue">         {0,3,6}</td></tr>
+        <tr><td align="right">7th dominant</td><td class="indexvalue">DOM7</td><td class="indexvalue">        {0,4,7,1}</td></tr>
+        <tr><td align="right">Major 7th</td><td class="indexvalue">MAJ7</td><td class="indexvalue">        {0,4,7,11}</td></tr>
+        <tr><td align="right">Minor 7th</td><td class="indexvalue">MIN7</td><td class="indexvalue">        {0,3,7,1}</td></tr>
+        <tr><td align="right">Suspended 4th</td><td class="indexvalue">SUS4</td><td class="indexvalue">        {0,5,7}</td></tr>
+        <tr><td align="right">Suspended 2nd</td><td class="indexvalue">SUS2</td><td class="indexvalue">        {0,2,7}</td></tr>
+        <tr><td align="right">Major 6th</td><td class="indexvalue">MAJ6</td><td class="indexvalue">        {0,4,7,9}</td></tr>
+        <tr><td align="right">Minor 6th</td><td class="indexvalue">MIN6</td><td class="indexvalue">        {0,3,7,9}</td></tr>
+        <tr><td align="right">9th dominant</td><td class="indexvalue">DOM9</td><td class="indexvalue">        {0,4,7,10,14}</td></tr>
+        <tr><td align="right">9th Major</td><td class="indexvalue">MAJ9</td><td class="indexvalue">        {0,4,7,11,14}</td></tr>
+        <tr><td align="right">9th Minor</td><td class="indexvalue">MIN9</td><td class="indexvalue">        {0,3,7,10,14}</td></tr>
+        <tr><td align="right">Diminished 7th</td><td class="indexvalue">DIM7</td><td class="indexvalue">        {0,3,6,9}</td></tr>
+        <tr><td align="right">Add 9</td><td class="indexvalue">ADD9</td><td class="indexvalue">        {0,4,7,14}</td></tr>
+        <tr><td align="right">Minor 11th</td><td class="indexvalue">MIN11</td><td class="indexvalue">       {0,7,10,14,15,17}</td></tr>
+        <tr><td align="right">11th dominant</td><td class="indexvalue">DOM11</td><td class="indexvalue">       {0,7,10,14,17}</td></tr>
+        <tr><td align="right">13th dominant</td><td class="indexvalue">DOM13</td><td class="indexvalue">       {0,7,10,14,16,21}</td></tr>
+        <tr><td align="right">Major 13th</td><td class="indexvalue">MAJ13</td><td class="indexvalue">       {0,7,11,14,16,21}</td></tr>
+        <tr><td align="right">Minor 13th</td><td class="indexvalue">MIN13</td><td class="indexvalue">       {0,7,10,14,15,21}</td></tr>
+        <tr><td align="right">7-5 dominant</td><td class="indexvalue">DOM7_5</td><td class="indexvalue">      {0,4,6,1}</td></tr>
+        <tr><td align="right">7-5 dominant</td><td class="indexvalue">DOM7<5</td><td class="indexvalue">      {0,4,6,1}</td></tr>
+        <tr><td align="right">7+5 dominant</td><td class="indexvalue">DOM75</td><td class="indexvalue">       {0,4,8,1}</td></tr>
+        <tr><td align="right">7+5 dominant</td><td class="indexvalue">DOM7>5</td><td class="indexvalue">      {0,4,8,1}</td></tr>
+        <tr><td align="right">Major 7-5</td><td class="indexvalue">MAJ7_5</td><td class="indexvalue">      {0,4,6,11}</td></tr>
+        <tr><td align="right">Major 7-5</td><td class="indexvalue">MAJ7<5</td><td class="indexvalue">      {0,4,6,11}</td></tr>
+        <tr><td align="right">Major 7+5</td><td class="indexvalue">MAJ75</td><td class="indexvalue">       {0,4,8,11}</td></tr>
+        <tr><td align="right">Major 7+5</td><td class="indexvalue">MAJ7>5</td><td class="indexvalue">      {0,4,8,11}</td></tr>
+        <tr><td align="right">Minor Major 7</td><td class="indexvalue">MINMAJ7</td><td class="indexvalue">     {0,3,7,11}</td></tr>
+        <tr><td align="right">7-5-9 dominant</td><td class="indexvalue">DOM7_5_9</td><td class="indexvalue">    {0,4,6,10,13}</td></tr>
+        <tr><td align="right">7-5-9 dominant</td><td class="indexvalue">DOM7<5<9</td><td class="indexvalue">    {0,4,6,10,13}</td></tr>
+        <tr><td align="right">7-5+9 dominant</td><td class="indexvalue">DOM7_59</td><td class="indexvalue">     {0,4,6,10,15}</td></tr>
+        <tr><td align="right">7-5+9 dominant</td><td class="indexvalue">DOM7<5>9</td><td class="indexvalue">    {0,4,6,10,15}</td></tr>
+        <tr><td align="right">7+5-9 dominant</td><td class="indexvalue">DOM75_9</td><td class="indexvalue">     {0,4,8,10,13}</td></tr>
+        <tr><td align="right">7+5-9 dominant</td><td class="indexvalue">DOM7>5<9</td><td class="indexvalue">    {0,4,8,10,13}</td></tr>
+        <tr><td align="right">7+5+9 dominant</td><td class="indexvalue">DOM759</td><td class="indexvalue">      {0,4,8,10,15}</td></tr>
+        <tr><td align="right">7+5+9 dominant</td><td class="indexvalue">DOM7>5>9</td><td class="indexvalue">    {0,4,8,10,15}</td></tr>
+</table>
+\endhtmlonly
+
+In the above haflstep intervals, zero indicates the root note. Other values are relative haflstep values from it, which will be adjusted based on the root note.
+
+To specify a chord in CFugue, specify the root and append it with the chord name from the above table. For example, <tt>CMAJ</tt> signifies the C-major chord, which, based on the above halfstep intervals {0, 4, 7}, will automatically expand to <tt>C+E+G</tt> notes (C=0, E=4, G=7).
+
+The default octave for the chord notes is 3. To specify an explicit octave value for a chord, append the chord root with the octave number. For example, a B-Flat, 7th Octave, major chord will be <tt>Bb7Maj</tt>. 
+
+\subsubsection subsubDuration Duration
+Duration in Western music indicates how long a note should be played. CFugue supports below durations for the Western music notes.
+
+\htmlonly
+<table align="center">
+<tr><td class="indexkey">Character</td><td class="indexkey">Duration</td> </tr>
+<tr><td class="indexkey">W</td><td class="indexvalue">Whole Note </td></tr> 
+<tr><td class="indexkey">H</td><td class="indexvalue">Half Note </td></tr>
+<tr><td class="indexkey">Q</td><td class="indexvalue">Quarter Note </td></tr>
+<tr><td class="indexkey">I</td><td class="indexvalue">1/8th Note </td></tr>
+<tr><td class="indexkey">S</td><td class="indexvalue">1/16th Note </td></tr>
+<tr><td class="indexkey">T</td><td class="indexvalue">1/32th Note </td></tr>
+<tr><td class="indexkey">X</td><td class="indexvalue">1/64th Note </td></tr>
+<tr><td class="indexkey">O</td><td class="indexvalue">1/128th Note </td></tr>
+</table>
+\endhtmlonly
+
+In Carnatic music, durations for the notes are determined automatically based on the <i>Talam</i>. A <i>Talam</i> specifies the duration for a group of notes instead of an individual note. CFugue supports below Talams.
+
+\subsubsection subsubVelocity Velocity
+\subsubsection subsubConnectors Connectors
+
+\subsection subInstruments Specifying Instruments
+Instrument tokens in MusicStrings indicates which instrument should be used to play the subsequent notes in the strings. In CFugue, instrument tokens are identified with character <b>I</b> at their beginning. Below are few examples of valid instrument tokens:
+<pre class="fragment">
+    player.Play("I[PIANO]"); 
+    player.Play("I10"); 
+    player.Play("I[RAIN]"); 
+</pre>
+Ofcourse, the above does not produce any music output since there are no notes specified in the input. Usually one supplies a series of note tokens after an instrument token for generting music using the specified instrument. Examples are as shown below:
+<pre class="fragment">
+    player.Play("I[Piano] C D E F G A B"); <span class="comment">// Play an Octave using Piano instrument </span>
+    player.Play("I0 C D E I40 F G A B"); <span class="comment">// I0 is Piano and I40 is Violin</span>
+    player.Play("I[Flute] K[Kalyani] S R G M P D N"); <span class="comment">// Play an Octave in Kalyani Ragam with Flute</span> 
+</pre>
+
+Complete list of intruments supported by CFugue is as shown below. In the MusicStrings these instruments can be specified either by their name or their MIDI instrument number indicated.
+\htmlonly
+<table align="center">
+<tr>
+<td valign=top><table>
+        <tr><td class="indexvalue">PIANO</td>                   <td class="indexvalue">0</td></tr>
+        <tr><td class="indexvalue">ACOUSTIC_GRAND</td>          <td class="indexvalue">0</td></tr>
+        <tr><td class="indexvalue">BRIGHT_ACOUSTIC</td>         <td class="indexvalue">1</td></tr>
+        <tr><td class="indexvalue">ELECTRIC_GRAND</td>          <td class="indexvalue">2</td></tr>
+        <tr><td class="indexvalue">HONKEY_TONK</td>             <td class="indexvalue">3</td></tr>
+        <tr><td class="indexvalue">ELECTRIC_PIANO_1</td>        <td class="indexvalue">4</td></tr>
+        <tr><td class="indexvalue">ELECTRIC_PIANO_2</td>        <td class="indexvalue">5</td></tr>
+        <tr><td class="indexvalue">HARPISCHORD</td>             <td class="indexvalue">6</td></tr>
+        <tr><td class="indexvalue">CLAVINET</td>                <td class="indexvalue">7</td></tr>
+</table></td>
+<td valign=top><table>
+        <tr><td class="indexvalue">CELESTA</td>                 <td class="indexvalue">8</td></tr>
+        <tr><td class="indexvalue">GLOCKENSPIEL</td>            <td class="indexvalue">9</td></tr>
+        <tr><td class="indexvalue">MUSIC_BOX</td>               <td class="indexvalue">10</td></tr>
+        <tr><td class="indexvalue">VIBRAPHONE</td>              <td class="indexvalue">11</td></tr>
+        <tr><td class="indexvalue">MARIMBA</td>                 <td class="indexvalue">12</td></tr>
+        <tr><td class="indexvalue">XYLOPHONE</td>               <td class="indexvalue">13</td></tr>
+        <tr><td class="indexvalue">TUBULAR_BELLS</td>           <td class="indexvalue">14</td></tr>
+        <tr><td class="indexvalue">DULCIMER</td>                <td class="indexvalue">15</td></tr>
+</table></td>
+<td valign=top><table>
+        <tr><td class="indexvalue">DRAWBAR_ORGAN</td>           <td class="indexvalue">16</td></tr>
+        <tr><td class="indexvalue">PERCUSSIVE_ORGAN</td>        <td class="indexvalue">17</td></tr>
+        <tr><td class="indexvalue">ROCK_ORGAN</td>              <td class="indexvalue">18</td></tr>
+        <tr><td class="indexvalue">CHURCH_ORGAN</td>            <td class="indexvalue">19</td></tr>
+        <tr><td class="indexvalue">REED_ORGAN</td>              <td class="indexvalue">20</td></tr>
+        <tr><td class="indexvalue">ACCORDIAN</td>               <td class="indexvalue">21</td></tr>
+        <tr><td class="indexvalue">HARMONICA</td>               <td class="indexvalue">22</td></tr>
+        <tr><td class="indexvalue">TANGO_ACCORDIAN</td>         <td class="indexvalue">23</td></tr>
+</table></td>
+<td valign=top><table>
+        <tr><td class="indexvalue">GUITAR</td>                  <td class="indexvalue">24</td></tr>
+        <tr><td class="indexvalue">NYLON_STRING_GUITAR</td>     <td class="indexvalue">24</td></tr>
+        <tr><td class="indexvalue">STEEL_STRING_GUITAR</td>     <td class="indexvalue">25</td></tr>
+        <tr><td class="indexvalue">ELECTRIC_JAZZ_GUITAR</td>    <td class="indexvalue">26</td></tr>
+        <tr><td class="indexvalue">ELECTRIC_CLEAN_GUITAR</td>   <td class="indexvalue">27</td></tr>
+        <tr><td class="indexvalue">ELECTRIC_MUTED_GUITAR</td>   <td class="indexvalue">28</td></tr>
+        <tr><td class="indexvalue">OVERDRIVEN_GUITAR</td>       <td class="indexvalue">29</td></tr>
+        <tr><td class="indexvalue">DISTORTION_GUITAR</td>       <td class="indexvalue">30</td></tr>
+        <tr><td class="indexvalue">GUITAR_HARMONICS</td>        <td class="indexvalue">31</td></tr>
+</table></td>
+</tr>
+<tr>
+<td valign=top><table>
+        <tr><td class="indexvalue">ACOUSTIC_BASS</td>           <td class="indexvalue">32</td></tr>
+        <tr><td class="indexvalue">ELECTRIC_BASS_FINGER</td>    <td class="indexvalue">33</td></tr>
+        <tr><td class="indexvalue">ELECTRIC_BASS_PICK</td>      <td class="indexvalue">34</td></tr>
+        <tr><td class="indexvalue">FRETLESS_BASS</td>           <td class="indexvalue">35</td></tr>
+        <tr><td class="indexvalue">SLAP_BASS_1</td>             <td class="indexvalue">36</td></tr>
+        <tr><td class="indexvalue">SLAP_BASS_2</td>             <td class="indexvalue">37</td></tr>
+        <tr><td class="indexvalue">SYNTH_BASS_1</td>            <td class="indexvalue">38</td></tr>
+        <tr><td class="indexvalue">SYNTH_BASS_2</td>            <td class="indexvalue">39</td></tr>
+</table></td>
+<td valign=top><table>
+        <tr><td class="indexvalue">VIOLIN</td>                  <td class="indexvalue">40</td></tr>
+        <tr><td class="indexvalue">VIOLA</td>                   <td class="indexvalue">41</td></tr>
+        <tr><td class="indexvalue">CELLO</td>                   <td class="indexvalue">42</td></tr>
+        <tr><td class="indexvalue">CONTRABASS</td>              <td class="indexvalue">43</td></tr>
+        <tr><td class="indexvalue">TREMOLO_STRINGS</td>         <td class="indexvalue">44</td></tr>
+        <tr><td class="indexvalue">PIZZICATO_STRINGS</td>       <td class="indexvalue">45</td></tr>
+        <tr><td class="indexvalue">ORCHESTRAL_STRINGS</td>      <td class="indexvalue">46</td></tr>
+        <tr><td class="indexvalue">TIMPANI</td>                 <td class="indexvalue">47</td></tr>
+</table></td>
+<td valign=top><table>
+        <tr><td class="indexvalue">STRING_ENSEMBLE_1</td>       <td class="indexvalue">48</td></tr>
+        <tr><td class="indexvalue">STRING_ENSEMBLE_2</td>       <td class="indexvalue">49</td></tr>
+        <tr><td class="indexvalue">SYNTH_STRINGS_1</td>         <td class="indexvalue">50</td></tr>
+        <tr><td class="indexvalue">SYNTH_STRINGS_2</td>         <td class="indexvalue">51</td></tr>
+        <tr><td class="indexvalue">CHOIR_AAHS</td>              <td class="indexvalue">52</td></tr>
+        <tr><td class="indexvalue">VOICE_OOHS</td>              <td class="indexvalue">53</td></tr>
+        <tr><td class="indexvalue">SYNTH_VOICE</td>             <td class="indexvalue">54</td></tr>
+        <tr><td class="indexvalue">ORCHESTRA_HIT</td>           <td class="indexvalue">55</td></tr>
+</table></td>
+<td valign=top><table>
+        <tr><td class="indexvalue">TRUMPET</td>                 <td class="indexvalue">56</td></tr>
+        <tr><td class="indexvalue">TROMBONE</td>                <td class="indexvalue">57</td></tr>
+        <tr><td class="indexvalue">TUBA</td>                    <td class="indexvalue">58</td></tr>
+        <tr><td class="indexvalue">MUTED_TRUMPET</td>           <td class="indexvalue">59</td></tr>
+        <tr><td class="indexvalue">FRENCH_HORN</td>             <td class="indexvalue">60</td></tr>
+        <tr><td class="indexvalue">BRASS_SECTION</td>           <td class="indexvalue">61</td></tr>
+        <tr><td class="indexvalue">SYNTHBRASS_1</td>            <td class="indexvalue">62</td></tr>
+        <tr><td class="indexvalue">SYNTHBRASS_2</td>            <td class="indexvalue">63</td></tr>
+</table></td>
+</tr>
+<tr>
+<td valign=top><table>
+        <tr><td class="indexvalue">SOPRANO_SAX</td>             <td class="indexvalue">64</td></tr>
+        <tr><td class="indexvalue">ALTO_SAX</td>                <td class="indexvalue">65</td></tr>
+        <tr><td class="indexvalue">TENOR_SAX</td>               <td class="indexvalue">66</td></tr>
+        <tr><td class="indexvalue">BARITONE_SAX</td>            <td class="indexvalue">67</td></tr>
+        <tr><td class="indexvalue">OBOE</td>                    <td class="indexvalue">68</td></tr>
+        <tr><td class="indexvalue">ENGLISH_HORN</td>            <td class="indexvalue">69</td></tr>
+        <tr><td class="indexvalue">BASSOON</td>                 <td class="indexvalue">70</td></tr>
+        <tr><td class="indexvalue">CLARINET</td>                <td class="indexvalue">71</td></tr>
+</table></td>
+<td valign=top><table>
+        <tr><td class="indexvalue">PICCOLO</td>                 <td class="indexvalue">72</td></tr>
+        <tr><td class="indexvalue">FLUTE</td>                   <td class="indexvalue">73</td></tr>
+        <tr><td class="indexvalue">RECORDER</td>                <td class="indexvalue">74</td></tr>
+        <tr><td class="indexvalue">PAN_FLUTE</td>               <td class="indexvalue">75</td></tr>
+        <tr><td class="indexvalue">BLOWN_BOTTLE</td>            <td class="indexvalue">76</td></tr>
+        <tr><td class="indexvalue">SKAKUHACHI</td>              <td class="indexvalue">77</td></tr>
+        <tr><td class="indexvalue">WHISTLE</td>                 <td class="indexvalue">78</td></tr>
+        <tr><td class="indexvalue">OCARINA</td>                 <td class="indexvalue">79</td></tr>
+</table></td>
+<td valign=top><table>
+        <tr><td class="indexvalue">LEAD_SQUARE <i>or</i> SQUARE</td>             <td class="indexvalue">80</td></tr>
+        <tr><td class="indexvalue">LEAD_SAWTOOTH <i>or</i> SAWTOOTH</td>           <td class="indexvalue">81</td></tr>
+        <tr><td class="indexvalue">LEAD_CALLIOPE <i>or</i> CALLIOPE</td>           <td class="indexvalue">82</td></tr>
+        <tr><td class="indexvalue">LEAD_CHIFF <i>or</i> CHIFF</td>              <td class="indexvalue">83</td></tr>
+        <tr><td class="indexvalue">LEAD_CHARANG <i>or</i> CHARANG</td>            <td class="indexvalue">84</td></tr>
+        <tr><td class="indexvalue">LEAD_VOICE <i>or</i> VOICE</td>              <td class="indexvalue">85</td></tr>
+        <tr><td class="indexvalue">LEAD_FIFTHS <i>or</i> FIFTHS</td>             <td class="indexvalue">86</td></tr>
+        <tr><td class="indexvalue">LEAD_BASSLEAD <i>or</i> BASSLEAD</td>           <td class="indexvalue">87</td></tr>
+</table></td>
+<td valign=top><table>
+        <tr><td class="indexvalue">PAD_NEW_AGE <i>or</i> NEW_AGE</td>             <td class="indexvalue">88</td></tr>
+        <tr><td class="indexvalue">PAD_WARM <i>or</i> WARM</td>                <td class="indexvalue">89</td></tr>
+        <tr><td class="indexvalue">PAD_POLYSYNTH <i>or</i> POLYSYNTH</td>           <td class="indexvalue">90</td></tr>
+        <tr><td class="indexvalue">PAD_CHOIR <i>or</i> CHOIR</td>               <td class="indexvalue">91</td></tr>
+        <tr><td class="indexvalue">PAD_BOWED <i>or</i> BOWED</td>               <td class="indexvalue">92</td></tr>
+        <tr><td class="indexvalue">PAD_METALLIC <i>or</i> METALLIC</td>            <td class="indexvalue">93</td></tr>
+        <tr><td class="indexvalue">PAD_HALO <i>or</i> HALO</td>                <td class="indexvalue">94</td></tr>
+        <tr><td class="indexvalue">PAD_SWEEP <i>or</i> SWEEP</td>               <td class="indexvalue">95</td></tr>
+</table></td>
+</tr>
+<tr>
+<td valign=top><table>
+        <tr><td class="indexvalue">FX_RAIN <i>or</i> RAIN</td>                 <td class="indexvalue">96</td></tr>
+        <tr><td class="indexvalue">FX_SOUNDTRACK <i>or</i> SOUNDTRACK</td>           <td class="indexvalue">97</td></tr>
+        <tr><td class="indexvalue">FX_CRYSTAL <i>or</i> CRYSTAL</td>              <td class="indexvalue">98</td></tr>
+        <tr><td class="indexvalue">FX_ATMOSPHERE <i>or</i> ATMOSPHERE</td>           <td class="indexvalue">99</td></tr>
+        <tr><td class="indexvalue">FX_BRIGHTNESS <i>or</i> BRIGHTNESS</td>           <td class="indexvalue">100</td></tr>
+        <tr><td class="indexvalue">FX_GOBLINS <i>or</i> GOBLINS</td>              <td class="indexvalue">101</td></tr>
+        <tr><td class="indexvalue">FX_ECHOES <i>or</i> ECHOES</td>               <td class="indexvalue">102</td></tr>
+        <tr><td class="indexvalue">FX_SCI-FI <i>or</i> SCI-FI</td>               <td class="indexvalue">103</td></tr>
+</table></td>
+<td valign=top><table>
+        <tr><td class="indexvalue">SITAR</td>                   <td class="indexvalue">104</td></tr>
+        <tr><td class="indexvalue">BANJO</td>                   <td class="indexvalue">105</td></tr>
+        <tr><td class="indexvalue">SHAMISEN</td>                <td class="indexvalue">106</td></tr>
+        <tr><td class="indexvalue">KOTO</td>                    <td class="indexvalue">107</td></tr>
+        <tr><td class="indexvalue">KALIMBA</td>                 <td class="indexvalue">108</td></tr>
+        <tr><td class="indexvalue">BAGPIPE</td>                 <td class="indexvalue">109</td></tr>
+        <tr><td class="indexvalue">FIDDLE</td>                  <td class="indexvalue">110</td></tr>
+        <tr><td class="indexvalue">SHANAI</td>                  <td class="indexvalue">111</td></tr>
+</table></td>
+<td valign=top><table>
+        <tr><td class="indexvalue">TINKLE_BELL</td>             <td class="indexvalue">112</td></tr>
+        <tr><td class="indexvalue">AGOGO</td>                   <td class="indexvalue">113</td></tr>
+        <tr><td class="indexvalue">STEEL_DRUMS</td>             <td class="indexvalue">114</td></tr>
+        <tr><td class="indexvalue">WOODBLOCK</td>               <td class="indexvalue">115</td></tr>
+        <tr><td class="indexvalue">TAIKO_DRUM</td>              <td class="indexvalue">116</td></tr>
+        <tr><td class="indexvalue">MELODIC_TOM</td>             <td class="indexvalue">117</td></tr>
+        <tr><td class="indexvalue">SYNTH_DRUM</td>              <td class="indexvalue">118</td></tr>
+        <tr><td class="indexvalue">REVERSE_CYMBAL</td>          <td class="indexvalue">119</td></tr>
+</table></td>
+<td valign=top><table>
+        <tr><td class="indexvalue">GUITAR_FRET_NOISE</td>       <td class="indexvalue">120</td></tr>
+        <tr><td class="indexvalue">BREATH_NOISE</td>            <td class="indexvalue">121</td></tr>
+        <tr><td class="indexvalue">SEASHORE</td>                <td class="indexvalue">122</td></tr>
+        <tr><td class="indexvalue">BIRD_TWEET</td>              <td class="indexvalue">123</td></tr>
+        <tr><td class="indexvalue">TELEPHONE_RING</td>          <td class="indexvalue">124</td></tr>
+        <tr><td class="indexvalue">HELICOPTER</td>              <td class="indexvalue">125</td></tr>
+        <tr><td class="indexvalue">APPLAUSE</td>                <td class="indexvalue">126</td></tr>
+        <tr><td class="indexvalue">GUNSHOT</td>                 <td class="indexvalue">127</td></tr>
+</table></td>
+</tr>
+</table>
+\endhtmlonly
 
 \subsection subKeySignatures Specifying Key Signatures
 KeySignature specification is one of the powerful features of CFugue MusicStrings that makes it easy to write music notes and keep them simple and clean. A KeySignature essentially indicates how CFugue should interpret the notes it encouters during the MusicString parsing.
@@ -699,7 +971,7 @@ When a KeySignature is specified, it will be applied for all subsequent notes. H
  </td>
  <td valign=top>
 	 <table align="center">
-	 	 <tr><td class="indexkey">Somemore Ragas</td><td class="indexkey">Mela Mapping</td></tr>
+	 	 <tr><td class="indexkey">Somemore Ragas</td><td class="indexkey">Janya Mela</td></tr>
 		<tr><td class="indexvalue">BILAHARI</td><td class="indexvalue">MELA_29</td></tr>
 		<tr><td class="indexvalue">HAMSADHWANI</td><td class="indexvalue">MELA_29</td></tr>
 		<tr><td class="indexvalue">HINDOLAM</td><td class="indexvalue">MELA_20</td></tr>
