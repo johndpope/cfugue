@@ -314,7 +314,7 @@ namespace MusicNoteLib
 			bool anotherIsParallel;
 			short			octaveNumber;
             unsigned short  numSwaras; // [Carnatic] No.of Swaras the note spans, such as Sa, Pa etc...
-            const ChordDef* pChord; // Holds the Chord details, if isChord is true
+            ChordDef        chord; // Holds the Chord details, if isChord is true
 			NoteContext()	:
 				isNumeric(0),
 				isChord(0),
@@ -323,8 +323,7 @@ namespace MusicNoteLib
 				anotherIsSequential(0),
 				anotherIsParallel(0),
 				octaveNumber(-1),
-                numSwaras(1),
-                pChord(NULL)
+                numSwaras(1)
 			{
 			}
 		};
@@ -363,6 +362,8 @@ namespace MusicNoteLib
 		int ParseNoteOctave(TCHAR* szToken, NoteContext& ctx);
 		/// <Summary> Parses any chords specified for the note </Summary>
 		int ParseNoteChord(TCHAR* szToken, NoteContext& ctx);
+		/// <Summary> Parses any chord inversions specified for the note </Summary>
+		int ParseNoteChordInversion(TCHAR* szToken, NoteContext& ctx);
 		/// <Summary> Checks and Parses any associated notes </Summary>
 		int ParseNoteConnector(TCHAR* szToken, NoteContext& ctx);
 

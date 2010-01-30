@@ -104,7 +104,7 @@ namespace MusicNoteLib
         /// <Summary>
         /// Saves the current track/sequencer content to a MIDI Output file
         /// </Summary>
-		bool SaveToFile(const char* szOutputFilePath);
+		bool SaveToFile(const char* szOutputFilePath); //TODO: Add the capatiblity to store custom MIDI Headers
 	};
 
 } // namespace MusicNoteLib
