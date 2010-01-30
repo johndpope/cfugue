@@ -29,7 +29,7 @@ without ever having to deal with the low-level MIDI complexities. This library
 provides a beautiful abstraction that lets you concetrate on programming the <i>Music</i> rather
 than worry about the MIDI nuances.
 
-Provides features that makes it possible to use this library directly from many 
+Provides features that make it possible to use this library directly from many 
 platforms, including but not limited to ASP pages, .Net applications and even non-Windows
 based systems.
 
@@ -104,13 +104,124 @@ No warranty of what-so-ever is implied, including MERCHANTABILITY or FITNESS FOR
 /*! \page pageExamples CFugue usage examples
 
 \section secExampleContents Contents
-    - \ref ancPlay "Playing the Notes"
-    - \ref ancSaveMIDI "Saving to MIDI file"
-    - \ref ancAsynchPlay "Playing Asynchronously"
-    - \ref ancParserEvents "Accessing the Parser events"
+    - \ref secCExamples
+        - \ref ancCExamplePlay "Playing the Notes"
+        - \ref ancCExampleSaveMIDI "Saving to MIDI file"
+        - \ref ancCExamplePlayOptions "Configuring Play Options"
+        - \ref ancCExampleParserEvents "Accessing the Parser events"
+    - \ref secCplusCplusExamples
+        - \ref ancPlay "Playing the Notes"
+        - \ref ancSaveMIDI "Saving to MIDI file"
+        - \ref ancAsynchPlay "Playing Asynchronously"
+        - \ref ancParserEvents "Accessing the Parser events"
+    - \ref secPInvokeUsage
+        - \ref subsecPInvokePlay "Playing the Notes"
+        - \ref subsecPInvokeSave "Saving to MIDI file"
+        - \ref ancPInvokeExampleParserEvents "Accessing the Parser events"
     - \ref index "Back to main page"
 
-\anchor ancPlay <b>Playing the Notes</b>
+\section secExamplesIntroduction Introduction
+CFugue API is rich and versatile, and can be used from almost any language - C, C++, .Net, COM-compatible... 
+
+\note Initially the Alpha release of CFugue offers only C API (a wrapper over the internal C++ API). C++ API and P/Invoke definitions for .Net compatible clients are retained in the source code for later public release. If you are using the public Alpha release of CFugue, then you have access to only the C API, in which case please check the \ref secCExamples. If you are directly using the code from the SVN, then you will have access to the complete C++ API, in which case you can take advantage of \ref secCplusCplusExamples.
+
+\section secCExamples C Examples
+\subsection ancCExamplePlay Playing the Notes
+<pre class="fragment">
+    \#include "MusicNoteLib.h"
+
+    void main()
+    {		        
+        MusicNoteLib::PlayMusicString("C D E F G A B"); <span class="comment">// Play the Music Notes on the default MIDI output port</span>
+    }
+</pre>
+Playing them Carnatic style:
+<pre class="fragment">
+    \#include "MusicNoteLib.h"
+
+    void main()
+    {      
+        MusicNoteLib::PlayMusicString("K[MELA_DEFAULT] S R G M P D N"); <span class="comment">// Play the Music Notes on the default MIDI output port</span>
+    }
+</pre>
+
+\subsection ancCExampleSaveMIDI Saving Music Notes to MIDI output file
+<pre class="fragment">
+    \#include "MusicNoteLib.h"
+
+    void main()
+    {           
+        MusicNoteLib::SaveAsMidiFile("Cq Dw Ex", "MidiOutput.midi"); <span class="comment">// Save the Music Notes to Midi file directly, without playing</span>
+    }
+</pre>
+
+\subsection ancCExamplePlayOptions Configuring the Play Options
+
+The <tt>PlayMusicString()</tt> method plays the music notes on default MIDI output port with default MIDI timer resolution. However, if you would like to configure these options, use the <tt>PlayMusicStringWithOpts()</tt> method. It works similar to the <tt>PlayMusicString()</tt> method, but directs the output based on the input options.
+
+<pre class="fragment">
+    \#include "MusicNoteLib.h"
+
+    void main()
+    {
+        MusicNoteLib::PlayMusicStringWithOpts(_T("Cq Dw Ex"), <span class="comment">// CFugue MusicString to be played</span>
+                                                MIDI_MAPPER, <span class="comment">// MIDI Output port</span>
+                                                48 <span class="comment">// MIDI Timer Resolution in MilliSeconds</span>);
+     }
+</pre>
+
+\subsection ancCExampleParserEvents Accessing the Parser events
+
+A MusicString need be parsed before it can be played or rendered as sheet output. While performing
+the parsing operation, parser generates Trace events and Error events to let the caller
+know of the status. Callers can handle these events and output the Trace and Error information
+to a log file or appropriate UI.
+
+Use the <tt>PlayMusicStringCB()</tt> method to add listeners to the parser trace and error events.
+Once subscribed, the attached listeners will be invoked during the parse phase. A sample demonstrating the procedure is below.
+<pre class="fragment">
+    \#include "MusicNoteLib.h"
+
+    void __stdcall OnParseTrace(void* pUserData, const TCHAR* szTraceMsg)
+    {
+        OutputDebugString(_T("\n"));
+        OutputDebugString(szTraceMsg);
+    }
+
+    void __stdcall OnParseError(void* pUserData, long lErrCode, const TCHAR* szErrorMsg, const TCHAR* szToken);
+    {
+        OutputDebugString(_T("\nError --> "));
+        OutputDebugString(szErrMsg);
+        if(szToken != NULL)
+        {
+            OutputDebugString(_T("\t Token: "));	 
+            OutputDebugString(szToken);
+        }
+    }
+
+    void main()
+    {
+        MusicNoteLib::PlayMusicStringCB(_T("Cq Dw Ex"), <span class="comment">// CFugue MusicString to be played</span>
+                                        OnParseTrace, <span class="comment">// Parse Trace Event Handler</span>
+                                        OnParseError, <span class="comment">// Prase Error Event Handler</span>
+                                        NULL);
+     }
+</pre>
+Use <tt>PlayMusicStringWithOptsCB()</tt> method to subscribe handlers and also configure the Play options. Modified snippet looks like below.
+<pre class="fragment">
+    void main()
+    {
+        MusicNoteLib::PlayMusicStringWithOptsCB(_T("Cq Dw Ex"), <span class="comment">// CFugue MusicString to be played</span>
+                                                MIDI_MAPPER, <span class="comment">// MIDI Output port</span>
+                                                48 <span class="comment">// MIDI Timer Resolution in MilliSeconds</span>);
+                                                OnParseTrace, <span class="comment">// Parse Trace Event Handler</span>
+                                                OnParseError, <span class="comment">// Prase Error Event Handler</span>
+                                                NULL);
+     }
+</pre>
+
+\section secCplusCplusExamples C++ Examples
+\subsection ancPlay Playing the Notes
 <pre class="fragment">
     \#include "MusicNoteLib.h"
 
@@ -133,7 +244,7 @@ Playing them Carnatic style:
     }
 </pre>
 
-\anchor ancSaveMIDI <b>Saving Music Notes to MIDI output file</b>
+\subsection ancSaveMIDI Saving Music Notes to MIDI output file
 <pre class="fragment">
     \#include "MusicNoteLib.h"
 
@@ -162,7 +273,7 @@ You need to call this method <i>after</i> the call to Player::Play() or Player::
     }
 </pre>
 
-\anchor ancAsynchPlay <b>Asynchronous Play</b>
+\subsection ancAsynchPlay Asynchronous Play
 
 The Player::Play() method plays the music notes synchronously, i.e. the method 
 will not return till all the music notes are played completely. However, if you would like to play
@@ -189,7 +300,7 @@ to stop the play if it is still in progress. Calling StopPlay() after every Play
 call is a good practice (no matter if play is in progress or not). A typical usage of these methods
 is demonstrated in the above code snippet.
 
-\anchor ancParserEvents <b>Accessing the Parser events</b>
+\subsection ancParserEvents Accessing the Parser events
 
 A MusicString need be parsed before it can be played or rendered as sheet output. While performing
 the parsing operation, parser generates Trace events and Error events to let the caller
@@ -233,7 +344,91 @@ Play or Save methods is invoked on the player. A sample demonstrating the proced
         <span class="comment">// Parse the Notes and Save the content to a MIDI file</span>
         player.SaveAsMidiFile(_T("Cq Dw Ex"), "MidiOutput.midi"); 
      }
-</pre>*/
+</pre>
+
+\section secPInvokeUsage P/Invoke usage
+\subsection subsecPInvokePlay Playing the Notes
+<pre class="fragment">
+public static class MusicNoteLib
+{
+    [DllImport("MusicNoteDll.Dll")]
+    public static extern bool PlayMusicString([MarshalAs(UnmanagedType.LPStr)] String szMusicNotes);
+}
+
+public static void Main()
+{    
+    MusicNoteLib::PlayMusicString("Cq Dw Ex");<span class="comment">// Play the Music Notes on default MIDI Output Port</span>
+}
+</pre>
+\subsection subsecPInvokeSave Saving Music Notes to MIDI output file
+<pre class="fragment">
+public static class MusicNoteLib
+{
+    [DllImport("MusicNoteDll.Dll")]
+    public static extern bool SaveAsMidiFile([MarshalAs(UnmanagedType.LPStr)] String szMusicNotes, [MarshalAs(UnmanagedType.LPStr)] String szOutputFilePath);
+}
+
+public static void Main()
+{    
+    MusicNoteLib::SaveAsMidiFile("Cq Dw Ex", "MidiOutput.mid");<span class="comment">// Save the Music Notes to a MIDI file</span>
+}
+</pre>
+\subsection ancPInvokeExampleParserEvents Accessing the Parser events
+
+A MusicString need be parsed before it can be played or rendered as sheet output. While performing
+the parsing operation, parser generates Trace events and Error events to let the caller
+know of the status. Callers can handle these events and output the Trace and Error information
+to a log file or appropriate UI.
+
+Use the <tt>PlayMusicStringCB()</tt> method to add listeners to the parser trace and error events.
+Once subscribed, the attached listeners will be invoked during the parse phase. A sample demonstrating the procedure is below.
+<pre class="fragment">
+public static class MusicNoteLib
+{
+    public delegate void ParserTraceDelegate(IntPtr userData, [MarshalAs(UnmanagedType.LPStr)] String szTraceMsg);
+    public delegate void ParserErrorDelegate(IntPtr userData, int errCode,
+                                            [MarshalAs(UnmanagedType.LPStr)] String szErrorMsg,
+                                            [MarshalAs(UnmanagedType.LPStr)] String szToken);
+
+    [DllImport("MusicNoteDll.Dll", CallingConvention = CallingConvention.Cdecl)]
+    public static extern void PlayMusicStringCB([MarshalAs(UnmanagedType.LPStr)] String szMusicNotes, 
+                                            [MarshalAs(UnmanagedType.FunctionPtr)] ParserTraceDelegate td,
+                                            [MarshalAs(UnmanagedType.FunctionPtr)] ParserErrorDelegate ed,
+                                            IntPtr userData);
+}
+
+    public void OnParseTrace(IntPtr userData, [MarshalAs(UnmanagedType.LPStr)] String szTraceMsg)
+    {
+        <span class="comment">// Do something with szTraceMsg ... </span>
+    }
+
+    public void OnParseError(IntPtr userData, int errCode, [MarshalAs(UnmanagedType.LPStr)] String szErrorMsg, [MarshalAs(UnmanagedType.LPStr)] String szToken)
+    {
+        <span class="comment">// Do something with szErrorMsg and szToken ... </span>
+    }
+
+void main()
+{
+    MusicNoteLib.PlayMusicStringWithOptsCB("C D E", <span class="comment">// CFugue MusicString to be played</span>
+                        new MusicNoteLib.ParserTraceDelegate(OnParseTrace), <span class="comment">// Parse Trace Event Handler</span>
+                        new MusicNoteLib.ParserErrorDelegate(OnParseError), <span class="comment">// Prase Error Event Handler</span>
+                                        IntPtr.Zero);
+ }
+</pre>
+Use <tt>PlayMusicStringWithOptsCB()</tt> method to subscribe handlers and also configure the Play options. Modified snippet looks like below.
+<pre class="fragment">
+void main()
+{
+    MusicNoteLib.PlayMusicStringWithOptsCB("C D E", <span class="comment">// CFugue MusicString to be played</span>
+                                            MIDI_MAPPER, <span class="comment">// MIDI Output port</span>
+                                            48 <span class="comment">// MIDI Timer Resolution in MilliSeconds</span>);
+                        new MusicNoteLib.ParserTraceDelegate(OnParseTrace), <span class="comment">// Parse Trace Event Handler</span>
+                        new MusicNoteLib.ParserErrorDelegate(OnParseError), <span class="comment">// Prase Error Event Handler</span>
+                                            IntPtr.Zero);
+ }
+</pre>
+
+*/
 
 
 /////////////////////////////////////////////////////////////////
@@ -357,7 +552,7 @@ A note can also be specified using its MIDI numeric value directly. Usually, whe
     <span class="comment">// Play a Mid-C </span>
     player.Play("[60]");
 </pre>
-Observe that we need to enclose the numeric value in square brackets []. Failing to do so will make the CFugue ignore the token. Below is the complete listing of MIDI numeric values for all the notes.
+Observe that we need to enclose the numeric value in square brackets []. Failing to do so might result in CFugue ignoring the token. Below is the complete listing of MIDI numeric values for all the notes.
 
 \htmlonly
 <table align="center">
@@ -517,7 +712,7 @@ Observe that we need to enclose the numeric value in square brackets []. Failing
 Be informed that when you specify a note using its MIDI numeric value, you cannot use the Octave field in the token anymore. Octave fields are only applicable for notes specified using their names.
 
 \subsubsection subsubOctave Octave
-For Western music, CFugue supports octaves in the range [0, 10]. You can specify an octave for a non-numeric note by appending the octave number to it, such as <i>C2</i> to signify C note in 2nd octave or <i>Bb8</i> to signify B-flat note in 8th octave. (Observe that some notations start the octave values from -1 instead of 0. CFugue starts the octave numbering at 0. Middle-C in CFugue is C5, which is MIDI note value 60.)
+For Western music, CFugue supports octaves in the range [0, 10]. You can specify an octave for a non-numeric note by appending the octave number to it, such as <i>C2</i> to signify C note in 2nd octave or <i>Bb8</i> to signify B-flat note in 8th octave. Observe that CFugue starts the octave numbering at 0 (instead of -1 used by some other representations). Middle-C in CFugue is C5, which is MIDI note value 60.
 
 Octaves are optional. If you do not specify any octave value for a note, a default value of Octave 5 will be used for that note (unless it is a chord note, in which case a default value of 3 will be used). 
 
@@ -587,6 +782,13 @@ To specify a chord in CFugue, specify the root and append it with the chord name
 
 The default octave for the chord notes is 3. To specify an explicit octave value for a chord, append the chord root with the octave number. For example, a B-Flat, 7th Octave, major chord will be <tt>Bb7Maj</tt>. 
 
+\anchor ancNoteChordInversions <b>Chord Inversions</b>
+
+A chord inversion indicates a different way of playing a chord. The degree of inversion indicates how many notes in the chord that need be shifted in the octave. A first degree inversion indicates that one note (the root note) should be moved up an octave, while the second degree inversion indicates that two notes (the root note and the second note) should be moved to one octave heigherr. When the note is moved up an octave heigher, the remaining notes in the chord become the new bass notes. Typically a chord with <i>n</i> number of notes can have atmost <i>n</i> degree inversions.
+
+The character <tt>^</tt> indicates an inversion in CFugue. There are two ways to use it. The first is to specify <tt>^</tt> as many times as the degree of inversion after the chord name, and the second is to specify <tt>^</tt> after the chord name followed by the new bass note. For example, <tt>Cmaj^^</tt> and <tt>Cmaj^G</tt> are two ways of indicating the same: a second degree inversion for C-Major chord (that makes the <tt>G</tt> as the new bass note).
+
+
 \subsubsection subsubDuration Duration
 Duration in Western music indicates how long a note should be played. CFugue supports below durations for the Western music notes.
 
@@ -604,9 +806,32 @@ Duration in Western music indicates how long a note should be played. CFugue sup
 </table>
 \endhtmlonly
 
+These characters can be combined to form any aribtrary lengths of durations as required. For example, the token <tt>Bb6www</tt> indicates a B-Flat note in 6th octave for a duration of three whole notes, and the token <tt>F\#MajH</tt> indicates an F-sharp Major chord for a duration of half-note.
+
+CFugue also supports dotted durations. For example, a dotted quarter note would be a <tt>q</tt> followed by a dot (<tt>q.</tt>). Dotted durations indicate an addendum of extra half to the original duration. Thus a dotted quarter note = quarter note + 1/8th note;
+
+Further, CFugue supports numeric durations also. Use the slash character followed by the decimal portion of whole note to indicate a numeric duration. For example, the token <tt>F#8/0.25</tt> signifies an F-sharp note in eight octave for a duration of quarter note (<tt>0.25</tt> is the quarter note portion of whole note). Similarily <tt>0.5</tt> signifies half-note and <tt>1.0</tt> signifies a while note. Values greater than <tt>1.0</tt> indicate a note that spans multiple measures. For example, the <tt>Bb6www</tt> token discussed above can be represeted numerically as <tt>Bb6/3.0</tt>.
+
+Below are few valid examples of duration specification:
+<pre class="fragment">
+    player.Play("Gh"); <span class="comment">// G note in default octave for a half-note duration </span>
+    player.Play("[65]wq"); <span class="comment">// Middle-F (F5) for a whote+quarter note duration </span>
+    player.Play("C3i."); <span class="comment">// C3 dotted-eighth (1/8 + 1/16) duration </span>
+</pre>
+For Western music, if no duration is specified, a default duration of quarter note is assumed.
+
 In Carnatic music, durations for the notes are determined automatically based on the <i>Talam</i>. A <i>Talam</i> specifies the duration for a group of notes instead of an individual note. CFugue supports below Talams.
 
 \subsubsection subsubVelocity Velocity
+CFugue supports attack and decay velocities for notes. These values indicate how a note should be played in terms of its "take off" and "landing" volumes. For example, a note with long attack will sound like being built over a period of time, while a note with long decay sounds like a bell or a string that continues to resonate long after it has been struck. 
+
+In CFugue, attack and decay velocities can be specified using the letters <tt>V</tt> and <tt>D</tt>, respectively, followed by a numeric value in the range [0, 127]. Low numeric values indicate quicker attack and decay, while high values signify longer attack and decay. Both are optional and are independent of each other. And the default value, if unspecified, is 64. Below are few examples of valid usage:
+<pre class="fragment">
+    player.Play("C6V0D124"); <span class="comment">// C6 note with sharp attack and longer decay </span>
+    player.Play("Bb3qhD0"); <span class="comment">// B-Flat 3rd octave quarter+half duration with default Attack and sharp decay </span>
+    player.Play("Bb3qhA0"); <span class="comment">// B-Flat 3rd octave quarter+half duration with sharp Attack and default decay </span>
+</pre>
+
 \subsubsection subsubConnectors Connectors
 
 \subsection subInstruments Specifying Instruments
