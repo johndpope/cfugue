@@ -11,7 +11,7 @@ namespace MusicNoteLib
     /// Definition of a Chord entry
     struct ChordDef
     {
-        typedef unsigned char HALFSTEP;
+        typedef signed short HALFSTEP;
         
         enum { MAX_INTERVALS = 16, MAX_NAME = 16 };
 
@@ -23,7 +23,7 @@ namespace MusicNoteLib
     /// <Summary>Maniuplates Chord definitions for Western Music</Summary>
     class Chords
     {    
-        std::map<TCHAR, std::vector<const ChordDef*> > m_Definitions;
+        std::map<TCHAR, std::vector<ChordDef> > m_Definitions;
     public:
         /// Initialize the Chords with default definitions
         Chords();
@@ -54,7 +54,7 @@ namespace MusicNoteLib
         /// Retrieves the chord that suits the first part of the given string
         /// @param szToken the string that has any Chord name at its start
         /// @param retVal the ChordDef object that has a Chord with its name present in the szToken
-        unsigned int ExtractMatchingChord(const TCHAR* szToken, const ChordDef* &retVal) const;
+        unsigned int ExtractMatchingChord(const TCHAR* szToken, ChordDef* retVal) const;
     };
 
 } // namespace MusicNoteLib

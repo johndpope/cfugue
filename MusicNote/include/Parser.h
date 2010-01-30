@@ -121,6 +121,9 @@ namespace MusicNoteLib
 			PARSE_ERROR_NUMERIC_NOTE_END,		///< MACRO_END missing while parsing a numeric note.			
 			PARSE_ERROR_NUMERIC_NOTE_VALUE,		///< Failure while converting/retrieving a numeric note number.
 			PARSE_ERROR_LETTER_NOTE,			///< Invalid Alphabet encountering while trying to read a Note Symbol
+			PARSE_ERROR_CHORDINV_MACRO_END,	    ///< MACRO_END missing while parsing a Chord Inversion.
+			PARSE_ERROR_CHORDINV_VALUE,		    ///< Failure while converting/retrieving a Chord Inversion Root Note number.
+			PARSE_ERROR_CHORDINV_MAXLIMIT,	    ///< Specified an inversion root note that is not with in acceptable range of values
 			PARSE_ERROR_OCTAVE_MACRO_END,		///< MACRO_END missing while parsing an Octave Macro
 			PARSE_ERROR_OCTAVE_VALUE,			///< Failure while conveting/retrieving an Octave macro number
 			PARSE_ERROR_OCTAVE_MAXLIMIT,		///< Specified an octave that is beyond the permitted range [0, 10]
