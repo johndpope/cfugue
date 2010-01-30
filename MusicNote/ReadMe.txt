@@ -1,4 +1,4 @@
-MusicNote Library
+CFugue MusicNote Library
 
 Directory Structure:
 
