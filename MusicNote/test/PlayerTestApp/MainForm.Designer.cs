@@ -74,16 +74,16 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.listView_Log);
             this.splitContainer1.Panel2Collapsed = true;
-            this.splitContainer1.Size = new System.Drawing.Size(792, 341);
-            this.splitContainer1.SplitterDistance = 400;
+            this.splitContainer1.Size = new System.Drawing.Size(832, 435);
+            this.splitContainer1.SplitterDistance = 200;
             this.splitContainer1.TabIndex = 0;
             // 
             // splitter_PropertyGrid
             // 
             this.splitter_PropertyGrid.Dock = System.Windows.Forms.DockStyle.Right;
-            this.splitter_PropertyGrid.Location = new System.Drawing.Point(593, 0);
+            this.splitter_PropertyGrid.Location = new System.Drawing.Point(633, 0);
             this.splitter_PropertyGrid.Name = "splitter_PropertyGrid";
-            this.splitter_PropertyGrid.Size = new System.Drawing.Size(3, 257);
+            this.splitter_PropertyGrid.Size = new System.Drawing.Size(3, 351);
             this.splitter_PropertyGrid.TabIndex = 8;
             this.splitter_PropertyGrid.TabStop = false;
             // 
@@ -139,7 +139,7 @@
             this.textBox_Notes.Multiline = true;
             this.textBox_Notes.Name = "textBox_Notes";
             this.textBox_Notes.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox_Notes.Size = new System.Drawing.Size(596, 257);
+            this.textBox_Notes.Size = new System.Drawing.Size(636, 351);
             this.textBox_Notes.TabIndex = 7;
             this.textBox_Notes.Text = "I[FLUTE] C D E F G A B";
             // 
@@ -153,15 +153,15 @@
             this.panel_Commands.Controls.Add(this.checkBox_PlaySelected);
             this.panel_Commands.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel_Commands.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.panel_Commands.Location = new System.Drawing.Point(0, 257);
+            this.panel_Commands.Location = new System.Drawing.Point(0, 351);
             this.panel_Commands.Name = "panel_Commands";
             this.panel_Commands.Padding = new System.Windows.Forms.Padding(0, 8, 16, 8);
-            this.panel_Commands.Size = new System.Drawing.Size(596, 84);
+            this.panel_Commands.Size = new System.Drawing.Size(636, 84);
             this.panel_Commands.TabIndex = 6;
             // 
             // button_ToMIDI
             // 
-            this.button_ToMIDI.Location = new System.Drawing.Point(502, 11);
+            this.button_ToMIDI.Location = new System.Drawing.Point(542, 11);
             this.button_ToMIDI.Name = "button_ToMIDI";
             this.button_ToMIDI.Size = new System.Drawing.Size(75, 32);
             this.button_ToMIDI.TabIndex = 1;
@@ -171,7 +171,7 @@
             // 
             // button_Play
             // 
-            this.button_Play.Location = new System.Drawing.Point(421, 11);
+            this.button_Play.Location = new System.Drawing.Point(461, 11);
             this.button_Play.Name = "button_Play";
             this.button_Play.Size = new System.Drawing.Size(75, 32);
             this.button_Play.TabIndex = 0;
@@ -185,7 +185,7 @@
             this.flowLayoutPanel_MIDIOutDevices.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.flowLayoutPanel_MIDIOutDevices.Controls.Add(this.label1);
             this.flowLayoutPanel_MIDIOutDevices.Controls.Add(this.comboBox_MIDIOutDevs);
-            this.flowLayoutPanel_MIDIOutDevices.Location = new System.Drawing.Point(151, 11);
+            this.flowLayoutPanel_MIDIOutDevices.Location = new System.Drawing.Point(191, 11);
             this.flowLayoutPanel_MIDIOutDevices.Name = "flowLayoutPanel_MIDIOutDevices";
             this.flowLayoutPanel_MIDIOutDevices.Size = new System.Drawing.Size(264, 32);
             this.flowLayoutPanel_MIDIOutDevices.TabIndex = 5;
@@ -215,7 +215,7 @@
             this.flowLayoutPanel_TimerResolution.Controls.Add(this.label2);
             this.flowLayoutPanel_TimerResolution.Controls.Add(this.numericUpDown_TimerResolution);
             this.panel_Commands.SetFlowBreak(this.flowLayoutPanel_TimerResolution, true);
-            this.flowLayoutPanel_TimerResolution.Location = new System.Drawing.Point(3, 11);
+            this.flowLayoutPanel_TimerResolution.Location = new System.Drawing.Point(43, 11);
             this.flowLayoutPanel_TimerResolution.Name = "flowLayoutPanel_TimerResolution";
             this.flowLayoutPanel_TimerResolution.Size = new System.Drawing.Size(142, 30);
             this.flowLayoutPanel_TimerResolution.TabIndex = 6;
@@ -253,7 +253,7 @@
             // 
             // linkLabel_TextBoxProperties
             // 
-            this.linkLabel_TextBoxProperties.Location = new System.Drawing.Point(450, 46);
+            this.linkLabel_TextBoxProperties.Location = new System.Drawing.Point(490, 46);
             this.linkLabel_TextBoxProperties.Name = "linkLabel_TextBoxProperties";
             this.linkLabel_TextBoxProperties.Size = new System.Drawing.Size(127, 24);
             this.linkLabel_TextBoxProperties.TabIndex = 3;
@@ -267,7 +267,7 @@
             this.checkBox_PlaySelected.AutoSize = true;
             this.checkBox_PlaySelected.Checked = true;
             this.checkBox_PlaySelected.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox_PlaySelected.Location = new System.Drawing.Point(328, 49);
+            this.checkBox_PlaySelected.Location = new System.Drawing.Point(368, 49);
             this.checkBox_PlaySelected.Name = "checkBox_PlaySelected";
             this.checkBox_PlaySelected.Size = new System.Drawing.Size(116, 21);
             this.checkBox_PlaySelected.TabIndex = 2;
@@ -277,10 +277,10 @@
             // propertyGrid1
             // 
             this.propertyGrid1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.propertyGrid1.Location = new System.Drawing.Point(596, 0);
+            this.propertyGrid1.Location = new System.Drawing.Point(636, 0);
             this.propertyGrid1.Name = "propertyGrid1";
             this.propertyGrid1.SelectedObject = this.textBox_Notes;
-            this.propertyGrid1.Size = new System.Drawing.Size(196, 341);
+            this.propertyGrid1.Size = new System.Drawing.Size(196, 435);
             this.propertyGrid1.TabIndex = 5;
             this.propertyGrid1.Visible = false;
             // 
@@ -314,7 +314,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(792, 341);
+            this.ClientSize = new System.Drawing.Size(832, 435);
             this.Controls.Add(this.splitContainer1);
             this.Name = "MainForm";
             this.Text = "MusicString Player Test Application";
