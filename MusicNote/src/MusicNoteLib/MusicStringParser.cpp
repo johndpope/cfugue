@@ -467,6 +467,10 @@ namespace MusicNoteLib
 
 			if(ComputeNoteValue(ctx) == -1) { *pbNonContinuableErrorOccured = true; return false;}
 
+			nLen = ParseNoteChordInversion(szToken, ctx);
+			if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false;}
+			szToken += nLen;
+
 			nLen = ParseNoteDuration(szToken, ctx);
 			if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false;}
 			szToken += nLen;
@@ -742,15 +746,130 @@ namespace MusicNoteLib
             return 0;    // No Chords for Rest Notes
         }
 
-        unsigned int nChordNameLen = this->m_Chords.ExtractMatchingChord(szToken, ctx.pChord);
+        unsigned int nChordNameLen = this->m_Chords.ExtractMatchingChord(szToken, &ctx.chord);
 
         if(nChordNameLen > 0)
         {
             ctx.isChord = true;
-            Verbose(_T("ParseNoteChord: Found Chord ") + MString(ctx.pChord->szChordName));
+            Verbose(_T("ParseNoteChord: Found Chord ") + MString(ctx.chord.szChordName));
         }
 
         return nChordNameLen;
+    }
+
+    int MusicStringParser::ParseNoteChordInversion(TCHAR* szToken, NoteContext& ctx)
+    {
+        if(ctx.isChord == false)
+        {
+            Verbose(_T("ParseNoteChordInversion: Skipping Chord Inversions..."));
+            return 0;
+        }
+
+        TCHAR* pszToken = szToken;
+
+        int nInversionCount = 0;
+        int nInversionRootNote = -1;
+        int nInversionOctave = -1;
+        bool bCheckForInversion = true;
+
+        while(bCheckForInversion && *pszToken != NULL)
+        {
+            switch(pszToken[0])
+            {
+            case _T('^'): pszToken++; nInversionCount++; break;
+            case _T('C'): pszToken++; nInversionRootNote = NOTE_C_Value; break;
+            case _T('D'): pszToken++; nInversionRootNote = NOTE_D_Value; break;
+            case _T('E'): pszToken++; nInversionRootNote = NOTE_E_Value; break;
+            case _T('F'): pszToken++; nInversionRootNote = NOTE_F_Value; break;
+            case _T('G'): pszToken++; nInversionRootNote = NOTE_G_Value; break;
+            case _T('A'): pszToken++; nInversionRootNote = NOTE_A_Value; break;
+            case _T('B'): pszToken++; // this could be note B or Flat symbol b
+                if(nInversionRootNote == -1) nInversionRootNote = NOTE_B_Value; 
+                else nInversionRootNote--; 
+                break;
+            case _T('#'): pszToken++; nInversionRootNote++; break;
+            case _T('1'): pszToken++; nInversionOctave = 1; break;
+            case _T('2'): pszToken++; nInversionOctave = 2; break;
+            case _T('3'): pszToken++; nInversionOctave = 3; break;
+            case _T('4'): pszToken++; nInversionOctave = 4; break;
+            case _T('5'): pszToken++; nInversionOctave = 5; break;
+            case _T('6'): pszToken++; nInversionOctave = 6; break;
+            case _T('7'): pszToken++; nInversionOctave = 7; break;
+            case _T('8'): pszToken++; nInversionOctave = 8; break;
+            case _T('9'): pszToken++; nInversionOctave = 9; break;
+            case _T('0'): pszToken++; // this could be 0th octave or a 0 after a digit
+                if(nInversionOctave == -1) nInversionOctave = 0;
+                else nInversionOctave *= 10; break;
+            case MACRO_START:   // Root note is specified as a Macro number value
+                {
+                    unsigned short nRoot = 0; bool bSuccess = false;
+		            int nLen = ParseNumber(pszToken, &nRoot, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_CHORDINV_MACRO_END, PARSE_ERROR_CHORDINV_VALUE);
+		            if(nLen == -1) { return -1; } // Some irrevocable error occured
+		            if(bSuccess)
+                    {
+                        nInversionRootNote = nRoot;
+                        pszToken += nLen;
+                        break;
+                    } 
+                    else ; // fall through                    
+                }
+            default: bCheckForInversion = false; break;
+           }
+        } // while
+
+        // Update the values based on Inversion Specifications
+        if(nInversionCount > 0)
+        {
+            if(nInversionRootNote == -1) // if No Root note specified, inversion is based on number of carets
+            {
+                Verbose(_T("Chord Inversion based on count: ") + OIL::ToString(nInversionCount));
+                // Increase each halfstep before the inversion by 12, the total number of halfsteps in an octave
+                ctx.noteNumber += 12;
+                for(int i = nInversionCount -1; i < ctx.chord.nIntervalCount; ++i)
+                {
+                    Verbose(_T("  Inverting ") + OIL::ToString(ctx.chord.Intervals[i]) + _T(" to be ") + OIL::ToString(ctx.chord.Intervals[i] - 12));
+                    ctx.chord.Intervals[i] -= 12;
+                }
+            }
+            else // Inversion based on root note
+            {
+                if(nInversionOctave != -1)
+                    nInversionRootNote += (nInversionOctave * 12);
+                else if(nInversionRootNote < 12)
+                {
+                    int nCurOctave = ctx.noteNumber / 12; // get the current octave
+                    nInversionRootNote += (nCurOctave * 12);
+                }
+
+                // Otherwise, InversionRootNote could be a numeric value, such as [60]
+                Verbose(_T("Chord Inversion is based on note: ") + OIL::ToString(nInversionRootNote));
+
+                if((nInversionRootNote  > ctx.noteNumber + ctx.chord.Intervals[ctx.chord.nIntervalCount -1])
+                    || (nInversionRootNote < ctx.noteNumber))
+                {
+                    if(Error(PARSE_ERROR_CHORDINV_MAXLIMIT, _T("Chord Inversion Root Note is beyond range"), szToken))
+                        return -1;
+
+                    Trace(_T("  Adjusted the inversion root note to be ") + OIL::ToString(ctx.noteNumber) + _T(" and continuing..."));
+
+                    nInversionRootNote = ctx.noteNumber;
+                }
+
+                Verbose(_T(" Inverting ") + OIL::ToString(ctx.noteNumber) + _T(" to be ") + OIL::ToString(ctx.noteNumber + 12));
+                ctx.noteNumber += 12;
+
+                for(int i=0; i < ctx.chord.nIntervalCount; ++ i)
+                {
+                    if(ctx.noteNumber + ctx.chord.Intervals[i] >= nInversionRootNote + 12)
+                    {
+                        Verbose(_T("  Inverting ") + OIL::ToString(ctx.chord.Intervals[i]) + _T(" to be ") + OIL::ToString(ctx.chord.Intervals[i] - 12));
+                        ctx.chord.Intervals[i] -= 12;
+                    }
+                }
+            }
+        }
+        
+        return pszToken - szToken; // return the number of characters scanned
     }
 
 	int MusicStringParser::ComputeNoteValue(NoteContext& ctx)
@@ -1060,10 +1179,10 @@ namespace MusicNoteLib
 
 		if(ctx.isChord)
 		{
-            for(unsigned short i=0; i < ctx.pChord->nIntervalCount; ++i)
+            for(unsigned short i=0; i < ctx.chord.nIntervalCount; ++i)
 			{
 				Note noteObj;
-                noteObj.noteNumber = ctx.noteNumber + ctx.pChord->Intervals[i];
+                noteObj.noteNumber = ctx.noteNumber + ctx.chord.Intervals[i];
 				noteObj.duration = ctx.duration;
 				noteObj.decimalDuration = ctx.decimalDuration;
 				noteObj.type = Note::PARALLEL;
