@@ -446,6 +446,7 @@ void main()
             - \ref subsubDuration
             - \ref subsubVelocity
             - \ref subsubConnectors
+		- \ref subRestNotes
         - \ref subInstruments
         - \ref subKeySignatures
     - \ref secInteroperation
@@ -833,6 +834,22 @@ In CFugue, attack and decay velocities can be specified using the letters <tt>V<
 </pre>
 
 \subsubsection subsubConnectors Connectors
+
+\subsection subRestNotes Specifying Rests
+Apart from the regular notes, CFugue also supports <i>Rest</i> notes. Rest notes are nothing but periods of silence. Their use is similar to that of sounded notes, except that Rest notes do not support anything other than a Duration. That is, Rest notes do not have Octaves or Velocities or Connectors. And the durations specifications for Rest notes are same as that of the usual notes. Refer to \ref subsubDuration for details on durations.
+
+Use the symbol <i>R</i> to specify a Rest note in Western music. The usual duration specificiers can be appended as usual. Below are few examples:
+<pre class="fragment">
+    player.Play("R"); <span class="comment">// Rest note for the detault duration</span>
+    player.Play("Rw"); <span class="comment">// Rest note for a whole duration</span>
+</pre>
+Obviously, you would not be listening any sound being output when you run the above lines of code. Rest notes are designed to be used in conjunct with other regular notes. Usually it is rare that you would want to program MusicStrings made of only rest notes. Place them amidst of regular music notes to actually listen them, such as shown in the below example.
+<pre class="fragment">
+    player.Play("Cw Rh Dw"); <span class="comment">// Can you "listen" the Rest note ?</span>
+</pre>
+For Carnatic music, the symbols <tt>,</tt> and <tt>;</tt> signify the Rest notes. The durations are based on the currently selected Talam. The <tt>,</tt> specifies a Rest note for one duration, while the <tt>;</tt> specifies a Rest note for two durations.
+
+These <tt>,</tt> and <tt>;</tt> can also be used in Western music notation, in which case they both act as the default Rest note with no explicit duration. For more details on mixing the Western and Carnatic music notations, please refer \ref secInteroperation.
 
 \subsection subInstruments Specifying Instruments
 Instrument tokens in MusicStrings indicates which instrument should be used to play the subsequent notes in the strings. In CFugue, instrument tokens are identified with character <b>I</b> at their beginning. Below are few examples of valid instrument tokens:

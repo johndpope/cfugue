@@ -39,10 +39,12 @@ namespace MusicNoteLib
 			ASSIGNMENT_SYMBOL			= _T('='),
 
 			// Note Related
-			REST_NOTE			        = _T('R'),  ///< Specifies a Rest Note token [Western Music Only]
-			MACRO_START					= _T('['),  ///< Signifies a Macro start symbol
-			MACRO_END					= _T(']'),  ///< Signifies the Macro end symbol
-		};
+            MACRO_START					= _T('['),  ///< Signifies a Macro start symbol
+            MACRO_END					= _T(']'),  ///< Signifies the Macro end symbol
+            WESTERN_REST_NOTE	        = _T('R'),  ///< Specifies a Rest Note token [Western Music Only]
+            REST_NOTE1					= _T(','),  ///< Specifies a Rest Note of one duration
+            REST_NOTE2					= _T(';'),  ///< Specifies a Rest Note of two durations
+        };
 
 		/// <Summary> Note Numbers </Summary>
 		enum NoteNumbers : unsigned short
