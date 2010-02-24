@@ -522,15 +522,33 @@ namespace MusicNoteLib
 		switch(szToken[0])
 		{
 		case MACRO_START : return ParseNumericNote(szToken, ctx);
-        case REST_NOTE: // Rest Note concept is valid only for Western Music
+		case REST_NOTE1: 
+			{
+				Verbose(_T("This Note is a Rest"));
+				ctx.isRest = true;
+				ctx.numSwaras = 1;
+				return 1;
+			}
+		case REST_NOTE2:
+			{
+				Verbose(_T("This is a Rest note for Two swara durations"));
+				ctx.isRest = true;
+				ctx.numSwaras = 2;
+				return 1;
+			}
+        case WESTERN_REST_NOTE: // This Rest Note symbol is valid only for Western Music
             {                
                 if(m_KeySig.GetMode() == KeySignature::WESTERN)
-                    return ParseRest(szToken, ctx);
-                else
-                    ; // follow on 
+				{	
+					Verbose(_T("This Note is a Rest"));
+
+					ctx.isRest = true; return 1;
+				}
+				break;
             }
-		default: return ParseLetterNote(szToken, ctx);
+		default: break;
 		}
+		return ParseLetterNote(szToken, ctx);
 	}
 
 	/// <Summary> Parses Numeric Note. 
