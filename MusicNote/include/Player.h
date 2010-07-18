@@ -32,7 +32,7 @@ namespace MusicNoteLib
         ///
         /// Returns false if unable to start the play. Failures can happen if unable to open
         /// the MIDI output port or if unable to create a MIDI timer with supplied resolution or
-        /// if there any critical parsing errors in the supplied Music String.
+        /// if there are any critical parsing errors in the supplied Music String.
         ///
         /// @param strMusicNotes the input Music string to be played on MIDI output port
 		/// @param nMIDIOutPortID the output MIDI port to be used for the play
