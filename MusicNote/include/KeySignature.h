@@ -129,20 +129,9 @@ namespace MusicNoteLib
         /// Valid only for Carnatic Mode. Use GetMode() to verify the Mode.
         inline unsigned short& Speed() { return m_nSpeed; }
 
-        /// Populates the standard KeySignature Macro defintions into Music String Dictionary
-        inline static void PopulateStandardDefinitions(DICTIONARY& stdDefns)
+        /// Populates Western Music Scale values
+        inline static void PopulateWesternDefinitions(DICTIONARY& stdDefns)
         {
-            // We maintain support for both Carnatic and Western Key Signatures.
-
-            // In Carnatic Music,
-            // a total of 72 Key Signatures, known as Melakartha Janya Ragas, are
-            // present. These values are added to the dictionary with MELA_X key name,
-            // where x specifies a number in the range [1, 72]. However, to distinguish
-            // these values from the Western Key Signature values, we set the 
-            // 8th high bit in the byte to be 1, so all the values for the Carnatic
-            // music will be in the range [129, 200]. We also support MELA_0
-            // and MELA_DEFAULT macros that maps to Melakartha 29 - Shankarabharanam scale.
-
             // In Western Music,
             // Key signature values span from -7 to 7. But our dictionary does not
             // allow negative values. So we make the values to be from 0 to 14. We
@@ -159,9 +148,6 @@ namespace MusicNoteLib
             // See MusicStringParser::ParseKeySignatureToken to see how 
             // these values are interpreted correctly.
 
-            //
-            // Western Definitions
-            //
             stdDefns[_T("CBMAJ")]       = _T("78");
             stdDefns[_T("ABMIN")]       = _T("14");
 
@@ -210,13 +196,23 @@ namespace MusicNoteLib
             stdDefns[_T("SCALE")]       = _T("64"); // Same as C-Major
             stdDefns[_T("SCALE_DEF")]   = _T("64"); // Same as C-Major
             stdDefns[_T("SCALE_DEFAULT")] = _T("64"); // Same as C-Major
+        }
 
-            // Populate the Talam Macro Definitions
-            Talam::PopulateStandardDefinitions(stdDefns);
+        /// Populates Carnatic Ragas and Mela values
+        inline static void PopulateCarnaticDefinitions(DICTIONARY& stdDefns)
+        {
+            // In Carnatic Music,
+            // a total of 72 Key Signatures, known as Melakartha Janya Ragas, are
+            // present. These values are added to the dictionary with MELA_X key name,
+            // where x specifies a number in the range [1, 72]. However, to distinguish
+            // these values from the Western Key Signature values, we set the 
+            // 8th high bit in the byte to be 1, so all the values for the Carnatic
+            // music will be in the range [129, 200]. We also support MELA_0
+            // and MELA_DEFAULT macros that maps to Melakartha 29 - Shankarabharanam scale.
+            
+            // See MusicStringParser::ParseKeySignatureToken to see how 
+            // these values are interpreted correctly.
 
-            //
-            // Carnatic Definitions
-            //
             stdDefns[_T("MELA_1")]       = _T("129");
             stdDefns[_T("MELA_2")]       = _T("130");
             stdDefns[_T("MELA_3")]       = _T("131");
@@ -292,7 +288,7 @@ namespace MusicNoteLib
 
             stdDefns[_T("MELA_0")]        = _T("157"); // Defaults to 29th Mela
             stdDefns[_T("MELA_DEFAULT")]  = _T("157");
-            stdDefns[_T("MELA")]          = _T("157");
+            stdDefns[_T("MELA")]          = _T("157");        
 
             // Carnatic name mappings to the Melakartha Janya Ragas
             stdDefns[_T("KANAKANGI")]     = stdDefns[_T("MELA_1")];
@@ -392,11 +388,12 @@ namespace MusicNoteLib
             
             // Special Identifiers to Restore the Previous Scale/Raga while Switching the Mode
             stdDefns[_T("CARNATIC")]      = _T("256");
-            stdDefns[_T("WESTERN")]       = _T("256");
+            stdDefns[_T("WESTERN")]       = _T("256");        
+        }
 
-            //
-            // Speed Definitions
-            //
+        /// Populates Speed values for Carnatic music
+        inline static void PopulateSpeedDefinitions(DICTIONARY& stdDefns)
+        {
             stdDefns[_T("1ST_SPEED")]   = _T("1");
             stdDefns[_T("2ND_SPEED")]   = _T("2");
             stdDefns[_T("3RD_SPEED")]   = _T("3");
@@ -415,6 +412,29 @@ namespace MusicNoteLib
             stdDefns[_T("FOURTH")]      = _T("4");
             stdDefns[_T("FIFTH")]       = _T("5");
             stdDefns[_T("SIXTH")]       = _T("6");
+        }
+
+        /// \brief Populates the standard KeySignature Macro defintions into Music String Dictionary
+        /// Western Key Signatures, Carnatic Ragas, Talam and Speed values are populated.
+        inline static void PopulateStandardDefinitions(DICTIONARY& stdDefns)
+        {
+            //
+            // Western Scale Definitions
+            //
+            PopulateWesternDefinitions(stdDefns);
+
+            //
+            // Carnatic Raga & Mela Definitions
+            //
+            PopulateCarnaticDefinitions(stdDefns);
+
+            // Populate the Talam Macro Definitions
+            Talam::PopulateStandardDefinitions(stdDefns);
+
+            //
+            // Speed Definitions
+            //
+            PopulateSpeedDefinitions(stdDefns);
        }
 
        /// Takes a plain Swara and converts it to the correct value based on the supplied Melakartha Raga.
