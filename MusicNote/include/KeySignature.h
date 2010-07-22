@@ -1,3 +1,11 @@
+/*
+	This is part of CFugue, the C++ Runtime for MIDI Score Programming
+	Copyright (C) 2009-2010 Gopalakrishna Palem
+
+	For links to further information, or to contact the author,
+	see <http://musicnote.sourceforge.net/>.
+*/
+
 #ifndef KEYSIGNATURE_H__56751CC1_46A2_4238_BAF1_7884CDA8089B__
 #define KEYSIGNATURE_H__56751CC1_46A2_4238_BAF1_7884CDA8089B__
 
@@ -384,11 +392,7 @@ namespace MusicNoteLib
             stdDefns[_T("KAMBHOJI")]      = stdDefns[_T("MELA_28")];
             stdDefns[_T("MADHYAMAVATHI")] = stdDefns[_T("MELA_22")];
             stdDefns[_T("MOHANAM")]       = stdDefns[_T("MELA_28")];
-            stdDefns[_T("NEELAMBARI")]    = stdDefns[_T("MELA_29")];
-            
-            // Special Identifiers to Restore the Previous Scale/Raga while Switching the Mode
-            stdDefns[_T("CARNATIC")]      = _T("256");
-            stdDefns[_T("WESTERN")]       = _T("256");        
+            stdDefns[_T("NEELAMBARI")]    = stdDefns[_T("MELA_29")];            
         }
 
         /// Populates Speed values for Carnatic music
@@ -427,6 +431,10 @@ namespace MusicNoteLib
             // Carnatic Raga & Mela Definitions
             //
             PopulateCarnaticDefinitions(stdDefns);
+
+            // Special Identifiers to Restore the Previous Scale/Raga while Switching the Mode
+            stdDefns[_T("CARNATIC")]      = _T("256");
+            stdDefns[_T("WESTERN")]       = _T("256");        
 
             // Populate the Talam Macro Definitions
             Talam::PopulateStandardDefinitions(stdDefns);
