@@ -1,3 +1,11 @@
+/*
+	This is part of CFugue, the C++ Runtime for MIDI Score Programming
+	Copyright (C) 2009-2010 Gopalakrishna Palem
+
+	For links to further information, or to contact the author,
+	see <http://musicnote.sourceforge.net/>.
+*/
+
 #ifndef __MSTRING_H__2B50AFA1_EFB9_428a_A397_3FFEA175FA33__
 #define __MSTRING_H__2B50AFA1_EFB9_428a_A397_3FFEA175FA33__
 
@@ -46,9 +54,9 @@ namespace MusicNoteLib
 		}
 		inline operator const TCHAR* () const {	return c_str(); }
 #ifdef UNICODE
-		inline MString(const char* sz) { _ASSERTE(_T("This is not Supported") == NULL); }
+		inline MString(const char* ) { _ASSERTE(_T("This is not Supported") == NULL); }
 #else
-		inline MString(const wchar_t* sz) { _ASSERTE(_T("This is not Supported") == NULL); }
+		inline MString(const wchar_t* ) { _ASSERTE(_T("This is not Supported") == NULL); }
 #endif
 	}; // class MString
 
