@@ -7,8 +7,18 @@
 %\newcommand*{\memfontpack}{newcent}
 \documentclass[oneside,10pt,extrafontsizes]{memoir}
 
+\setlrmarginsandblock{2.5cm}{*}{1} 
+\setulmarginsandblock{2.5cm}{2.5cm}{*}
+\setmarginnotes{2.5mm}{2cm}{1em}
+\checkandfixthelayout
+
 \usepackage{xcolor,graphicx}
 
+\usepackage[colorlinks,pdfauthor={Gopalakrishna Palem},pdfkeywords={C++, CFugue, Gopalakrishna, Music, MIDI},pdftitle={The Complete Guide to CFugue},pdfsubject={Programming Music in C/C++}]{hyperref}
+\usepackage{memhfixc}
+
+\usepackage{fancyvrb}
+\newcommand\starbreak{\fancybreak{\decosix\quad\decosix\quad\decosix}}
 
 \usepackage{listings}
 \lstset{ %
@@ -35,17 +45,14 @@ morecomment=[l]//								% Comment the lines that begin with //
 \ifpdf
 	\definecolor{CodeCommentColor}{rgb}{0,0.50,0} % Use green color for Chapters for PDF
   \lstset{ morecomment=[l][\color{CodeCommentColor}]//		}% Comment the lines that begin with //
-\fi
 
-\ifpdf
-	\usepackage[colorlinks,pdfauthor={Gopalakrishna Palem},pdfkeywords={C++, CFugue, Gopalakrishna, Music, MIDI},pdftitle={The Complete Guide to CFugue},pdfsubject={Programming Music in C/C++}]{hyperref}
-	\usepackage{memhfixc}
 	\definecolor{TitleColor}{rgb}{.647,.129,.149} % Use Red color for Chapters for PDF
-	\renewcommand\colorchapnum{\color{TitleColor}}
-	\renewcommand\colorchaptitle{\color{TitleColor}}
 \else
 	\definecolor{TitleColor}{rgb}{0,0,0} % Just use black color for Non-Pdf 
 \fi
+
+	\renewcommand\colorchapnum{\color{TitleColor}}
+	\renewcommand\colorchaptitle{\color{TitleColor}}
 
 %\chapterstyle{pedersen}
 \chapterstyle{veelo}
@@ -83,48 +90,55 @@ morecomment=[l]//								% Comment the lines that begin with //
 %}
 %\chapterstyle{jenor}
 %%%%%%%%%%%%%%%%%%%%%%%%%%
-%\usepackage{color,calc,graphicx,soul,fourier}
-%\definecolor{nicered}{rgb}{.647,.129,.149}
-%\makeatletter
-%\newlength\dlf@normtxtw
-%\setlength\dlf@normtxtw{\textwidth}
-%\def\myhelvetfont{\def\sfdefault{mdput}}
-%\newsavebox{\feline@chapter}
-%\newcommand\feline@chapter@marker[1][4cm]{%
-%\sbox\feline@chapter{%
-%\resizebox{!}{#1}{\fboxsep=1pt%
-%\colorbox{nicered}{\color{white}\bfseries\sffamily\thechapter}%
-%}}%
-%\rotatebox{90}{%
-%\resizebox{%
-%\heightof{\usebox{\feline@chapter}}+\depthof{\usebox{\feline@chapter}}}%
-%{!}{\scshape\so\@chapapp}}\quad%
-%\raisebox{\depthof{\usebox{\feline@chapter}}}{\usebox{\feline@chapter}}%
-%}
-%\newcommand\feline@chm[1][4cm]{%
-%\sbox\feline@chapter{\feline@chapter@marker[#1]}%
-%\makebox[0pt][l]{% aka \rlap
-%\makebox[1cm][r]{\usebox\feline@chapter}%
-%}}
-%\makechapterstyle{daleif1}{
-%\renewcommand\chapnamefont{\normalfont\Large\scshape\raggedleft\so}
-%\renewcommand\chaptitlefont{\normalfont\huge\bfseries\scshape\color{nicered}}
-%\renewcommand\chapternamenum{}
-%\renewcommand\printchaptername{}
-%\renewcommand\printchapternum{\null\hfill\feline@chm[2.5cm]\par}
-%\renewcommand\afterchapternum{\par\vskip\midchapskip}
-%\renewcommand\printchaptertitle[1]{\chaptitlefont\raggedleft ##1\par}
-%}
-%\makeatother
-%\chapterstyle{daleif1}
+\usepackage{color,calc,graphicx,soul,fourier}
+\definecolor{nicered}{rgb}{.647,.129,.149}
+\makeatletter
+\newlength\dlf@normtxtw
+\setlength\dlf@normtxtw{\textwidth}
+\def\myhelvetfont{\def\sfdefault{mdput}}
+\newsavebox{\feline@chapter}
+\newcommand\feline@chapter@marker[1][4cm]{%
+\sbox\feline@chapter{%
+\resizebox{!}{#1}{\fboxsep=1pt%
+\colorbox{nicered}{\color{white}\bfseries\sffamily\thechapter}%
+}}%
+\rotatebox{90}{%
+\resizebox{%
+\heightof{\usebox{\feline@chapter}}+\depthof{\usebox{\feline@chapter}}}%
+{!}{\scshape\so\@chapapp}}\quad%
+\raisebox{\depthof{\usebox{\feline@chapter}}}{\usebox{\feline@chapter}}%
+}
+\newcommand\feline@chm[1][4cm]{%
+\sbox\feline@chapter{\feline@chapter@marker[#1]}%
+\makebox[0pt][l]{% aka \rlap
+\makebox[1cm][r]{\usebox\feline@chapter}%
+}}
+\makechapterstyle{daleif1}{
+\renewcommand\chapnamefont{\normalfont\Large\scshape\raggedleft\so}
+\renewcommand\chaptitlefont{\normalfont\huge\bfseries\scshape\color{nicered}}
+\renewcommand\chapternamenum{}
+\renewcommand\printchaptername{}
+\renewcommand\printchapternum{\null\hfill\feline@chm[2.5cm]\par}
+\renewcommand\afterchapternum{\par\vskip\midchapskip}
+\renewcommand\printchaptertitle[1]{\chaptitlefont\raggedleft ##1\par}
+}
+\makeatother
+\chapterstyle{daleif1}
 %%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage{memfonts}
-   \renewcommand{\rmdefault}{bch}
-   \renewcommand{\sfdefault}{phv}
-   \renewcommand{\ttdefault}{pcr}
-
+%\usepackage{memfonts}
+%   \renewcommand{\rmdefault}{bch}
+%   \renewcommand{\sfdefault}{phv}
+%   \renewcommand{\ttdefault}{pcr}
+\definecolor{felinesrcbgcolor}{rgb}{1,1,0.85}
+\definecolor{felinesrcbgcolor}{rgb}{0.94,0.97,1}
+\definecolor{felineframe}{rgb}{0.79,0.88,1}
+\definecolor{myorange}{rgb}{1,0.375,0}
+\usepackage[draft]{fixme}
+\usepackage{fourier}
+\usepackage[scaled]{luximono}
+\usepackage[scaled]{berasans}
 
 % see the list of further useful packages
 % in the Reference Guide
