@@ -1,3 +1,11 @@
+/*
+	This is part of CFugue, the C++ Runtime for MIDI Score Programming
+	Copyright (C) 2009-2010 Gopalakrishna Palem
+
+	For links to further information, or to contact the author,
+	see <http://musicnote.sourceforge.net/>.
+*/
+
 #ifndef __DICTIONARY_H__57D24F57_01B6_4fcd_B92E_7B7849C51407__
 #define __DICTIONARY_H__57D24F57_01B6_4fcd_B92E_7B7849C51407__
 
