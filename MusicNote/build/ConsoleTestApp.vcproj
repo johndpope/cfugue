@@ -22,7 +22,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)../bin"
 			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="1"
 			CharacterSet="2"
@@ -45,7 +45,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\include;..\..\Common;"
+				AdditionalIncludeDirectories="../include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -66,8 +66,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				LinkLibraryDependencies="false"
+				AdditionalDependencies="MusicNoteDLLd.lib musicnotelibd.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\lib"
+				AdditionalLibraryDirectories="$(OutDir);$(SolutionDir)../lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -99,7 +101,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)../bin"
 			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="1"
 			CharacterSet="2"
@@ -124,8 +126,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\include;..\..\Common;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="../include"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
@@ -144,7 +146,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				LinkLibraryDependencies="false"
+				AdditionalDependencies="MusicNoteDLL.lib musicnotelib.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="$(OutDir);$(SolutionDir)../lib"
+				IgnoreAllDefaultLibraries="false"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -173,11 +179,12 @@
 				Name="VCPostBuildEventTool"
 				Description="copying $(TargetPath) to $(TargetDir)..\..\bin\"
 				CommandLine="copy $(TargetPath) $(TargetDir)..\..\bin\"
+				ExcludedFromBuild="true"
 			/>
 		</Configuration>
 		<Configuration
 			Name="StaticDebug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)../bin"
 			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="1"
 			CharacterSet="2"
@@ -200,8 +207,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\include;..\..\Common;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="../include"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -221,7 +228,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				LinkLibraryDependencies="false"
+				AdditionalDependencies="MusicNoteDLLsd.lib musicnotelibsd.lib"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="$(OutDir);$(SolutionDir)../lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -248,11 +258,12 @@
 				Name="VCPostBuildEventTool"
 				Description="copying $(TargetPath) to $(TargetDir)..\..\bin\"
 				CommandLine="copy $(TargetPath) $(TargetDir)..\..\bin\"
+				ExcludedFromBuild="true"
 			/>
 		</Configuration>
 		<Configuration
 			Name="StaticRelease|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)../bin"
 			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="1"
 			CharacterSet="2"
@@ -277,8 +288,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\include;..\..\Common;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="../include"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
@@ -297,7 +308,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				LinkLibraryDependencies="false"
+				AdditionalDependencies="MusicNoteDLLs.lib musicnotelibs.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="$(OutDir);$(SolutionDir)../lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -326,11 +340,12 @@
 				Name="VCPostBuildEventTool"
 				Description="copying $(TargetPath) to $(TargetDir)..\..\bin\"
 				CommandLine="copy $(TargetPath) $(TargetDir)..\..\bin\"
+				ExcludedFromBuild="true"
 			/>
 		</Configuration>
 		<Configuration
 			Name="UnicodeDebug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)../bin"
 			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="1"
 			CharacterSet="1"
@@ -353,8 +368,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\include;..\..\Common;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS"
+				AdditionalIncludeDirectories="../include"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -374,8 +389,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				LinkLibraryDependencies="false"
+				AdditionalDependencies="MusicNoteDLLdu.lib musicnotelibdu.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\lib"
+				AdditionalLibraryDirectories="$(OutDir);$(SolutionDir)../lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -407,7 +424,7 @@
 		</Configuration>
 		<Configuration
 			Name="UnicodeRelease|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)../bin"
 			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="1"
 			CharacterSet="1"
@@ -432,8 +449,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\include;..\..\Common;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="../include"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
@@ -452,7 +469,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				LinkLibraryDependencies="false"
+				AdditionalDependencies="MusicNoteDLLu.lib musicnotelibu.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="$(OutDir);$(SolutionDir)../lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -481,11 +501,12 @@
 				Name="VCPostBuildEventTool"
 				Description="copying $(TargetPath) to $(TargetDir)..\..\bin\"
 				CommandLine="copy $(TargetPath) $(TargetDir)..\..\bin\"
+				ExcludedFromBuild="true"
 			/>
 		</Configuration>
 		<Configuration
 			Name="UnicodeStaticDebug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)../bin"
 			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="1"
 			CharacterSet="1"
@@ -508,8 +529,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\include;..\..\Common;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="../include"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -529,7 +550,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				LinkLibraryDependencies="false"
+				AdditionalDependencies="MusicNoteDLLsdu.lib musicnotelibsdu.lib"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="$(OutDir);$(SolutionDir)../lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -556,11 +580,12 @@
 				Name="VCPostBuildEventTool"
 				Description="copying $(TargetPath) to $(TargetDir)..\..\bin\"
 				CommandLine="copy $(TargetPath) $(TargetDir)..\..\bin\"
+				ExcludedFromBuild="true"
 			/>
 		</Configuration>
 		<Configuration
 			Name="UnicodeStaticRelease|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)../bin"
 			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="1"
 			CharacterSet="1"
@@ -585,8 +610,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\include;..\..\Common;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				AdditionalIncludeDirectories="../include"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
@@ -605,7 +630,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				LinkLibraryDependencies="false"
+				AdditionalDependencies="MusicNoteDLLsu.lib musicnotelibsu.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="$(OutDir);$(SolutionDir)../lib"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -634,6 +662,7 @@
 				Name="VCPostBuildEventTool"
 				Description="copying $(TargetPath) to $(TargetDir)..\..\bin\"
 				CommandLine="copy $(TargetPath) $(TargetDir)..\..\bin\"
+				ExcludedFromBuild="true"
 			/>
 		</Configuration>
 	</Configurations>

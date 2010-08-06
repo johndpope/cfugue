@@ -22,7 +22,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)../lib/"
 			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="4"
 			CharacterSet="2"
@@ -45,7 +45,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\include;..\..\common"
+				AdditionalIncludeDirectories="../include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -54,6 +54,7 @@
 				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
 				WarningLevel="3"
 				DebugInformationFormat="4"
+				OmitDefaultLibName="true"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -66,6 +67,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				LinkLibraryDependencies="true"
+				OutputFile="$(OutDir)\$(ProjectName)d.lib"
 				IgnoreAllDefaultLibraries="true"
 			/>
 			<Tool
@@ -89,7 +92,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)../lib/"
 			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="4"
 			CharacterSet="2"
@@ -114,7 +117,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\include;..\..\common"
+				AdditionalIncludeDirectories="../include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -122,6 +125,7 @@
 				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
 				WarningLevel="3"
 				DebugInformationFormat="3"
+				OmitDefaultLibName="true"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -134,6 +138,9 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				LinkLibraryDependencies="true"
+				OutputFile="$(OutDir)\$(ProjectName).lib"
+				IgnoreAllDefaultLibraries="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -151,11 +158,12 @@
 				Name="VCPostBuildEventTool"
 				Description="copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)c.lib"
 				CommandLine="copy $(TargetPath) $(TargetDir)..\..\lib\$(TargetName)c.lib"
+				ExcludedFromBuild="true"
 			/>
 		</Configuration>
 		<Configuration
 			Name="StaticDebug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)../lib/"
 			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="4"
 			CharacterSet="2"
@@ -178,7 +186,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\include;..\..\common"
+				AdditionalIncludeDirectories="../include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -187,6 +195,7 @@
 				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
 				WarningLevel="3"
 				DebugInformationFormat="4"
+				OmitDefaultLibName="true"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -199,6 +208,9 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				LinkLibraryDependencies="true"
+				OutputFile="$(OutDir)\$(ProjectName)sd.lib"
+				IgnoreAllDefaultLibraries="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -216,11 +228,12 @@
 				Name="VCPostBuildEventTool"
 				Description="copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)d.lib"
 				CommandLine="copy $(TargetPath) $(TargetDir)..\..\lib\$(TargetName)d.lib"
+				ExcludedFromBuild="true"
 			/>
 		</Configuration>
 		<Configuration
 			Name="StaticRelease|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)../lib/"
 			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="4"
 			CharacterSet="2"
@@ -245,7 +258,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\include;..\..\common"
+				AdditionalIncludeDirectories="../include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -253,6 +266,7 @@
 				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
 				WarningLevel="3"
 				DebugInformationFormat="3"
+				OmitDefaultLibName="true"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -265,6 +279,9 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				LinkLibraryDependencies="true"
+				OutputFile="$(OutDir)\$(ProjectName)s.lib"
+				IgnoreAllDefaultLibraries="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -282,11 +299,12 @@
 				Name="VCPostBuildEventTool"
 				Description="copying  $(TargetPath) to $(TargetDir)..\..\lib\"
 				CommandLine="copy $(TargetPath) $(TargetDir)..\..\lib\$(TargetName).lib"
+				ExcludedFromBuild="true"
 			/>
 		</Configuration>
 		<Configuration
 			Name="UnicodeDebug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)../lib/"
 			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="4"
 			CharacterSet="1"
@@ -309,7 +327,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\include;..\..\common"
+				AdditionalIncludeDirectories="../include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -318,6 +336,7 @@
 				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
 				WarningLevel="3"
 				DebugInformationFormat="4"
+				OmitDefaultLibName="true"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -330,6 +349,8 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				LinkLibraryDependencies="true"
+				OutputFile="$(OutDir)\$(ProjectName)du.lib"
 				IgnoreAllDefaultLibraries="true"
 			/>
 			<Tool
@@ -353,7 +374,7 @@
 		</Configuration>
 		<Configuration
 			Name="UnicodeRelease|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)../lib/"
 			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="4"
 			CharacterSet="1"
@@ -378,7 +399,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\include;..\..\common"
+				AdditionalIncludeDirectories="../include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -386,6 +407,7 @@
 				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
 				WarningLevel="3"
 				DebugInformationFormat="3"
+				OmitDefaultLibName="true"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -398,6 +420,9 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				LinkLibraryDependencies="true"
+				OutputFile="$(OutDir)\$(ProjectName)u.lib"
+				IgnoreAllDefaultLibraries="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -415,11 +440,12 @@
 				Name="VCPostBuildEventTool"
 				Description="copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)cu.lib"
 				CommandLine="copy $(TargetPath) $(TargetDir)..\..\lib\$(TargetName)cu.lib"
+				ExcludedFromBuild="true"
 			/>
 		</Configuration>
 		<Configuration
 			Name="UnicodeStaticDebug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)../lib/"
 			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="4"
 			CharacterSet="1"
@@ -442,7 +468,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\include;..\..\common"
+				AdditionalIncludeDirectories="../include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -451,6 +477,7 @@
 				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
 				WarningLevel="3"
 				DebugInformationFormat="4"
+				OmitDefaultLibName="true"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -463,6 +490,9 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				LinkLibraryDependencies="true"
+				OutputFile="$(OutDir)\$(ProjectName)sdu.lib"
+				IgnoreAllDefaultLibraries="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -480,11 +510,12 @@
 				Name="VCPostBuildEventTool"
 				Description="copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)ud.lib"
 				CommandLine="copy $(TargetPath) $(TargetDir)..\..\lib\$(TargetName)ud.lib"
+				ExcludedFromBuild="true"
 			/>
 		</Configuration>
 		<Configuration
 			Name="UnicodeStaticRelease|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)../lib/"
 			IntermediateDirectory="$(ConfigurationName)\tmp_$(ProjectName)"
 			ConfigurationType="4"
 			CharacterSet="1"
@@ -509,7 +540,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\include;..\..\common"
+				AdditionalIncludeDirectories="../include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="true"
@@ -517,6 +548,7 @@
 				ProgramDataBaseFileName="$(IntDir)\$(ProjectName)_vc90.pdb"
 				WarningLevel="3"
 				DebugInformationFormat="3"
+				OmitDefaultLibName="true"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -529,6 +561,9 @@
 			/>
 			<Tool
 				Name="VCLibrarianTool"
+				LinkLibraryDependencies="true"
+				OutputFile="$(OutDir)\$(ProjectName)su.lib"
+				IgnoreAllDefaultLibraries="true"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -546,6 +581,7 @@
 				Name="VCPostBuildEventTool"
 				Description="copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)u.lib"
 				CommandLine="copy $(TargetPath) $(TargetDir)..\..\lib\$(TargetName)u.lib"
+				ExcludedFromBuild="true"
 			/>
 		</Configuration>
 	</Configurations>
@@ -772,7 +808,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\Common\EventHandler.h"
+				RelativePath="..\include\Common\EventHandler.h"
 				>
 			</File>
 			<File

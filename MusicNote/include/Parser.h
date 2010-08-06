@@ -28,7 +28,7 @@
 #endif
 //#endif
 
-#include "EventHandler.h"
+#include "Common/EventHandler.h"
 
 namespace MusicNoteLib
 {

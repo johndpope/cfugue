@@ -7,7 +7,7 @@
 #include "Voice.h"
 
 #define STRUTILS_RETURN_TYPE MusicNoteLib::MString
-#include "StrUtils.h"
+#include "Common/StrUtils.h"
 
 #include "Chords.h"
 
