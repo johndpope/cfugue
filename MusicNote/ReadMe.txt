@@ -16,7 +16,5 @@ Directory Structure:
 
 \docs: contains the Doxygen generated documentation
 
-\libjdkmidi: contains the jdkmidi library
-
 \guide: contains the CFugue Complete Programming Guide Source
 
