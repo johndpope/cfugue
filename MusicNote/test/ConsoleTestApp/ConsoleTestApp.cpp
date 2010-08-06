@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 
-#include "MusicNoteLib.h"
+#include "MusicNoteDll.h"
 
 void OnParseTrace(const MusicNoteLib::CParser*, MusicNoteLib::CParser::TraceEventHandlerArgs* pEvArgs)
 {

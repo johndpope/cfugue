@@ -1,6 +1,6 @@
 ; MusicNoteDLL.def : Declares the module parameters.
 
-LIBRARY      "MusicNoteDLL.DLL"
+;LIBRARY      "MusicNoteDLL.DLL"
 
 EXPORTS
 	DllCanUnloadNow		PRIVATE
