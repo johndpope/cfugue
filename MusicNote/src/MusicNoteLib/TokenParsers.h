@@ -21,31 +21,31 @@ namespace MusicNoteLib
 
 	namespace Western
 	{
-		const MusicStringParser::TokenClassifierDef TokenClassifiers[] =
-		{
-			_T('V')/*, ReadVoice,*/
-			//_T('T'), ReadTempo,
-			//_T('I'), ReadInstrument,
-			//_T('L'), ReadLayer,
-			//_T('K'), ReadKeySignature,
-			//_T('X'), ReadController,
-			//_T('@'), ReadTime,
-			//_T('*'), ReadKeyPressure,
-			//_T('+'), ReadChannelPressure,
-			//_T('&'), ReadPitchBend,
-			//_T('|'), ReadMeasure,
-			//_T('$'), ReadDictionary,
-			//_T('A'), ReadNote,
-			//_T('B'), ReadNote,
-			//_T('C'), ReadNote,
-			//_T('D'), ReadNote,
-			//_T('E'), ReadNote,
-			//_T('F'), ReadNote,
-			//_T('G'), ReadNote,
-			//_T('R'), ReadNote,
-			//_T('['), ReadNote,
+		//const MusicStringParser::TokenClassifierDef TokenClassifiers[] =
+		//{
+		//	_T('V')/*, ReadVoice,*/
+		//	//_T('T'), ReadTempo,
+		//	//_T('I'), ReadInstrument,
+		//	//_T('L'), ReadLayer,
+		//	//_T('K'), ReadKeySignature,
+		//	//_T('X'), ReadController,
+		//	//_T('@'), ReadTime,
+		//	//_T('*'), ReadKeyPressure,
+		//	//_T('+'), ReadChannelPressure,
+		//	//_T('&'), ReadPitchBend,
+		//	//_T('|'), ReadMeasure,
+		//	//_T('$'), ReadDictionary,
+		//	//_T('A'), ReadNote,
+		//	//_T('B'), ReadNote,
+		//	//_T('C'), ReadNote,
+		//	//_T('D'), ReadNote,
+		//	//_T('E'), ReadNote,
+		//	//_T('F'), ReadNote,
+		//	//_T('G'), ReadNote,
+		//	//_T('R'), ReadNote,
+		//	//_T('['), ReadNote,
 
-		}; // TokenClassifiers
+		//}; // TokenClassifiers
 
 	} // namespace Western
 
