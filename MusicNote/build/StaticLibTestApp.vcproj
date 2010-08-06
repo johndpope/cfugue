@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="SampleApp"
-	ProjectGUID="{676E3156-CE1B-4E67-B627-DE2FD02FA4F5}"
+	Name="StaticLibTestApp"
+	ProjectGUID="{7A2ACDEF-8475-41FE-A212-0BA403CEF416}"
 	RootNamespace="SampleApp"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
@@ -334,11 +334,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\test\SampleApp\SampleApp.cpp"
+				RelativePath="..\test\StaticLibTestApp\SampleApp.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\test\SampleApp\stdafx.cpp"
+				RelativePath="..\test\StaticLibTestApp\stdafx.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -380,11 +380,11 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\test\SampleApp\stdafx.h"
+				RelativePath="..\test\StaticLibTestApp\stdafx.h"
 				>
 			</File>
 			<File
-				RelativePath="..\test\SampleApp\targetver.h"
+				RelativePath="..\test\StaticLibTestApp\targetver.h"
 				>
 			</File>
 		</Filter>
