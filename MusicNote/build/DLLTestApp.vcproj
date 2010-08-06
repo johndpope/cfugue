@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="ConsoleTestApp"
-	ProjectGUID="{61C7838D-3C3F-4144-B3F7-8B55068DA6DE}"
+	Name="DLLTestApp"
+	ProjectGUID="{0BFD4D6C-D4CA-40BF-A409-3EE1C4C99889}"
 	RootNamespace="ConsoleTestApp"
 	SccProjectName="Svn"
 	SccAuxPath="Svn"
@@ -675,11 +675,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\test\ConsoleTestApp\ConsoleTestApp.cpp"
+				RelativePath="..\test\DLLTestApp\ConsoleTestApp.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\test\ConsoleTestApp\stdafx.cpp"
+				RelativePath="..\test\DLLTestApp\stdafx.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -753,11 +753,11 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\test\ConsoleTestApp\stdafx.h"
+				RelativePath="..\test\DLLTestApp\stdafx.h"
 				>
 			</File>
 			<File
-				RelativePath="..\test\ConsoleTestApp\targetver.h"
+				RelativePath="..\test\DLLTestApp\targetver.h"
 				>
 			</File>
 		</Filter>
@@ -768,7 +768,7 @@
 			>
 		</Filter>
 		<File
-			RelativePath="..\test\ConsoleTestApp\ReadMe.txt"
+			RelativePath="..\test\DLLTestApp\ReadMe.txt"
 			>
 		</File>
 	</Files>
