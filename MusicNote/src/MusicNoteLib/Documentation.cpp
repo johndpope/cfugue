@@ -456,7 +456,7 @@ void main()
 One of the capabilities of CFugue that makes it so elegant and easy to use is the concept of Music Note Strings 
 (or simply <i>MusicString</i>s, as referred to by JFugue). MusicStrings provide the ability to specify 
 Music Notes and MIDI instructions as a sequence of characters (and tokens) in human readable form,
-as opposed to the usual complex binary data byte form. This makes it easy to learn and master. Below is an example of a MusicString that plays a Mid-C note followed by a C-Major chord. (Please refer \ref pageExamples "CFugue API examples" for more such examples.)
+as opposed to the usual complex binary data byte form. This makes it easy to learn and master. Below is an example of a MusicString supplied to the <i>Play()</i> method to play a Mid-C note and a C-Major chord. (Please refer \ref pageExamples "CFugue API examples" for more such examples.)
 <pre class="fragment">
     \#include "MusicNoteLib.h"
 
@@ -467,7 +467,21 @@ as opposed to the usual complex binary data byte form. This makes it easy to lea
         player.Play("C CMaj"); <span class="comment">// Play a Mid-C followed by C-Major Chord </span>
     }
 </pre>
+Few more examples of MusicStrings:
+<pre class="fragment">
+    MusicNoteLib::Player player; <span class="comment">// Create the Player Object</span>
+    
+    player.Play("I[FLUTE] FMaj"); <span class="comment">// Play the F-Major chord with Flute </span>
 
+    player.Play("C D E F G A B"); <span class="comment">// Play all the mid octave notes </span>
+    player.Play("K[MELA] S R G M P D N"); <span class="comment">// Play all the mid octave (madhya sthayi) notes in Carnatic Music </span>
+
+    player.Play("C+D+E+F+G+A+B"); <span class="comment">// Play all the mid octave notes in parallel</span>
+    
+    player.Play("CI CI CI GI FI GI D#I. FI. G#I GI. RI"); <span class="comment">// Notes with durations</span>
+
+    player.Play("K[HAMSADHWANI]T8S2 ( S' GA' R'  S' R' S' N   PA N S'  RI' RI' )"); <span class="comment">// A piece of Vatapi Ganapathim in double speed </span>
+</pre>
 In the following we discuss at length the details of what constitues a MusicString and how it can be used for creating music with CFugue.
 
 \section secMusicString Components of MusicString
