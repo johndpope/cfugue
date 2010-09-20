@@ -1,3 +1,11 @@
+/*
+	This is part of CFugue, a C++ Runtime for MIDI Score Programming
+	Copyright (C) 2009-2010 Gopalakrishna Palem
+
+	For links to further information, or to contact the author,
+	see <http://musicnote.sourceforge.net/>.
+*/
+
 #ifndef _TEMPO_H___1A1E8E8A_DFBA_40c7_B45D_7B5EC45BEE4D__
 #define _TEMPO_H___1A1E8E8A_DFBA_40c7_B45D_7B5EC45BEE4D__
 

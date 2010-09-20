@@ -33,8 +33,36 @@
 #include "jdkmidi/manager.h"
 #include "jdkmidi/driver.h"
 #include "jdkmidi/driverwin32.h"
-
+#include <stdio.h>
 using namespace jdkmidi;
+
+  class Receiver :
+        public MIDISequencerGUIEventNotifier
+  {
+    public:
+		Receiver ( FILE *fArg ): f(fArg) { }
+      
+	  virtual ~Receiver() { }
+      
+      virtual void Notify ( const MIDISequencer *seq, MIDISequencerGUIEvent e )
+	  {
+		        fprintf ( f, "GUI EVENT: G=%d, SG=%d, ITEM=%d\n",
+					seq->
+
+                e.GetEventGroup(),
+                e.GetEventSubGroup(),
+                e.GetEventItem()
+              );
+
+	  }
+	  virtual bool GetEnable() const {  return en;}
+	  virtual void SetEnable ( bool f ) { en = f; }
+      
+    private:
+    
+      FILE *f;
+      bool en;
+  };
 
 int main ( int argc, char **argv )
 {

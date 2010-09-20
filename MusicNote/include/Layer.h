@@ -1,3 +1,11 @@
+/*
+	This is part of CFugue, a C++ Runtime for MIDI Score Programming
+	Copyright (C) 2009-2010 Gopalakrishna Palem
+
+	For links to further information, or to contact the author,
+	see <http://musicnote.sourceforge.net/>.
+*/
+
 #ifndef __LAYER_H__B93236D6_FA2B_4de1_B1F1_908DBA7B7CE4__
 #define __LAYER_H__B93236D6_FA2B_4de1_B1F1_908DBA7B7CE4__
 

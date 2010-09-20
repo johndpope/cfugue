@@ -1,3 +1,10 @@
+/*
+	This is part of CFugue, a C++ Runtime for MIDI Score Programming
+	Copyright (C) 2009-2010 Gopalakrishna Palem
+
+	For links to further information, or to contact the author,
+	see <http://musicnote.sourceforge.net/>.
+*/
 
 #ifndef __INDEXED_VECTORS_H__E2C81E6D_A292_41d7_B830_F7C07D335205__
 #define __INDEXED_VECTORS_H__E2C81E6D_A292_41d7_B830_F7C07D335205__

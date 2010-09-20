@@ -1,3 +1,11 @@
+/*
+	This is part of CFugue, a C++ Runtime for MIDI Score Programming
+	Copyright (C) 2009-2010 Gopalakrishna Palem
+
+	For links to further information, or to contact the author,
+	see <http://musicnote.sourceforge.net/>.
+*/
+
 #ifndef MIDIRENDERER_H__9266AE56_84CB_4662_8328_ED088111CFE0__
 #define MIDIRENDERER_H__9266AE56_84CB_4662_8328_ED088111CFE0__
 
