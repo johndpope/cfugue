@@ -35,7 +35,28 @@ namespace PlayerTestApp
         public delegate void ParserErrorDelegate(IntPtr userData, int errCode,
                 [MarshalAs(UnmanagedType.LPStr)] String szErrorMsg,
                 [MarshalAs(UnmanagedType.LPStr)] String szToken);
+#if DEBUG
+        [DllImport("MusicNoteDlld.Dll")]
+        public static extern bool PlayMusicString([MarshalAs(UnmanagedType.LPStr)] String szMusicNotes);
 
+        [DllImport("MusicNoteDlld.Dll")]
+        public static extern bool PlayMusicStringWithOpts([MarshalAs(UnmanagedType.LPStr)] String szMusicNotes, int nMidiOutPortID, uint nTimerResMS);
+
+        [DllImport("MusicNoteDlld.Dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void PlayMusicStringCB([MarshalAs(UnmanagedType.LPStr)] String szMusicNotes, 
+                                        [MarshalAs(UnmanagedType.FunctionPtr)] ParserTraceDelegate td,
+                                        [MarshalAs(UnmanagedType.FunctionPtr)] ParserErrorDelegate ed,
+                                        IntPtr userData);
+
+        [DllImport("MusicNoteDlld.Dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void PlayMusicStringWithOptsCB([MarshalAs(UnmanagedType.LPStr)] String szMusicNotes, int nMidiOutPortID, uint nTimerResMS,
+                                        [MarshalAs(UnmanagedType.FunctionPtr)] ParserTraceDelegate td,
+                                        [MarshalAs(UnmanagedType.FunctionPtr)] ParserErrorDelegate ed,
+                                        IntPtr userData);
+
+        [DllImport("MusicNoteDlld.Dll")]
+        public static extern bool SaveAsMidiFile([MarshalAs(UnmanagedType.LPStr)] String szMusicNotes, [MarshalAs(UnmanagedType.LPStr)] String szOutputFilePath);
+#else
         [DllImport("MusicNoteDll.Dll")]
         public static extern bool PlayMusicString([MarshalAs(UnmanagedType.LPStr)] String szMusicNotes);
 
@@ -56,5 +77,6 @@ namespace PlayerTestApp
 
         [DllImport("MusicNoteDll.Dll")]
         public static extern bool SaveAsMidiFile([MarshalAs(UnmanagedType.LPStr)] String szMusicNotes, [MarshalAs(UnmanagedType.LPStr)] String szOutputFilePath);
+#endif
     }
 }
