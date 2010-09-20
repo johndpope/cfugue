@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "jdkmidi", "jdkmidi.vcxproj", "{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+		StaticDebug|Win32 = StaticDebug|Win32
+		StaticRelease|Win32 = StaticRelease|Win32
+		UnicodeDebug|Win32 = UnicodeDebug|Win32
+		UnicodeRelease|Win32 = UnicodeRelease|Win32
+		UnicodeStaticDebug|Win32 = UnicodeStaticDebug|Win32
+		UnicodeStaticRelease|Win32 = UnicodeStaticRelease|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.Debug|Win32.Build.0 = Debug|Win32
+		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.Release|Win32.ActiveCfg = Release|Win32
+		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.Release|Win32.Build.0 = Release|Win32
+		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.StaticDebug|Win32.ActiveCfg = StaticDebug|Win32
+		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.StaticDebug|Win32.Build.0 = StaticDebug|Win32
+		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.StaticRelease|Win32.ActiveCfg = StaticRelease|Win32
+		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.StaticRelease|Win32.Build.0 = StaticRelease|Win32
+		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.UnicodeDebug|Win32.ActiveCfg = UnicodeDebug|Win32
+		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.UnicodeDebug|Win32.Build.0 = UnicodeDebug|Win32
+		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.UnicodeRelease|Win32.ActiveCfg = UnicodeRelease|Win32
+		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.UnicodeRelease|Win32.Build.0 = UnicodeRelease|Win32
+		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.UnicodeStaticDebug|Win32.ActiveCfg = UnicodeStaticDebug|Win32
+		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.UnicodeStaticDebug|Win32.Build.0 = UnicodeStaticDebug|Win32
+		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.UnicodeStaticRelease|Win32.ActiveCfg = UnicodeStaticRelease|Win32
+		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.UnicodeStaticRelease|Win32.Build.0 = UnicodeStaticRelease|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

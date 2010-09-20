@@ -1,3 +1,11 @@
+/*
+	This is part of CFugue, a C++ Runtime for MIDI Score Programming
+	Copyright (C) 2009-2010 Gopalakrishna Palem
+
+	For links to further information, or to contact the author,
+	see <http://musicnote.sourceforge.net/>.
+*/
+
 #ifndef __PARSERLISTENER_H__D2514D7C_F971_49d6_B8E0_E892725FEB73__
 #define __PARSERLISTENER_H__D2514D7C_F971_49d6_B8E0_E892725FEB73__
 
