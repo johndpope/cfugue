@@ -764,8 +764,9 @@ namespace MusicNoteLib
             return 0;    // No Chords for Rest Notes
         }
 
-        unsigned int nChordNameLen = this->m_Chords.ExtractMatchingChord(szToken, &ctx.chord);
-
+        unsigned int nChordNameLen = m_pChords != NULL ? 
+									 m_pChords->ExtractMatchingChord(szToken, &ctx.chord) :
+									 Chords::GetDefaultMatchingChord(szToken, &ctx.chord) ;
         if(nChordNameLen > 0)
         {
             ctx.isChord = true;

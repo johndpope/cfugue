@@ -30,7 +30,7 @@ namespace MusicNoteLib
     /// <Summary>Maniuplates Chord definitions for Western Music</Summary>
     class Chords
     {    
-        std::map<TCHAR, std::vector<ChordDef> > m_Definitions;
+        std::map<TCHAR, std::vector<const ChordDef *> > m_Definitions;
     public:
         /// Initialize the Chords with default definitions
         Chords();
@@ -45,8 +45,8 @@ namespace MusicNoteLib
         Chords(const ChordDef* pChords, int nSize);
 
         /// Overrides the existing definitions with the supplied values. 
-        /// If supplied array is empty, default values will be loaded. When not empty,
-        /// the supplied array should not be freed before this Chords object is freed.
+        /// If supplied array is empty, default values will be loaded. 
+        /// The supplied array should not be freed before this Chords object is freed.
         /// @param pChords Array of Chord definitions. Use NULL to load the default values
         /// @param nSize Size of the pChords Array
         void LoadDefinitions(const ChordDef* pChords = NULL, int nSize = 0);
@@ -58,10 +58,22 @@ namespace MusicNoteLib
         /// @param nSize Size of the pChords Array
         void AddDefinitions(const ChordDef* pChords, int nSize);
 
-        /// Retrieves the chord that suits the first part of the given string
+        /// Retrieves the chord that suits the first part of the given string.
+		/// If you have not added any custom definitions with AddDefinitions(), then
+		/// you might find the static GetDefaultMatchingChord() method more convenient.
         /// @param szToken the string that has any Chord name at its start
         /// @param retVal the ChordDef object that has a Chord with its name present in the szToken
+		/// @return the number of characters correctly matched. Zero, if no match found
         unsigned int ExtractMatchingChord(const TCHAR* szToken, ChordDef* retVal) const;
+
+        /// Retrieves the chord that suits the first part of the given string.
+		/// Same as ExtractMatchingChord, except that this method is static and uses 
+		/// only the in-built default chord definitions for the search. For custom chord
+		/// definitions, you need to create a Chords object and use ExtractMatchingChord.
+        /// @param szToken the string that has any Chord name at its start
+        /// @param retVal the ChordDef object that has a Chord with its name present in the szToken
+		/// @return the number of characters correctly matched. Zero, if no match found
+        static unsigned int GetDefaultMatchingChord(const TCHAR* szToken, ChordDef* retVal);
     };
 
 } // namespace MusicNoteLib

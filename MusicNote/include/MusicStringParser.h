@@ -147,11 +147,9 @@ namespace MusicNoteLib
             NOTE_SHRUTI_DOWN    = _T('.'),   ///< Decrements Note Shruti one level downward the Mandra Sthayi
         };
 
-        Chords m_Chords; // Holds the Chord Definitions
-
-		DICTIONARY m_Dictionary;	// Holds the custom MACRO definitions for Music Strings
-
-        KeySignature m_KeySig;  // Holds the last seen Key Signature. Useful for computing Note value.
+        const Chords*	m_pChords;		// Holds the custom Chord Definitions, if any, supplied by user
+		DICTIONARY		m_Dictionary;	// Holds the default && custom MACRO definitions for Music Strings
+        KeySignature	m_KeySig;		// Holds the last seen Key Signature. Useful for computing Note value.
 
         unsigned short m_nDefNoteOctave;    // Holds the Default Octave Value to be used for Notes
         unsigned short m_nDefChordOctave;   // Holds the Default Octave Value to be used for Chords
@@ -193,7 +191,7 @@ namespace MusicNoteLib
 
 		//const TokenClassifierDef* m_pDef;
 
-		inline MusicStringParser() 
+		MusicStringParser() 
 		{ 
 			ResetDefinitions();
 		}
@@ -202,13 +200,13 @@ namespace MusicNoteLib
         /// Macros defined in the Music Strings are <i>remembered</i> across the Parse() method calls.
         /// Call ResetDefinitions() before calling Parse() to clear the previous definitions.
 		/// </Summary>
-		inline void ResetDefinitions()
+		void ResetDefinitions()
 		{
 			m_Dictionary.clear();
-			MusicNoteLib::PopulateStandardDefinitions(m_Dictionary); // Load standard macro definitions
+			PopulateStandardDefinitions(m_Dictionary); // Load standard macro definitions
             SetKeySignature(KeySignature());
             SetOctaveDefaults();
-            m_Chords.LoadDefinitions();
+            m_pChords = NULL;
 		}
 
         /// Sets the KeySignature to be used for further Note parsing
@@ -227,28 +225,19 @@ namespace MusicNoteLib
 
         /// <Summary>
         /// \brief Resets the Chord definitions to the supplied values.
-        /// Only refernce to the ChordDefs is hold by the parser. So, the internal
-        /// ChordDef objects used by the input chords object should not be freed
-        /// before this parser object is released.
-        /// See Chords::LoadDefinitions() for more details.
+		///
+        /// A refernce to the supplied Chords object is stored by the Parser. 
+		/// So, make sure the supplied Chords object stays valid as long as this
+		/// Parser object is valid.
+		///
+		/// Since a reference is stored by the Parser, any modification you do for the 
+		/// supplied Chords object will get refelected in the Parser too.
+		///
+        /// See Chords::LoadDefinitions() and Chords::AddDefinitions() for more details.
         /// </Summary>
         inline void LoadChords(const Chords& chords)
         {
-            m_Chords = chords;
-        }
-
-        /// <Summary>
-        /// \brief Adds the supplied chord definitions to the existing definitions.
-        /// Only references to the ChordDef are stored in the parser object.
-        /// Hence the input pChords should be ensure to live longer than this
-        /// parser object to avoid any memory access errors.
-        /// @param pChords the array that holds the definitions of Chords to be added
-        /// @param nSize the size of the pChords array
-        /// \remarks It is caller's responsibility to avoid duplicate values that might collide with existing definitions.
-        /// </Summary>
-        inline void AddChordDefinitions(const ChordDef* pChords, int nSize)
-        {
-            m_Chords.AddDefinitions(pChords, nSize);
+            m_pChords = &chords;
         }
 
 		/// <Summary>
