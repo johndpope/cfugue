@@ -22,10 +22,7 @@ namespace MusicNoteLib
 		MusicStringParser	m_Parser;
 	public:
 
-		inline Player(void)
-		{
-			m_Parser.AddListener(&m_Renderer);
-		}
+		Player(void);
 
 		inline ~Player(void)
 		{
@@ -53,17 +50,7 @@ namespace MusicNoteLib
             
             player.Play(_T("ci di f fi")); // Play the Music Notes on the default MIDI output port
         </pre> */
-        inline bool Play(const MString& strMusicNotes, int nMIDIOutPortID = MIDI_MAPPER, unsigned int nMIDITimerResMS = 20)
-        {
-            bool bRetVal = PlayAsync(strMusicNotes, nMIDIOutPortID, nMIDITimerResMS);
-
-            while(IsPlaying())
-                Sleep(1000);//TODO: Ensure Platform compatibility for Sleep
-            
-            StopPlay();
-
-            return bRetVal;
-        }
+        bool Play(const MString& strMusicNotes, int nMIDIOutPortID = MIDI_MAPPER, unsigned int nMIDITimerResMS = 20);
 
         /// <Summary>
         /// Starts playing the notes asynchronously. Returns false if unable to start the Play. 
@@ -91,24 +78,13 @@ namespace MusicNoteLib
 
             player.StopPlay(); // Stop the Play when done
          </pre> */
-        inline bool PlayAsync(const MString& strMusicNotes, int nMIDIOutPortID = MIDI_MAPPER, unsigned int nMIDITimerResMS = 20 )
-        {
-            m_Renderer.Clear(); // Clear any previous Notes
-
-            if(false == m_Parser.Parse(strMusicNotes))	// Parse and Load the Notes into MIDI MultiTrack
-                return false;
-
-            return m_Renderer.BeginPlayAsync(nMIDIOutPortID, nMIDITimerResMS); // Start Playing on the given MIDIport with supplied resolution
-        }
+        bool PlayAsync(const MString& strMusicNotes, int nMIDIOutPortID = MIDI_MAPPER, unsigned int nMIDITimerResMS = 20 );
 
         /// <Summary>
         /// Stops the Play started with PlayAsync().
         /// Each PlayAsync() should have a matching StopPlay() method call.
         /// </Summary>
-		inline void StopPlay()
-		{
-			m_Renderer.EndPlayAsync();
-		}
+		void StopPlay();
 
 		/// <Summary>Returns true if an asynchronous Play is currently in progress</Summary>
 		inline bool IsPlaying() const { return m_Renderer.IsPlaying(); }
@@ -153,14 +129,7 @@ namespace MusicNoteLib
             player.SaveAsMidiFile(_T("Cq Dw Ex"), "MidiOutput.midi"); // Save the Music Notes to Midi file directly, without playing
 
         </pre> */
-		inline bool SaveAsMidiFile(const MString& strMusicNotes, const char* szOutputFilePath)
-		{
-			m_Renderer.Clear(); // Clear any previous Notes
-
-			m_Parser.Parse(strMusicNotes);	// Parse the Notes and Load the Midi Events into MIDI MultiTrack
-
-			return m_Renderer.SaveToFile(szOutputFilePath);
-		}
+		bool SaveAsMidiFile(const MString& strMusicNotes, const char* szOutputFilePath);
 
 		/// <Summary>
 		/// Saves any previously played Music Notes into a Midi output file.
@@ -181,10 +150,7 @@ namespace MusicNoteLib
 
             player.SaveToMidiFile("Output.mid"); // Save the played content to MIDI Output file
         </pre> */
-		inline bool SaveToMidiFile(const char* szOutputFilePath)
-		{
-			return m_Renderer.SaveToFile(szOutputFilePath);
-		}
+		bool SaveToMidiFile(const char* szOutputFilePath);
 	};
 
 } // namespace MusicNoteLib

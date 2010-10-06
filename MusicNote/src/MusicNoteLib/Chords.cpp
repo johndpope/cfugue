@@ -52,13 +52,13 @@ namespace MusicNoteLib
 
     // Return if the first element is greater than the second
     template<typename T>
-    bool phRepComparator(const T& input1, const T& input2)
+    bool phRepComparator(const T* input1, const T* input2)
     {
-        return _tcslen(input1.szChordName) > _tcslen(input2.szChordName);
+        return _tcslen(input1->szChordName) > _tcslen(input2->szChordName);
     }
 
     template<typename T>
-    void LoadVector(std::map<TCHAR, std::vector<T> >& vecArray, const T* inputArr, int nInputSize)
+    void LoadVector(std::map<TCHAR, std::vector<const T*> >& vecArray, const T* inputArr, int nInputSize)
     {
         // For each entry in the definition
         for(int i=0; i < nInputSize; ++i)
@@ -67,17 +67,15 @@ namespace MusicNoteLib
             // Find the First character
             const TCHAR chIndex = Obj.szChordName[0];
             // Store the definition, indexed at its first character 
-            vecArray[chIndex].push_back(Obj);
+            vecArray[chIndex].push_back(inputArr+i);
         }
 
         // Sort each vector such that longer strings come first
-        std::map<TCHAR, std::vector<T> >::iterator iter = vecArray.begin();
-        while(iter != vecArray.end())
-        {            
-            std::vector<T>& vec = iter->second;
-            std::sort(vec.begin(), vec.end(), phRepComparator<T>);
-            iter++;
-        }
+		std::for_each(vecArray.begin(), vecArray.end(), [](std::map<TCHAR, std::vector<const T*> >::value_type& iter)
+		{
+			std::vector<const T*>& vec = iter.second;
+			std::sort(vec.begin(), vec.end(), phRepComparator<T>);
+		});
     }
 
     // Checks if the given prefix string is complete present in the string.
@@ -102,23 +100,26 @@ namespace MusicNoteLib
     // @param retVal Holds the object whose strint completely matched the prefix of sz
     // @return the number of characters correctly matched (should be the same as the length of retVal)
     template<typename T>
-    inline unsigned int ExtractMatchingObject(std::map<TCHAR, std::vector<T> > vecArray, const TCHAR* sz, T* retVal)
+    inline unsigned int ExtractMatchingObject(const std::map<TCHAR, std::vector<const T*> >& vecArray, const TCHAR* sz, T* retVal)
     {
         const TCHAR chIndex =  sz[0];
 
-        const std::vector<T>& vecObjects = vecArray[chIndex];
+		const auto iterVecObjects = vecArray.find(chIndex);
 
-        unsigned int nMatched = 0;
+		if(iterVecObjects != vecArray.end())
+		{
+			const std::vector<const T*>& vecObjects = iterVecObjects->second;
 
-        for(int i=0, nMax = vecObjects.size(); i <  nMax; ++i)
-        {
-            *retVal = vecObjects[i];
+			unsigned int nMatched = 0;
 
-            if((nMatched = IsPrefixMatching(sz, retVal->szChordName)) > 0)
-                return nMatched;
-        }
+			for(int i=0, nMax = vecObjects.size(); i <  nMax; ++i)
+			{
+				*retVal = *vecObjects[i];
 
-        retVal = NULL;
+				if((nMatched = IsPrefixMatching(sz, retVal->szChordName)) > 0)
+					return nMatched;
+			}
+		}
 
         return 0;
     }
@@ -155,5 +156,11 @@ namespace MusicNoteLib
     {
         return ExtractMatchingObject(this->m_Definitions, szToken, retVal);
     }
+
+	unsigned int Chords::GetDefaultMatchingChord(const TCHAR* szToken, ChordDef* retVal)
+	{
+		static Chords staticObj; // Loads the default chord definitions
+		return staticObj.ExtractMatchingChord(szToken, retVal);
+	}
 
 } // namespace MusicNoteLib

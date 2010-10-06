@@ -159,6 +159,8 @@
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='UnicodeStaticRelease|Win32'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='UnicodeStaticRelease|Win32'" />
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)d</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|Win32'">$(ProjectName)du</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|Win32'">$(ProjectName)u</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -396,6 +398,7 @@
     <ClCompile Include="..\src\MusicNoteLib\MusicNoteLib.cpp" />
     <ClCompile Include="..\src\MusicNoteLib\MusicStringParser.cpp" />
     <ClCompile Include="..\src\MusicNoteLib\Parser.cpp" />
+    <ClCompile Include="..\src\MusicNoteLib\Player.cpp" />
     <ClCompile Include="..\src\MusicNoteLib\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
