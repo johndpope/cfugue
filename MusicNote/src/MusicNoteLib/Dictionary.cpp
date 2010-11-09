@@ -3,6 +3,7 @@
 #include "Instrument.h"
 #include "Tempo.h"
 #include "KeySignature.h"
+#include "ControllerEvent.h"
 
 namespace MusicNoteLib
 {
@@ -14,6 +15,8 @@ namespace MusicNoteLib
         Tempo::PopulateStandardDefinitions(dictionaryObj);
 		// Populate Music Instrument Defintions
 		Instrument::PopulateStandardDefinitions(dictionaryObj);
+		// Populate Controller Event Definitions
+		ControllerEvent::PopulateStandardDefinitions(dictionaryObj);
 	}
 
 } // namespace MusicNoteLib

@@ -27,6 +27,9 @@ namespace MusicNoteLib
 
 		long m_lFirstNoteTime;
 
+		/// <Summary>Event handler for Controller event Raised by Parser</Summary>
+		virtual void OnControllerEvent(const CParser* pParser, const ControllerEvent* pConEvent);
+
 		/// <Summary>Event handler for Instrument event Raised by Parser</Summary>
         virtual void OnInstrumentEvent(const CParser* pParser, const Instrument* pInstrument);
 

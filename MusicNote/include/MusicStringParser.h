@@ -293,7 +293,7 @@ namespace MusicNoteLib
 		bool ParseInstrumentToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
 		bool ParseLayerToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
 		bool ParseKeySignatureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
-		bool ParseControllerToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured) { return false; }
+		bool ParseControllerToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
 		bool ParseTimeToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
 		bool ParseKeyPressureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured) { return false; }
 		bool ParseChannelPressureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured) { return false; }

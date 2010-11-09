@@ -9,6 +9,9 @@
 #ifndef __MUSICINSTRUMENT_H__0823ABB9_BB3E_46a6_84DE_BBA9F4E7F821__
 #define __MUSICINSTRUMENT_H__0823ABB9_BB3E_46a6_84DE_BBA9F4E7F821__
 
+/** @file Instrument.h 
+ * \brief Declares Instrument class
+ */ 
 #include "Dictionary.h"
 
 namespace MusicNoteLib

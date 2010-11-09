@@ -41,6 +41,7 @@
 namespace MusicNoteLib
 {
 	// Forward Declarations
+	class ControllerEvent;
 	class Instrument;
     class KeySignature;
     class Layer;
@@ -70,7 +71,7 @@ namespace MusicNoteLib
 	{
 	public:
 			
-		OIL::CEventT<const CParser> evController;
+		OIL::CEventT<const CParser, const ControllerEvent> evController; ///< Event Raised when Parser encounters a MIDI Controller Event
 		OIL::CEventT<const CParser, const Instrument> evInstrument; ///< Event Raised when Parser encounters an Instrument command
 		OIL::CEventT<const CParser, const KeySignature> evKeySignature; ///< Event Raised when Parser encounters a Key Signature command
 		OIL::CEventT<const CParser, const Layer> evLayer; ///< Event Raised when Parser encounters a Layer command
@@ -106,6 +107,8 @@ namespace MusicNoteLib
 		{
 			CRITICAL_ERROR_MEMORY_ALLOCATION,	///< Memory allocation failed
 			PARSE_ERROR_MISSING_ASSIGNMENT,		///< No Assignment symbol found
+			PARSE_ERROR_CONTROLLER_MACRO_END,	///< MACRO_END missing while parsing a Controller Index Macro.			
+			PARSE_ERROR_CONTROLLER_VALUE,		///< Failure while converting/retrieving a Controller Value number.
 			PARSE_ERROR_INSTRUMENT_MACRO_END,	///< MACRO_END missing while parsing a Instrument Macro.			
 			PARSE_ERROR_INSTRUMENT_VALUE,		///< Failure while converting/retrieving a Instrument number.
 			PARSE_ERROR_KEYSIGNATURE_MACRO_END,	///< MACRO_END missing while parsing a Key Signature Macro.			

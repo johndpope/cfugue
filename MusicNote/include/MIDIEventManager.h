@@ -97,6 +97,19 @@ namespace MusicNoteLib
 	    }
 
 	    /// <Summary>
+	    /// Adds a MIDI controller event to the current track.
+        /// @param uControlIndex the controller 
+        /// @param uControlValue value for the controller
+	    /// </Summary>
+		inline void AddControllerEvent(unsigned char uControlIndex, unsigned char uControlValue)
+		{
+			jdkmidi::MIDITimedBigMessage msg;
+			msg.SetTime(GetTrackTime());
+			msg.SetControlChange((unsigned char)m_nCurrentTrack, uControlIndex, uControlValue);
+			m_Tracks.GetTrack(m_nCurrentTrack)->PutEvent(msg);
+		}
+
+	    /// <Summary>
 	    /// Adds a short Key Singature event to the current track.
         /// @param nKeySig a value in the range [-7, 7]
         /// @param MajMin indicates if this is Major (0) scale or Min (1) scale
