@@ -14,8 +14,8 @@
 \section mainPageContents Contents
     - \ref overview
     - \ref features
-    - \ref pageExamples "How to use CFugue API"
-    - \ref pageMusicString "CFugue MusicString Specifications"
+    - \ref pageExamples "Examples"
+    - \ref pageMusicString "CFugue MusicString"
     - \ref download "Download CFugue"
     - \ref copyright "Contact us"
 
@@ -449,6 +449,7 @@ void main()
 		- \ref subRestNotes
         - \ref subInstruments
         - \ref subKeySignatures
+		- \ref subVoices
     - \ref secInteroperation
     - \ref index "Back to main page"
 
@@ -1244,6 +1245,17 @@ When a KeySignature is specified, it will be applied for all subsequent notes. H
 For CFugue, Western is the default mode, and CMajor is the default KeySignature. All Parsers start in Western mode with CMajor scale set to their default. If you rather want the Parser to use a Carnatic mode, then you should explicitly supply a KeySignature token with an appropriate value before passing on any Carnatic music notes.
 
 For further details on how to interoperate between Western and Carnatic style of music, refer \ref secInteroperation.
+
+\subsection subVoices Specifying Channels / Tracks
+Channels / Tracks are referred to as <i>voices</i> in CFugue. The tokens that start with character <b>V</b> are considered as voice tokens. 
+
+CFugue supports all the 16 channels of MIDI, which are accessible through V0 to 15. Whenever CFugue encounters a voice token in the MusicString, it changes the current track to the specified one in the token, inserting all the subsequent notes into this newly set track. When you want to switch back to your old track to insert notes into it, you simply supply another voice token with the corresponding track number. 
+
+By default, <i>V0</i> is implied at the beginning.
+
+Be noted that channels/tracks/voices play in parallel. For example, the MusicString <tt>CMAJ V1 CMIN</tt> plays CMAJ chord on channel 0 in <i>parallel</i> with CMIN chord on channel 1. Just because <tt>V1 CMIN</tt> comes <i>after</i> CMAJ in the Music String does not make it wait till CMAJ completes playing. Channels play independent of each other and certain MIDI players allow you to turn off selective tracks, so that you can listen only few tracks of your choice. 
+
+In CFugue, if you would like to sync the channels, you have to use the Rest notes. For example, to make CMIN chord on channel 1 play <i>after</i> the CMAJ chord completes playing on channel 0, you need to insert a Rest note with sufficient duration on channel 1, something like <tt>CMAJ V1 R CMIN</tt>. This makes the Rest note play in parallel with CMAJ, effectively making CMIN play after CMAJ is completed. 
 
 \section secInteroperation Interoperating Western and Carnatic Music
 A powerful feature of CFugue's MusicString is its ability to work with both Western and Carnatic music with same ease. For the first time in the music world, it is now not only possible to specify 

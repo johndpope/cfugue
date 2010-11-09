@@ -21,9 +21,6 @@
     <ClCompile Include="..\src\MusicNoteLib\Dictionary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\MusicNoteLib\Documentation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\MusicNoteLib\Instrument.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -111,6 +108,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\Voice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ControllerEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "MusicStringParser.h"
+#include "ControllerEvent.h"
 #include "Instrument.h"
 #include "Layer.h"
 #include "Tempo.h"
@@ -415,6 +416,65 @@ namespace MusicNoteLib
 		return true;
     }
 
+	///<Summary>Parses a MIDI Controller Event Token</Summary>
+	bool MusicStringParser::ParseControllerToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured)
+	{
+		TCHAR* pszAssignSymbol = _tcschr(szToken, ASSIGNMENT_SYMBOL); // Find the Equals sign
+		if(pszAssignSymbol == NULL)
+		{
+			MString str(ASSIGNMENT_SYMBOL + MString(_T(" Symbol Not found")));
+			*pbNonContinuableErrorOccured = Error(PARSE_ERROR_MISSING_ASSIGNMENT, str, szToken);
+			return false;
+		}
+		
+		*pszAssignSymbol = _T('\0');
+
+		TCHAR* pszKey = szToken;
+		TCHAR* pszValue = pszAssignSymbol + 1;
+
+		bool bSuccess = false; int nControllerIndex=-1;
+    			
+		int nLen = ParseNumber(pszKey, &nControllerIndex, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_CONTROLLER_MACRO_END, PARSE_ERROR_CONTROLLER_VALUE);
+		if(nLen == -1) return false;	// Some irrevocable error occured
+		if(bSuccess)
+		{
+			if(nControllerIndex >= 128)
+			{
+				int nControllerCoarse = nControllerIndex % 128; // This is in contrast to JFugue style
+				int nControllerFine = nControllerIndex / 128;
+
+				int nControllerValue=0;
+				int nLen = ParseNumber(pszValue, &nControllerValue, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_CONTROLLER_MACRO_END, PARSE_ERROR_CONTROLLER_VALUE);
+				if(nLen == -1) return false;	// Some irrevocable error occured
+				
+				unsigned char coarseValue = (unsigned char)(nControllerValue / 128);
+				unsigned char fineValue = (unsigned char)(nControllerValue % 128);	
+				
+				ControllerEvent evObjCoarse(nControllerCoarse, coarseValue);
+				RaiseEvent(&evController, &evObjCoarse);
+
+				ControllerEvent evObjFine(nControllerFine, fineValue);
+				RaiseEvent(&evController, &evObjFine);
+
+				Verbose(MString(_T("MusicStringParser::ParseControllerToken: [")) + OIL::ToString(nControllerCoarse) + MString(_T("]=")) + OIL::ToString(coarseValue));
+				Verbose(MString(_T("MusicStringParser::ParseControllerToken: [")) + OIL::ToString(nControllerFine) + MString(_T("]=")) + OIL::ToString(fineValue));
+			}
+			else
+			{
+				unsigned char nControllerValue=0;
+				int nLen = ParseNumber(pszValue, &nControllerValue, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_CONTROLLER_MACRO_END, PARSE_ERROR_CONTROLLER_VALUE);
+				if(nLen == -1) return false;	// Some irrevocable error occured
+
+				ControllerEvent evObj(nControllerIndex, nControllerValue);
+				RaiseEvent(&evController, &evObj);
+		
+				Verbose(MString(_T("MusicStringParser::ParseControllerToken: [")) + pszKey + MString(_T("]=")) + pszValue);
+			}
+		}			
+
+		return true;
+
+	}
 
 	///<Summary>Parses a Dictionary Element Token. Creates or Updates the Dictionary Element Value</Summary>		
 	bool MusicStringParser::ParseDictionaryToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured)

@@ -9,6 +9,9 @@
 #ifndef _TEMPO_H___1A1E8E8A_DFBA_40c7_B45D_7B5EC45BEE4D__
 #define _TEMPO_H___1A1E8E8A_DFBA_40c7_B45D_7B5EC45BEE4D__
 
+/** @file Tempo.h 
+ * \brief Declares Tempo class used in Western music
+ */ 
 #include "Dictionary.h"
 
 namespace MusicNoteLib

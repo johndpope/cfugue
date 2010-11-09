@@ -53,7 +53,7 @@ namespace MusicNoteLib
 
         /// Adds the supplied definitions to the existing ones. 
         /// Caller has to ensure that the new values do not add duplicates to existing ones.
-        /// The supplied array should not be freed before this Chords object is freed.
+        /// The input array should not be freed before this Chords object is freed.
         /// @param pChords Array of Chord definitions.
         /// @param nSize Size of the pChords Array
         void AddDefinitions(const ChordDef* pChords, int nSize);

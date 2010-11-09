@@ -15,6 +15,7 @@ namespace MusicNoteLib
 {
 	//Forward Declarations
 	class CParser;
+	class ControllerEvent;
 	class Instrument;
     class KeySignature;
     class Layer;
@@ -33,6 +34,8 @@ namespace MusicNoteLib
 		inline CParserListener(void) {	}
 
 		inline virtual ~CParserListener(void)	{	}
+
+		inline virtual void OnControllerEvent(const CParser& pParser, const ControllerEvent* pCEvent) { }
 
 		inline virtual void OnInstrumentEvent(const CParser* pParser, const Instrument* pInstrument) { } 
 

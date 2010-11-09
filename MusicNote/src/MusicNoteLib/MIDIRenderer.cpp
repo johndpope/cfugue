@@ -2,6 +2,7 @@
 #include "jdkmidi/filewritemultitrack.h"
 #include "MIDIRenderer.h"
 #include "Note.h"
+#include "ControllerEvent.h"
 #include "Instrument.h"
 #include "KeySignature.h"
 #include "Layer.h"
@@ -20,6 +21,11 @@ namespace MusicNoteLib
 		jdkmidi::MIDIFileWriteMultiTrack WriterObj(&m_Tracks, &outFile);
 
 		return WriterObj.Write();
+	}
+
+	void MIDIRenderer::OnControllerEvent(const CParser* pParser, const ControllerEvent* pConEvent)
+	{
+		AddControllerEvent(pConEvent->GetControl(), pConEvent->GetValue());
 	}
 
     void MIDIRenderer::OnInstrumentEvent(const CParser* pParser, const Instrument* pInstrument)
