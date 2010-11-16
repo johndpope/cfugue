@@ -287,20 +287,20 @@ namespace MusicNoteLib
 
 	private:
 		// Token Parserer Methods. Return value indicates success or failure.
-        bool ParseSpeedModulatorToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
-		bool ParseVoiceToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
-		bool ParseTempoToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
-		bool ParseInstrumentToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
-		bool ParseLayerToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
-		bool ParseKeySignatureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+		bool ParseChannelPressureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
 		bool ParseControllerToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
-		bool ParseTimeToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
-		bool ParseKeyPressureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured) { return false; }
-		bool ParseChannelPressureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured) { return false; }
-		bool ParsePitchBendToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured) { return false; }
-		bool ParseMeasureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured) { return false; }
 		bool ParseDictionaryToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+		bool ParseInstrumentToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+		bool ParseKeyPressureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+		bool ParseKeySignatureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+		bool ParseLayerToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+		bool ParseMeasureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
 		bool ParseNoteToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+		bool ParsePitchBendToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+        bool ParseSpeedModulatorToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+		bool ParseTempoToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+		bool ParseTimeToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+		bool ParseVoiceToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
 
 		struct NoteContext : public Note
 		{

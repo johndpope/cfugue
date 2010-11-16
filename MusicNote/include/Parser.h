@@ -41,10 +41,13 @@
 namespace MusicNoteLib
 {
 	// Forward Declarations
+	class ChannelPressure;
 	class ControllerEvent;
 	class Instrument;
     class KeySignature;
     class Layer;
+	class PitchBend;
+	class PolyphonicPressure;
     class Tempo;
     class Time;
     class Voice;
@@ -75,10 +78,10 @@ namespace MusicNoteLib
 		OIL::CEventT<const CParser, const Instrument> evInstrument; ///< Event Raised when Parser encounters an Instrument command
 		OIL::CEventT<const CParser, const KeySignature> evKeySignature; ///< Event Raised when Parser encounters a Key Signature command
 		OIL::CEventT<const CParser, const Layer> evLayer; ///< Event Raised when Parser encounters a Layer command
-		OIL::CEventT<const CParser> evMeasure;
-		OIL::CEventT<const CParser> evChannelPressure;
-		OIL::CEventT<const CParser> evPolyphonicPressure;
-		OIL::CEventT<const CParser> evPitchBend;
+		OIL::CEventT<const CParser> evMeasure; ///< Event Raised when Parser encounters a Measure bar
+		OIL::CEventT<const CParser, const ChannelPressure> evChannelPressure; ///< Event Raised when Parser encounters a Channel Pressure command
+		OIL::CEventT<const CParser, const PolyphonicPressure> evPolyphonicPressure; ///< Event Raised when Parser encounters a Key Pressure command
+		OIL::CEventT<const CParser, const PitchBend> evPitchBend; ///< Event Raised when Parser encounters a PitchBend command
 		OIL::CEventT<const CParser, const Tempo> evTempo; ///< Event Raised when Parser encounters a Tempo command
 		OIL::CEventT<const CParser, const Time> evTime;   ///< Event Raised when Parser encounters a Time command
 		OIL::CEventT<const CParser, const Voice> evVoice; ///< Event Raised when Parser encounters a Voice command
@@ -107,13 +110,19 @@ namespace MusicNoteLib
 		{
 			CRITICAL_ERROR_MEMORY_ALLOCATION,	///< Memory allocation failed
 			PARSE_ERROR_MISSING_ASSIGNMENT,		///< No Assignment symbol found
+			PARSE_ERROR_CPRESSURE_MACRO_END,	///< MACRO_END missing while parsing a Controller Index Macro.			
+			PARSE_ERROR_CPRESSURE_VALUE,		///< Failure while converting/retrieving a Controller Value number.
 			PARSE_ERROR_CONTROLLER_MACRO_END,	///< MACRO_END missing while parsing a Controller Index Macro.			
 			PARSE_ERROR_CONTROLLER_VALUE,		///< Failure while converting/retrieving a Controller Value number.
 			PARSE_ERROR_INSTRUMENT_MACRO_END,	///< MACRO_END missing while parsing a Instrument Macro.			
 			PARSE_ERROR_INSTRUMENT_VALUE,		///< Failure while converting/retrieving a Instrument number.
+			PARSE_ERROR_KEYPRESSURE_MACRO_END,	///< MACRO_END missing while parsing a Polyphonic Pressure Macro.			
+			PARSE_ERROR_KEYPRESSURE_VALUE,		///< Failure while converting/retrieving a Polyphonic Pressure number.
 			PARSE_ERROR_KEYSIGNATURE_MACRO_END,	///< MACRO_END missing while parsing a Key Signature Macro.			
 			PARSE_ERROR_KEYSIGNATURE_VALUE,		///< Failure while converting/retrieving a Key Signature number.
             PARSE_ERROR_KEYSIGNATURE_MAXLIMIT,  ///< Specified a KeySignature beyond permitted range [0, 14] , [64, 78], [129, 200]
+			PARSE_ERROR_PITCHBEND_MACRO_END,	///< MACRO_END missing while parsing a PitchBend Macro.			
+			PARSE_ERROR_PITCHBEND_VALUE,		///< Failure while converting/retrieving a PitchBend number.
 			PARSE_ERROR_TALAM_MACRO_END,	    ///< MACRO_END missing while parsing a Talam Macro.			
 			PARSE_ERROR_TALAM_VALUE,		    ///< Failure while converting/retrieving a Talam number.
             PARSE_ERROR_TALAM_MAXLIMIT,         ///< Specified a Talam beyond permitted range [0, 35]

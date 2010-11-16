@@ -96,6 +96,18 @@ namespace MusicNoteLib
 		    m_Time[m_nCurrentTrack][m_CurrentLayer[m_nCurrentTrack]] += lDuration;
 	    }
 
+		/// <Summary>
+		/// Adds a Channel Pressure event to the current track
+		/// @param uPressure the pressure value that should be applied to the notes on the current channel
+		/// </Summary>
+		inline void AddChannelPressureEvent(unsigned char uPressure)
+		{
+			jdkmidi::MIDITimedBigMessage msg;
+			msg.SetTime(GetTrackTime());
+			msg.SetChannelPressure((unsigned char)m_nCurrentTrack, uPressure);
+			m_Tracks.GetTrack(m_nCurrentTrack)->PutEvent(msg);
+		}
+
 	    /// <Summary>
 	    /// Adds a MIDI controller event to the current track.
         /// @param uControlIndex the controller 
@@ -121,6 +133,32 @@ namespace MusicNoteLib
             msg.SetKeySig(nKeySig, MajMin);
             m_Tracks.GetTrack(m_nCurrentTrack)->PutEvent(msg);
         }
+
+		/// <Summary>
+		/// Adds a PitchBend event to the current track.
+		/// @param uLowByte the low byte value of the pitch bend
+		/// @param uHighByte the high byte value of the pitch bend
+		/// </Summary>
+		inline void AddPitchBendEvent(unsigned char uLowByte, unsigned char uHighByte)
+		{
+			jdkmidi::MIDITimedBigMessage msg;
+			msg.SetTime(GetTrackTime());
+			msg.SetPitchBend((unsigned char)m_nCurrentTrack, uLowByte, uHighByte);
+			m_Tracks.GetTrack(m_nCurrentTrack)->PutEvent(msg);
+		}
+
+		/// <Summary>
+		/// Adds a key pressure event to the current track.
+		/// @param uKey the note the pressure should be applied to
+		/// @param uPressure the Pressure value that should be applied to the key
+		/// </Summary>
+		inline void AddPolyphonicPressureEvent(unsigned char uKey, unsigned char uPressure)
+		{
+			jdkmidi::MIDITimedBigMessage msg;
+			msg.SetTime(GetTrackTime());
+			msg.SetPolyPressure((unsigned char)m_nCurrentTrack, uKey, uPressure);
+			m_Tracks.GetTrack(m_nCurrentTrack)->PutEvent(msg);
+		}
 
 	    /// <Summary>
 	    /// Adds a short ProgramChange message event to the current track.

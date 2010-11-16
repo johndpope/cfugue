@@ -15,10 +15,13 @@ namespace MusicNoteLib
 {
 	//Forward Declarations
 	class CParser;
+	class ChannelPressure;
 	class ControllerEvent;
 	class Instrument;
     class KeySignature;
     class Layer;
+	class PitchBend;
+	class PolyphonicPressure;
     class Tempo;
     class Time;
     class Voice;
@@ -35,13 +38,21 @@ namespace MusicNoteLib
 
 		inline virtual ~CParserListener(void)	{	}
 
-		inline virtual void OnControllerEvent(const CParser& pParser, const ControllerEvent* pCEvent) { }
+		inline virtual void OnChannelPressureEvent(const CParser* pParser, const ChannelPressure* pCP) { }
+
+		inline virtual void OnControllerEvent(const CParser* pParser, const ControllerEvent* pCEvent) { }
 
 		inline virtual void OnInstrumentEvent(const CParser* pParser, const Instrument* pInstrument) { } 
 
 		inline virtual void OnKeySignatureEvent(const CParser* pParser, const KeySignature* pKeySig) { } 
 
 		inline virtual void OnLayerEvent(const CParser* pParser, const Layer* pLayer) { } 
+
+		inline virtual void OnMeasureEvent(const CParser* pParser, OIL::CEventHandlerArgs* pArgs) { }
+
+		inline virtual void OnPitchBendEvent(const CParser* pParser, const PitchBend* pPB) { }
+
+		inline virtual void OnPolyphonicPressureEvent(const CParser* pParser, const PolyphonicPressure* pPressure) { }
 
 		inline virtual void OnTempoEvent(const CParser* pParser, const Tempo* pTempo) { } 
 

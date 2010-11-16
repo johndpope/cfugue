@@ -2,10 +2,13 @@
 #include "jdkmidi/filewritemultitrack.h"
 #include "MIDIRenderer.h"
 #include "Note.h"
+#include "ChannelPressure.h"
 #include "ControllerEvent.h"
 #include "Instrument.h"
 #include "KeySignature.h"
 #include "Layer.h"
+#include "PitchBend.h"
+#include "PolyphonicPressure.h"
 #include "Tempo.h"
 #include "Time.h"
 #include "Voice.h"
@@ -21,6 +24,11 @@ namespace MusicNoteLib
 		jdkmidi::MIDIFileWriteMultiTrack WriterObj(&m_Tracks, &outFile);
 
 		return WriterObj.Write();
+	}
+	
+	void MIDIRenderer::OnChannelPressureEvent(const CParser* pParser, const ChannelPressure* pCP)
+	{
+		AddChannelPressureEvent(pCP->GetPressure());
 	}
 
 	void MIDIRenderer::OnControllerEvent(const CParser* pParser, const ControllerEvent* pConEvent)
@@ -42,6 +50,16 @@ namespace MusicNoteLib
     {
         SetCurrentLayer(pLayer->GetLayer());
     }
+
+	void MIDIRenderer::OnPitchBendEvent(const CParser* pParser, const PitchBend* pPB)
+	{
+		AddPitchBendEvent(pPB->GetLowByte(), pPB->GetHighByte());
+	}
+
+	void MIDIRenderer::OnPolyphonicPressureEvent(const CParser* pParser, const PolyphonicPressure* pPressure)
+	{
+		AddPolyphonicPressureEvent(pPressure->GetKey(), pPressure->GetPressure());
+	}
 
     void MIDIRenderer::OnTempoEvent(const CParser* pParser, const Tempo* pTempo)
     {
