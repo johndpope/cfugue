@@ -1,8 +1,11 @@
 #include "stdafx.h"
 #include "MusicStringParser.h"
+#include "ChannelPressure.h"
 #include "ControllerEvent.h"
 #include "Instrument.h"
 #include "Layer.h"
+#include "PitchBend.h"
+#include "PolyphonicPressure.h"
 #include "Tempo.h"
 #include "Time.h"
 #include "Voice.h"
@@ -152,6 +155,38 @@ namespace MusicNoteLib
 		return bRetVal;
 	}
 
+	bool MusicStringParser::ParsePitchBendToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured)
+	{
+		bool bSuccess = *pbNonContinuableErrorOccured = false; unsigned int nVal = 0;
+
+		int nLen = ParseNumber(szToken, &nVal, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_PITCHBEND_MACRO_END, PARSE_ERROR_PITCHBEND_VALUE);
+		if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false; } // Some irrevocable error occured
+		if(bSuccess)
+		{
+			szToken += nLen;
+			if(*szToken == _T(',')) // seems this is in LSB,MSB format
+			{
+				bool bSuccess = *pbNonContinuableErrorOccured = false; unsigned char nHighVal = 0;
+
+				int nLen = ParseNumber(szToken, &nHighVal, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_PITCHBEND_MACRO_END, PARSE_ERROR_PITCHBEND_VALUE);
+				if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false; } // Some irrevocable error occured
+				if(bSuccess)
+				{
+					PitchBend pbObj((unsigned char) nVal, nHighVal);
+					RaiseEvent(&evPitchBend, &pbObj);
+					return true;
+				}				
+			}
+			else // This is in single integer format
+			{
+				PitchBend pbObj((unsigned char)(nVal % 128), (unsigned char)(nVal / 128));
+				RaiseEvent(&evPitchBend, &pbObj);
+				return true;
+			}
+		}
+		return false;
+	}
+
     bool MusicStringParser::ParseSpeedModulatorToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured)
     {
         TCHAR* pszToken = szToken;
@@ -249,6 +284,25 @@ namespace MusicNoteLib
 		return false;
     }
 
+	bool MusicStringParser::ParseChannelPressureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured)
+	{
+		bool bSuccess = *pbNonContinuableErrorOccured = false; unsigned char nPressure = 0;
+
+		int nLen = ParseNumber(szToken, &nPressure, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_CPRESSURE_MACRO_END, PARSE_ERROR_CPRESSURE_VALUE);
+		if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false; } // Some irrevocable error occured
+		if(bSuccess)
+		{
+			Verbose(MString(_T("MusicStringParser::ParseChannelPressureToken: Pressure = ")) + OIL::ToString(nPressure));
+
+			ChannelPressure cpObj(nPressure);
+
+			RaiseEvent(&evChannelPressure, &cpObj);
+
+			return true;
+		}
+		return false;
+	}
+
 	///<Summary>
 	/// Parses an Instrument Element Token. 
 	/// @param szToken the Token that contains the Music Instrument Element
@@ -267,6 +321,48 @@ namespace MusicNoteLib
 			Instrument instrumentObj(nInstrument);
 
 			RaiseEvent(&evInstrument, &instrumentObj);
+
+			return true;
+		}
+		return false;
+	}
+
+	/// <Summary> 
+	/// Parses Polyphonic Pressure Token.
+	/// The typical structure of this token is: *[NoteNumber],[PressureValue]
+	/// @param szToken the Token that contains the Music Instrument Element
+	/// @param pbNonContinuableErrorOccured return value that indicates the caller if further parsing should stopped
+	/// </Summary>
+	bool MusicStringParser::ParseKeyPressureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured)
+	{
+		NoteContext ctx;
+
+		// Read the Key (Note)
+		int	nLen = ParseNoteRoot(szToken, ctx); 
+		if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false;}
+		szToken += nLen;
+
+		nLen = ParseNoteOctave(szToken, ctx);
+		if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false;}
+		szToken += nLen;
+
+		if(ComputeNoteValue(ctx) == -1) { *pbNonContinuableErrorOccured = true; return false;}
+
+		TCHAR* pszPressure = szToken;
+		while(*pszPressure != NULL && *pszPressure == _T(',')) pszPressure++;
+		
+		bool bSuccess = *pbNonContinuableErrorOccured = false; unsigned char nKeyPressure = 0;
+
+		// Read the Pressure Value
+		nLen = ParseNumber(pszPressure, &nKeyPressure, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_KEYPRESSURE_MACRO_END, PARSE_ERROR_KEYPRESSURE_VALUE);
+		if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false; } // Some irrevocable error occured
+		if(bSuccess)
+		{
+			Verbose(MString(_T("MusicStringParser::ParseKeyPressureToken: Key = ") + OIL::ToString(ctx.noteNumber) + (" Pressure = ")) + OIL::ToString(nKeyPressure));
+
+			PolyphonicPressure ppObj((unsigned char) ctx.noteNumber, nKeyPressure);
+
+			RaiseEvent(&evPolyphonicPressure, &ppObj);
 
 			return true;
 		}
@@ -416,7 +512,13 @@ namespace MusicNoteLib
 		return true;
     }
 
-	///<Summary>Parses a MIDI Controller Event Token</Summary>
+	///<Summary>
+	/// Parses a MIDI Controller Event Token.
+	/// The typical structure of this token is: X[ControlCode]=[ControlValue]
+	/// Some Control Codes have fine and coarse values. Users can either specify
+	/// two tokens one for fine and the other for Coarse value, or they can use 
+	/// the combined Control Code in a single token.
+	/// </Summary>
 	bool MusicStringParser::ParseControllerToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured)
 	{
 		TCHAR* pszAssignSymbol = _tcschr(szToken, ASSIGNMENT_SYMBOL); // Find the Equals sign
@@ -474,6 +576,15 @@ namespace MusicNoteLib
 
 		return true;
 
+	}
+
+	bool MusicStringParser::ParseMeasureToken(TCHAR* szToken, bool* )
+	{
+		OIL::CEventHandlerArgs args;
+		RaiseEvent(&evMeasure, &args);
+
+		Verbose(MString(_T("MusicStringParser::ParseMeasureToken")));
+		return true;
 	}
 
 	///<Summary>Parses a Dictionary Element Token. Creates or Updates the Dictionary Element Value</Summary>		
@@ -752,7 +863,6 @@ namespace MusicNoteLib
 
 		return pszSymbol - szToken; // return the number of characters read
 	}
-
 		
 	/// <Summary> Parses any associated note octave </Summary>
 	int MusicStringParser::ParseNoteOctave(TCHAR* szToken, NoteContext& ctx)
@@ -773,7 +883,7 @@ namespace MusicNoteLib
             // Use XOctave token to change the default Medium Octave. For example,
             // XOctave=7 changes the Medium Octave to 7 instead of the default 5.
 
-            // TODO: Implement the XOctave (XShruti) and XChord directives
+            // TODO: Implement the XOctave (XShruti) and XChord directives; X is already used. Try Z
 
             bool bCheckForModifiers = true; const TCHAR* pszSymbol = szToken;
             while(bCheckForModifiers)
@@ -929,7 +1039,7 @@ namespace MusicNoteLib
                     if(Error(PARSE_ERROR_CHORDINV_MAXLIMIT, _T("Chord Inversion Root Note is beyond range"), szToken))
                         return -1;
 
-                    Trace(_T("  Adjusted the inversion root note to be ") + OIL::ToString(ctx.noteNumber) + _T(" and continuing..."));
+                    Verbose(_T("  Adjusted the inversion root note to be ") + OIL::ToString(ctx.noteNumber) + _T(" and continuing..."));
 
                     nInversionRootNote = ctx.noteNumber;
                 }

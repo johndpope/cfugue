@@ -27,6 +27,9 @@ namespace MusicNoteLib
 
 		long m_lFirstNoteTime;
 
+		/// <Summary>Event handler for Channel Pressure event Raised by Parser</Summary>
+		virtual void OnChannelPressureEvent(const CParser* pParser, const ChannelPressure* pCP);
+
 		/// <Summary>Event handler for Controller event Raised by Parser</Summary>
 		virtual void OnControllerEvent(const CParser* pParser, const ControllerEvent* pConEvent);
 
@@ -38,6 +41,12 @@ namespace MusicNoteLib
 
 		/// <Summary>Event handler for Layer event Raised by Parser</Summary>
         virtual void OnLayerEvent(const CParser* pParser, const Layer* pLayer);
+
+		/// <Summary>Event handler for PitchBend event Raised by Parser</Summary>
+		virtual void OnPitchBendEvent(const CParser* pParser, const PitchBend* pPB);
+
+		/// <Summary>Event handler for Polyphonic Pressure event Raised by Parser</Summary>
+		virtual void OnPolyphonicPressureEvent(const CParser* pParser, const PolyphonicPressure* pPressure);
 
         /// <Summary>Event handler for Tempo event Raised by Parser </Summary>
         virtual void OnTempoEvent(const CParser* pParser, const Tempo* pTempo);
