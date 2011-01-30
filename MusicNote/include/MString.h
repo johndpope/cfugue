@@ -9,8 +9,9 @@
 #ifndef __MSTRING_H__2B50AFA1_EFB9_428a_A397_3FFEA175FA33__
 #define __MSTRING_H__2B50AFA1_EFB9_428a_A397_3FFEA175FA33__
 
-#include "TChar.h"	// On Non win32 platforms we use a local TChar.h
+#include "Common/TChar.h"	// On Non win32 platforms we use a local TChar.h
 #include <string>
+#include <cassert>
 
 namespace MusicNoteLib
 {
@@ -54,12 +55,15 @@ namespace MusicNoteLib
 		}
 		inline operator const TCHAR* () const {	return c_str(); }
 #ifdef UNICODE
-		inline MString(const char* ) { _ASSERTE(_T("This is not Supported") == NULL); }
+		inline MString(const char* ) { assert(_T("This is not Supported") == NULL); }
 #else
-		inline MString(const wchar_t* ) { _ASSERTE(_T("This is not Supported") == NULL); }
+		inline MString(const wchar_t* ) { assert(_T("This is not Supported") == NULL); }
 #endif
 	}; // class MString
 
 } // namespace MusicNoteLib
+
+#define STRUTILS_RETURN_TYPE MusicNoteLib::MString
+#include "Common/StrUtils.h"
 
 #endif // __MSTRING_H__2B50AFA1_EFB9_428a_A397_3FFEA175FA33__
