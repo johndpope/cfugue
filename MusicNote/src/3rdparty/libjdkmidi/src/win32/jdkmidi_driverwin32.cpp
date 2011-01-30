@@ -250,9 +250,9 @@ namespace jdkmidi
   void CALLBACK MIDIDriverWin32::win32_timer (
     UINT wTimerID,
     UINT msg,
-    DWORD dwUser,
-    DWORD dw1,
-    DWORD dw2
+    DWORD_PTR dwUser,
+    DWORD_PTR dw1,
+    DWORD_PTR dw2
   )
   {
     MIDIDriverWin32 *self = ( MIDIDriverWin32 * ) dwUser;
