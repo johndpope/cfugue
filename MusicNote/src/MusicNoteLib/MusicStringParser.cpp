@@ -10,9 +10,6 @@
 #include "Time.h"
 #include "Voice.h"
 
-#define STRUTILS_RETURN_TYPE MusicNoteLib::MString
-#include "Common/StrUtils.h"
-
 #include "Chords.h"
 
 #include "math.h"
@@ -23,7 +20,7 @@ namespace MusicNoteLib
 	template<typename T>
 	inline int LoadValueFromString(const TCHAR* sz, T* pRetVal)
 	{
-		_ASSERTE(_T("LoadValueFromString called with Unknown Type") == NULL);
+		assert(_T("LoadValueFromString called with Unknown Type") == NULL);
 
 		return *pRetVal = NULL;
 	}
