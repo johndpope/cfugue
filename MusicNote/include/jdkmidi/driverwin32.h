@@ -84,9 +84,9 @@ namespace jdkmidi
       static void CALLBACK win32_timer (
         UINT wTimerID,
         UINT msg,
-        DWORD dwUser,
-        DWORD dw1,
-        DWORD dw2
+        DWORD_PTR dwUser,
+        DWORD_PTR dw1,
+        DWORD_PTR dw2
       );
       
       static void CALLBACK win32_midi_in (
