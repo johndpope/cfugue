@@ -9,7 +9,7 @@
 #ifndef __INDEXED_VECTORS_H__E2C81E6D_A292_41d7_B830_F7C07D335205__
 #define __INDEXED_VECTORS_H__E2C81E6D_A292_41d7_B830_F7C07D335205__
 
-#include "TChar.h"
+#include "MString.h"
 #include <vector>
 #include <map>
 

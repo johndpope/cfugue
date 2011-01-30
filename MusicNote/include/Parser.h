@@ -37,6 +37,7 @@
 //#endif
 
 #include "Common/EventHandler.h"
+#include "MString.h"
 
 namespace MusicNoteLib
 {
