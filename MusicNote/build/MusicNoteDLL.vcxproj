@@ -179,6 +179,8 @@
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='UnicodeStaticRelease|Win32'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='UnicodeStaticRelease|Win32'" />
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectName)d</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|Win32'">$(ProjectName)du</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|Win32'">$(ProjectName)u</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -429,6 +431,7 @@ copy $(OutDir)$(ProjectName).lib  $(TargetDir)..\..\lib\
       <SubSystem>Windows</SubSystem>
       <ImportLibrary>$(SolutionDir)../lib/$(ProjectName)du.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>$(SolutionDir)../lib/MusicNoteLibdu.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <AssemblyIdentity>$(ProjectName), type=win32, version=1.0.0.0</AssemblyIdentity>
@@ -482,6 +485,7 @@ copy $(OutDir)$(ProjectName).lib  $(TargetDir)..\..\lib\$(TargetName)cud.lib
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <ImportLibrary>$(SolutionDir)../lib/$(ProjectName)u.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>$(SolutionDir)../lib/MusicNoteLibu.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <AssemblyIdentity>$(ProjectName), type=win32, version=1.0.0.0</AssemblyIdentity>

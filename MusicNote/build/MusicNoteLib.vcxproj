@@ -288,6 +288,7 @@
     <Lib>
       <OutputFile>$(OutDir)$(ProjectName)du.lib</OutputFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <AdditionalDependencies>$(SolutionDir)../lib/JdkMididu.lib</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Message>copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)cud.lib</Message>
@@ -314,6 +315,7 @@
     <Lib>
       <OutputFile>$(OutDir)$(ProjectName)u.lib</OutputFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <AdditionalDependencies>$(SolutionDir)../lib/JdkMidiu.lib</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Message>copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)cu.lib</Message>
