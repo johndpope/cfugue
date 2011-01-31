@@ -33,10 +33,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "jdkmidi", "..\src\3rdparty\libjdkmidi\build\vc10\jdkmidi.vcxproj", "{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}"
 EndProject
 Global
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -247,7 +243,6 @@ Global
 		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.StaticRelease|x86.ActiveCfg = Release|Win32
 		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.UnicodeDebug|Any CPU.ActiveCfg = Debug|Win32
 		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.UnicodeDebug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.UnicodeDebug|Mixed Platforms.Build.0 = Debug|Win32
 		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.UnicodeDebug|Win32.ActiveCfg = Debug|Win32
 		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.UnicodeDebug|Win32.Build.0 = Debug|Win32
 		{E8DCEE7E-2507-4817-834C-32CAE5EBB48B}.UnicodeDebug|x86.ActiveCfg = Debug|Win32
@@ -342,14 +337,14 @@ Global
 		{7A2ACDEF-8475-41FE-A212-0BA403CEF416}.StaticRelease|Win32.Build.0 = StaticRelease|Win32
 		{7A2ACDEF-8475-41FE-A212-0BA403CEF416}.StaticRelease|x86.ActiveCfg = StaticRelease|Win32
 		{7A2ACDEF-8475-41FE-A212-0BA403CEF416}.UnicodeDebug|Any CPU.ActiveCfg = Debug|Win32
-		{7A2ACDEF-8475-41FE-A212-0BA403CEF416}.UnicodeDebug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{7A2ACDEF-8475-41FE-A212-0BA403CEF416}.UnicodeDebug|Mixed Platforms.Build.0 = Debug|Win32
+		{7A2ACDEF-8475-41FE-A212-0BA403CEF416}.UnicodeDebug|Mixed Platforms.ActiveCfg = UnicodeDebug|Win32
+		{7A2ACDEF-8475-41FE-A212-0BA403CEF416}.UnicodeDebug|Mixed Platforms.Build.0 = UnicodeDebug|Win32
 		{7A2ACDEF-8475-41FE-A212-0BA403CEF416}.UnicodeDebug|Win32.ActiveCfg = Debug|Win32
 		{7A2ACDEF-8475-41FE-A212-0BA403CEF416}.UnicodeDebug|Win32.Build.0 = Debug|Win32
 		{7A2ACDEF-8475-41FE-A212-0BA403CEF416}.UnicodeDebug|x86.ActiveCfg = Debug|Win32
 		{7A2ACDEF-8475-41FE-A212-0BA403CEF416}.UnicodeRelease|Any CPU.ActiveCfg = Release|Win32
-		{7A2ACDEF-8475-41FE-A212-0BA403CEF416}.UnicodeRelease|Mixed Platforms.ActiveCfg = Release|Win32
-		{7A2ACDEF-8475-41FE-A212-0BA403CEF416}.UnicodeRelease|Mixed Platforms.Build.0 = Release|Win32
+		{7A2ACDEF-8475-41FE-A212-0BA403CEF416}.UnicodeRelease|Mixed Platforms.ActiveCfg = UnicodeRelease|Win32
+		{7A2ACDEF-8475-41FE-A212-0BA403CEF416}.UnicodeRelease|Mixed Platforms.Build.0 = UnicodeRelease|Win32
 		{7A2ACDEF-8475-41FE-A212-0BA403CEF416}.UnicodeRelease|Win32.ActiveCfg = Release|Win32
 		{7A2ACDEF-8475-41FE-A212-0BA403CEF416}.UnicodeRelease|Win32.Build.0 = Release|Win32
 		{7A2ACDEF-8475-41FE-A212-0BA403CEF416}.UnicodeRelease|x86.ActiveCfg = Release|Win32
@@ -421,5 +416,9 @@ Global
 		{A0B9DB06-D300-4B01-AF47-B14765DF337C} = {2C364E42-43FF-496A-A450-B82C6B3FFBE0}
 		{0BFD4D6C-D4CA-40BF-A409-3EE1C4C99889} = {2C364E42-43FF-496A-A450-B82C6B3FFBE0}
 		{7A2ACDEF-8475-41FE-A212-0BA403CEF416} = {2C364E42-43FF-496A-A450-B82C6B3FFBE0}
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal
