@@ -1,6 +1,6 @@
 /*
     This is part of CFugue, a C++ Runtime environment for MIDI Score Programming
-    Copyright (C) 2009-2010 Gopalakrishna Palem
+    Copyright (C) 2009 Gopalakrishna Palem
 
     For links to further information, or to contact the author,
     see <http://musicnote.sourceforge.net/>.
@@ -93,7 +93,7 @@ No warranty of what-so-ever is implied, including MERCHANTABILITY or FITNESS FOR
 
  Project: http://musicnote.sourceforge.net
 
- Copyright (C) 2009-2010 <a href="http://www.CineFxLabs.com">CineFx Digital Media Pvt Ltd.</a>
+ Copyright (C) 2009 <a href="http://www.CineFxLabs.com">CineFx Digital Media Pvt Ltd.</a>
 
 */
 
