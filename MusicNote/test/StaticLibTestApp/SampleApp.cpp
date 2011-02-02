@@ -22,10 +22,10 @@ int _tmain(int argc, _TCHAR* argv[])
 	/// C++ API
 	///
     MusicNoteLib::Player player; // Create the Player Object
-    player.Play("C D E F G A B"); // Play the Music Notes on the default MIDI output port
+    player.Play(_T("C D E F G A B")); // Play the Music Notes on the default MIDI output port
 	
 	// Asynchronous Play
-	if(player.PlayAsync("Cx Dh Ah.")) // Start Playing Asynchronously 
+	if(player.PlayAsync(_T("Cx Dh Ah."))) // Start Playing Asynchronously 
     while(player.IsPlaying()) // Wait while the play is in progress
         Sleep(1000);       
 	player.StopPlay(); // Match every PlayAsync with a StopPlay
