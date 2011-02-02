@@ -18,6 +18,29 @@ SET(ORG_WEBSITE          "http://musicnote.sourceforge.net/")
 
 
 #################################
+# Setup Output Directories
+#################################
+SET (CMAKE_LIBRARY_OUTPUT_DIRECTORY
+  ${PROJECT_SOURCE_DIR}/Bin
+  CACHE PATH
+  "Destination Directory for all output Shared Libraries"
+  )
+
+SET (CMAKE_RUNTIME_OUTPUT_DIRECTORY
+  ${PROJECT_SOURCE_DIR}/Bin
+  CACHE PATH
+  "Destination Directory for all output Executables."
+  )
+
+SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY
+  ${PROJECT_SOURCE_DIR}/Lib
+  CACHE PATH
+  "Destination Directory for all output static libraries."
+  )
+
+
+
+#################################
 # Configuring build type
 #################################
 IF(NOT CMAKE_BUILD_TYPE)
@@ -51,7 +74,10 @@ option (BUILD_MUSICNOTE_TESTS "Should the Test applications be built for MusicNo
 
 mark_as_advanced(BUILD_MUSICNOTE_DLL)
 
+
 include_directories( "include" "include/common" )
+
+MESSAGE(TODO:Add Doxygen Target for documentation)
 
 #################################
 #### Target: MusicNoteLib ####
@@ -221,6 +247,14 @@ target_link_libraries(jdkmidi  ${jdkmidi_Dependencies})
 SET( MusicNoteLib_Dependencies jdkmidi  ${MusicNoteLib_Librarian} )
 target_link_libraries(MusicNoteLib  ${MusicNoteLib_Dependencies})
 
+install(TARGETS jdkmidi MusicNoteLib RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
+
+if (BUILD_MUSICNOTE_TESTS)
+	SET( StaticLibTestApp_Dependencies MusicNoteLib  ${StaticLibTestApp_Librarian} )
+	target_link_libraries(StaticLibTestApp  ${StaticLibTestApp_Dependencies})
+	install(TARGETS StaticLibTestApp RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
+ENDIF(BUILD_MUSICNOTE_TESTS)
+
 
 #################################
 #### Target: MusicNoteDLL ####
@@ -228,14 +262,14 @@ target_link_libraries(MusicNoteLib  ${MusicNoteLib_Dependencies})
 
 ADD_SUBDIRECTORY(src/MusicNoteDLL)
 
-if (BUILD_MUSICNOTE_TESTS AND BUILD_MUSICNOTE_DLL)
+if (BUILD_MUSICNOTE_TESTS AND BUILD_MUSICNOTE_DLL AND WIN32)
 	SET( DLLTestApp_Dependencies MusicNoteDLL  ${DLLTestApp_Librarian} )
 	target_link_libraries(DLLTestApp  ${DLLTestApp_Dependencies})
-ENDIF(BUILD_MUSICNOTE_TESTS AND BUILD_MUSICNOTE_DLL)
+	install(TARGETS DLLTestApp  RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
+ENDIF(BUILD_MUSICNOTE_TESTS AND BUILD_MUSICNOTE_DLL AND WIN32)
 
-if (BUILD_MUSICNOTE_TESTS)
-	SET( StaticLibTestApp_Dependencies MusicNoteLib  ${StaticLibTestApp_Librarian} )
-	target_link_libraries(StaticLibTestApp  ${StaticLibTestApp_Dependencies})
-ENDIF(BUILD_MUSICNOTE_TESTS)
+
+
+
 
 
