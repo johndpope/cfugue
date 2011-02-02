@@ -776,7 +776,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\test\DLLTestApp\ConsoleTestApp.cpp" />
+    <ClCompile Include="..\test\DLLTestApp\DLLTestApp.cpp" />
     <ClCompile Include="..\test\DLLTestApp\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
