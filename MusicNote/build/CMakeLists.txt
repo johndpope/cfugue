@@ -8,7 +8,7 @@ PROJECT( MusicNote )
 #################################
 #### Target: MusicNoteLib ####
 #################################
-include_directories( "../include" "../../common" )
+include_directories( "../include" "../include/common" )
 SET( MusicNoteLib_Source_Files 
 	../src/MusicNoteLib/Dictionary.cpp
 	../src/MusicNoteLib/Instrument.cpp
@@ -20,7 +20,7 @@ SET( MusicNoteLib_Source_Files
    )
 SET( MusicNoteLib_Header_Files 
 	../include/Dictionary.h
-	../../Common/EventHandler.h
+	../include/Common/EventHandler.h
 	../include/Instrument.h
 	../include/KeySignature.h
 	../include/Layer.h
@@ -48,16 +48,16 @@ add_library(MusicNoteLib   ${MusicNoteLib_Source_Files}  ${MusicNoteLib_Header_F
 #### Target: ConsoleTestApp ####
 #################################
 include_directories( "../include" "../../Common" )
-link_directories( "../lib" )
+#link_directories( "../lib" )
 SET( ConsoleTestApp_Source_Files 
-	../test/ConsoleTestApp/ConsoleTestApp.cpp
-	../test/ConsoleTestApp/stdafx.cpp
+	../test/DLLTestApp/ConsoleTestApp.cpp
+	../test/DLLTestApp/stdafx.cpp
    )
 SET( ConsoleTestApp_Header_Files 
-	../test/ConsoleTestApp/stdafx.h
-	../test/ConsoleTestApp/targetver.h
+	../test/DLLTestApp/stdafx.h
+	../test/DLLTestApp/targetver.h
    )
-SET( ConsoleTestApp_UnKnownGroup ../test/ConsoleTestApp/ReadMe.txt    )
+SET( ConsoleTestApp_UnKnownGroup ../test/DLLTestApp/ReadMe.txt    )
 
 add_executable(ConsoleTestApp   ${ConsoleTestApp_Source_Files}  ${ConsoleTestApp_Header_Files}  ${ConsoleTestApp_UnKnownGroup} )
 
@@ -103,69 +103,69 @@ add_library(MusicNoteDLL  SHARED   ${MusicNoteDLL_Source_Files}  ${MusicNoteDLL_
 #################################
 #### Target: jdkmidi ####
 #################################
-include_directories( "../src/3rdparty/libjdkmidi/build/vc9/../../../../../include" )
+include_directories( "include" )
 SET( jdkmidi_Librarian   WinMM.Lib   )
 SET( jdkmidi_Source_Files 
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_advancedsequencer.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_driver.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_driverdump.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/win32/jdkmidi_driverwin32.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_edittrack.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_file.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_fileread.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_filereadmultitrack.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_fileshow.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_filewrite.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_filewritemultitrack.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_keysig.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_manager.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_matrix.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_midi.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_msg.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_multitrack.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_parser.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_process.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_queue.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_sequencer.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_showcontrol.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_showcontrolhandler.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_smpte.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_sysex.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_tempo.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_tick.cpp
-	../src/3rdparty/libjdkmidi/build/vc9/../../src/jdkmidi_track.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_advancedsequencer.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_driver.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_driverdump.cpp
+	../src/3rdparty/libjdkmidi/src/win32/jdkmidi_driverwin32.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_edittrack.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_file.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_fileread.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_filereadmultitrack.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_fileshow.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_filewrite.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_filewritemultitrack.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_keysig.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_manager.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_matrix.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_midi.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_msg.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_multitrack.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_parser.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_process.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_queue.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_sequencer.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_showcontrol.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_showcontrolhandler.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_smpte.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_sysex.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_tempo.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_tick.cpp
+	../src/3rdparty/libjdkmidi/src/jdkmidi_track.cpp
    )
 SET( jdkmidi_Header_Files 
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/advancedsequencer.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/driver.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/driverdump.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/driverwin32.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/edittrack.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/file.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/fileread.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/filereadmultitrack.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/fileshow.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/filewrite.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/filewritemultitrack.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/keysig.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/manager.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/matrix.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/midi.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/msg.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/multitrack.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/parser.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/process.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/queue.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/sequencer.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/showcontrol.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/showcontrolhandler.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/smpte.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/song.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/sysex.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/tempo.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/tick.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/track.h
-	../src/3rdparty/libjdkmidi/build/vc9/../../../../../include/jdkmidi/world.h
+	../include/jdkmidi/advancedsequencer.h
+	../include/jdkmidi/driver.h
+	../include/jdkmidi/driverdump.h
+	../include/jdkmidi/driverwin32.h
+	../include/jdkmidi/edittrack.h
+	../include/jdkmidi/file.h
+	../include/jdkmidi/fileread.h
+	../include/jdkmidi/filereadmultitrack.h
+	../include/jdkmidi/fileshow.h
+	../include/jdkmidi/filewrite.h
+	../include/jdkmidi/filewritemultitrack.h
+	../include/jdkmidi/keysig.h
+	../include/jdkmidi/manager.h
+	../include/jdkmidi/matrix.h
+	../include/jdkmidi/midi.h
+	../include/jdkmidi/msg.h
+	../include/jdkmidi/multitrack.h
+	../include/jdkmidi/parser.h
+	../include/jdkmidi/process.h
+	../include/jdkmidi/queue.h
+	../include/jdkmidi/sequencer.h
+	../include/jdkmidi/showcontrol.h
+	../include/jdkmidi/showcontrolhandler.h
+	../include/jdkmidi/smpte.h
+	../include/jdkmidi/song.h
+	../include/jdkmidi/sysex.h
+	../include/jdkmidi/tempo.h
+	../include/jdkmidi/tick.h
+	../include/jdkmidi/track.h
+	../include/jdkmidi/world.h
    )
 
 add_library(jdkmidi   ${jdkmidi_Source_Files}  ${jdkmidi_Header_Files} )
