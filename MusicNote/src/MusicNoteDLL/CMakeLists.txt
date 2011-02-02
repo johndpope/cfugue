@@ -1,4 +1,4 @@
-# CMakeLists.txt - Created with Sln2CMake Application
+# CMakeLists.txt
 
 
 cmake_minimum_required(VERSION 2.6)
@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 2.6)
 # PROJECT( MusicNoteDLL )
 
        
-ADD_DEFINITIONS(-D_USRDLL -DMUSICNOTEDLL_EXPORTS)
+ADD_DEFINITIONS(-DUNICODE -D_UNICODE -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -D_USRDLL -DMUSICNOTEDLL_EXPORTS -D_ATL_DLL /Zl)
 
 #################################
 #### Target: MusicNoteDLL ####
@@ -51,8 +51,14 @@ ENDIF(BUILD_MUSICNOTE_DLL)
 
 
 if (BUILD_MUSICNOTE_DLL)
-	SET( MusicNoteDLL_Dependencies MusicNoteLib  ${MusicNoteDLL_Librarian} )
-	target_link_libraries(MusicNoteDLL  ${MusicNoteDLL_Dependencies})
+	if (WIN32)
+		SET( MusicNoteDLL_Dependencies MusicNoteLib  ${MusicNoteDLL_Librarian} )
+		target_link_libraries(MusicNoteDLL  ${MusicNoteDLL_Dependencies})
+		install(TARGETS MusicNoteDLL RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
+	ELSE(WIN32)
+ 		MESSAGE("MusicNoteDLL is a COM component - only supported on Windows builds !!")
+	ENDIF(WIN32)
 ENDIF (BUILD_MUSICNOTE_DLL)
+
 
 
