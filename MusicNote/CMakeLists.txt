@@ -1,0 +1,241 @@
+# CMakeLists.txt - Created with Sln2CMake Application
+
+
+cmake_minimum_required(VERSION 2.6)
+
+PROJECT( MusicNote )
+
+#################################
+# Project Info
+#################################
+SET(PROJECT_NAME_SHORT   "CFugue")
+SET(PROJECT_NAME_LONG    "CFugue")
+SET(PROJECT_DESCRIPTION  "C++ Runtime Environment for MIDI Score Programming")
+SET(PROJECT_COPYRIGHT    "Copyright (C) 2009 Gopalakrishna Palem")
+SET(PROJECT_CONTACT      "Gopalakrishna.Palem@Yahoo.com")
+SET(PROJECT_VENDOR       "Gopalakrishna Palem")
+SET(ORG_WEBSITE          "http://musicnote.sourceforge.net/")
+
+
+#################################
+# Configuring build type
+#################################
+IF(NOT CMAKE_BUILD_TYPE)
+    SET(CMAKE_BUILD_TYPE "Debug" CACHE STRING
+        "Choose the type of build, options are: Debug Release"
+        FORCE)   
+ENDIF(NOT CMAKE_BUILD_TYPE)
+
+
+#################################
+# Generic Compiler options
+#################################
+
+ADD_DEFINITIONS( -DUNICODE -D_UNICODE -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS)
+
+
+#################################
+# Build Specific Options
+#################################
+
+IF("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
+	#Release settings
+ELSE("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
+	#Debug settings
+ENDIF("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
+
+
+#################################
+option (BUILD_MUSICNOTE_DLL "Should the DLL be built for MusicNote (Only for Windows)" OFF) 
+option (BUILD_MUSICNOTE_TESTS "Should the Test applications be built for MusicNote" ON) 
+
+mark_as_advanced(BUILD_MUSICNOTE_DLL)
+
+include_directories( "include" "include/common" )
+
+#################################
+#### Target: MusicNoteLib ####
+#################################
+SET( MusicNoteLib_Source_Files 
+	src/MusicNoteLib/Chords.cpp
+	src/MusicNoteLib/Dictionary.cpp
+	src/MusicNoteLib/Documentation.cpp
+	src/MusicNoteLib/Instrument.cpp
+	src/MusicNoteLib/MIDIRenderer.cpp
+	src/MusicNoteLib/MusicNoteLib.cpp
+	src/MusicNoteLib/MusicStringParser.cpp
+	src/MusicNoteLib/Parser.cpp
+	src/MusicNoteLib/Player.cpp
+	src/MusicNoteLib/stdafx.cpp
+   )
+SET( MusicNoteLib_Header_Files 
+	include/Dictionary.h
+	include/Common/EventHandler.h
+	include/Instrument.h
+	include/KeySignature.h
+	include/Layer.h
+	include/MIDIEventManager.h
+	include/MIDIRenderer.h
+	include/MString.h
+	include/MusicNoteLib.h
+	include/MusicStringParser.h
+	include/Note.h
+	include/Parser.h
+	include/ParserListener.h
+	include/Player.h
+	src/MusicNoteLib/stdafx.h
+	include/Talam.h
+	src/MusicNoteLib/targetver.h
+	include/Tempo.h
+	include/Time.h
+	include/Voice.h
+   )
+SET( MusicNoteLib_UnKnownGroup src/MusicNoteLib/ReadMe.txt    )
+
+add_library(MusicNoteLib   ${MusicNoteLib_Source_Files}  ${MusicNoteLib_Header_Files}  ${MusicNoteLib_UnKnownGroup} )
+SET_TARGET_PROPERTIES(MusicNoteLib PROPERTIES DEBUG_POSTFIX "d")
+
+#################################
+#### Target: DLLTestApp ####
+#################################
+SET( DLLTestApp_Source_Files 
+	test/DLLTestApp/DLLTestApp.cpp
+	test/DLLTestApp/stdafx.cpp
+   )
+SET( DLLTestApp_Header_Files 
+	test/DLLTestApp/stdafx.h
+	test/DLLTestApp/targetver.h
+   )
+SET( DLLTestApp_UnKnownGroup test/DLLTestApp/ReadMe.txt    )
+
+if (BUILD_MUSICNOTE_TESTS AND BUILD_MUSICNOTE_DLL)
+	add_executable(DLLTestApp   ${DLLTestApp_Source_Files}  ${DLLTestApp_Header_Files}  ${DLLTestApp_UnKnownGroup} )
+	SET_TARGET_PROPERTIES(DLLTestApp PROPERTIES DEBUG_POSTFIX "d")
+endif (BUILD_MUSICNOTE_TESTS AND BUILD_MUSICNOTE_DLL)
+
+
+#################################
+#### Target: StaticTestApp ####
+#################################
+SET( StaticLibTestApp_Source_Files 
+	test/StaticLibTestApp/SampleApp.cpp
+	test/StaticLibTestApp/stdafx.cpp
+   )
+SET( StaticLibTestApp_Header_Files 
+	test/StaticLibTestApp/stdafx.h
+	test/StaticLibTestApp/targetver.h
+   )
+
+if (BUILD_MUSICNOTE_TESTS)
+	add_executable(StaticLibTestApp   ${StaticLibTestApp_Source_Files}  ${StaticLibTestApp_Header_Files} )
+	SET_TARGET_PROPERTIES(StaticLibTestApp PROPERTIES DEBUG_POSTFIX "d")
+endif (BUILD_MUSICNOTE_TESTS )
+
+
+#################################
+#### Target: PlayerTestApp ####
+#################################
+#################################
+#### Target: Documentation ####
+#################################
+#################################
+#### Target: jdkmidi ####
+#################################
+SET( jdkmidi_Source_Files 
+	src/3rdparty/libjdkmidi/src/jdkmidi_advancedsequencer.cpp
+	src/3rdparty/libjdkmidi/src/jdkmidi_driver.cpp
+	src/3rdparty/libjdkmidi/src/jdkmidi_driverdump.cpp
+	src/3rdparty/libjdkmidi/src/win32/jdkmidi_driverwin32.cpp
+	src/3rdparty/libjdkmidi/src/jdkmidi_edittrack.cpp
+	src/3rdparty/libjdkmidi/src/jdkmidi_file.cpp
+	src/3rdparty/libjdkmidi/src/jdkmidi_fileread.cpp
+	src/3rdparty/libjdkmidi/src/jdkmidi_filereadmultitrack.cpp
+	src/3rdparty/libjdkmidi/src/jdkmidi_fileshow.cpp
+	src/3rdparty/libjdkmidi/src/jdkmidi_filewrite.cpp
+	src/3rdparty/libjdkmidi/src/jdkmidi_filewritemultitrack.cpp
+	src/3rdparty/libjdkmidi/src/jdkmidi_keysig.cpp
+	src/3rdparty/libjdkmidi/src/jdkmidi_manager.cpp
+	src/3rdparty/libjdkmidi/src/jdkmidi_matrix.cpp
+	src/3rdparty/libjdkmidi/src/jdkmidi_midi.cpp
+	src/3rdparty/libjdkmidi/src/jdkmidi_msg.cpp
+	src/3rdparty/libjdkmidi/src/jdkmidi_multitrack.cpp
+	src/3rdparty/libjdkmidi/src/jdkmidi_parser.cpp
+	src/3rdparty/libjdkmidi/src/jdkmidi_process.cpp
+	src/3rdparty/libjdkmidi/src/jdkmidi_queue.cpp
+	src/3rdparty/libjdkmidi/src/jdkmidi_sequencer.cpp
+	src/3rdparty/libjdkmidi/src/jdkmidi_showcontrol.cpp
+	src/3rdparty/libjdkmidi/src/jdkmidi_showcontrolhandler.cpp
+	src/3rdparty/libjdkmidi/src/jdkmidi_smpte.cpp
+	src/3rdparty/libjdkmidi/src/jdkmidi_sysex.cpp
+	src/3rdparty/libjdkmidi/src/jdkmidi_tempo.cpp
+	src/3rdparty/libjdkmidi/src/jdkmidi_tick.cpp
+	src/3rdparty/libjdkmidi/src/jdkmidi_track.cpp
+   )
+SET( jdkmidi_Header_Files 
+	include/jdkmidi/advancedsequencer.h
+	include/jdkmidi/driver.h
+	include/jdkmidi/driverdump.h
+	include/jdkmidi/driverwin32.h
+	include/jdkmidi/edittrack.h
+	include/jdkmidi/file.h
+	include/jdkmidi/fileread.h
+	include/jdkmidi/filereadmultitrack.h
+	include/jdkmidi/fileshow.h
+	include/jdkmidi/filewrite.h
+	include/jdkmidi/filewritemultitrack.h
+	include/jdkmidi/keysig.h
+	include/jdkmidi/manager.h
+	include/jdkmidi/matrix.h
+	include/jdkmidi/midi.h
+	include/jdkmidi/msg.h
+	include/jdkmidi/multitrack.h
+	include/jdkmidi/parser.h
+	include/jdkmidi/process.h
+	include/jdkmidi/queue.h
+	include/jdkmidi/sequencer.h
+	include/jdkmidi/showcontrol.h
+	include/jdkmidi/showcontrolhandler.h
+	include/jdkmidi/smpte.h
+	include/jdkmidi/song.h
+	include/jdkmidi/sysex.h
+	include/jdkmidi/tempo.h
+	include/jdkmidi/tick.h
+	include/jdkmidi/track.h
+	include/jdkmidi/world.h
+   )
+
+add_library(jdkmidi   ${jdkmidi_Source_Files}  ${jdkmidi_Header_Files} )
+SET_TARGET_PROPERTIES(jdkmidi PROPERTIES DEBUG_POSTFIX "d")
+
+#################################
+#Link the targets with their Depenedency Libraries
+#################################
+
+IF(WIN32)
+	SET( jdkmidi_Librarian   WinMM.Lib   )
+ENDIF(WIN32)
+
+SET( jdkmidi_Dependencies  ${jdkmidi_Librarian} )
+target_link_libraries(jdkmidi  ${jdkmidi_Dependencies})
+
+SET( MusicNoteLib_Dependencies jdkmidi  ${MusicNoteLib_Librarian} )
+target_link_libraries(MusicNoteLib  ${MusicNoteLib_Dependencies})
+
+
+#################################
+#### Target: MusicNoteDLL ####
+#################################
+
+ADD_SUBDIRECTORY(src/MusicNoteDLL)
+
+if (BUILD_MUSICNOTE_TESTS AND BUILD_MUSICNOTE_DLL)
+	SET( DLLTestApp_Dependencies MusicNoteDLL  ${DLLTestApp_Librarian} )
+	target_link_libraries(DLLTestApp  ${DLLTestApp_Dependencies})
+ENDIF(BUILD_MUSICNOTE_TESTS AND BUILD_MUSICNOTE_DLL)
+
+if (BUILD_MUSICNOTE_TESTS)
+	SET( StaticLibTestApp_Dependencies MusicNoteLib  ${StaticLibTestApp_Librarian} )
+	target_link_libraries(StaticLibTestApp  ${StaticLibTestApp_Dependencies})
+ENDIF(BUILD_MUSICNOTE_TESTS)
+
+
