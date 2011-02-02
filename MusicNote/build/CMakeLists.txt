@@ -6,16 +6,65 @@ cmake_minimum_required(VERSION 2.6)
 PROJECT( MusicNote )
 
 #################################
+# Project Info
+#################################
+SET(PROJECT_NAME_SHORT   "CFugue")
+SET(PROJECT_NAME_LONG    "CFugue")
+SET(PROJECT_DESCRIPTION  "C++ Runtime Environment for MIDI Score Programming")
+SET(PROJECT_COPYRIGHT    "Copyright (C) 2009 Gopalakrishna Palem")
+SET(PROJECT_CONTACT      "Gopalakrishna.Palem@Yahoo.com")
+SET(PROJECT_VENDOR       "Gopalakrishna Palem")
+SET(ORG_WEBSITE          "http://musicnote.sourceforge.net/")
+
+
+#################################
+# Configuring build type
+#################################
+IF(NOT CMAKE_BUILD_TYPE)
+    SET(CMAKE_BUILD_TYPE "Debug" CACHE STRING
+        "Choose the type of build, options are: Debug Release"
+        FORCE)   
+ENDIF(NOT CMAKE_BUILD_TYPE)
+
+
+#################################
+# Generic Compiler options
+#################################
+
+ADD_DEFINITIONS( -DUNICODE -D_UNICODE -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS)
+
+
+#################################
+# Build Specific Options
+#################################
+
+IF("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
+	#Release settings
+ELSE("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
+	#Debug settings
+ENDIF("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
+
+
+#################################
+option (BUILD_MUSICNOTE_DLL "Should the DLL be built for MusicNote (Only for Windows)" OFF) 
+option (BUILD_MUSICNOTE_TESTS "Should the Test applications be built for MusicNote" ON) 
+
+
+include_directories( "../include" "../include/common" )
+
+#################################
 #### Target: MusicNoteLib ####
 #################################
-include_directories( "../include" "../include/common" )
 SET( MusicNoteLib_Source_Files 
+	../src/MusicNoteLib/Chords.cpp
 	../src/MusicNoteLib/Dictionary.cpp
+	../src/MusicNoteLib/Documentation.cpp
 	../src/MusicNoteLib/Instrument.cpp
 	../src/MusicNoteLib/MIDIRenderer.cpp
 	../src/MusicNoteLib/MusicNoteLib.cpp
 	../src/MusicNoteLib/MusicStringParser.cpp
 	../src/MusicNoteLib/Parser.cpp
+	../src/MusicNoteLib/Player.cpp
 	../src/MusicNoteLib/stdafx.cpp
    )
 SET( MusicNoteLib_Header_Files 
@@ -43,28 +92,48 @@ SET( MusicNoteLib_Header_Files
 SET( MusicNoteLib_UnKnownGroup ../src/MusicNoteLib/ReadMe.txt    )
 
 add_library(MusicNoteLib   ${MusicNoteLib_Source_Files}  ${MusicNoteLib_Header_Files}  ${MusicNoteLib_UnKnownGroup} )
+SET_TARGET_PROPERTIES(MusicNoteLib PROPERTIES DEBUG_POSTFIX "d")
 
 #################################
-#### Target: ConsoleTestApp ####
+#### Target: DLLTestApp ####
 #################################
-include_directories( "../include" "../../Common" )
-#link_directories( "../lib" )
-SET( ConsoleTestApp_Source_Files 
-	../test/DLLTestApp/ConsoleTestApp.cpp
+SET( DLLTestApp_Source_Files 
+	../test/DLLTestApp/DLLTestApp.cpp
 	../test/DLLTestApp/stdafx.cpp
    )
-SET( ConsoleTestApp_Header_Files 
+SET( DLLTestApp_Header_Files 
 	../test/DLLTestApp/stdafx.h
 	../test/DLLTestApp/targetver.h
    )
-SET( ConsoleTestApp_UnKnownGroup ../test/DLLTestApp/ReadMe.txt    )
+SET( DLLTestApp_UnKnownGroup ../test/DLLTestApp/ReadMe.txt    )
 
-add_executable(ConsoleTestApp   ${ConsoleTestApp_Source_Files}  ${ConsoleTestApp_Header_Files}  ${ConsoleTestApp_UnKnownGroup} )
+if (BUILD_MUSICNOTE_TESTS AND BUILD_MUSICNOTE_DLL)
+	add_executable(DLLTestApp   ${DLLTestApp_Source_Files}  ${DLLTestApp_Header_Files}  ${DLLTestApp_UnKnownGroup} )
+	SET_TARGET_PROPERTIES(DLLTestApp PROPERTIES DEBUG_POSTFIX "d")
+endif (BUILD_MUSICNOTE_TESTS AND BUILD_MUSICNOTE_DLL)
+
+
+#################################
+#### Target: StaticTestApp ####
+#################################
+SET( StaticLibTestApp_Source_Files 
+	../test/StaticLibTestApp/SampleApp.cpp
+	../test/StaticLibTestApp/stdafx.cpp
+   )
+SET( StaticLibTestApp_Header_Files 
+	../test/StaticLibTestApp/stdafx.h
+	../test/StaticLibTestApp/targetver.h
+   )
+
+if (BUILD_MUSICNOTE_TESTS)
+	add_executable(StaticLibTestApp   ${StaticLibTestApp_Source_Files}  ${StaticLibTestApp_Header_Files} )
+	SET_TARGET_PROPERTIES(StaticLibTestApp PROPERTIES DEBUG_POSTFIX "d")
+endif (BUILD_MUSICNOTE_TESTS )
+
 
 #################################
 #### Target: MusicNoteDLL ####
 #################################
-include_directories( "../include" "../../common" )
 SET( MusicNoteDLL_Source_Files 
 	../src/MusicNoteDLL/dlldatax.c
 	../src/MusicNoteDLL/dllmain.cpp
@@ -92,7 +161,11 @@ SET( MusicNoteDLL_Generated_Files
    )
 SET( MusicNoteDLL_UnKnownGroup ../src/MusicNoteDLL/ReadMe.txt    )
 
-add_library(MusicNoteDLL  SHARED   ${MusicNoteDLL_Source_Files}  ${MusicNoteDLL_Header_Files}  ${MusicNoteDLL_Resource_Files}  ${MusicNoteDLL_Generated_Files}  ${MusicNoteDLL_UnKnownGroup} )
+if(BUILD_MUSICNOTE_DLL)
+	add_library(MusicNoteDLL  SHARED   ${MusicNoteDLL_Source_Files}  ${MusicNoteDLL_Header_Files}  ${MusicNoteDLL_Resource_Files}  ${MusicNoteDLL_Generated_Files}  ${MusicNoteDLL_UnKnownGroup} )
+	SET_TARGET_PROPERTIES(MusicNoteDLL PROPERTIES DEBUG_POSTFIX "d")
+        ADD_DEFINITIONS(-D_USRDLL -DMUSICNOTEDLL_EXPORTS)
+ENDIF(BUILD_MUSICNOTE_DLL)
 
 #################################
 #### Target: PlayerTestApp ####
@@ -103,8 +176,6 @@ add_library(MusicNoteDLL  SHARED   ${MusicNoteDLL_Source_Files}  ${MusicNoteDLL_
 #################################
 #### Target: jdkmidi ####
 #################################
-include_directories( "include" )
-SET( jdkmidi_Librarian   WinMM.Lib   )
 SET( jdkmidi_Source_Files 
 	../src/3rdparty/libjdkmidi/src/jdkmidi_advancedsequencer.cpp
 	../src/3rdparty/libjdkmidi/src/jdkmidi_driver.cpp
@@ -169,19 +240,36 @@ SET( jdkmidi_Header_Files
    )
 
 add_library(jdkmidi   ${jdkmidi_Source_Files}  ${jdkmidi_Header_Files} )
+SET_TARGET_PROPERTIES(jdkmidi PROPERTIES DEBUG_POSTFIX "d")
 
 #################################
 #Link the targets with their Depenedency Libraries
 #################################
-SET( MusicNoteLib_Dependencies jdkmidi  ${MusicNoteLib_Librarian} )
-target_link_libraries(MusicNoteLib  ${MusicNoteLib_Dependencies})
 
-SET( ConsoleTestApp_Dependencies MusicNoteLib  ${ConsoleTestApp_Librarian} )
-target_link_libraries(ConsoleTestApp  ${ConsoleTestApp_Dependencies})
-
-SET( MusicNoteDLL_Dependencies MusicNoteLib  ${MusicNoteDLL_Librarian} )
-target_link_libraries(MusicNoteDLL  ${MusicNoteDLL_Dependencies})
+IF(WIN32)
+	SET( jdkmidi_Librarian   WinMM.Lib   )
+ENDIF(WIN32)
 
 SET( jdkmidi_Dependencies  ${jdkmidi_Librarian} )
 target_link_libraries(jdkmidi  ${jdkmidi_Dependencies})
+
+SET( MusicNoteLib_Dependencies jdkmidi  ${MusicNoteLib_Librarian} )
+target_link_libraries(MusicNoteLib  ${MusicNoteLib_Dependencies})
+
+
+if (BUILD_MUSICNOTE_DLL)
+	SET( MusicNoteDLL_Dependencies MusicNoteLib  ${MusicNoteDLL_Librarian} )
+	target_link_libraries(MusicNoteDLL  ${MusicNoteDLL_Dependencies})
+ENDIF (BUILD_MUSICNOTE_DLL)
+
+if (BUILD_MUSICNOTE_TESTS AND BUILD_MUSICNOTE_DLL)
+	SET( DLLTestApp_Dependencies MusicNoteDLL  ${DLLTestApp_Librarian} )
+	target_link_libraries(DLLTestApp  ${DLLTestApp_Dependencies})
+ENDIF(BUILD_MUSICNOTE_TESTS AND BUILD_MUSICNOTE_DLL)
+
+if (BUILD_MUSICNOTE_TESTS)
+	SET( StaticLibTestApp_Dependencies MusicNoteLib  ${StaticLibTestApp_Librarian} )
+	target_link_libraries(StaticLibTestApp  ${StaticLibTestApp_Dependencies})
+ENDIF(BUILD_MUSICNOTE_TESTS)
+
 
