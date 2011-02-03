@@ -22,7 +22,7 @@ SET(ORG_WEBSITE          "http://musicnote.sourceforge.net/")
 #################################
 option (BUILD_MUSICNOTE_DLL "Should the DLL be built for MusicNote (Only for Windows)" OFF) 
 option (BUILD_MUSICNOTE_TESTS "Should the Test applications be built for MusicNote" ON) 
-option (BUILD_MUSICNOTE_UNICODE "Should MusicNote be built with Unicode? (recommended: Yes)" ON)
+SET (BUILD_MUSICNOTE_UNICODE ON CACHE BOOL "Should MusicNote be built with Unicode? (recommended: Yes)")
 
 mark_as_advanced(BUILD_MUSICNOTE_DLL)
 
