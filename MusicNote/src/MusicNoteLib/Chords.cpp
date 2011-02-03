@@ -112,7 +112,7 @@ namespace MusicNoteLib
 
 			unsigned int nMatched = 0;
 
-			for(int i=0, nMax = vecObjects.size(); i <  nMax; ++i)
+			for(size_t i=0, nMax = vecObjects.size(); i <  nMax; ++i)
 			{
 				*retVal = *vecObjects[i];
 
