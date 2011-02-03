@@ -40,7 +40,7 @@ namespace MusicNoteLib
 
 		if(psz != sz) *pRetVal = nVal;
 
-		return psz - sz;
+		return (int)(psz - sz);
     }
 
 	template<>
@@ -88,7 +88,7 @@ namespace MusicNoteLib
 
 		if(psz != sz) *pRetVal = nVal;
 
-		return psz - sz;
+		return (int)(psz - sz);
 	}	
 
 	bool MusicStringParser::Parse(const TCHAR* szTokens)
@@ -163,13 +163,13 @@ namespace MusicNoteLib
 			szToken += nLen;
 			if(*szToken == _T(',')) // seems this is in LSB,MSB format
 			{
-				bool bSuccess = *pbNonContinuableErrorOccured = false; unsigned char nHighVal = 0;
+				bool bSuccess = *pbNonContinuableErrorOccured = false; unsigned short nHighVal = 0;
 
 				int nLen = ParseNumber(szToken, &nHighVal, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_PITCHBEND_MACRO_END, PARSE_ERROR_PITCHBEND_VALUE);
 				if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false; } // Some irrevocable error occured
 				if(bSuccess)
 				{
-					PitchBend pbObj((unsigned char) nVal, nHighVal);
+					PitchBend pbObj((unsigned char) nVal, (unsigned char) nHighVal);
 					RaiseEvent(&evPitchBend, &pbObj);
 					return true;
 				}				
@@ -219,7 +219,7 @@ namespace MusicNoteLib
 		
     bool MusicStringParser::ParseVoiceToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured)
     {
-		bool bSuccess = *pbNonContinuableErrorOccured = false; unsigned char nVoice = 0;
+		bool bSuccess = *pbNonContinuableErrorOccured = false; unsigned short nVoice = 0;
 
 		int nLen = ParseNumber(szToken, &nVoice, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_VOICE_MACRO_END, PARSE_ERROR_VOICE_VALUE);
 		if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false; } // Some irrevocable error occured
@@ -234,7 +234,7 @@ namespace MusicNoteLib
 				nVoice = 15; // if we need to continue despite the error, ceil the value
 			}
 
-			Voice voiceObj(nVoice);
+			Voice voiceObj((unsigned char) nVoice);
 
 			RaiseEvent(&evVoice, &voiceObj);
 
@@ -283,7 +283,7 @@ namespace MusicNoteLib
 
 	bool MusicStringParser::ParseChannelPressureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured)
 	{
-		bool bSuccess = *pbNonContinuableErrorOccured = false; unsigned char nPressure = 0;
+		bool bSuccess = *pbNonContinuableErrorOccured = false; unsigned short nPressure = 0;
 
 		int nLen = ParseNumber(szToken, &nPressure, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_CPRESSURE_MACRO_END, PARSE_ERROR_CPRESSURE_VALUE);
 		if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false; } // Some irrevocable error occured
@@ -291,7 +291,7 @@ namespace MusicNoteLib
 		{
 			Verbose(MString(_T("MusicStringParser::ParseChannelPressureToken: Pressure = ")) + OIL::ToString(nPressure));
 
-			ChannelPressure cpObj(nPressure);
+			ChannelPressure cpObj((unsigned char) nPressure);
 
 			RaiseEvent(&evChannelPressure, &cpObj);
 
@@ -307,7 +307,7 @@ namespace MusicNoteLib
 	///</Summary>
 	bool MusicStringParser::ParseInstrumentToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured)
 	{
-		bool bSuccess = *pbNonContinuableErrorOccured = false; unsigned char nInstrument = 0;
+		bool bSuccess = *pbNonContinuableErrorOccured = false; unsigned short nInstrument = 0;
 
 		int nLen = ParseNumber(szToken, &nInstrument, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_INSTRUMENT_MACRO_END, PARSE_ERROR_INSTRUMENT_VALUE);
 		if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false; } // Some irrevocable error occured
@@ -315,7 +315,7 @@ namespace MusicNoteLib
 		{
 			Verbose(MString(_T("MusicStringParser::ParseInstrumentToken: Instrument = ")) + OIL::ToString(nInstrument));
 
-			Instrument instrumentObj(nInstrument);
+			Instrument instrumentObj((unsigned char) nInstrument);
 
 			RaiseEvent(&evInstrument, &instrumentObj);
 
@@ -348,7 +348,7 @@ namespace MusicNoteLib
 		TCHAR* pszPressure = szToken;
 		while(*pszPressure != NULL && *pszPressure == _T(',')) pszPressure++;
 		
-		bool bSuccess = *pbNonContinuableErrorOccured = false; unsigned char nKeyPressure = 0;
+		bool bSuccess = *pbNonContinuableErrorOccured = false; unsigned short nKeyPressure = 0;
 
 		// Read the Pressure Value
 		nLen = ParseNumber(pszPressure, &nKeyPressure, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_KEYPRESSURE_MACRO_END, PARSE_ERROR_KEYPRESSURE_VALUE);
@@ -357,7 +357,7 @@ namespace MusicNoteLib
 		{
 			Verbose(MString(_T("MusicStringParser::ParseKeyPressureToken: Key = ") + OIL::ToString(ctx.noteNumber) + (" Pressure = ")) + OIL::ToString(nKeyPressure));
 
-			PolyphonicPressure ppObj((unsigned char) ctx.noteNumber, nKeyPressure);
+			PolyphonicPressure ppObj((unsigned char) ctx.noteNumber, (unsigned char) nKeyPressure);
 
 			RaiseEvent(&evPolyphonicPressure, &ppObj);
 
@@ -368,7 +368,7 @@ namespace MusicNoteLib
 
     bool MusicStringParser::ParseLayerToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured)
     {
-		bool bSuccess = *pbNonContinuableErrorOccured = false; unsigned char nLayer = 0;
+		bool bSuccess = *pbNonContinuableErrorOccured = false; unsigned short nLayer = 0;
 
 		int nLen = ParseNumber(szToken, &nLayer, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_LAYER_MACRO_END, PARSE_ERROR_LAYER_VALUE);
 		if(nLen == -1) { *pbNonContinuableErrorOccured = true; return false; } // Some irrevocable error occured
@@ -376,7 +376,7 @@ namespace MusicNoteLib
 		{
 			Verbose(MString(_T("MusicStringParser::ParseLayerToken: Layer = ")) + OIL::ToString(nLayer));
 
-			Layer layerObj(nLayer);
+			Layer layerObj((unsigned char) nLayer);
 
 			RaiseEvent(&evLayer, &layerObj);
 
@@ -546,13 +546,13 @@ namespace MusicNoteLib
 				int nLen = ParseNumber(pszValue, &nControllerValue, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_CONTROLLER_MACRO_END, PARSE_ERROR_CONTROLLER_VALUE);
 				if(nLen == -1) return false;	// Some irrevocable error occured
 				
-				unsigned char coarseValue = (unsigned char)(nControllerValue / 128);
-				unsigned char fineValue = (unsigned char)(nControllerValue % 128);	
+				int coarseValue = (nControllerValue / 128);
+				int fineValue = (nControllerValue % 128);	
 				
-				ControllerEvent evObjCoarse(nControllerCoarse, coarseValue);
+				ControllerEvent evObjCoarse((unsigned char) nControllerCoarse, (unsigned char) coarseValue);
 				RaiseEvent(&evController, &evObjCoarse);
 
-				ControllerEvent evObjFine(nControllerFine, fineValue);
+				ControllerEvent evObjFine((unsigned char) nControllerFine, (unsigned char) fineValue);
 				RaiseEvent(&evController, &evObjFine);
 
 				Verbose(MString(_T("MusicStringParser::ParseControllerToken: [")) + OIL::ToString(nControllerCoarse) + MString(_T("]=")) + OIL::ToString(coarseValue));
@@ -560,11 +560,11 @@ namespace MusicNoteLib
 			}
 			else
 			{
-				unsigned char nControllerValue=0;
+				unsigned short nControllerValue=0;
 				int nLen = ParseNumber(pszValue, &nControllerValue, bSuccess, MACRO_START, MACRO_END, PARSE_ERROR_CONTROLLER_MACRO_END, PARSE_ERROR_CONTROLLER_VALUE);
 				if(nLen == -1) return false;	// Some irrevocable error occured
 
-				ControllerEvent evObj(nControllerIndex, nControllerValue);
+				ControllerEvent evObj((unsigned char) nControllerIndex, (unsigned char) nControllerValue);
 				RaiseEvent(&evController, &evObj);
 		
 				Verbose(MString(_T("MusicStringParser::ParseControllerToken: [")) + pszKey + MString(_T("]=")) + pszValue);
@@ -822,7 +822,7 @@ namespace MusicNoteLib
     		
 		    Verbose(_T("Note number within octave: ") + OIL::ToString(ctx.noteNumber));
 
-		    return pszToken - szToken; // return the number of characters read
+		    return (int)(pszToken - szToken); // return the number of characters read
         }
 
         // Western Mode Notes
@@ -858,7 +858,7 @@ namespace MusicNoteLib
 		
 		Verbose(_T("Note number within octave: ") + OIL::ToString(ctx.noteNumber));
 
-		return pszSymbol - szToken; // return the number of characters read
+		return (int)(pszSymbol - szToken); // return the number of characters read
 	}
 		
 	/// <Summary> Parses any associated note octave </Summary>
@@ -892,7 +892,7 @@ namespace MusicNoteLib
                 default: bCheckForModifiers = false; break;
                 }
             }
-            nLen = pszSymbol - szToken; // Number of Characters consumed
+            nLen = (int)(pszSymbol - szToken); // Number of Characters consumed
         }
         else
         {
@@ -1055,7 +1055,7 @@ namespace MusicNoteLib
             }
         }
         
-        return pszToken - szToken; // return the number of characters scanned
+        return (int)(pszToken - szToken); // return the number of characters scanned
     }
 
 	int MusicStringParser::ComputeNoteValue(NoteContext& ctx)
@@ -1181,7 +1181,7 @@ namespace MusicNoteLib
 
 		Verbose(_T("Actual Duration is: ") + OIL::ToString(ctx.duration));
 
-		return pszDuration - szToken + nTupletLen; // Return the number of characters consumed
+		return (int)(pszDuration - szToken) + nTupletLen; // Return the number of characters consumed
 	}
 	
 	/// <Summary> Parses duration expressed as Alphabet W, H etc.. </Summary>
@@ -1237,7 +1237,7 @@ namespace MusicNoteLib
 			pszDuration ++;
 		}	
 		
-		return pszDuration - szToken; // return the number of characters consumed
+		return (int)(pszDuration - szToken); // return the number of characters consumed
 	}
 
 	/// <Summary> Parses tuples expressed with * : </Summary>
@@ -1282,7 +1282,7 @@ namespace MusicNoteLib
 			Verbose(_T("Tuplet Ratio is: ") + OIL::ToString((unsigned int)dNumerator) + _T(":") + OIL::ToString((unsigned int)dDenominator));
 			Verbose(_T("Decimal Duration after applying Tuplet: ") + OIL::ToString(ctx.decimalDuration));
 
-			return pszTuplet - szToken; // return number of characters consumed
+			return (int)(pszTuplet - szToken); // return number of characters consumed
 		}
 
 		return 0; // This is not a tuplet  
@@ -1312,7 +1312,7 @@ namespace MusicNoteLib
 			default: 
 				{
 					Verbose(_T("Attack Velocity: ") + OIL::ToString(ctx.attackVelocity) + _T(" Decay Velocity: ") + OIL::ToString(ctx.decayVelocity));
-					return pszVelocity - szToken;
+					return (int)(pszVelocity - szToken);
 				}
 			}
 
@@ -1332,7 +1332,7 @@ namespace MusicNoteLib
 			pszVelocity += nLen;
 		}while(true);	// we can have both attack and decay specified for the same note. so loop again.
 
-		return pszVelocity - szToken;
+		return (int)(pszVelocity - szToken);
 	}
 
 	/// <Summary> Checks & Parses any associated notes </Summary>
@@ -1420,7 +1420,7 @@ namespace MusicNoteLib
 
 				Trace(_T("  Ignoring ") + MacroBracketStart);
 
-                return pszNumberStart - szToken; // Failure; return the lentgh scanned
+                return (int)(pszNumberStart - szToken); // Failure; return the lentgh scanned
 			}
 			else // We found an End Bracket
 			{
@@ -1434,13 +1434,13 @@ namespace MusicNoteLib
 					// if we have to ignore this error, we ignore the whole string between the [ and ]  
 					Trace(_T("  Ignoring ") + MString(szToken + 1));
 
-					return (pszEndBracket - szToken) +1; // Failure; return the length consumed
+					return (int)(pszEndBracket - szToken) +1; // Failure; return the length consumed
 				}
 				else // The Macro got read successfully
 				{
 					bSuccess = true;
 
-					return (pszEndBracket - szToken) +1; // return the number of characters scanned
+					return (int)(pszEndBracket - szToken) +1; // return the number of characters scanned
 				}
 			}
 		}	
@@ -1460,7 +1460,7 @@ namespace MusicNoteLib
 		else // The number got read successfully
 			bSuccess = true;
 
-		return pszNumberStart - szToken + nStrLen; // return the number of characters consumed
+		return (int)(pszNumberStart - szToken) + nStrLen; // return the number of characters consumed
 	}
 
 } // namespace MusicNoteLib

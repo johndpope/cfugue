@@ -18,62 +18,98 @@ SET(ORG_WEBSITE          "http://musicnote.sourceforge.net/")
 
 
 #################################
-# Setup Output Directories
+# Setup Build Options
 #################################
-SET (CMAKE_LIBRARY_OUTPUT_DIRECTORY
-  ${PROJECT_SOURCE_DIR}/Bin
-  CACHE PATH
-  "Destination Directory for all output Shared Libraries"
-  )
+option (BUILD_MUSICNOTE_DLL "Should the DLL be built for MusicNote (Only for Windows)" OFF) 
+option (BUILD_MUSICNOTE_TESTS "Should the Test applications be built for MusicNote" ON) 
+option (BUILD_MUSICNOTE_UNICODE "Should MusicNote be built with Unicode? (recommended: Yes)" ON)
 
-SET (CMAKE_RUNTIME_OUTPUT_DIRECTORY
-  ${PROJECT_SOURCE_DIR}/Bin
-  CACHE PATH
-  "Destination Directory for all output Executables."
-  )
-
-SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY
-  ${PROJECT_SOURCE_DIR}/Lib
-  CACHE PATH
-  "Destination Directory for all output static libraries."
-  )
-
-
+mark_as_advanced(BUILD_MUSICNOTE_DLL)
 
 #################################
-# Configuring build type
+# Compute Values based on Options
 #################################
+set(Char_Flags "" CACHE INTERNAL "Compiler Character Flags: Unicode/MBCS Options")
+set(Char_postfix "" CACHE INTERNAL "Unicode Postfix")
+set(Output_postfix "" CACHE INTERNAL "Debug Postfix")
+
+if(BUILD_MUSICNOTE_UNICODE)
+	SET(Char_postfix "u")
+	SET(Char_Flags "-DUNICODE -D_UNICODE")
+	message(STATUS "Unicode build is ON")
+else(BUILD_MUSICNOTE_UNICODE)
+	SET(Char_postfix "")
+	SET(Char_Flags "-D_MBCS")
+	message(STATUS "Unicode build is OFF")
+endif(BUILD_MUSICNOTE_UNICODE)
+
 IF(NOT CMAKE_BUILD_TYPE)
     SET(CMAKE_BUILD_TYPE "Debug" CACHE STRING
         "Choose the type of build, options are: Debug Release"
         FORCE)   
 ENDIF(NOT CMAKE_BUILD_TYPE)
 
+if("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
+	SET(Output_postfix "")	
+endif()
+if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+	SET(Output_postfix "d")	
+endif()
+		
+SET(CMAKE_DEBUG_POSTFIX "d${Char_postfix}")
+SET(CMAKE_RELEASE_POSTFIX "${Char_postfix}")
+message(STATUS "Output Postfix: ${Output_postfix}${Char_postfix}")
+
+#################################
+# Setup Output Directories
+#################################
+SET (CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG
+  ${PROJECT_SOURCE_DIR}/Bin
+  CACHE PATH
+  "Destination Directory for output Shared Libraries (Debug Mode)"
+  )
+SET (CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE
+  ${PROJECT_SOURCE_DIR}/Bin
+  CACHE PATH
+  "Destination Directory for output Shared Libraries (Release Mode)"
+  )
+
+SET (CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG
+  ${PROJECT_SOURCE_DIR}/Bin
+  CACHE PATH
+  "Destination Directory for output Executables (Debug Mode)."
+  )
+SET (CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE
+  ${PROJECT_SOURCE_DIR}/Bin
+  CACHE PATH
+  "Destination Directory for output Executables (Release Mode)."
+  )
+
+SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG
+  ${PROJECT_SOURCE_DIR}/Lib
+  CACHE PATH
+  "Destination Directory for output static libraries (Debug Mode)."
+  )
+SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE
+  ${PROJECT_SOURCE_DIR}/Lib
+  CACHE PATH
+  "Destination Directory for output static libraries (Release Mode)."
+  )
+
+mark_as_advanced(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG)
+mark_as_advanced(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE)
+mark_as_advanced(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG)
+mark_as_advanced(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE)
+mark_as_advanced(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG)
+mark_as_advanced(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE)
 
 #################################
 # Generic Compiler options
 #################################
 
-ADD_DEFINITIONS( -DUNICODE -D_UNICODE -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS)
-
-
-#################################
-# Build Specific Options
-#################################
-
-IF("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
-	#Release settings
-ELSE("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
-	#Debug settings
-ENDIF("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
-
+ADD_DEFINITIONS(${Char_Flags} -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS)
 
 #################################
-option (BUILD_MUSICNOTE_DLL "Should the DLL be built for MusicNote (Only for Windows)" OFF) 
-option (BUILD_MUSICNOTE_TESTS "Should the Test applications be built for MusicNote" ON) 
-
-mark_as_advanced(BUILD_MUSICNOTE_DLL)
-
 
 include_directories( "include" "include/common" )
 
@@ -119,7 +155,7 @@ SET( MusicNoteLib_Header_Files
 SET( MusicNoteLib_UnKnownGroup src/MusicNoteLib/ReadMe.txt    )
 
 add_library(MusicNoteLib   ${MusicNoteLib_Source_Files}  ${MusicNoteLib_Header_Files}  ${MusicNoteLib_UnKnownGroup} )
-SET_TARGET_PROPERTIES(MusicNoteLib PROPERTIES DEBUG_POSTFIX "d")
+#SET_TARGET_PROPERTIES(MusicNoteLib PROPERTIES DEBUG_POSTFIX "d")
 
 #################################
 #### Target: DLLTestApp ####
@@ -136,7 +172,7 @@ SET( DLLTestApp_UnKnownGroup test/DLLTestApp/ReadMe.txt    )
 
 if (BUILD_MUSICNOTE_TESTS AND BUILD_MUSICNOTE_DLL)
 	add_executable(DLLTestApp   ${DLLTestApp_Source_Files}  ${DLLTestApp_Header_Files}  ${DLLTestApp_UnKnownGroup} )
-	SET_TARGET_PROPERTIES(DLLTestApp PROPERTIES DEBUG_POSTFIX "d")
+	SET_TARGET_PROPERTIES(DLLTestApp PROPERTIES DEBUG_POSTFIX "d${Char_postfix}" RELEASE_POSTFIX "${Char_postfix}")
 endif (BUILD_MUSICNOTE_TESTS AND BUILD_MUSICNOTE_DLL)
 
 
@@ -154,7 +190,7 @@ SET( StaticLibTestApp_Header_Files
 
 if (BUILD_MUSICNOTE_TESTS)
 	add_executable(StaticLibTestApp   ${StaticLibTestApp_Source_Files}  ${StaticLibTestApp_Header_Files} )
-	SET_TARGET_PROPERTIES(StaticLibTestApp PROPERTIES DEBUG_POSTFIX "d")
+	SET_TARGET_PROPERTIES(StaticLibTestApp PROPERTIES DEBUG_POSTFIX "d${Char_postfix}" RELEASE_POSTFIX "${Char_postfix}")
 endif (BUILD_MUSICNOTE_TESTS )
 
 
@@ -231,7 +267,7 @@ SET( jdkmidi_Header_Files
    )
 
 add_library(jdkmidi   ${jdkmidi_Source_Files}  ${jdkmidi_Header_Files} )
-SET_TARGET_PROPERTIES(jdkmidi PROPERTIES DEBUG_POSTFIX "d")
+#SET_TARGET_PROPERTIES(jdkmidi PROPERTIES DEBUG_POSTFIX "d")
 
 #################################
 #Link the targets with their Depenedency Libraries
