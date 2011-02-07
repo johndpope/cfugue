@@ -22,7 +22,9 @@ namespace MusicNoteLib
 	{
 		assert(_T("LoadValueFromString called with Unknown Type") == NULL);
 
-		return *pRetVal = NULL;
+		*pRetVal = _T('0');
+
+		return 0;
 	}
 
     template<typename T>
@@ -190,7 +192,7 @@ namespace MusicNoteLib
 
         unsigned short nSpeed = m_KeySig.Speed();
 
-        while(*pszToken != NULL)
+        while(*pszToken != _T('\0'))
         {
             switch(pszToken[0])
             {
@@ -346,7 +348,7 @@ namespace MusicNoteLib
 		if(ComputeNoteValue(ctx) == -1) { *pbNonContinuableErrorOccured = true; return false;}
 
 		TCHAR* pszPressure = szToken;
-		while(*pszPressure != NULL && *pszPressure == _T(',')) pszPressure++;
+		while(*pszPressure != _T('\0') && *pszPressure == _T(',')) pszPressure++;
 		
 		bool bSuccess = *pbNonContinuableErrorOccured = false; unsigned short nKeyPressure = 0;
 
@@ -958,7 +960,7 @@ namespace MusicNoteLib
         int nInversionOctave = -1;
         bool bCheckForInversion = true;
 
-        while(bCheckForInversion && *pszToken != NULL)
+        while(bCheckForInversion && *pszToken != _T('\0'))
         {
             switch(pszToken[0])
             {
@@ -1189,7 +1191,7 @@ namespace MusicNoteLib
 	{
 		TCHAR* pszDuration = szToken;
 
-		while(*pszDuration != NULL)
+		while(*pszDuration != _T('\0'))
 		{
 			if(pszDuration[0] == NOTE_TIE)
 			{
