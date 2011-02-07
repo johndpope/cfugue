@@ -1392,7 +1392,7 @@ namespace MusicNoteLib
 		DICTIONARY::const_iterator dictEntry = m_Dictionary.find(szKey);
 
 		// Lookup may fail if the key is not a macro - in such case we use the key itself as the value
-		const TCHAR* pszVal = (dictEntry == m_Dictionary.end() ? szKey : dictEntry->second);
+		const TCHAR* pszVal = (dictEntry == m_Dictionary.end() ? szKey : (const TCHAR*)dictEntry->second);
 
 		// *pRetVal = NULL;
 
