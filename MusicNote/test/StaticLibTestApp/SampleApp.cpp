@@ -16,7 +16,7 @@
 #include "stdafx.h"
 #include "MusicNoteLib.h"
 
-int _tmain(int argc, _TCHAR* argv[])
+int main(int argc, char* argv[])
 {
 	/////////////////////////////////////////
 	/// C++ API
