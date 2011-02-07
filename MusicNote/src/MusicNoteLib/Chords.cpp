@@ -70,8 +70,10 @@ namespace MusicNoteLib
             vecArray[chIndex].push_back(inputArr+i);
         }
 
+		typedef typename std::map<TCHAR, std::vector<const T*> >::value_type VecIterTypeT;
+
         // Sort each vector such that longer strings come first
-		std::for_each(vecArray.begin(), vecArray.end(), [](std::map<TCHAR, std::vector<const T*> >::value_type& iter)
+		std::for_each(vecArray.begin(), vecArray.end(), [](VecIterTypeT& iter)
 		{
 			std::vector<const T*>& vec = iter.second;
 			std::sort(vec.begin(), vec.end(), phRepComparator<T>);
@@ -92,7 +94,7 @@ namespace MusicNoteLib
             nMatched++;
         }
         
-        return (*pfx == NULL) ? nMatched : 0;
+        return (*pfx == _T('\0')) ? nMatched : 0;
     }
 
     // Searches the vectors to find the best prefix that matches the sequence of
@@ -137,7 +139,7 @@ namespace MusicNoteLib
     void Chords::LoadDefinitions(const ChordDef* pChords /*=NULL*/, int nSize /*=0*/)
     {
         m_Definitions.clear();
-        if(pChords == NULL || nSize == NULL)
+        if(pChords == NULL || nSize == 0)
         {   
             pChords = DefChordDefinitions;
             nSize = _countof(DefChordDefinitions);
