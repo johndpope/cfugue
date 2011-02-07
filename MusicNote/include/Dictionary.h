@@ -20,7 +20,7 @@ namespace MusicNoteLib
 {
 	/// <Summary>Implements the less operator for Maps with string case-insensitive comparisions </Summary>
 	template<class _Ty>
-	struct StringLessT : public std::binary_function<_Ty, _Ty, bool>
+	struct StringLess : public std::binary_function<_Ty, _Ty, bool>
 	{
 		inline bool operator()(const _Ty& _Left, const _Ty& _Right) const
 		{	
@@ -30,11 +30,8 @@ namespace MusicNoteLib
 
 	/// <Summary> Dictionary type maps a string key to a string value. The string
 	/// value can be an integer or double (in text form), or a string </Summary>
-#if defined(UNICODE) || defined(_UNICODE)
-	typedef std::map<MString, MString, StringLessT<const wchar_t*> > DICTIONARY;
-#else
-	typedef std::map<MString, MString, StringLessT<const char*> > DICTIONARY;
-#endif
+	typedef std::map<MString, MString, StringLess<const TCHAR*> > DICTIONARY;
+
 	/// <Summary> Accessor method to Populate standard macro definitions </Summary>
 	void PopulateStandardDefinitions(DICTIONARY& dictionaryObj);
 
