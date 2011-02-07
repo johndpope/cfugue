@@ -107,7 +107,7 @@ mark_as_advanced(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE)
 # Generic Compiler options
 #################################
 
-ADD_DEFINITIONS(${Char_Flags} -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS)
+ADD_DEFINITIONS(${Char_Flags} -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -std=gnu++0x)
 
 #################################
 
