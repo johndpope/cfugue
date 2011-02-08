@@ -163,16 +163,6 @@ namespace PlayerTestApp
             listView_Log.Columns[0].Width = listView_Log.ClientSize.Width;
         }
 
-        public void OnParseTrace(IntPtr userData, [MarshalAs(UnmanagedType.LPStr)] String szTraceMsg)
-        {
-            bgWorker_Play.ReportProgress(0, szTraceMsg);
-        }
-
-        public void OnParseError(IntPtr userData, int errCode, [MarshalAs(UnmanagedType.LPStr)] String szErrorMsg, [MarshalAs(UnmanagedType.LPStr)] String szToken)
-        {
-            bgWorker_Play.ReportProgress(0, szErrorMsg + " while parsing: " + szToken);
-        }
-
         private void bgWorker_Play_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker bw = sender as BackgroundWorker;
@@ -201,6 +191,27 @@ namespace PlayerTestApp
 
             listView_Log.Items.Add(szTraceMsg);
         }
+#if UNICODE
+        public void OnParseTrace(IntPtr userData, [MarshalAs(UnmanagedType.LPWStr)] String szTraceMsg)
+        {
+            bgWorker_Play.ReportProgress(0, szTraceMsg);
+        }
 
+        public void OnParseError(IntPtr userData, int errCode, [MarshalAs(UnmanagedType.LPWStr)] String szErrorMsg, [MarshalAs(UnmanagedType.LPWStr)] String szToken)
+        {
+            bgWorker_Play.ReportProgress(0, szErrorMsg + " while parsing: " + szToken);
+        }
+
+#else // MBCS
+        public void OnParseTrace(IntPtr userData, [MarshalAs(UnmanagedType.LPStr)] String szTraceMsg)
+        {
+            bgWorker_Play.ReportProgress(0, szTraceMsg);
+        }
+
+        public void OnParseError(IntPtr userData, int errCode, [MarshalAs(UnmanagedType.LPStr)] String szErrorMsg, [MarshalAs(UnmanagedType.LPStr)] String szToken)
+        {
+            bgWorker_Play.ReportProgress(0, szErrorMsg + " while parsing: " + szToken);
+        }
+#endif // UNICODE
     }
 }
