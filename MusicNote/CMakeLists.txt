@@ -36,11 +36,11 @@ set(Output_postfix "" CACHE INTERNAL "Debug Postfix")
 if(BUILD_MUSICNOTE_UNICODE)
 	SET(Char_postfix "u")
 	SET(Char_Flags "-DUNICODE -D_UNICODE")
-	message(STATUS "Unicode build is ON")
+	message(STATUS "MusicNote: Unicode build is ON")
 else(BUILD_MUSICNOTE_UNICODE)
 	SET(Char_postfix "")
 	SET(Char_Flags "-D_MBCS")
-	message(STATUS "Unicode build is OFF")
+	message(STATUS "MusicNote: Unicode build is OFF")
 endif(BUILD_MUSICNOTE_UNICODE)
 
 IF(NOT CMAKE_BUILD_TYPE)
@@ -58,7 +58,7 @@ endif()
 		
 SET(CMAKE_DEBUG_POSTFIX "d${Char_postfix}")
 SET(CMAKE_RELEASE_POSTFIX "${Char_postfix}")
-message(STATUS "Output Postfix: ${Output_postfix}${Char_postfix}")
+message(STATUS "MusicNote: Output Postfix: ${Output_postfix}${Char_postfix}")
 
 #################################
 # Setup Output Directories
