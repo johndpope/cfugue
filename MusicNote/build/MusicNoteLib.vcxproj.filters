@@ -45,6 +45,9 @@
     <ClCompile Include="..\src\MusicNoteLib\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\MusicNoteLib\MIDIDrivers\AlsaDriver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Chords.h">
