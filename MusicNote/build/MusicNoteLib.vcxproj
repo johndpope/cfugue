@@ -729,6 +729,7 @@
     <ClCompile Include="..\src\MusicNoteLib\Chords.cpp" />
     <ClCompile Include="..\src\MusicNoteLib\Dictionary.cpp" />
     <ClCompile Include="..\src\MusicNoteLib\Instrument.cpp" />
+    <ClCompile Include="..\src\MusicNoteLib\MIDIDrivers\AlsaDriver.cpp" />
     <ClCompile Include="..\src\MusicNoteLib\MIDIRenderer.cpp" />
     <ClCompile Include="..\src\MusicNoteLib\MusicNoteLib.cpp" />
     <ClCompile Include="..\src\MusicNoteLib\MusicStringParser.cpp" />
