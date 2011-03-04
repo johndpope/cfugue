@@ -10,7 +10,7 @@
 #include "PitchBend.h"
 #include "PolyphonicPressure.h"
 #include "Tempo.h"
-#include "Time.h"
+#include "TimeToken.h"
 #include "Voice.h"
 
 namespace MusicNoteLib

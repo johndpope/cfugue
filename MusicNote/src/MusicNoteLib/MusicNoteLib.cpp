@@ -27,7 +27,7 @@ namespace MusicNoteLib
         const PARSETRACEARGS* pCallbackData = (const PARSETRACEARGS*) pParser->GetUserData();
         pCallbackData->lpfnTraceProc(pCallbackData->lpUserData, pEvArgs->szTraceMsg);
     }
-    
+
 	static void OnParseError(const MusicNoteLib::CParser* pParser, MusicNoteLib::CParser::ErrorEventHandlerArgs* pEvArgs)
     {
         const PARSETRACEARGS* pCallbackData = (const PARSETRACEARGS*) pParser->GetUserData();
@@ -37,7 +37,7 @@ namespace MusicNoteLib
 extern "C"
 {
     MUSICNOTELIB_API void* GetCarnaticMusicNoteReader()
-	{	
+	{
 		MusicNoteLib::MusicStringParser Parser;
 
 		return NULL;
@@ -60,7 +60,7 @@ extern "C"
 	   // OutputDebugString(pEvArgs->szErrMsg);
 	   // if(pEvArgs->szToken)
 	   // {
-		  //  OutputDebugString(_T("\t Token: "));	 
+		  //  OutputDebugString(_T("\t Token: "));
 		  //  OutputDebugString(pEvArgs->szToken);
 	   // }
     //}
@@ -70,9 +70,9 @@ extern "C"
         return Player().Play(szNotes);
     }
 
-    MUSICNOTELIB_API bool PlayMusicStringCB(const TCHAR* szNotes, 
-											LPFNTRACEPROC traceCallbackProc, 
-											LPFNERRORPROC errorCallbackProc, 
+    MUSICNOTELIB_API bool PlayMusicStringCB(const TCHAR* szNotes,
+											LPFNTRACEPROC traceCallbackProc,
+											LPFNERRORPROC errorCallbackProc,
 											void* pCallbackData)
     {
         PARSETRACEARGS callbackArgs;
@@ -87,17 +87,17 @@ extern "C"
         return playerObj.Play(szNotes);
     }
 
-	MUSICNOTELIB_API bool PlayMusicStringWithOpts(LPCTSTR szMusicNotes, int nMidiOutPortID, unsigned int nTimerResMS)
+	MUSICNOTELIB_API bool PlayMusicStringWithOpts(const TCHAR* szMusicNotes, int nMidiOutPortID, unsigned int nTimerResMS)
 	{
 		Player playerObj;
 		return playerObj.Play(szMusicNotes, nMidiOutPortID, nTimerResMS);
 	}
 
-	MUSICNOTELIB_API bool PlayMusicStringWithOptsCB(LPCTSTR szMusicNotes, 
-													int nMidiOutPortID, 
+	MUSICNOTELIB_API bool PlayMusicStringWithOptsCB(const TCHAR* szMusicNotes,
+													int nMidiOutPortID,
 													unsigned int nTimerResMS,
-													LPFNTRACEPROC traceCallbackProc, 
-													LPFNERRORPROC errorCallbackProc, 
+													LPFNTRACEPROC traceCallbackProc,
+													LPFNERRORPROC errorCallbackProc,
 													void* pCallbackData)
 	{
         PARSETRACEARGS callbackArgs;

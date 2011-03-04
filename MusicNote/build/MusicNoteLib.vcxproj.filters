@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
+    <Filter Include="MIDIDriver">
+      <UniqueIdentifier>{31090698-e5ce-4ec2-a36e-42f227a187b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\MusicNoteLib\Chords.cpp">
@@ -46,7 +49,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\src\MusicNoteLib\MIDIDrivers\AlsaDriver.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>MIDIDriver</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MusicNoteLib\MIDIDrivers\RtMidi.cpp">
+      <Filter>MIDIDriver</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -107,9 +113,6 @@
     <ClInclude Include="..\include\Tempo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\Time.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\Voice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -124,6 +127,27 @@
     </ClInclude>
     <ClInclude Include="..\include\PitchBend.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Common\_TChar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Common\StrUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\rtmidi\RtError.h">
+      <Filter>MIDIDriver</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\rtmidi\RtMidi.h">
+      <Filter>MIDIDriver</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\AlsaDriver.h">
+      <Filter>MIDIDriver</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\TimeToken.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\MidiTimer.h">
+      <Filter>MIDIDriver</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

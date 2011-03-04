@@ -127,12 +127,21 @@ SET( MusicNoteLib_Source_Files
 	src/MusicNoteLib/MusicNoteLib.cpp
 	src/MusicNoteLib/MusicStringParser.cpp
 	src/MusicNoteLib/Parser.cpp
-	src/MusicNoteLib/Player.cpp
+	src/MusicNoteLib/Player.cpp	
 	src/MusicNoteLib/stdafx.cpp
+	src/MusicNoteLib/MIDIDrivers/AlsaDriver.cpp
+	src/MusicNoteLib/MIDIDrivers/RtMidi.cpp
    )
 SET( MusicNoteLib_Header_Files 
-	include/Dictionary.h
+	src/MusicNoteLib/targetver.h
+	src/MusicNoteLib/stdafx.h
 	include/Common/EventHandler.h
+	include/Common/StrUtils.h
+	include/rtmidi/RtMidi.h
+	include/rtmidi/RtError.h
+	include/AlsaDriver.h
+	include/MidiTimer.h
+	include/Dictionary.h
 	include/Instrument.h
 	include/KeySignature.h
 	include/Layer.h
@@ -145,11 +154,9 @@ SET( MusicNoteLib_Header_Files
 	include/Parser.h
 	include/ParserListener.h
 	include/Player.h
-	src/MusicNoteLib/stdafx.h
 	include/Talam.h
-	src/MusicNoteLib/targetver.h
 	include/Tempo.h
-	include/Time.h
+	include/TimeToken.h
 	include/Voice.h
    )
 SET( MusicNoteLib_UnKnownGroup src/MusicNoteLib/ReadMe.txt    )
