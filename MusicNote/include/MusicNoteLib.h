@@ -11,7 +11,7 @@
 
 /** @file MusicNoteLib.h
  * \brief Main header file for accessing the MusicNote Library
- */ 
+ */
 
 /// <Summary>
 /// This header file can be included directly in your project or through
@@ -25,10 +25,16 @@
 
 #include "Player.h"
 
+#if defined WIN32 || defined _WIN32
+#define STDCALL __stdcall
+#else
+#define STDCALL  //__attribute__((stdcall))
+#endif
+
 namespace MusicNoteLib /// Music Programming Library
 {
-typedef  void (__stdcall *LPFNTRACEPROC)(void* pUserData, const TCHAR* szTraceMsg);
-typedef  void (__stdcall *LPFNERRORPROC)(void* pUserData, long lErrCode, const TCHAR* szErrorMsg, const TCHAR* szToken);
+typedef  void (STDCALL *LPFNTRACEPROC)(void* pUserData, const TCHAR* szTraceMsg);
+typedef  void (STDCALL *LPFNERRORPROC)(void* pUserData, long lErrCode, const TCHAR* szErrorMsg, const TCHAR* szToken);
 
 extern "C"
 {
@@ -59,10 +65,10 @@ extern "C"
     /// @return True if the notes were played successfully, False otherwise
 	/// </Summary>
 	MUSICNOTELIB_API bool PlayMusicStringCB(const TCHAR* szMusicNotes,
-											LPFNTRACEPROC traceCallbackProc, 
-											LPFNERRORPROC errorCallbackProc, 
+											LPFNTRACEPROC traceCallbackProc,
+											LPFNERRORPROC errorCallbackProc,
 											void* pUserData);
-	
+
 	/// <Summary>
 	/// Plays Music string notes on the given MIDI Output device using the given Timer Resolution.
     /// Use PlayMusicString() to use default values.
@@ -84,11 +90,11 @@ extern "C"
     /// @param pUserData any user supplied data that should be sent to the Callback
     /// @return True if Play was successful, False otherwise
 	/// </Summary>
-	MUSICNOTELIB_API bool PlayMusicStringWithOptsCB(const TCHAR* szMusicNotes, 
-													int nMidiOutPortID, 
+	MUSICNOTELIB_API bool PlayMusicStringWithOptsCB(const TCHAR* szMusicNotes,
+													int nMidiOutPortID,
 													unsigned int nTimerResMS,
-													LPFNTRACEPROC traceCallbackProc, 
-													LPFNERRORPROC errorCallbackProc, 
+													LPFNTRACEPROC traceCallbackProc,
+													LPFNERRORPROC errorCallbackProc,
 													void* pUserData);
     /// <Summary>
     /// Save the given MusicString content into a MIDI output file
@@ -104,7 +110,7 @@ extern "C"
     MUSICNOTELIB_API void Parse(const TCHAR* szNotes, LPFNTRACEPROC traceCallbackProc, void* pUserData);
 
 } // extern "C"
-    
+
 
 
 } // namespace MusicNoteLib

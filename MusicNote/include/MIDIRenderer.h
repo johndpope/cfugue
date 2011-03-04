@@ -13,19 +13,31 @@
 #include "jdkmidi/driverwin32.h"
 #include "ParserListener.h"
 #include "MIDIEventManager.h"
+#include "MidiTimer.h"
+
+#if defined(_WIN32) // this is Windows
+    typedef jdkmidi::MIDIDriverWin32 MusicNoteMIDIDriver;
+#else // this is Linux
+	#include "AlsaDriver.h"
+    typedef MIDIDriverAlsa MusicNoteMIDIDriver;
+#endif
+
+#ifndef MIDI_MAPPER
+#define MIDI_MAPPER ((unsigned int)-1)  //TODO: Correct this MIDI_MAPPER
+#endif // MIDI_MAPPER
 
 namespace MusicNoteLib
 {
 	///<Summary>Takes care of Rendering MIDI Output either to a file or to a MIDI out Port</Summary>
 	class MIDIRenderer : MIDIEventManager, public CParserListener
-	{   
-		jdkmidi::MIDIDriverWin32 m_MIDIDriver;
-    
+	{
+		MusicNoteMIDIDriver m_MIDIDriver;
+
 		jdkmidi::MIDIManager m_MIDIManager;
 
-		// MIDIEventManager m_MIDIEventManager;
+		long m_nSequenceTime;	// pseudo time tick to keep track of sequencer
 
-		long m_lFirstNoteTime;
+		long m_lFirstNoteTime;	// time of first parallel note. Used for parallel notes
 
 		/// <Summary>Event handler for Channel Pressure event Raised by Parser</Summary>
 		virtual void OnChannelPressureEvent(const CParser* pParser, const ChannelPressure* pCP);
@@ -97,7 +109,7 @@ namespace MusicNoteLib
 			{
 				if(m_MIDIDriver.StartTimer(nTimerResolutionMS))
 				{
-					m_MIDIManager.SetTimeOffset(timeGetTime());
+					m_MIDIManager.SetTimeOffset(MidiTimer::CurrentTimeOffset());
 					m_MIDIManager.SeqPlay();
 					return true;
 				}

@@ -5,8 +5,15 @@
 	For links to further information, or to contact the author,
 	see <http://musicnote.sourceforge.net/>.
 */
+#if defined _WIN32 || defined WIN32
+
+#else	// only if not Windows
 
 #include "AlsaDriver.h"
+
+#if defined __GNUC__	// MSVC doesnt have support for std::thread yet
+#include <thread>
+#endif
 
 using namespace jdkmidi;
 
@@ -15,12 +22,10 @@ using namespace jdkmidi;
       MIDIDriver ( queue_size ),
       m_pMidiIn ( 0 ),
       m_pMidiOut ( 0 ),
-      //in_open ( false ),
-      //out_open ( false ),
-      timer_open ( false )
+      m_pThread ( NULL )
   {
   }
-  
+
   MIDIDriverAlsa::~MIDIDriverAlsa()
   {
     StopTimer();
@@ -41,11 +46,11 @@ using namespace jdkmidi;
 			{
 				m_pMidiIn = new RtMidiIn("MIDIDriverAlsa Client");
 			}
-			catch ( RtError &error ) 
+			catch ( RtError &error )
 			{
-				error.printMessage();			
+				error.printMessage();
 				return false;
-			}			
+			}
 		}
 		if(m_pMidiIn != NULL)
 		{
@@ -96,3 +101,14 @@ using namespace jdkmidi;
 		}
 		return true;
 	}
+
+	bool MIDIDriverAlsa::StartTimer ( int res )
+	{
+	    if(m_pThread == NULL)
+	    {
+	        m_pThread = new std::thread(std::Ref(*this));
+
+	    }
+	}
+
+#endif // _ifndef _Win32
