@@ -54,6 +54,9 @@
     <ClCompile Include="..\src\MusicNoteLib\MIDIDrivers\RtMidi.cpp">
       <Filter>MIDIDriver</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\MusicNoteLib\MIDIDrivers\MidiDevice.cpp">
+      <Filter>MIDIDriver</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Chords.h">
@@ -147,6 +150,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\MidiTimer.h">
+      <Filter>MIDIDriver</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\MidiDevice.h">
       <Filter>MIDIDriver</Filter>
     </ClInclude>
   </ItemGroup>

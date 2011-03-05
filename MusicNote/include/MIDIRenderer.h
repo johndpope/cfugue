@@ -19,11 +19,11 @@
     typedef jdkmidi::MIDIDriverWin32 MusicNoteMIDIDriver;
 #else // this is Linux
 	#include "AlsaDriver.h"
-    typedef MIDIDriverAlsa MusicNoteMIDIDriver;
+    typedef MusicNoteLib::MIDIDriverAlsa MusicNoteMIDIDriver;
 #endif
 
 #ifndef MIDI_MAPPER
-#define MIDI_MAPPER ((unsigned int)-1)  //TODO: Correct this MIDI_MAPPER
+#define MIDI_MAPPER ((unsigned int)-1)
 #endif // MIDI_MAPPER
 
 namespace MusicNoteLib
@@ -97,9 +97,9 @@ namespace MusicNoteLib
 		/// <Summary>
 		/// Starts Rendering the MIDI output to MIDI port.
 		/// Each BeingPlayAsync call should have a matching EndPlayAsync call (no matter success or failure).
-		/// nMIDIOutPortID is the ID of the MIDI output port to open for play.
-		/// nTimerResolutionMS is the required minimum resolution for the MIDI timer (in MilliSeconds).
-		/// Returns false if Unable to open MIDI port or unable to create timer with specified resolution.
+		/// @param nMIDIOutPortID is the ID of the MIDI output port to open for play.
+		/// @param nTimerResolutionMS is the required minimum resolution for the MIDI timer (in MilliSeconds).
+		/// @return false if Unable to open MIDI port or unable to create timer with specified resolution.
 		/// </Summary>
 		inline bool BeginPlayAsync(int nMIDIOutPortID = MIDI_MAPPER, unsigned int nTimerResolutionMS = 20)
 		{
@@ -107,12 +107,14 @@ namespace MusicNoteLib
 			m_MIDIManager.SetSeq(&m_Sequencer);
 			if(m_MIDIDriver.OpenMIDIOutPort(nMIDIOutPortID))
 			{
-				if(m_MIDIDriver.StartTimer(nTimerResolutionMS))
+				m_MIDIManager.SeqPlay(); // Set into Play mode
+				m_MIDIManager.SetTimeOffset(MidiTimer::CurrentTimeOffset()); // Set the initial time offset
+				if(!m_MIDIDriver.StartTimer(nTimerResolutionMS))
 				{
-					m_MIDIManager.SetTimeOffset(MidiTimer::CurrentTimeOffset());
-					m_MIDIManager.SeqPlay();
-					return true;
+					m_MIDIManager.SeqStop(); // Could not set a timer - Lets set into Stop mode
+					return false;
 				}
+				return true;
 			}
 			return false;
 		}
@@ -123,10 +125,20 @@ namespace MusicNoteLib
 		/// </Summary>
 		inline void EndPlayAsync()
 		{
-			m_MIDIDriver.StopTimer();
-			m_MIDIManager.SeqStop();
+			m_MIDIManager.SeqStop();	// Set into Stop mode
+			m_MIDIDriver.StopTimer();	// Stop the Timer
 			m_MIDIDriver.CloseMIDIOutPort();
 		}
+
+		/// <Summary>
+		/// After starting MIDI play with BeginPlayAsync(), use WaitTillDone()
+		/// to wait till the play is done. Caller gets blocked until completion.
+		/// Returns immediately if no play is in progress.
+		/// After WaitTillDone() returns, use EndPlayAsync() to release the resources.
+		/// In case you do want to know the status without geting blocked,
+		/// use IsPlaying() method.
+		/// </Summary>
+		void WaitTillDone();
 
 		/// <Summary>
 		/// Indicates if the MIDI output is still being rendered (to MIDI Port) or finished.

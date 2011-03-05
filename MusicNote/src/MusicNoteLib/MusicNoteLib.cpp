@@ -89,8 +89,8 @@ extern "C"
 
 	MUSICNOTELIB_API bool PlayMusicStringWithOpts(const TCHAR* szMusicNotes, int nMidiOutPortID, unsigned int nTimerResMS)
 	{
-		Player playerObj;
-		return playerObj.Play(szMusicNotes, nMidiOutPortID, nTimerResMS);
+		Player playerObj(nMidiOutPortID, nTimerResMS);
+		return playerObj.Play(szMusicNotes);
 	}
 
 	MUSICNOTELIB_API bool PlayMusicStringWithOptsCB(const TCHAR* szMusicNotes,
@@ -105,11 +105,11 @@ extern "C"
 		callbackArgs.lpfnErrorProc = errorCallbackProc;
         callbackArgs.lpUserData = pCallbackData;
 
-		Player playerObj;
+		Player playerObj(nMidiOutPortID, nTimerResMS);
         playerObj.Parser().SetUserData(&callbackArgs);
         playerObj.Parser().evTrace.Subscribe(OnParseTrace);
 		playerObj.Parser().evError.Subscribe(OnParseError);
-		return playerObj.Play(szMusicNotes, nMidiOutPortID, nTimerResMS);
+		return playerObj.Play(szMusicNotes);
 	}
 } // extern "C"
 

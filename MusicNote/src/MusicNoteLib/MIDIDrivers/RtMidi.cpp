@@ -1942,7 +1942,7 @@ void RtMidiOut :: sendMessage( std::vector<unsigned char> *message )
 
 // Thanks to Jean-Baptiste Berruchon for the sysex code.
 
-#if defined(__WINDOWS_MM__)
+#if defined(__WINDOWS_MM__) || defined _WIN32 || defined WIN32	// Gopalakrishna Palem
 
 // The Windows MM API is based on the use of a callback function for
 // MIDI input.  We convert the system specific time stamps to delta

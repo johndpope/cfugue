@@ -37,7 +37,7 @@ namespace jdkmidi
       
       virtual bool HardwareMsgOut ( const MIDITimedBigMessage &msg );
       
-      virtual void TimeTick ( unsigned long sys_time );
+      virtual bool TimeTick ( unsigned long sys_time );
       
     protected:
     

@@ -145,12 +145,14 @@ namespace jdkmidi
     return true;
   }
   
-  void MIDIDriver::TimeTick ( unsigned long sys_time )
+  bool MIDIDriver::TimeTick ( unsigned long sys_time )
   {
+	  bool hasMoreEventsToPump = true;
+
     // run the additional tick procedure if we need to
     if ( tick_proc )
     {
-      tick_proc->TimeTick ( sys_time );
+      hasMoreEventsToPump = tick_proc->TimeTick ( sys_time );
     }
     
     // feed as many midi messages from out_queu to the hardware out port
@@ -173,6 +175,8 @@ namespace jdkmidi
       }
       
     }
+
+	return hasMoreEventsToPump;
     
   }
   
