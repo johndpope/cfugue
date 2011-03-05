@@ -15,60 +15,77 @@
 #include "jdkmidi/sequencer.h"
 
 #include <thread> // std::thread
+#include <future> // std::future
 
-  class MIDIDriverAlsa : public jdkmidi::MIDIDriver
-  {
-	  RtMidiIn*		m_pMidiIn;
-	  RtMidiOut*	m_pMidiOut;
+namespace MusicNoteLib
+{
+	///<Summary>MIDI Driver for Linux Alsa based machines</Summary>
+	class MIDIDriverAlsa : public jdkmidi::MIDIDriver
+	{
+		RtMidiIn*		    m_pMidiIn;
+		RtMidiOut*	        m_pMidiOut;
+        std::future<bool>   m_bgTaskResult;
+	public:
+		MIDIDriverAlsa ( int queue_size );
+		virtual ~MIDIDriverAlsa();
 
-    public:
-      MIDIDriverAlsa ( int queue_size );
-      virtual ~MIDIDriverAlsa();
+		void ResetMIDIOut();
 
-      void ResetMIDIOut();
+        /// <Summary>
+        /// Creates a background thread to pump MIDI events
+        /// at the supplied timer resolution.
+        /// Use WaitTillDone() to wait till the background processing completes.
+        /// Use StopTimer() after the background processing is completed, to release resources.
+        /// @param resolution_ms MIDI Timer resolution in milliseconds
+        /// @return false if background thread cannot be started
+        /// </Summary>
+		bool StartTimer ( int resolution_ms );
 
-      bool StartTimer ( int resolution_ms );
-      bool OpenMIDIInPort ( int id );
+		/// Waits (blocks) till the background thread created with StartTimer()
+		/// completes its processing.
+		/// After StartTimer() succeeds, use WaitTillDone() followed by StopTimer().
+		/// Returns immediately if no background thread is running.
+		void WaitTillDone();
 
-      bool OpenMIDIOutPort ( int id );
+        /// Call StopTimer() to release the resources used by the background
+        /// procedure created with StartTimer(). StopTimer() Should be called
+        /// <i>after</i> the background procedure is done (indicated by BGThreadStatus::COMPLETED).
+        /// If background procedure is still running while StopTimer() is called, caller gets
+        /// blocked till the background procedure completes.
+        /// If no background procedure exists, returns immediately.
+		void StopTimer();
 
-      void StopTimer();
-      void CloseMIDIInPort();
-      void CloseMIDIOutPort();
+		/// Opens the MIDI input port with the given ID
+		/// @return false if the given input port cannot be opened
+		bool OpenMIDIInPort ( int id );
 
+        /// Opens the MIDI output port with the given ID
+        /// @return false if the given output port cannot be opened
+		bool OpenMIDIOutPort ( int id );
 
-      bool HardwareMsgOut ( const jdkmidi::MIDITimedBigMessage &msg );
+		/// Closed any previously opened MIDI Input port
+		void CloseMIDIInPort();
 
-    protected:
-      void operator() (); // This is the Time-tick procedure called from std::thread
+		/// Closed any previously opened MIDI Output port
+		void CloseMIDIOutPort();
 
-      std::thread* m_pThread;
+		enum BGThreadStatus {   RUNNING,    ///< Async procedure is running - use WaitTillDone() to wait for completion
+                                COMPLETED,  ///< Async procedure completed running - use StopTimer() to finish
+                                INVALID     ///< No background procedure running - use StartTimer() to start one
+                            };
+	protected:
+		bool HardwareMsgOut ( const jdkmidi::MIDITimedBigMessage &msg );
 
-//      static void CALLBACK win32_timer (
-//        UINT wTimerID,
-//        UINT msg,
-//        DWORD_PTR dwUser,
-//        DWORD_PTR dw1,
-//        DWORD_PTR dw2
-//      );
-//
-//      static void CALLBACK win32_midi_in (
-//        HMIDIIN hMidiIn,
-//        UINT wMsg,
-//        DWORD dwInstance,
-//        DWORD dwParam1,
-//        DWORD dwParam2
-//      );
+		std::thread* m_pThread;
 
-      //HMIDIIN in_handle;
-      //HMIDIOUT out_handle;
-      int timer_id;
-      int timer_res;
+		int timer_id;
+		int timer_res;
 
-      //bool in_open;
-      //bool out_open;
-      //bool timer_open;
-  };
+		//bool in_open;
+		//bool out_open;
+		//bool timer_open;
+	};
 
+} // namespace MusicNoteLib
 
 #endif // __ALSADRIVER_H__9857EC39_234E_411E_9558_EFDA218796AA__

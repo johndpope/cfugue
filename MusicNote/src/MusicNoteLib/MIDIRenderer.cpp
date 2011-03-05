@@ -15,17 +15,26 @@
 
 namespace MusicNoteLib
 {
+    void MIDIRenderer::WaitTillDone()
+    {
+#if defined WIN32 || defined _WIN32
+		while(IsPlaying()) Sleep(500);
+#else
+        m_MIDIDriver.WaitTillDone();
+#endif
+    }
+
     bool MIDIRenderer::SaveToFile(const char* szOutputFilePath)
 	{
 		jdkmidi::MIDIFileWriteStreamFileName outFile(szOutputFilePath);
 
 		if(outFile.IsValid() == false) return false;
-				
+
 		jdkmidi::MIDIFileWriteMultiTrack WriterObj(&m_Tracks, &outFile);
 
 		return WriterObj.Write();
 	}
-	
+
 	void MIDIRenderer::OnChannelPressureEvent(const CParser* pParser, const ChannelPressure* pCP)
 	{
 		AddChannelPressureEvent(pCP->GetPressure());

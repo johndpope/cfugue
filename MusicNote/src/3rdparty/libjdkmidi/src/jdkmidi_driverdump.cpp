@@ -49,10 +49,10 @@ namespace jdkmidi
   }
   
   
-  void MIDIDriverDump::TimeTick ( unsigned long sys_time )
+  bool MIDIDriverDump::TimeTick ( unsigned long sys_time )
   {
     fprintf ( f, "TICK  : %8ld\n", sys_time );
-    MIDIDriver::TimeTick ( sys_time );
+    return MIDIDriver::TimeTick ( sys_time );
   }
   
   

@@ -34,8 +34,8 @@ namespace jdkmidi
       }
       
       virtual ~MIDITick();
-      
-      virtual void TimeTick ( unsigned long sys_time ) = 0;
+      // Returns True if more events are pending. False if all events are pumped and done.
+      virtual bool TimeTick ( unsigned long sys_time ) = 0;
   };
 }
 

@@ -180,21 +180,21 @@ namespace jdkmidi
     return repeat_play_mode && play_mode;
   }
   
-  void MIDIManager::TimeTick ( unsigned long sys_time_ )
+  bool MIDIManager::TimeTick ( unsigned long sys_time_ )
   {
     if ( play_mode )
     {
-      TimeTickPlayMode ( sys_time_ );
+      return TimeTickPlayMode ( sys_time_ );
     }
     else if ( stop_mode )
     {
-      TimeTickStopMode ( sys_time_ );
+      return TimeTickStopMode ( sys_time_ );
     }
     
-    
+    return false;
   }
   
-  void MIDIManager::TimeTickPlayMode ( unsigned long sys_time_ )
+  bool MIDIManager::TimeTickPlayMode ( unsigned long sys_time_ )
   {
     double sys_time = ( double ) sys_time_ - ( double ) sys_time_offset;
     float next_event_time = 0.0;
@@ -278,11 +278,14 @@ namespace jdkmidi
                            ) );
                            
       }
+	  return false;	 // to indicate that events are stopped
     }
-    
+
+    return true;
   }
   
-  void MIDIManager::TimeTickStopMode ( unsigned long sys_time_ )
+  bool MIDIManager::TimeTickStopMode ( unsigned long sys_time_ )
   {
+	  return true;
   }
 }

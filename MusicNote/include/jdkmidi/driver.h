@@ -142,7 +142,7 @@ namespace jdkmidi
       // resulting message to HandleMsgIn to process it and put it in
       // the in_queue.
       
-      virtual void TimeTick ( unsigned long sys_time );
+      virtual bool TimeTick ( unsigned long sys_time );
       
       
     protected:

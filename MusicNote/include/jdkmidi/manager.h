@@ -82,12 +82,12 @@ namespace jdkmidi
       bool IsSeqRepeat() const;
       
       // inherited from MIDITick
-      virtual void TimeTick ( unsigned long sys_time );
+      virtual bool TimeTick ( unsigned long sys_time );
       
     protected:
     
-      virtual void TimeTickPlayMode ( unsigned long sys_time_ );
-      virtual void TimeTickStopMode ( unsigned long sys_time_ );
+      virtual bool TimeTickPlayMode ( unsigned long sys_time_ );
+      virtual bool TimeTickStopMode ( unsigned long sys_time_ );
       
       MIDIDriver *driver;
       

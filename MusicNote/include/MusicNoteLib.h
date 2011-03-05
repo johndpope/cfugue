@@ -24,6 +24,7 @@
 #endif // MUSICNOTELIB_API
 
 #include "Player.h"
+#include "MidiDevice.h"
 
 #if defined WIN32 || defined _WIN32
 #define STDCALL __stdcall
