@@ -22,6 +22,7 @@ SET(ORG_WEBSITE          "http://musicnote.sourceforge.net/")
 #################################
 option (BUILD_MUSICNOTE_DLL "Should the DLL be built for MusicNote (Only for Windows)" OFF) 
 option (BUILD_MUSICNOTE_TESTS "Should the Test applications be built for MusicNote" ON) 
+OPTION (VERBOSE_MUSICNOTE_TRACE "Should MusicNote generate Verbose String Parsing Traces" ON)
 SET (BUILD_MUSICNOTE_UNICODE ON CACHE BOOL "Should MusicNote be built with Unicode? (recommended: Yes)")
 
 mark_as_advanced(BUILD_MUSICNOTE_DLL)
@@ -109,6 +110,22 @@ mark_as_advanced(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE)
 
 ADD_DEFINITIONS(${Char_Flags} -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -std=gnu++0x)
 
+IF(VERBOSE_MUSICNOTE_TRACE)
+	ADD_DEFINITIONS(-DENABLE_TRACING)
+ENDIF()
+
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+	ADD_DEFINITIONS(-D__LINUX_ALSASEQ__)
+ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+
+IF(APPLE)	# Mac OS X specific code
+	ADD_DEFINITIONS(-D__MACOSX_CORE__)
+ENDIF(APPLE)
+
+IF(WIN32)	# Windows specific definitions
+	ADD_DEFINITIONS(-D__WINDOWS_MM__)
+ENDIF(WIN32)
+
 #################################
 
 include_directories( "include" "include/common" )
@@ -131,6 +148,7 @@ SET( MusicNoteLib_Source_Files
 	src/MusicNoteLib/stdafx.cpp
 	src/MusicNoteLib/MIDIDrivers/AlsaDriver.cpp
 	src/MusicNoteLib/MIDIDrivers/RtMidi.cpp
+	src/MusicNoteLib/MIDIDrivers/MidiDevice.cpp
    )
 SET( MusicNoteLib_Header_Files 
 	src/MusicNoteLib/targetver.h
@@ -139,6 +157,7 @@ SET( MusicNoteLib_Header_Files
 	include/Common/StrUtils.h
 	include/rtmidi/RtMidi.h
 	include/rtmidi/RtError.h
+	include/MidiDevice.h
 	include/AlsaDriver.h
 	include/MidiTimer.h
 	include/Dictionary.h
@@ -283,6 +302,15 @@ add_library(jdkmidi   ${jdkmidi_Source_Files}  ${jdkmidi_Header_Files} )
 IF(WIN32)
 	SET( jdkmidi_Librarian   WinMM.Lib   )
 ENDIF(WIN32)
+
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")	# Mac OS X specific code
+     SET(OperatingSystem "Mac OS X")
+ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")	# Linux specific code
+     SET(MusicNoteLib_Librarian asound)
+ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+
 
 SET( jdkmidi_Dependencies  ${jdkmidi_Librarian} )
 target_link_libraries(jdkmidi  ${jdkmidi_Dependencies})
