@@ -54,9 +54,9 @@ namespace MusicNoteLib
         /// </Summary>
         /// Example Usage:
         /** <pre>
-            MusicNoteLib::Player player; // Create the Player Object
+            MusicNoteLib::Player player; // Create the Player Object with the default MIDI output port
 
-            player.Play(_T("ci di f fi")); // Play the Music Notes on the default MIDI output port
+            player.Play(_T("ci di f fi")); // Play the Music Notes
         </pre> */
         bool Play(const MString& strMusicNotes);
 
@@ -78,9 +78,9 @@ namespace MusicNoteLib
         /// </Summary>
         /// Example Usage:
         /** <pre>
-            MusicNoteLib::Player player; // Create the Player object
+            MusicNoteLib::Player player(nMIDIOutPortID, nMIDITimerResMS); // Create the Player object
 
-            if(player.PlayAsync(strMusicNotes, nMIDIOutPortID, nMIDITimerResMS)) // Start Playing Asynchronously
+            if(player.PlayAsync(strMusicNotes) // Start Playing Asynchronously
                 while(player.IsPlaying()) // Wait while the play is still in progress
                     Sleep(1000);
 
@@ -89,15 +89,15 @@ namespace MusicNoteLib
         bool PlayAsync(const MString& strMusicNotes);
 
 		/// <Summary>
-		/// After play starts asynchronously with PlayAsync(), use WaitTillDone() to wait 
+		/// After play starts asynchronously with PlayAsync(), use WaitTillDone() to wait
 		/// till the play completes. Caller gets blocked. Once WaitTillDone() returns call
 		/// StopPlay() to release MIDI resources.
 		/// </Summary>
         /// Example Usage:
         /** <pre>
-            MusicNoteLib::Player player; // Create the Player object
+            MusicNoteLib::Player player(nMIDIOutPortID, nMIDITimerResMS); // Create the Player object
 
-            if(player.PlayAsync(strMusicNotes, nMIDIOutPortID, nMIDITimerResMS)) // Start Playing Asynchronously
+            if(player.PlayAsync(strMusicNotes) // Start Playing Asynchronously
 				player.WaitTillDone(); // wait while the play is in progress
 
             player.StopPlay(); // Stop the Play and release MIDI resources

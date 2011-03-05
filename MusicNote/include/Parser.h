@@ -24,12 +24,12 @@
 /// <Summary>
 /// Verbose is another mode of tracing where more verbose details of Parsing are reported.
 /// Verbose mode requires the Tracing to be enabled with ENABLE_TRACING defined apriori.
-/// Verbose more reports all possible internal details for the notes being parsed.
-/// It is possible to limit the Tracing the output by defining NO_VERBOSE.
+/// Verbose mode reports all possible internal details for the notes being parsed.
+/// It is possible to limit the Tracing output by defining NO_VERBOSE.
 /// Using NO_VERBOSE with ENABLE_TRACING will only report significant parsing information and not everything.
 /// </Summary>
 //#if ENABLE_TRACING
-#ifndef NO_VERBOSE 
+#ifndef NO_VERBOSE
 #define Verbose(x)  Trace(x)
 #else
 #define Verbose(x)
@@ -56,7 +56,7 @@ namespace MusicNoteLib
 	class CParserListener;
 
     /// <Summary>
-    /// \brief Base class that represents a Parser Object. 
+    /// \brief Base class that represents a Parser Object.
     ///
     /// Parsers are implemented using an event subscription model. For each token encountered
     /// during the parsing, Parsers raise the appropriate event, which will be handled by the listeners.
@@ -66,15 +66,15 @@ namespace MusicNoteLib
     ///
     /// A listener interested in the Parse events can subscribe to all events at once using the CParser::AddListener method,
     /// or subscribe to only few selected events using the event's Subscribe method.
-    /// 
-    /// Multiple listeners can be connected to a single Parser object. However, the order in which the listeners are 
+    ///
+    /// Multiple listeners can be connected to a single Parser object. However, the order in which the listeners are
     /// notified about the events is not guaranteed to be sequential.
-    /// 
+    ///
     /// </Summary>
 	class CParser : public OIL::CEventSource
 	{
 	public:
-			
+
 		OIL::CEventT<const CParser, const ControllerEvent> evController; ///< Event Raised when Parser encounters a MIDI Controller Event
 		OIL::CEventT<const CParser, const Instrument> evInstrument; ///< Event Raised when Parser encounters an Instrument command
 		OIL::CEventT<const CParser, const KeySignature> evKeySignature; ///< Event Raised when Parser encounters a Key Signature command
@@ -86,7 +86,7 @@ namespace MusicNoteLib
 		OIL::CEventT<const CParser, const Tempo> evTempo; ///< Event Raised when Parser encounters a Tempo command
 		OIL::CEventT<const CParser, const Time> evTime;   ///< Event Raised when Parser encounters a Time command
 		OIL::CEventT<const CParser, const Voice> evVoice; ///< Event Raised when Parser encounters a Voice command
-		OIL::CEventT<const CParser, const Note> evNote;	///< Event Raised when Parser encounters a Note 
+		OIL::CEventT<const CParser, const Note> evNote;	///< Event Raised when Parser encounters a Note
 		OIL::CEventT<const CParser> evSequentialNote; ///< Encountered a Sequential note after a first note
 		OIL::CEventT<const CParser> evParalleNote; ///< Encountered a Parallel note after a first note
 
@@ -111,35 +111,35 @@ namespace MusicNoteLib
 		{
 			CRITICAL_ERROR_MEMORY_ALLOCATION,	///< Memory allocation failed
 			PARSE_ERROR_MISSING_ASSIGNMENT,		///< No Assignment symbol found
-			PARSE_ERROR_CPRESSURE_MACRO_END,	///< MACRO_END missing while parsing a Controller Index Macro.			
+			PARSE_ERROR_CPRESSURE_MACRO_END,	///< MACRO_END missing while parsing a Controller Index Macro.
 			PARSE_ERROR_CPRESSURE_VALUE,		///< Failure while converting/retrieving a Controller Value number.
-			PARSE_ERROR_CONTROLLER_MACRO_END,	///< MACRO_END missing while parsing a Controller Index Macro.			
+			PARSE_ERROR_CONTROLLER_MACRO_END,	///< MACRO_END missing while parsing a Controller Index Macro.
 			PARSE_ERROR_CONTROLLER_VALUE,		///< Failure while converting/retrieving a Controller Value number.
-			PARSE_ERROR_INSTRUMENT_MACRO_END,	///< MACRO_END missing while parsing a Instrument Macro.			
+			PARSE_ERROR_INSTRUMENT_MACRO_END,	///< MACRO_END missing while parsing a Instrument Macro.
 			PARSE_ERROR_INSTRUMENT_VALUE,		///< Failure while converting/retrieving a Instrument number.
-			PARSE_ERROR_KEYPRESSURE_MACRO_END,	///< MACRO_END missing while parsing a Polyphonic Pressure Macro.			
+			PARSE_ERROR_KEYPRESSURE_MACRO_END,	///< MACRO_END missing while parsing a Polyphonic Pressure Macro.
 			PARSE_ERROR_KEYPRESSURE_VALUE,		///< Failure while converting/retrieving a Polyphonic Pressure number.
-			PARSE_ERROR_KEYSIGNATURE_MACRO_END,	///< MACRO_END missing while parsing a Key Signature Macro.			
+			PARSE_ERROR_KEYSIGNATURE_MACRO_END,	///< MACRO_END missing while parsing a Key Signature Macro.
 			PARSE_ERROR_KEYSIGNATURE_VALUE,		///< Failure while converting/retrieving a Key Signature number.
             PARSE_ERROR_KEYSIGNATURE_MAXLIMIT,  ///< Specified a KeySignature beyond permitted range [0, 14] , [64, 78], [129, 200]
-			PARSE_ERROR_PITCHBEND_MACRO_END,	///< MACRO_END missing while parsing a PitchBend Macro.			
+			PARSE_ERROR_PITCHBEND_MACRO_END,	///< MACRO_END missing while parsing a PitchBend Macro.
 			PARSE_ERROR_PITCHBEND_VALUE,		///< Failure while converting/retrieving a PitchBend number.
-			PARSE_ERROR_TALAM_MACRO_END,	    ///< MACRO_END missing while parsing a Talam Macro.			
+			PARSE_ERROR_TALAM_MACRO_END,	    ///< MACRO_END missing while parsing a Talam Macro.
 			PARSE_ERROR_TALAM_VALUE,		    ///< Failure while converting/retrieving a Talam number.
             PARSE_ERROR_TALAM_MAXLIMIT,         ///< Specified a Talam beyond permitted range [0, 35]
-			PARSE_ERROR_SPEED_MACRO_END,	    ///< MACRO_END missing while parsing a Speed Macro.			
+			PARSE_ERROR_SPEED_MACRO_END,	    ///< MACRO_END missing while parsing a Speed Macro.
 			PARSE_ERROR_SPEED_VALUE,		    ///< Failure while converting/retrieving a Speed number.
             PARSE_ERROR_SPEED_MAXLIMIT,         ///< Specified a Speed beyond permitted range [1, 6]
-			PARSE_ERROR_LAYER_MACRO_END,	    ///< MACRO_END missing while parsing a Layer Macro.			
+			PARSE_ERROR_LAYER_MACRO_END,	    ///< MACRO_END missing while parsing a Layer Macro.
 			PARSE_ERROR_LAYER_VALUE,		    ///< Failure while converting/retrieving a Layer number.
-			PARSE_ERROR_TEMPO_MACRO_END,	    ///< MACRO_END missing while parsing a Tempo Macro.			
+			PARSE_ERROR_TEMPO_MACRO_END,	    ///< MACRO_END missing while parsing a Tempo Macro.
 			PARSE_ERROR_TEMPO_VALUE,		    ///< Failure while converting/retrieving a Tempo number.
-			PARSE_ERROR_TIME_MACRO_END,	        ///< MACRO_END missing while parsing a Time Macro.			
+			PARSE_ERROR_TIME_MACRO_END,	        ///< MACRO_END missing while parsing a Time Macro.
 			PARSE_ERROR_TIME_VALUE,		        ///< Failure while converting/retrieving a Time number.
-			PARSE_ERROR_VOICE_MACRO_END,	    ///< MACRO_END missing while parsing a Voice Macro.			
+			PARSE_ERROR_VOICE_MACRO_END,	    ///< MACRO_END missing while parsing a Voice Macro.
 			PARSE_ERROR_VOICE_VALUE,		    ///< Failure while converting/retrieving a Voice number.
 			PARSE_ERROR_VOICE_MAXLIMIT,		    ///< Specified a voice that is beyond the permitted range [0, 15]
-			PARSE_ERROR_NUMERIC_NOTE_END,		///< MACRO_END missing while parsing a numeric note.			
+			PARSE_ERROR_NUMERIC_NOTE_END,		///< MACRO_END missing while parsing a numeric note.
 			PARSE_ERROR_NUMERIC_NOTE_VALUE,		///< Failure while converting/retrieving a numeric note number.
 			PARSE_ERROR_LETTER_NOTE,			///< Invalid Alphabet encountering while trying to read a Note Symbol
 			PARSE_ERROR_CHORDINV_MACRO_END,	    ///< MACRO_END missing while parsing a Chord Inversion.
@@ -160,13 +160,13 @@ namespace MusicNoteLib
 		/// The structure that is passed as argument to the Error Event Handler procedure.
 		/// Listeners who want to know about the error events can subscribe to the evError
 		/// event and handle the trace events raised by MusicStringParser as the parsing progresses.
-		/// 
-		/// Unlike the other programming paradigms that teach greedy methods asking you to exit 
+		///
+		/// Unlike the other programming paradigms that teach greedy methods asking you to exit
 		/// the moment any error occurs, MusicNote library fights to live its best before it gives up.
-		/// So, usually if there is any error in parsing a token, parser does not abort and tries to continue 
-		/// parsing the rest of the tokens. 
+		/// So, usually if there is any error in parsing a token, parser does not abort and tries to continue
+		/// parsing the rest of the tokens.
 		/// In case this behavior is not suitable for your application and if you would like to stop the processing
-		/// immediately when there is an error, you can indicate your preference to stop the processing 
+		/// immediately when there is an error, you can indicate your preference to stop the processing
 		/// by using the <code>bShouldStopParsing</code> variable. Set it to true in the error handler
 		/// procedure, to halt the processing immediately. By default it would be False (meaning the parser
 		/// should continue its best to resolve the token ignoring the error).
@@ -175,11 +175,11 @@ namespace MusicNoteLib
 		/// overriden by the next listener. Parser only respects the last value it sees. So, use care while
 		/// dealing with multiple listeners, and ensure that they do not use conflicting settings.
 		///
-		/// Ofcourse, in case of critical errors such as memory allocation failure etc.. there is nothing 
+		/// Ofcourse, in case of critical errors such as memory allocation failure etc.. there is nothing
 		/// that could be done, so the listener preferences are ignored and processing would be stopped.
 		/// </Summary>
-		struct ErrorEventHandlerArgs : public OIL::CEventHandlerArgs 
-		{  
+		struct ErrorEventHandlerArgs : public OIL::CEventHandlerArgs
+		{
 			const ErrorCode	errCode; ///< Error Code
 			const TCHAR* szErrMsg;	///< The Error message sent by Parser
 			const TCHAR* szToken;	///< Token the error is applicable for
@@ -192,7 +192,7 @@ namespace MusicNoteLib
 		OIL::CEventT<const CParser, ErrorEventHandlerArgs> evError; ///< Raised when a parse error happens
 	protected:
 		/// <Summary>
-        /// Error method is called whenever there is a parse error. 
+        /// Error method is called whenever there is a parse error.
 		/// This method will raise events through the CParser::evError event
 		/// variable. Listeners can subscribe to it to get to know about the parse errors.
 		///
@@ -217,8 +217,8 @@ namespace MusicNoteLib
         /// Listeners who want to know about the trace events can subscribe to the CParser::evTrace
 		/// event and handle the trace events raised by the Parser as the parsing progresses.
 		/// </Summary>
-		struct TraceEventHandlerArgs : public OIL::CEventHandlerArgs 
-		{  
+		struct TraceEventHandlerArgs : public OIL::CEventHandlerArgs
+		{
 			const TCHAR* szTraceMsg; ///< The Error message sent by Parser
 			inline TraceEventHandlerArgs(const TCHAR* sz) : szTraceMsg(sz) { }
 		};
@@ -238,11 +238,12 @@ namespace MusicNoteLib
 		/// </Summary>
 		inline virtual void Trace(const TCHAR* szTraceMsg)
 		{
-			OIL::CEventSource::RaiseEvent(&evTrace, &TraceEventHandlerArgs(szTraceMsg));
+		    TraceEventHandlerArgs args(szTraceMsg);
+			OIL::CEventSource::RaiseEvent(&evTrace, &args);
 		}
 #else
 
-#define Trace(x) 
+#define Trace(x)
 
 #endif // #if ENABLE_TRACING
 	};
