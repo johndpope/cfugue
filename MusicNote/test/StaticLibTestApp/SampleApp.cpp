@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
 			/////////////////////////////////////////
 			/// List the MIDI Ports
 			for(unsigned int i=0; i < nOutPortCount; ++i)
-				_tprintf(_T("\t%d\t:  %s\n"), i, MusicNoteLib::GetMidiOutPortName(i).c_str());
+				printf("\t%d\t:  %s\n", i, MusicNoteLib::GetMidiOutPortName(i).c_str());
 			//////////////////////////////////////////
 			/// Chose a Midi output port
 			_tprintf(_T("\nChoose your MIDI Port ID for the play:"));
@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
 		}
 		else
 		{
-			_tprintf(_T("\nUsing %s as the MIDI output port\n"), MusicNoteLib::GetMidiOutPortName(0).c_str());
+			printf("\nUsing %s as the MIDI output port\n", MusicNoteLib::GetMidiOutPortName(0).c_str());
 		}
 	}
 	else if(argc == 2)
@@ -81,61 +81,61 @@ int main(int argc, char* argv[])
 	/////////////////////////////////////////
 	/// C API
 	///
-//	_tprintf(_T("\nPlaying Notes.."));
-//	MusicNoteLib::PlayMusicStringWithOpts(_T("C D E F G A B"), nPortID, nTimerRes);
-//	_tprintf(_T("    Done"));
-//
-//	_tprintf(_T("\nPlaying Chrods.."));
-//	MusicNoteLib::PlayMusicStringWithOpts(_T("CMajH DMaj EMajH"), nPortID, nTimerRes);
-//	_tprintf(_T("    Done"));
-//
-//	_tprintf(_T("\nPlaying Parallel Notes.."));
-//	MusicNoteLib::PlayMusicStringWithOpts(_T("C+D+E+F+G+A+B"), nPortID, nTimerRes);
-//	_tprintf(_T("    Done"));
-//
-//	_tprintf(_T("\nPlaying Sequential Notes.."));
-//	MusicNoteLib::PlayMusicStringWithOpts(_T("B_A_G_F_E_D_C"), nPortID, nTimerRes);
-//	_tprintf(_T("    Done"));
-//
-//	_tprintf(_T("\nChanging instrument to Flute and to Violin and back to Piano.."));
-//	MusicNoteLib::PlayMusicStringWithOpts(_T("C D I[Flute] E F I[Violin] G A I[PIANO] B C6"), nPortID, nTimerRes);
-//	_tprintf(_T("    Done"));
-//
-//	//////////////////////////////////////////////
-//	_tprintf(_T("\nPlaying Carnatic Music.."));
-//
-//	_tprintf(_T("\nPlaying Kalyani.."));
-//	MusicNoteLib::PlayMusicStringWithOpts(_T("K[MELA_65] S R G M P D N S'"), nPortID, nTimerRes);
-//	_tprintf(_T("    Done"));
-//
-//	_tprintf(_T("\nPlaying Kharaharapriya.."));
-//	MusicNoteLib::PlayMusicStringWithOpts(_T("K[MELA_22] S R G M P D N S'"), nPortID, nTimerRes);
-//	_tprintf(_T("    Done"));
-//
-//	_tprintf(_T("\nPlaying Kalyani in Douple speed.."));
-//	MusicNoteLib::PlayMusicStringWithOpts(_T("K[MELA_65]S[2] S R G M P D N S'"), nPortID, nTimerRes);
-//	_tprintf(_T("    Done"));
-//
-//	_tprintf(_T("\nPlaying Kharaharapriya in Triple speed.."));
-//	MusicNoteLib::PlayMusicStringWithOpts(_T("K[MELA_22]S[3] S R G M P D N S'"), nPortID, nTimerRes);
-//	_tprintf(_T("    Done"));
-//
+	_tprintf(_T("\nPlaying Notes.."));
+	MusicNoteLib::PlayMusicStringWithOpts(_T("C D E F G A B"), nPortID, nTimerRes);
+	_tprintf(_T("    Done"));
+
+	_tprintf(_T("\nPlaying Chrods.."));
+	MusicNoteLib::PlayMusicStringWithOpts(_T("CMajH DMaj EMajH"), nPortID, nTimerRes);
+	_tprintf(_T("    Done"));
+
+	_tprintf(_T("\nPlaying Parallel Notes.."));
+	MusicNoteLib::PlayMusicStringWithOpts(_T("C+D+E+F+G+A+B"), nPortID, nTimerRes);
+	_tprintf(_T("    Done"));
+
+	_tprintf(_T("\nPlaying Sequential Notes.."));
+	MusicNoteLib::PlayMusicStringWithOpts(_T("B_A_G_F_E_D_C"), nPortID, nTimerRes);
+	_tprintf(_T("    Done"));
+
+	_tprintf(_T("\nChanging instrument to Flute and to Violin and back to Piano.."));
+	MusicNoteLib::PlayMusicStringWithOpts(_T("C D I[Flute] E F I[Violin] G A I[PIANO] B C6"), nPortID, nTimerRes);
+	_tprintf(_T("    Done"));
+
+	//////////////////////////////////////////////
+	_tprintf(_T("\nPlaying Carnatic Music.."));
+
+	_tprintf(_T("\nPlaying Kalyani.."));
+	MusicNoteLib::PlayMusicStringWithOpts(_T("K[MELA_65] S R G M P D N S'"), nPortID, nTimerRes);
+	_tprintf(_T("    Done"));
+
+	_tprintf(_T("\nPlaying Kharaharapriya.."));
+	MusicNoteLib::PlayMusicStringWithOpts(_T("K[MELA_22] S R G M P D N S'"), nPortID, nTimerRes);
+	_tprintf(_T("    Done"));
+
+	_tprintf(_T("\nPlaying Kalyani in Douple speed.."));
+	MusicNoteLib::PlayMusicStringWithOpts(_T("K[MELA_65]S[2] S R G M P D N S'"), nPortID, nTimerRes);
+	_tprintf(_T("    Done"));
+
+	_tprintf(_T("\nPlaying Kharaharapriya in Triple speed.."));
+	MusicNoteLib::PlayMusicStringWithOpts(_T("K[MELA_22]S[3] S R G M P D N S'"), nPortID, nTimerRes);
+	_tprintf(_T("    Done"));
+
 
 
 	_tprintf(_T("\n\n -------- C++ API Tests ------------\n"));
 	/////////////////////////////////////////
 	/// C++ API
 	///
-//	_tprintf(_T("\nPlaying Middle Octave.."));
+	_tprintf(_T("\nPlaying Middle Octave.."));
     MusicNoteLib::Player player(nPortID, nTimerRes); // Create the Player Object
-//    player.Play(_T("C D E F G A B")); // Play the Music Notes on the default MIDI output port
-//
-//	_tprintf(_T("\nPlaying few random notes.."));
-//	// Asynchronous Play
-//	if(player.PlayAsync(_T("Cx Dh Ah."))) // Start Playing Asynchronously
-//    while(player.IsPlaying()) // Wait while the play is in progress
-//        SLEEP(1000);
-//	player.StopPlay(); // Match every PlayAsync with a StopPlay
+    player.Play(_T("C D E F G A B")); // Play the Music Notes on the default MIDI output port
+
+	_tprintf(_T("\nPlaying few random notes.."));
+	// Asynchronous Play
+	if(player.PlayAsync(_T("Cx Dh Ah."))) // Start Playing Asynchronously
+    while(player.IsPlaying()) // Wait while the play is in progress
+        SLEEP(1000);
+	player.StopPlay(); // Match every PlayAsync with a StopPlay
 
 	_tprintf(_T("\nSubscribing to Player parser events..."));
     // Subscribe to the Events

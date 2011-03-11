@@ -108,7 +108,11 @@ mark_as_advanced(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE)
 # Generic Compiler options
 #################################
 
-ADD_DEFINITIONS(${Char_Flags} -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS -std=gnu++0x)
+ADD_DEFINITIONS(${Char_Flags} -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS)
+
+IF(CMAKE_COMPILER_IS_GNUCC)
+  ADD_DEFINITIONS(-std=gnu++0x ) # Add C++0x support for GCC
+ENDIF()
 
 IF(VERBOSE_MUSICNOTE_TRACE)
 	ADD_DEFINITIONS(-DENABLE_TRACING)
@@ -130,7 +134,7 @@ ENDIF(WIN32)
 
 include_directories( "include" "include/common" )
 
-MESSAGE(TODO:Add Doxygen Target for documentation)
+# MESSAGE(TODO:Add Doxygen Target for documentation)
 
 #################################
 #### Target: MusicNoteLib ####

@@ -20,7 +20,7 @@ SET( MusicNoteDLL_Source_Files
 	../MusicNoteLib/MusicNoteLib.cpp
 	stdafx.cpp
    )
-MESSAGE(TODO:Add IDL Type processing to the CMake for MusicNoteDll)
+#MESSAGE(TODO:Add IDL Type processing to the CMake for MusicNoteDll)
 SET( MusicNoteDLL_Header_Files 
 	dlldatax.h
 	dllmain.h
