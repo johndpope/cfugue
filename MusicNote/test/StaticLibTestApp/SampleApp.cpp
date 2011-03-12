@@ -40,6 +40,21 @@ void OnParseError(const MusicNoteLib::CParser*, MusicNoteLib::CParser::ErrorEven
 	}
 }
 
+#if defined _UNICODE || defined UNICODE
+#define Str_Type std::wstring
+    std::wstring ToUnicode(std::string&& str)
+    {
+        wchar_t *pSz = new wchar_t[str.length() +2];
+        mbstowcs(pSz, str.c_str(), str.length()+1);
+        std::wstring strRetVal(pSz);
+        delete pSz;
+        return strRetVal;
+    }
+#else
+#define Str_Type std::string
+#define ToUnicode(x)    x
+#endif
+
 int main(int argc, char* argv[])
 {
 	int nPortID=MIDI_MAPPER, nTimerRes = 20;
@@ -55,15 +70,23 @@ int main(int argc, char* argv[])
 			/////////////////////////////////////////
 			/// List the MIDI Ports
 			for(unsigned int i=0; i < nOutPortCount; ++i)
-				printf("\t%d\t:  %s\n", i, MusicNoteLib::GetMidiOutPortName(i).c_str());
+            {
+                Str_Type strName = ToUnicode(MusicNoteLib::GetMidiOutPortName(i));
+                _tprintf(_T("\t %d \t: "), i );
+                _tprintf(strName.c_str());
+                _tprintf(_T("\n"));
+            }
 			//////////////////////////////////////////
 			/// Chose a Midi output port
 			_tprintf(_T("\nChoose your MIDI Port ID for the play:"));
-			scanf("%d", &nPortID);
+			_tscanf(_T("%d"), &nPortID);
 		}
 		else
 		{
-			printf("\nUsing %s as the MIDI output port\n", MusicNoteLib::GetMidiOutPortName(0).c_str());
+            Str_Type strName = ToUnicode(MusicNoteLib::GetMidiOutPortName(0));
+			_tprintf(_T("\nUsing the MIDI output port: "));
+            _tprintf(strName.c_str());
+            _tprintf(_T("\n"));
 		}
 	}
 	else if(argc == 2)
