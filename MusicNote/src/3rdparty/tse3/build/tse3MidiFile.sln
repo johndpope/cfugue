@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tse3MidiFile", "tse3MidiFile.vcxproj", "{F587804C-E71A-2745-5E8D-2DA60AD3F73C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F587804C-E71A-2745-5E8D-2DA60AD3F73C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F587804C-E71A-2745-5E8D-2DA60AD3F73C}.Debug|Win32.Build.0 = Debug|Win32
+		{F587804C-E71A-2745-5E8D-2DA60AD3F73C}.Release|Win32.ActiveCfg = Release|Win32
+		{F587804C-E71A-2745-5E8D-2DA60AD3F73C}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

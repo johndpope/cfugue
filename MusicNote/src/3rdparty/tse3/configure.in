@@ -1,0 +1,435 @@
+# ----------------------------------------------------------------------------
+# configure script
+#   autoconf script for TSE3 library
+#   (c) Pete Goodliffe, 2000-2002
+# ----------------------------------------------------------------------------
+
+dnl Process this file with autoconf to produce a configure script.
+
+
+# ----------------------------------------------------------------------------
+# Initialisation and package information
+# ----------------------------------------------------------------------------
+
+AC_INIT(Makefile.am)
+
+TSE3_PACKAGE=tse3
+TSE3_VERSION=`cat $srcdir/Version`
+
+AM_INIT_AUTOMAKE($TSE3_PACKAGE, $TSE3_VERSION)
+AM_CONFIG_HEADER(config.h)
+
+# ----------------------------------------------------------------------------
+# Compile environment
+# ----------------------------------------------------------------------------
+
+# Compilers
+AC_PROG_CC
+# AC_REQUIRE([AC_PROG_CPP])
+AC_PROG_CPP
+AC_PROG_INSTALL
+
+AC_PROG_CXX
+# AC_PROG_CXX_WORKS
+# AC_PROG_CXX_GNU
+
+# Environment
+AC_CYGWIN
+
+# Ensure debugging is disabled
+if (echo $CXXFLAGS | grep "\-g" >/dev/null 2>/dev/null) then
+AC_MSG_WARN("CXXFLAGS is set to \"$CXXFLAGS\"")
+echo
+echo "****  warning: You are building this library with debugging   ****"
+echo "****      enabled, which will make the library enormous.      ****"
+echo "****   You can try setting the environment variable CXXFLAGS  ****"
+echo "****     to -O2 to prevent the default -g flag being added.   ****"
+echo
+fi
+
+# Library creation
+AM_ENABLE_SHARED
+AM_DISABLE_STATIC
+AM_PROG_LIBTOOL
+AC_SUBST(LIBTOOL_DEPS)
+
+# Switch on all warnings: build must be silent ;-)
+test "$GCC" = yes && CCFLAGS="$CFLAGS -W -Wall -ansi -pedantic"
+test "$GCC" = yes && CXXFLAGS="$CXXFLAGS -W -Wall -ansi -pedantic"
+
+# gcc-cpp has the wonderful -MM option to produce nicer dependencies
+test "$GCC" = yes && CPP_MM=M; AC_SUBST(CPP_MM)
+
+# Checks for header files
+AC_HEADER_DIRENT
+AC_HEADER_STDC
+AC_CHECK_HEADERS(sys/soundcard.h machine/soundcard.h linux/awe_voice.h awe_voice.h /usr/src/sys/i386/isa/sound/awe_voice.h /usr/src/sys/gnu/i386/isa/sound/awe_voice.h unistd.h alsa/asoundlib.h sys/asoundlib.h kde/arts/artsmidi.h arts/artsmidi.h)
+
+# Checks for typdefs, structures, and compiler characteristics
+AC_C_CONST
+AC_TYPE_SIZE_T
+
+# Checks for library functions.
+AC_CHECK_FUNCS(select)
+
+# ----------------------------------------------------------------------------
+# TSE3 feature support
+# ----------------------------------------------------------------------------
+
+#
+# The features that can be configured at compile time are:
+#   - Whether to install documentation - if an RPM is being built, we
+#     don't need to install this, or we may get two copies of the
+#     documentation
+#     (controlled by the TSE3_INSTALL_DOCS flag)
+#   - Whether to support multiple threads
+#     (controlled by the TSE3_WITHOUT_MUTEX flag)
+#   - Whether to support the Open Sound System (OSS)
+#     (controlled by the TSE3_WITH_OSS flag) 
+#   - Whether to support the Advanced Linux Sound Architecture (ALSA)
+#     (controlled by the TSE3_WITH_ALSA flag) 
+#   - Whether to support the aRts
+#     (controlled by the TSE3_WITH_ARTS flag) 
+#
+# For the last three we need to check whether the target machine supports
+# the library, and whether the user wants to build that support in.
+#
+
+# ----------------------------------------------------------------------------
+# Checks for documentation installation
+
+install_tse3_doc="yes"
+AC_MSG_CHECKING(whether to install library documentation)
+AC_ARG_WITH(doc-install,
+[  --with-doc-install      whether to install TSE3 library documentation],
+[if test "$withval" = yes; then
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_RESULT(no)
+  install_tse3_doc="no"
+fi], [AC_MSG_RESULT(yes)])
+
+AM_CONDITIONAL(INSTALL_TSE3_DOC, test "$install_tse3_doc" = "yes")
+
+# ----------------------------------------------------------------------------
+# Checks for multithread support (Mutex class)
+
+AC_MSG_CHECKING(whether threading support is wanted)
+AC_ARG_WITH(mutex,
+[  --with-mutex            whether to support multithreading in TSE3],
+[if test "$withval" = yes; then
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_RESULT(no)
+  AC_DEFINE(TSE3_WITHOUT_MUTEX,1,[Define if threading support is not required])
+fi], [AC_MSG_RESULT(yes)])
+
+# ----------------------------------------------------------------------------
+# Checks for OSS library support
+
+# 1. Check whether OSS is there
+have_oss="no"
+AC_DEFUN(AC_CHECK_OSS,
+[
+  AC_CHECK_HEADER(sys/soundcard.h,
+  [
+      have_oss="yes"
+      AC_DEFINE(HAVE_OSS, 1,
+          [Define if you have <sys/soundcard.h> (required for OSS support)])
+  ], [have_oss="no"])
+])
+AC_CHECK_OSS
+
+AM_CONDITIONAL(HAVE_OSS, test "$have_oss" = "yes")
+
+AC_MSG_CHECKING(whether OSS is available)
+if test "$have_oss" = "yes"; then
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_RESULT(no)
+fi
+
+# 2. Check whether OSS is wanted
+AC_MSG_CHECKING(whether OSS support is wanted)
+AC_ARG_WITH(oss,
+[  --with-oss              whether to support the OSS library],
+[if test "$withval" = "yes"; then
+  AC_MSG_RESULT(yes)
+  with_oss="yes"
+else
+  AC_MSG_RESULT(no)
+  with_oss="no"
+fi], [AC_MSG_RESULT(yes); with_oss="yes"])
+
+if test "$with_oss" = "yes" -a "$have_oss" = "yes"; then
+  AC_SUBST(TSE3_WITH_OSS)
+  AC_DEFINE(TSE3_WITH_OSS,1,[Define if OSS library support is required])
+fi
+AM_CONDITIONAL(TSE3_WITH_OSS, test "$with_oss" = "yes" -a "$have_oss" = "yes")
+
+# ----------------------------------------------------------------------------
+# Checks for ALSA library support
+
+# 1. Check whether ALSA is there
+have_alsa="no"
+AC_DEFUN(AC_CHECK_LIBASOUND,
+[
+  dnl Alsa headers?
+  alsa_header_prefix="NONE"
+  AC_CHECK_HEADER(sys/asoundlib.h,  alsa_header_prefix="sys")
+  AC_CHECK_HEADER(alsa/asoundlib.h, alsa_header_prefix="alsa")
+
+  ac_ldflags_save="$LDFLAGS"
+  LDFLAGS="$all_libraries $LDFLAGS"
+  LIBASOUND=""
+  if test "x$alsa_header_prefix" != "xNONE"; then
+
+    dnl Alsa library exists?
+    AC_CHECK_LIB(asound,snd_seq_create_simple_port,[
+      AC_TRY_RUN([
+#include <$alsa_header_prefix/asoundlib.h>
+int main() { return (SND_LIB_MAJOR == 0 && SND_LIB_MINOR != 5 && SND_LIB_MINOR != 9) || SND_LIB_MAJOR != 1; }
+        ] ,[
+        have_alsa="yes"
+        LIBASOUND="-lasound"
+        AC_DEFINE(HAVE_ALSA, 1,
+          [Define if you have libasound (required for alsa support)])
+      ], [ have_alsa="no" ], [ have_alsa="no" ])
+    ], [
+      have_alsa="no"
+    ])
+
+    dnl Alsa library version
+    alsa_version="none"
+    AC_MSG_CHECKING(for Alsa version)
+    alsa_tmpfile=`mktemp /tmp/tse3-conftest-alsaversion.XXXXXX`
+    AC_TRY_RUN([
+#include <$alsa_header_prefix/asoundlib.h>
+#include <stdio.h>
+    int main()
+    {
+        FILE *temp = fopen("$alsa_tmpfile", "w");
+        if (SND_LIB_MAJOR == 0)
+        {
+            fprintf(temp, "%d.%d", SND_LIB_MAJOR, SND_LIB_MINOR);
+        }
+        else
+        {
+            fprintf(temp, "%d", SND_LIB_MAJOR);
+        }
+        fclose(temp);
+        return 0;
+    }
+    ], alsa_version="determining...", alsa_version="none", AC_MSG_WARN(Using Alsa whilst cross compiling. Presuming 0.9.x) && cat "0.9" > $alsa_tmpfile)
+    alsa_version=`cat $alsa_tmpfile`
+    rm $alsa_tmpfile
+    AC_MSG_RESULT($alsa_version)
+    if test "$alsa_version" = "0.5"; then
+      AC_DEFINE(TSE3_WITH_ALSA_0_5_X,1,[Define if you have Alsa 0.5.x])
+    fi
+    if test "$alsa_version" = "0.9"; then
+      AC_DEFINE(TSE3_WITH_ALSA_0_9_X,1,[Define if you have Alsa 0.9.x])
+    fi
+    if test "$alsa_version" = "1"; then
+      AC_DEFINE(TSE3_WITH_ALSA_0_9_X,1,[Define if you have Alsa 0.9.x])
+    fi
+  fi
+  AC_SUBST(LIBASOUND)
+  LDFLAGS="$ac_ldflags_save"
+
+])
+AC_CHECK_LIBASOUND
+
+AM_CONDITIONAL(HAVE_ALSA, test "$have_alsa" = "yes")
+
+AC_MSG_CHECKING(whether ALSA is available)
+if test "$have_alsa" = "yes"; then
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_RESULT(no)
+fi
+
+# 2. Check whether ALSA is wanted
+AC_MSG_CHECKING(whether ALSA support is wanted)
+AC_ARG_WITH(alsa,
+[  --with-alsa             whether to support the ALSA library],
+[if test "$withval" = yes; then
+  AC_MSG_RESULT(yes)
+  with_alsa="yes"
+else
+  AC_MSG_RESULT(no)
+  with_alsa="no"
+fi], [AC_MSG_RESULT(yes); with_alsa="yes"])
+
+if test "$with_alsa" = "yes" -a "$have_alsa" = "yes"; then
+  AC_SUBST(TSE3_WITH_ALSA)
+  AC_DEFINE(TSE3_WITH_ALSA,1,[Define if ALSA library support is required])
+  TSE3_ALSA_VERSION=$alsa_version
+  AC_SUBST(TSE3_ALSA_VERSION)
+  TSE3_ALSA_PREFIX=$alsa_header_prefix
+  AC_SUBST(TSE3_ALSA_PREFIX)
+  AC_SUBST(TSE3_WITH_ALSA_0_5_X)
+  AC_SUBST(TSE3_WITH_ALSA_0_9_X)
+else
+  TSE3_ALSA_VERSION=none
+  AC_SUBST(TSE3_ALSA_VERSION)
+fi
+AM_CONDITIONAL(TSE3_WITH_ALSA, test "$with_alsa" = "yes" -a "$have_alsa" = "yes")
+AM_CONDITIONAL(TSE3_WITH_ALSA_0_5_X, test "$with_alsa" = "yes" -a "$have_alsa" = "yes" -a "$alsa_version" = "0.5")
+AM_CONDITIONAL(TSE3_WITH_ALSA_0_9_X, test "$with_alsa" = "yes" -a "$have_alsa" = "yes" -a "$alsa_version" = "0.9")
+
+# ----------------------------------------------------------------------------
+# Checks for aRts library support
+
+# 1. Check whether aRts is there
+have_aRts="no"
+AC_DEFUN(AC_CHECK_LIBARTS,
+[
+  dnl aRts headers? We'll favour the generic includes then the existing
+  dnl kde-config, then SuSE KDE3 then SuSE KDE2
+  aRts_header_prefix="NONE"
+  AC_CHECK_HEADER(kde/arts/artsmidi.h, aRts_header_prefix="kde/arts")
+  AC_CHECK_HEADER(arts/artsmidi.h, aRts_header_prefix="arts")
+  if test "x$aRts_header_prefix" = "xNONE"; then
+    if test `which kde-config`; then
+      AC_MSG_CHECKING(aRts header location from kde-config)
+      aRts_header_prefix_kdeconf=`kde-config --prefix`/include
+      AC_MSG_RESULT($aRts_header_prefix_kdeconf)
+      AC_CHECK_FILE($aRts_header_prefix_kdeconf/arts/artsmidi.h, aRts_header_prefix=$aRts_header_prefix_kdeconf/arts)
+      AC_CHECK_FILE($aRts_header_prefix_kdeconf/kde/arts/artsmidi.h, aRts_header_prefix=$aRts_header_prefix_kdeconf/kde/arts)
+    fi
+  fi
+  if test "x$aRts_header_prefix" = "xNONE"; then
+    AC_CHECK_HEADER(/opt/kde3/include/arts/artsmidi.h, aRts_header_prefix="/opt/kde3/include/arts")
+  fi
+  if test "x$aRts_header_prefix" = "xNONE"; then
+    AC_CHECK_HEADER(/opt/kde2/include/arts/artsmidi.h, aRts_header_prefix="/opt/kde2/include/arts")
+  fi
+
+  echo "aRts prefix is $aRts_header_prefix"
+
+  ac_ldflags_save="$LDFLAGS"
+  aRts_library_prefix=""
+  if test `which kde-config`; then
+    aRts_library_prefix=`kde-config --prefix`/lib
+  fi
+  LDFLAGS="$all_libraries -L$aRts_library_prefix $LDFLAGS"
+  if test "x$aRts_header_prefix" != "xNONE"; then
+    AC_CHECK_LIB(artsc,arts_init,[
+      have_aRts="yes"
+      LIBARTS="-L$aRts_library_prefix -lartsc"
+      AC_DEFINE(HAVE_ARTS, 1,
+        [Define if you have libartsc (required for aRts support)])
+      dnl We add the KDEDIRS path (or preferably KDEDIRS) for linkage to
+      dnl libmcop
+      dnl if test "x$KDEDIR" = "x"; then
+      dnl   LIBARTS="-L$KDEDIRS $LIBARTS"
+      dnl else
+      dnl   LIBARTS="-L$KDEDIR $LIBARTS"
+      dnl fi
+    ], [
+      have_aRts="no"
+    ])
+  fi
+  AC_SUBST(LIBARTS)
+  LDFLAGS="$ac_ldflags_save"
+])
+AC_CHECK_LIBARTS
+
+AM_CONDITIONAL(HAVE_ARTS, test "$have_aRts" = "yes")
+
+AC_MSG_CHECKING(whether aRts is available)
+if test "$have_aRts" = "yes"; then
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_RESULT(no)
+fi
+
+# 2. Check whether aRts is wanted
+AC_MSG_CHECKING(whether aRts support is wanted)
+AC_ARG_WITH(aRts,
+[  --with-aRts             whether to support the aRts library],
+[if test "$withval" = "yes"; then
+  AC_MSG_RESULT(yes)
+  with_aRts="yes"
+else
+  AC_MSG_RESULT(no)
+  with_aRts="no"
+fi], [AC_MSG_RESULT(yes); with_aRts="yes"])
+
+if test "$with_aRts" = "yes" -a "$have_aRts" = "yes"; then
+  AC_SUBST(TSE3_WITH_ARTS)
+  AC_DEFINE(TSE3_WITH_ARTS,1,[Define if aRts library support is required])
+  TSE3_ARTS_PREFIX=$aRts_header_prefix
+  AC_SUBST(TSE3_ARTS_PREFIX)
+fi
+AM_CONDITIONAL(TSE3_WITH_ARTS, test "$with_aRts" = "yes" -a "$have_aRts" = "yes")
+
+# ----------------------------------------------------------------------------
+# Checks for WIN32 platform
+
+# 1. Check if we're running on either cygwin or mingw32
+
+AC_MSG_CHECKING(whether Win32 MIDI is available)
+
+have_win32="no"
+if test "$CYGWIN" = "yes"; then
+  have_win32="yes"
+fi
+if test "$MINGW32" = "yes"; then
+  have_win32="yes"
+fi
+
+if test "$have_win32" = "yes"; then
+  AC_MSG_RESULT(yes)
+else
+  AC_MSG_RESULT(no)
+fi
+
+# 2. Check whether Win32 is wanted
+AC_MSG_CHECKING(whether Win32 support is wanted)
+AC_ARG_WITH(win32,
+[  --with-win32            whether to support the Win32 platform],
+[if test "$withval" = "yes"; then
+  AC_MSG_RESULT(yes)
+  with_win32="yes"
+else
+  AC_MSG_RESULT(no)
+  with_win32="no"
+fi], [AC_MSG_RESULT(yes); with_win32="yes"])
+
+if test "$with_win32" = "yes" -a "$have_win32" = "yes"; then
+  AC_SUBST(TSE3_WITH_WIN32)
+  AC_DEFINE(TSE3_WITH_WIN32,1,[Define if Win32 platform support is required])
+fi
+AM_CONDITIONAL(TSE3_WITH_WIN32, test "$with_win32" = "yes" -a "$have_win32" = "yes")
+
+
+# ----------------------------------------------------------------------------
+# Finally, output the makefiles
+# ----------------------------------------------------------------------------
+
+AC_OUTPUT(
+    Makefile                        \
+    doc/Makefile                    \
+    demos/Makefile                  \
+    src/Makefile                    \
+    src/tse3/Makefile               \
+    src/tse3/app/Makefile           \
+    src/tse3/cmd/Makefile           \
+    src/tse3/file/Makefile          \
+    src/tse3/ins/Makefile           \
+    src/tse3/plt/Makefile           \
+    src/tse3/util/Makefile          \
+    src/tse3/listen/Makefile        \
+    src/tse3/listen/app/Makefile    \
+    src/tse3/listen/cmd/Makefile    \
+    src/tse3/listen/ins/Makefile    \
+    src/tse3play/Makefile           \
+    src/examples/Makefile           \
+    src/examples/contents/Makefile  \
+    src/examples/scale/Makefile     \
+    src/examples/midifile/Makefile  \
+    src/examples/ports/Makefile     \
+    src/examples/recording/Makefile \
+)
