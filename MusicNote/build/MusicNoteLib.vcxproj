@@ -821,6 +821,7 @@
     <ClInclude Include="..\include\AlsaDriver.h" />
     <ClInclude Include="..\include\ChannelPressure.h" />
     <ClInclude Include="..\include\Chords.h" />
+    <ClInclude Include="..\include\Common\MString.h" />
     <ClInclude Include="..\include\Common\StrUtils.h" />
     <ClInclude Include="..\include\Common\_TChar.h" />
     <ClInclude Include="..\include\ControllerEvent.h" />
@@ -833,7 +834,6 @@
     <ClInclude Include="..\include\MIDIEventManager.h" />
     <ClInclude Include="..\include\MIDIRenderer.h" />
     <ClInclude Include="..\include\MidiTimer.h" />
-    <ClInclude Include="..\include\MString.h" />
     <ClInclude Include="..\include\MusicNoteLib.h" />
     <ClInclude Include="..\include\MusicStringParser.h" />
     <ClInclude Include="..\include\Note.h" />

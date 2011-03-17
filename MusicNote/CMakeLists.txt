@@ -159,6 +159,7 @@ SET( MusicNoteLib_Header_Files
 	src/MusicNoteLib/stdafx.h
 	include/Common/EventHandler.h
 	include/Common/StrUtils.h
+	include/Common/MString.h
 	include/rtmidi/RtMidi.h
 	include/rtmidi/RtError.h
 	include/MidiDevice.h
@@ -170,7 +171,6 @@ SET( MusicNoteLib_Header_Files
 	include/Layer.h
 	include/MIDIEventManager.h
 	include/MIDIRenderer.h
-	include/MString.h
 	include/MusicNoteLib.h
 	include/MusicStringParser.h
 	include/Note.h

@@ -13,7 +13,7 @@
  * \brief Declares Dictionary type used by the Parsers
  */ 
 
-#include "MString.h"
+#include "Common/StrUtils.h"
 #include <map>
 
 namespace MusicNoteLib

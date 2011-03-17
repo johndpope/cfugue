@@ -83,9 +83,6 @@
     <ClInclude Include="..\include\MIDIRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\MString.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\MusicNoteLib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -154,6 +151,9 @@
     </ClInclude>
     <ClInclude Include="..\include\MidiDevice.h">
       <Filter>MIDIDriver</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Common\MString.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
