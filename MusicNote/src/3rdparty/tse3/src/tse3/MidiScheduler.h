@@ -30,9 +30,9 @@
 namespace TSE3
 {
 #if defined UNICODE || defined _UNICODE // Fix: Gopalakrishna Palem
-    typedef std::wstring Str_Return_Type;
+    typedef std::wstring OIL::StrUtils_Return_Type;
 #else
-    typedef std::string Str_Return_Type;
+    typedef std::string OIL::StrUtils_Return_Type;
 #endif
 
     /**
@@ -192,7 +192,7 @@ namespace TSE3
              *
              * @return Implementation name string
              */
-            Str_Return_Type implementationName() const
+            OIL::StrUtils_Return_Type implementationName() const
             {
                 return this->impl_implementationName();
             }
@@ -273,7 +273,7 @@ namespace TSE3
              * @param  port MIDI port number
              * @return Port name string
              */
-            Str_Return_Type portName(int port) const;
+            OIL::StrUtils_Return_Type portName(int port) const;
 
             /**
              * Returns a string describing the type of the port with the given
@@ -285,7 +285,7 @@ namespace TSE3
              * @param  port MIDI port number
              * @return Port type string
              */
-            Str_Return_Type portType(int port) const;
+            OIL::StrUtils_Return_Type portType(int port) const;
 
             /**
              * Returns whether or not the port is readable. If this function
@@ -636,9 +636,9 @@ namespace TSE3
              * do the work of sending the event at the exact timer tick.
              *****************************************************************/
 
-            virtual Str_Return_Type impl_implementationName() const = 0;
-            virtual Str_Return_Type impl_portName(int port) const = 0;
-            virtual Str_Return_Type impl_portType(int port) const = 0;
+            virtual OIL::StrUtils_Return_Type impl_implementationName() const = 0;
+            virtual OIL::StrUtils_Return_Type impl_portName(int port) const = 0;
+            virtual OIL::StrUtils_Return_Type impl_portType(int port) const = 0;
             virtual bool            impl_portReadable(int port) const = 0;
             virtual bool            impl_portWriteable(int port) const = 0;
             /**

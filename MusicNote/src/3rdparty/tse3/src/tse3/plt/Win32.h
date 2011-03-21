@@ -17,6 +17,7 @@
 #ifndef TSE3_PLT_WIN32_H
 #define TSE3_PLT_WIN32_H
 
+#include "Common/StrUtils.h"
 #include "tse3/MidiScheduler.h"
 #include <Windows.h>
 #include <iostream>
@@ -51,15 +52,15 @@ namespace TSE3
                 /**
                  * @reimplemented
                  */
-                virtual Str_Return_Type impl_implementationName() const;
+                virtual OIL::StrUtils_Return_Type impl_implementationName() const;
                 /**
                  * @reimplemented
                  */
-                virtual Str_Return_Type impl_portName(int port) const;
+                virtual OIL::StrUtils_Return_Type impl_portName(int port) const;
                 /**
                  * @reimplemented
                  */
-                virtual Str_Return_Type impl_portType(int port) const;
+                virtual OIL::StrUtils_Return_Type impl_portType(int port) const;
                 /**
                  * @reimplemented
                  */

@@ -133,13 +133,13 @@ Win32MidiScheduler::~Win32MidiScheduler()
 }
 
 
-Str_Return_Type Win32MidiScheduler::impl_implementationName() const
+OIL::StrUtils_Return_Type Win32MidiScheduler::impl_implementationName() const
 {
     return "Win32MidiScheduler version 0.00 [dev].";
 }
 
 
-Str_Return_Type Win32MidiScheduler::impl_portName(int port) const
+OIL::StrUtils_Return_Type Win32MidiScheduler::impl_portName(int port) const
 {
   if (port > numPorts()) 
     return NULL;
@@ -154,7 +154,7 @@ Str_Return_Type Win32MidiScheduler::impl_portName(int port) const
   }
 }
 
-Str_Return_Type Win32MidiScheduler::impl_portType(int port) const
+OIL::StrUtils_Return_Type Win32MidiScheduler::impl_portType(int port) const
 {
   if (port > numPorts()) return NULL;
   if (port < midiInGetNumDevs()) {

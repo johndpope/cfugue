@@ -49,15 +49,15 @@ namespace TSE3
                 /**
                  * @reimplemented
                  */
-                virtual Str_Return_Type impl_implementationName() const;
+                virtual OIL::StrUtils_Return_Type impl_implementationName() const;
                 /**
                  * @reimplemented
                  */
-                virtual Str_Return_Type impl_portName(int port) const;
+                virtual OIL::StrUtils_Return_Type impl_portName(int port) const;
                 /**
                  * @reimplemented
                  */
-                virtual Str_Return_Type impl_portType(int port) const;
+                virtual OIL::StrUtils_Return_Type impl_portType(int port) const;
                 /**
                  * @reimplemented
                  */
@@ -147,15 +147,15 @@ namespace TSE3
                 /**
                  * @reimplemented
                  */
-                virtual Str_Return_Type impl_implementationName() const;
+                virtual OIL::StrUtils_Return_Type impl_implementationName() const;
                 /**
                  * @reimplemented
                  */
-                virtual Str_Return_Type impl_portName(int port) const;
+                virtual OIL::StrUtils_Return_Type impl_portName(int port) const;
                 /**
                  * @reimplemented
                  */
-                virtual Str_Return_Type impl_portType(int port) const;
+                virtual OIL::StrUtils_Return_Type impl_portType(int port) const;
                 /**
                  * @reimplemented
                  */
