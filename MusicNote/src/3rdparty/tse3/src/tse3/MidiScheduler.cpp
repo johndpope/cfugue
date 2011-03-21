@@ -23,7 +23,11 @@ using namespace TSE3;
 
 namespace
 {
+#if defined UNICODE || defined _UNICODE
+    const wchar_t *INVALID_PORT_STRING = L"<Invalid port>";
+#else 
     const char *INVALID_PORT_STRING = "<Invalid port>";
+#endif
 }
 
 
@@ -77,7 +81,7 @@ void MidiScheduler::portNumbers(std::vector<int> &numbers) const
 }
 
 
-Str_Return_Type MidiScheduler::portName(int port) const
+OIL::StrUtils_Return_Type MidiScheduler::portName(int port) const
 {
     if (lookUpPortNumber(port))
     {
@@ -90,7 +94,7 @@ Str_Return_Type MidiScheduler::portName(int port) const
 }
 
 
-Str_Return_Type MidiScheduler::portType(int port) const
+OIL::StrUtils_Return_Type MidiScheduler::portType(int port) const
 {
     if (lookUpPortNumber(port))
     {

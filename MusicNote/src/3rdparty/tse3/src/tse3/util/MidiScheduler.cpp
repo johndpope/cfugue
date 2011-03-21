@@ -41,19 +41,19 @@ StreamMidiScheduler::~StreamMidiScheduler()
 }
 
 
-Str_Return_Type StreamMidiScheduler::impl_implementationName() const
+OIL::StrUtils_Return_Type StreamMidiScheduler::impl_implementationName() const
 {
     return "StreamMidiScheduler version 0.10 [dev].";
 }
 
 
-Str_Return_Type StreamMidiScheduler::impl_portName(int /*port*/) const
+OIL::StrUtils_Return_Type StreamMidiScheduler::impl_portName(int /*port*/) const
 {
     return "StreamMidiScheduler port";
 }
 
 
-Str_Return_Type StreamMidiScheduler::impl_portType(int /*port*/) const
+OIL::StrUtils_Return_Type StreamMidiScheduler::impl_portType(int /*port*/) const
 {
     return "StreamMidiScheduler port";
 }
@@ -220,19 +220,19 @@ NullMidiScheduler::~NullMidiScheduler()
 }
 
 
-Str_Return_Type NullMidiScheduler::impl_implementationName() const
+OIL::StrUtils_Return_Type NullMidiScheduler::impl_implementationName() const
 {
     return "NullMidiScheduler version 0.00 [dev].";
 }
 
 
-Str_Return_Type NullMidiScheduler::impl_portName(int /*port*/) const
+OIL::StrUtils_Return_Type NullMidiScheduler::impl_portName(int /*port*/) const
 {
     return "NullMidiScheduler port";
 }
 
 
-Str_Return_Type NullMidiScheduler::impl_portType(int /*port*/) const
+OIL::StrUtils_Return_Type NullMidiScheduler::impl_portType(int /*port*/) const
 {
     return "NullMidiScheduler port";
 }
