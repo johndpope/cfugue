@@ -142,7 +142,7 @@ OIL::StrUtils_Return_Type Win32MidiScheduler::impl_implementationName() const
 OIL::StrUtils_Return_Type Win32MidiScheduler::impl_portName(int port) const
 {
   if (port > numPorts()) 
-    return NULL;
+    return "";
   else if (port < midiInGetNumDevs()) {
     MIDIINCAPS m;
     midiInGetDevCaps(port, &m, sizeof(m));
@@ -156,7 +156,7 @@ OIL::StrUtils_Return_Type Win32MidiScheduler::impl_portName(int port) const
 
 OIL::StrUtils_Return_Type Win32MidiScheduler::impl_portType(int port) const
 {
-  if (port > numPorts()) return NULL;
+  if (port > numPorts()) return "";
   if (port < midiInGetNumDevs()) {
     return "MIDI Input Device";
   } else {
