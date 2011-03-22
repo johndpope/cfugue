@@ -32,8 +32,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "StaticLibTestApp", "StaticL
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "jdkmidi", "..\src\3rdparty\libjdkmidi\build\vc10\jdkmidi.vcxproj", "{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "QtTestApp", "QtTestApp.vcxproj", "{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}"
-EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -283,35 +281,6 @@ Global
 		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.UnicodeRelease|x64.ActiveCfg = UnicodeRelease|x64
 		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.UnicodeRelease|x64.Build.0 = UnicodeRelease|x64
 		{F8D83713-D3AB-4201-891D-9AF50BBDBA8B}.UnicodeRelease|x86.ActiveCfg = UnicodeRelease|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.Debug|Win32.ActiveCfg = Debug|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.Debug|Win32.Build.0 = Debug|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.Debug|x64.ActiveCfg = Debug|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.Debug|x86.ActiveCfg = Debug|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.Release|Any CPU.ActiveCfg = Release|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.Release|Win32.ActiveCfg = Release|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.Release|Win32.Build.0 = Release|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.Release|x64.ActiveCfg = Release|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.Release|x86.ActiveCfg = Release|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.UnicodeDebug|Any CPU.ActiveCfg = Debug|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.UnicodeDebug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.UnicodeDebug|Mixed Platforms.Build.0 = Debug|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.UnicodeDebug|Win32.ActiveCfg = Debug|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.UnicodeDebug|Win32.Build.0 = Debug|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.UnicodeDebug|x64.ActiveCfg = UnicodeDebug|x64
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.UnicodeDebug|x64.Build.0 = UnicodeDebug|x64
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.UnicodeDebug|x86.ActiveCfg = Debug|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.UnicodeRelease|Any CPU.ActiveCfg = Release|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.UnicodeRelease|Mixed Platforms.ActiveCfg = Release|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.UnicodeRelease|Mixed Platforms.Build.0 = Release|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.UnicodeRelease|Win32.ActiveCfg = Release|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.UnicodeRelease|Win32.Build.0 = Release|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.UnicodeRelease|x64.ActiveCfg = Release|Win32
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6}.UnicodeRelease|x86.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -320,6 +289,5 @@ Global
 		{A0B9DB06-D300-4B01-AF47-B14765DF337C} = {2C364E42-43FF-496A-A450-B82C6B3FFBE0}
 		{0BFD4D6C-D4CA-40BF-A409-3EE1C4C99889} = {2C364E42-43FF-496A-A450-B82C6B3FFBE0}
 		{7A2ACDEF-8475-41FE-A212-0BA403CEF416} = {2C364E42-43FF-496A-A450-B82C6B3FFBE0}
-		{7E2B18EE-2226-B6F0-1A38-AED72101B6A6} = {2C364E42-43FF-496A-A450-B82C6B3FFBE0}
 	EndGlobalSection
 EndGlobal
