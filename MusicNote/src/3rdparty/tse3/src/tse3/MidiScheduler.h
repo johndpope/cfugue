@@ -17,6 +17,7 @@
 #ifndef TSE3_SCHEDULER_H
 #define TSE3_SCHEDULER_H
 
+#include "Common/StrUtils.h"
 #include "tse3/listen/MidiScheduler.h"
 
 #include "tse3/Notifier.h"
@@ -29,11 +30,6 @@
 
 namespace TSE3
 {
-#if defined UNICODE || defined _UNICODE // Fix: Gopalakrishna Palem
-    typedef std::wstring OIL::StrUtils_Return_Type;
-#else
-    typedef std::string OIL::StrUtils_Return_Type;
-#endif
 
     /**
      * This class will generate an appropriate @ref MidiScheduler for the

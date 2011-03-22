@@ -279,7 +279,7 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>c:\Qt\2010.05\qt\lib\qtmaind.lib;../src/3rdparty/tse3/lib/tse3.lib;c:\Qt\2010.05\qt\lib\QtGuid4.lib;c:\Qt\2010.05\qt\lib\QtCored4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>c:\Qt\2010.05\qt\lib\qtmaind.lib;../src/3rdparty/tse3/lib/tse3_x64du.lib;c:\Qt\2010.05\qt\lib\QtGuid4.lib;c:\Qt\2010.05\qt\lib\QtCored4.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>c:\Qt\2010.05\qt\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -416,7 +416,7 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>c:\Qt\2010.05\qt\lib\qtmain.lib;../src/3rdparty/tse3/lib/tse3.lib;c:\Qt\2010.05\qt\lib\QtGui4.lib;c:\Qt\2010.05\qt\lib\QtCore4.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>c:\Qt\2010.05\qt\lib\qtmain.lib;../src/3rdparty/tse3/lib/tse3_x64u.lib;c:\Qt\2010.05\qt\lib\QtGui4.lib;c:\Qt\2010.05\qt\lib\QtCore4.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>c:\Qt\2010.05\qt\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <GenerateDebugInformation>false</GenerateDebugInformation>

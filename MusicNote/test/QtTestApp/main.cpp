@@ -23,9 +23,11 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  *
  */
-
+#include <Windows.h>
 #include <QtGui/QApplication>
 #include <QtCore/QThread>
+
+#include "qttse3playvisual.h"
 
 #include <cstdlib>
 #include "tse3play/tse3play.h"
@@ -82,9 +84,14 @@ int main(int argc, char *argv[])
     //MainWindow w;
     //w.show();
 
-    MyThread _thread(argc, argv);
-    _thread.start();
+   // MyThread _thread(argc, argv);
+    //_thread.start();
 
-    return a.exec();
+    //while(_thread.isRunning()) Sleep(500);
+
+    QtTse3PlayVisual visualDlg;
+    return visualDlg.exec();
+
+    //return 0;//a.exec();
 
 }
