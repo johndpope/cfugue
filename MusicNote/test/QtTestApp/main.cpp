@@ -75,7 +75,7 @@ int TSE3PlayMain(int argc, char *argv[])
 
  void MyThread::run()
  {
-     TSE3PlayMain(_argc, _argv);    
+     TSE3PlayMain(_argc, _argv);
  };
 
 int main(int argc, char *argv[])
