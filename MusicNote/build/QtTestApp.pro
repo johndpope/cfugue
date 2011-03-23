@@ -16,19 +16,27 @@ TEMPLATE = app
 SOURCES += \
     ../test/QtTestApp/QtTse3Play.cpp \
     ../test/QtTestApp/main.cpp \
+    ../test/QtTestApp/qttse3playvisual.cpp \
     ../src/QtVuMeter/qvumeter.cpp \
-    ../test/QtTestApp/qttse3playvisual.cpp
+    ../src/QtVuMeter/midioutcombobox.cpp \
+    ../src/QtVuMeter/midiincombobox.cpp
 
 HEADERS  += \
     ../test/QtTestApp/QtTse3Play.h \
     ../src/QtVuMeter/qvumeter.h \
-    ../test/QtTestApp/qttse3playvisual.h
+    ../test/QtTestApp/qttse3playvisual.h \
+    ../src/QtVuMeter/qvumeter.h \
+    ../src/QtVuMeter/midioutcombobox.h \
+    ../src/QtVuMeter/midiincombobox.h
 
 FORMS    += \
     ../test/QtTestApp/qttse3playvisual.ui
+
+
 INCLUDEPATH +=  ../src   \
                 ../src/3rdparty/tse3/src    \
-                ../include
+                ../include  \
+                ../src/QtVuMeter
 
 DESTDIR = ../bin
 
