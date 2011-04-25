@@ -9,6 +9,7 @@ class MidiInComboBox : public QComboBox
 public:
     explicit MidiInComboBox(QWidget *parent = 0);
 
+    void PopulateDevices();
 signals:
 
 public slots:
