@@ -10,6 +10,7 @@
 #define __MIDI_DEVICE_H__6EE03181_DEEC_4771_A660_1597700B5773__
 
 #include <string>
+#include <vector>
 
 namespace MusicNoteLib
 {
@@ -24,6 +25,14 @@ namespace MusicNoteLib
 
 	/// Returns the name of the given Midi Output Port
 	std::string GetMidiOutPortName(unsigned int nPortIndex);
+
+	typedef std::vector<std::string> StringList;
+	
+	/// Returns the names of all Midi Input Ports available
+	StringList GetMidiInPortNames();
+
+	/// Returns the names of all Midi Output Ports available
+	StringList GetMidiOutPortNames();
 
 } // namespace MusicNoteLib
 

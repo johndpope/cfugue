@@ -35,4 +35,24 @@ namespace MusicNoteLib
 		return midiOutObj.getPortName(nPortIndex);
 	}
 
+	StringList GetMidiInPortNames()
+	{
+		StringList strRetList;
+
+		for(int i=0, nMax = GetMidiInPortCount(); i < nMax; ++i)
+			strRetList.push_back(GetMidiInPortName(i));
+
+		return strRetList;
+	}
+
+	StringList GetMidiOutPortNames()
+	{
+		StringList strRetList;
+
+		for(int i=0, nMax = GetMidiOutPortCount(); i < nMax; ++i)
+			strRetList.push_back(GetMidiOutPortName(i));
+
+		return strRetList;
+	}
+
 } // namespace MusicNoteLib 
