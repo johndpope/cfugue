@@ -854,6 +854,11 @@
   <ItemGroup>
     <None Include="..\src\MusicNoteLib\ReadMe.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\src\3rdparty\libjdkmidi\build\vc10\jdkmidi.vcxproj">
+      <Project>{f8d83713-d3ab-4201-891d-9af50bbdba8b}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
