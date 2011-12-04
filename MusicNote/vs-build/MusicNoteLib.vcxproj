@@ -325,7 +325,8 @@
     <Lib>
       <OutputFile>$(OutDir)$(ProjectName)d.lib</OutputFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>$(SolutionDir)../lib/JdkMidid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Message>copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)cd.lib</Message>
@@ -351,7 +352,8 @@
     <Lib>
       <OutputFile>$(OutDir)$(ProjectName)d.lib</OutputFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>$(SolutionDir)../lib/JdkMidid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Message>copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)cd.lib</Message>
@@ -378,7 +380,8 @@
     <Lib>
       <OutputFile>$(OutDir)$(ProjectName).lib</OutputFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>$(SolutionDir)../lib/JdkMidi.lib</AdditionalDependencies>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Message>copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)c.lib</Message>
@@ -405,7 +408,8 @@
     <Lib>
       <OutputFile>$(OutDir)$(ProjectName).lib</OutputFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>$(SolutionDir)../lib/JdkMidi.lib</AdditionalDependencies>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Message>copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)c.lib</Message>
@@ -432,6 +436,8 @@
     <Lib>
       <OutputFile>$(OutDir)$(ProjectName)sd.lib</OutputFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Message>copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)d.lib</Message>
@@ -457,6 +463,8 @@
     <Lib>
       <OutputFile>$(OutDir)$(ProjectName)sd.lib</OutputFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Message>copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)d.lib</Message>
@@ -483,6 +491,8 @@
     <Lib>
       <OutputFile>$(OutDir)$(ProjectName)s.lib</OutputFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Message>copying  $(TargetPath) to $(TargetDir)..\..\lib\</Message>
@@ -509,6 +519,8 @@
     <Lib>
       <OutputFile>$(OutDir)$(ProjectName)s.lib</OutputFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Message>copying  $(TargetPath) to $(TargetDir)..\..\lib\</Message>
@@ -535,7 +547,8 @@
     <Lib>
       <OutputFile>$(OutDir)$(ProjectName)du.lib</OutputFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>$(SolutionDir)../lib/JdkMididu.lib</AdditionalDependencies>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Message>copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)cud.lib</Message>
@@ -561,7 +574,8 @@
     <Lib>
       <OutputFile>$(OutDir)$(ProjectName)du.lib</OutputFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>$(SolutionDir)../lib/JdkMididu.lib</AdditionalDependencies>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Message>copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)cud.lib</Message>
@@ -588,7 +602,8 @@
     <Lib>
       <OutputFile>$(OutDir)$(ProjectName)u.lib</OutputFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>$(SolutionDir)../lib/JdkMidiu.lib</AdditionalDependencies>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Message>copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)cu.lib</Message>
@@ -615,7 +630,8 @@
     <Lib>
       <OutputFile>$(OutDir)$(ProjectName)u.lib</OutputFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>$(SolutionDir)../lib/JdkMidiu.lib</AdditionalDependencies>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Message>copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)cu.lib</Message>
@@ -642,6 +658,8 @@
     <Lib>
       <OutputFile>$(OutDir)$(ProjectName)sdu.lib</OutputFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Message>copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)ud.lib</Message>
@@ -667,6 +685,8 @@
     <Lib>
       <OutputFile>$(OutDir)$(ProjectName)sdu.lib</OutputFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Message>copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)ud.lib</Message>
@@ -693,6 +713,8 @@
     <Lib>
       <OutputFile>$(OutDir)$(ProjectName)su.lib</OutputFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Message>copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)u.lib</Message>
@@ -719,6 +741,8 @@
     <Lib>
       <OutputFile>$(OutDir)$(ProjectName)su.lib</OutputFile>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Message>copying  $(TargetPath) to $(TargetDir)..\..\lib\$(TargetName)u.lib</Message>
