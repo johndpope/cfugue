@@ -79,14 +79,14 @@ QVUMeter::QVUMeter(QWidget *parent) : QWidget(parent)
 }
 
 
-void QVUMeter::SetBars(QStringList strBarLables)
+void QVUMeter::SetBars(QStringList strBarLables, double min, double max)
 {
     m_Bars.clear();
 
     m_nBars = strBarLables.length();
 
     for(int i=0 ; i < m_nBars; ++i)
-        m_Bars.push_back(new QUVBar(strBarLables[i], this));
+        m_Bars.push_back(new QUVBar(strBarLables[i], this, min, max));
 
     m_nTotalWindowWidth = nUnitBarWidth * m_nBars + 2 * nBorderWidth;
 
@@ -174,7 +174,7 @@ void QVUMeter::paintBar()
         painter.setBrush(QColor(40, 40, 40));
     
         double length = nBarHeight;
-        double leftBar = abs(length * (bar.min-bar.Value)/(bar.max-bar.min));
+        double leftBar = abs(length * (bar.Value - bar.min)/(bar.max-bar.min));
         
         painter.drawRect(nStartX, nStartY, nBarWidth, nBarHeight-leftBar);
 
@@ -225,14 +225,14 @@ void QVUMeter::paintValue()
 
 }
 
-QUVBar::QUVBar(QString strLable, QObject* pParent) : QObject(pParent)
+QUVBar::QUVBar(QString strLable, QObject* pParent, double _min, double _max) : QObject(pParent)
 {    
     colText = Qt::white;
     colHigh = Qt::red;
     colLow = Qt::green;
     dimVal = 9;
-    min = 0;
-    max = 100;
+    min = _min;
+    max = _max;
     Value = 0;    
     _lable = strLable;
 }
@@ -339,3 +339,12 @@ QUVBar* QVUMeter::GetBar(int nIndex) const
     return NULL;
 }
 
+void QVUMeter::SetMinMaxValues(double nMin, double nMax)
+{
+    for(int i=0, nMax = m_Bars.size(); i < nMax; ++i)
+    {
+        QUVBar* pBar = m_Bars.at(i);
+        pBar->setMinValue(nMin);
+        pBar->setMaxValue(nMax);
+    }
+}

@@ -8,12 +8,7 @@ MidiInComboBox::MidiInComboBox(QWidget *parent) :
 
 void MidiInComboBox::PopulateDevices()
 {
-    QStringList strDeviceList;
-
-    int nCount = MusicNoteLib::GetMidiInPortCount();
-    for(int i=0; i < nCount; ++i)
-        strDeviceList << MusicNoteLib::GetMidiInPortName(i);
-
     this->clear();
-    this->addItems(strDeviceList);
+    for(int i=0, nCount = MusicNoteLib::GetMidiInPortCount(); i < nCount; ++i)
+     this->addItem(MusicNoteLib::GetMidiInPortName(i).c_str());
 }
