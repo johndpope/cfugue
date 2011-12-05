@@ -85,7 +85,7 @@ class QUVBar : public QObject
 
 public:
 
-    QUVBar(QString strLabel = "", QObject* pParent = NULL);
+    QUVBar(QString strLabel = "", QObject* pParent = NULL, double min=0, double max = 100);
 
 
 signals:
@@ -144,14 +144,17 @@ public:
     /**
      <Summary>
       Sets the number of bars and their associated labels. 
+      Sets value min, max ranges for all bars.
       Existing bars will be deleted and replaced with new ones.
      </Summary>
     */
-    void SetBars(QStringList strBarLables);
+    void SetBars(QStringList strBarLables, double min=0, double max=100);
 
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
 
+    // Sets the Minimum and Maximum values for all bars present in the Meter
+    void SetMinMaxValues(double, double);
 
 signals:
 
