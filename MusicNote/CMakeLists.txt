@@ -124,6 +124,7 @@ ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
 IF(APPLE)	# Mac OS X specific code
 	ADD_DEFINITIONS(-D__MACOSX_CORE__)
+	INCLUDE_DIRECTORIES ( /Developer/Headers/FlatCarbon )
 ENDIF(APPLE)
 
 IF(WIN32)	# Windows specific definitions
@@ -297,7 +298,6 @@ SET( jdkmidi_Header_Files
    )
 
 add_library(jdkmidi   ${jdkmidi_Source_Files}  ${jdkmidi_Header_Files} )
-#SET_TARGET_PROPERTIES(jdkmidi PROPERTIES DEBUG_POSTFIX "d")
 
 #################################
 #Link the targets with their Depenedency Libraries
@@ -307,9 +307,23 @@ IF(WIN32)
 	SET( jdkmidi_Librarian   WinMM.Lib   )
 ENDIF(WIN32)
 
-IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")	# Mac OS X specific code
-     SET(OperatingSystem "Mac OS X")
-ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+IF(APPLE)
+   FIND_LIBRARY(CARBON_LIBRARY Carbon)
+   FIND_LIBRARY(QUICKTIME_LIBRARY /Developer/SDKs/MacOSX10.7.sdk/System/Library/Frameworks//QuickTime.framework/QuickTime)
+   FIND_LIBRARY(APP_SERVICES_LIBRARY ApplicationServices )
+   FIND_LIBRARY(COREAUDIO_LIBRARY CoreAudio)
+   FIND_LIBRARY(COREMIDI_LIBRARY CoreMIDI)
+   FIND_LIBRARY(CORESERVICES_LIBRARY CoreServices)
+   FIND_LIBRARY(COREFOUNDATION_LIBRARY CoreFoundation )
+   MARK_AS_ADVANCED (CARBON_LIBRARY
+                     QUICKTIME_LIBRARY
+                     APP_SERVICES_LIBRARY
+                     COREAUDIO_LIBRARY
+					 COREMIDI_LIBRARY
+					 CORESERVICES_LIBRARY
+                     COREFOUNDATION_LIBRARY)
+   SET(MusicNoteLib_Librarian ${CARBON_LIBRARY} ${QUICKTIME_LIBRARY} ${APP_SERVICES_LIBRARY} ${COREAUDIO_LIBRARY} ${COREMIDI_LIBRARY} ${CORESERVICES_LIBRARY} ${COREFOUNDATION_LIBRARY})
+ENDIF (APPLE)
 
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")	# Linux specific code
      SET(MusicNoteLib_Librarian asound)
