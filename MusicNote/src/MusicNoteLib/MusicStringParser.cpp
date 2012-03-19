@@ -3,7 +3,11 @@
 	Copyright (C) 2009 Gopalakrishna Palem
 
 	For links to further information, or to contact the author,
-	see <http://musicnote.sourceforge.net/>.
+	see <http://cfugue.sourceforge.net/>.
+    
+    $LastChangedDate: 2012-03-10 19:11:21 +0530 (Sat, 10 Mar 2012) $
+    $Rev: 174 $
+    $LastChangedBy: krishnapg $
 */
 
 #include "stdafx.h"
@@ -105,29 +109,115 @@ namespace MusicNoteLib
 		return (int)(psz - sz);
 	}
 
-	bool MusicStringParser::Parse(const TCHAR* szTokens)
-	{
-		bool bNonContinuableErrorOccured = false;
+    inline bool IsOneOf(const TCHAR ch, const TCHAR* chrArr)
+    {
+        return _tcschr(chrArr, ch) != NULL;
+    }
 
-		TCHAR* szTokensDup = _tcsdup(szTokens);	// Create a modifiable string
-		if(szTokensDup == NULL)
-		{
-			Error(CRITICAL_ERROR_MEMORY_ALLOCATION, _T("Memory allocation failure in MusicStringParser::Parse"), szTokens);
-            return false;
-		}
+    inline void EatWhiteSpace(const TCHAR* & psz, const TCHAR* chWhiteSpaces = _T(" \t\n\r"))
+    {
+        if(psz) while(*psz && IsOneOf(*psz, chWhiteSpaces)) psz++;
+    }
 
-        const TCHAR* szDelim = _T(" \t\n\r");  // Delimiters
-
-        for(TCHAR *szState, *szToken = _tcstok_s(szTokensDup, szDelim, &szState);
-                            szToken != NULL;
-                            szToken = _tcstok_s(NULL, szDelim, &szState))
+    inline void EatComments(const TCHAR* & psz) // CFugue allows C++ style comments: /* */ and //
+    {
+        if(psz && *psz == _T('/'))
         {
-            if(false == ParseToken(szToken, &bNonContinuableErrorOccured) &&
-				true == bNonContinuableErrorOccured)
-                return false;
+            TCHAR* pchEndDelimiter = NULL;
+            switch(*(psz + 1))
+            {
+            case _T('*'): pchEndDelimiter = _T("*/"); break; // this is a /* .. */ style comment
+            case _T('/'): pchEndDelimiter = _T("\n"); break; // this is a single line // style comment
+            default: return;
+            }
+            const TCHAR* pszEndComment = _tcsstr(psz+2, pchEndDelimiter);
+            if(pszEndComment)
+                psz = pszEndComment+2;
+        }
+        return ;
+    }
+
+    // copies at most nMaxLimit chars
+    inline TCHAR* CreateToken(const TCHAR* & psz, /*int nMaxLimit = INT_MAX, */const TCHAR* szDelim = _T(" \t\n\r")) // returns a new copy - caller need to delete it later
+    {
+        if(psz)
+        {
+            //int nCount = 0;
+            const TCHAR* pszStart = psz;
+            while(*psz && !IsOneOf(*psz, szDelim) /*&& ++nCount < nMaxLimit*/) psz++; // skip till a delimeter is found
+
+            int nLen = (int)(psz - pszStart);
+            TCHAR* pszNewCopy = new TCHAR[nLen + 1]; // allocate new buffer
+            memset(pszNewCopy, 0, sizeof(TCHAR) * (nLen+1));
+
+            _tcsncpy(pszNewCopy, pszStart, nLen); // copy the skipped chars
+
+            if(*psz) psz++;
+
+            return pszNewCopy;
         }
 
-        free(szTokensDup); // free the memory allocated by _tcsdup
+        return NULL;
+    }
+
+	bool MusicStringParser::Parse(const TCHAR* szTokens)
+	{
+        if(szTokens == NULL) return true;
+
+		bool bNonContinuableErrorOccured = false;
+
+        const TCHAR* psz = szTokens;
+        do
+        {
+            EatWhiteSpace(psz);
+
+            EatComments(psz);
+
+            //int nMaxTokenLen = INT_MAX;
+
+            //if(*psz == TOKEN_DOUBLESPEED_START) // we let no space needed after ( 
+            //    nMaxTokenLen = 1;
+
+            //// TODO: Add XML Support
+            //if(*psz == _T('<'))
+            //    ExtractXmlPortion();
+            
+            TCHAR* szDelim = _T(" \t\n\r()");  // Delimiters - we let ) and ( also be treated as delimeter so they can be seperate tokens
+
+            TCHAR* pszToken = CreateToken(psz, /*nMaxTokenLen,*/ szDelim); // 
+
+            if(pszToken == NULL) break;
+            
+            bool bRet = ParseToken(pszToken, &bNonContinuableErrorOccured);
+
+            delete[] pszToken;
+
+            if(false == bRet && true == bNonContinuableErrorOccured)
+                return false;
+
+        }while(*psz);             
+
+		//TCHAR* szTokensDup = _tcsdup(szTokens);	// Create a modifiable string
+		//if(szTokensDup == NULL)
+		//{
+		//	Error(CRITICAL_ERROR_MEMORY_ALLOCATION, _T("Memory allocation failure in MusicStringParser::Parse"), szTokens);
+  //          return false;
+		//}
+
+  //      // Remove comments in the string
+
+
+
+  //      for(TCHAR *szState, *szToken = _tcstok_s(szTokensDup, szDelim, &szState);
+  //                          szToken != NULL;
+  //                          szToken = _tcstok_s(NULL, szDelim, &szState))
+  //      {
+  //          if(false == ParseToken(szToken, &bNonContinuableErrorOccured) &&
+		//		true == bNonContinuableErrorOccured)
+  //              return false;
+  //      }
+
+  //      free(szTokensDup); // free the memory allocated by _tcsdup
 
 		return !bNonContinuableErrorOccured;
 	}

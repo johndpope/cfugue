@@ -3,12 +3,19 @@
 	Copyright (C) 2009 Gopalakrishna Palem
 
 	For links to further information, or to contact the author,
-	see <http://musicnote.sourceforge.net/>.
+	see <http://cfugue.sourceforge.net/>.
+    
+    $LastChangedDate: 2012-03-10 19:11:21 +0530 (Sat, 10 Mar 2012) $
+    $Rev: 174 $
+    $LastChangedBy: krishnapg $
 */
 
 #ifndef KEYSIGNATURE_H__56751CC1_46A2_4238_BAF1_7884CDA8089B__
 #define KEYSIGNATURE_H__56751CC1_46A2_4238_BAF1_7884CDA8089B__
 
+/** @file KeySignature.h 
+ * \brief Declares KeySignature class used in CFugue MusicString
+ */ 
 #include "Talam.h"
 
 namespace MusicNoteLib

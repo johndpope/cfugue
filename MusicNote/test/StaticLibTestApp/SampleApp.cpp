@@ -3,7 +3,7 @@
 	Copyright (C) 2009 Gopalakrishna Palem
 
 	For links to further information, or to contact the author,
-	see <http://musicnote.sourceforge.net/>.
+	see <http://cfugue.sourceforge.net/>.
 */
 
 // SampleApp.cpp
@@ -11,7 +11,7 @@
 // Demonstrates the usage of CFugue as a Statically Linked Library
 //
 // CFugue is under active development.
-// Please refer to documentation and latest releases at: http://musicnote.sourceforge.net/
+// Please refer to documentation and latest releases at: http://cfugue.sourceforge.net/
 
 #include "stdafx.h"
 #include "stdlib.h"

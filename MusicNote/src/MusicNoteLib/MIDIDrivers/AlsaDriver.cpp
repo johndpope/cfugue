@@ -3,7 +3,7 @@
 	Copyright (C) 2011 Gopalakrishna Palem
 
 	For links to further information, or to contact the author,
-	see <http://musicnote.sourceforge.net/>.
+	see <http://cfugue.sourceforge.net/>.
 */
 #if defined _WIN32 || defined WIN32
 

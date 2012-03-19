@@ -3,13 +3,13 @@
     Copyright (C) 2009 Gopalakrishna Palem
 
     For links to further information, or to contact the author,
-    see <http://musicnote.sourceforge.net/>.
+    see <http://cfugue.sourceforge.net/>.
 */
 
 /////////////////////////////////////////////////////////////////
 // Main Page
 /////////////////////////////////////////////////////////////////
-/*! \mainpage MusicNoteLib, The C++ Music Programming Library
+/*! \mainpage CFugue, The C++ Music Programming Library
 
 \section mainPageContents Contents
     - \ref overview
@@ -21,28 +21,26 @@
 
 \section overview Overview
 
-Popularily referred to as CFugue, meaning Carnatic Fugue or the C/C++
-replacement of JFugue, MusicNoteLib is a high level Music Programming Library.
+CFugue, meaning Carnatic Fugue or the C/C++ replacement of JFugue, is a high level Music Programming Library.
 
-This library makes it possible to play music notes directly from C/C++ programs,
+CFugue makes it possible to play music notes directly from C/C++ programs,
 without ever having to deal with the low-level MIDI complexities. This library 
 provides a beautiful abstraction that lets you concetrate on programming the <i>Music</i> rather
 than worry about the MIDI nuances.
 
-Provides features that make it possible to use this library directly from many 
+CFugue has numerous features that make it possible to use it directly from many 
 platforms, including but not limited to ASP pages, .Net applications and even non-Windows
 based systems.
 
 \section usage Usage
 
-Using this library to play music is as easy as writing plain music notes. Just create
+Using CFugue to play music is as easy as writing plain music notes. Just create
 a Player object and call the Play method on it, supplying the Music notes to be played. Simple.
 <pre class="fragment">
     \#include "MusicNoteLib.h"
-
     void main()
     {
-        MusicNoteLib::Player player; <span class="comment">/ Create the Player Object</span>
+        MusicNoteLib::Player player; <span class="comment">// Create the Player Object</span>
         player.Play("C D E F G A B"); <span class="comment">// Play the Music Notes on the default MIDI output port</span>
     }
 </pre>
@@ -71,15 +69,12 @@ For further details on CFugue music note specifications, please refer to \ref pa
 
 \section download Download
 
-CFugue is ready to be used in your applications. It can be found at the downloads section of http://sourceforge.net/projects/musicnote/
+CFugue is ready to be used in your applications. It can be found at the downloads section of http://sourceforge.net/projects/cfugue/
 
 \section limitations Limitations
 
 CFugue is under active development, with much of the features, such as rendering to sheet music, etc. 
 pending. By the time the development completes, we hope to have this Limitations section to be empty.
-
-CFugue aims to be platform independent. At present the primary development is happening on Win32 and the real work of porting and testing
-to ensure the full platform compliance is still in-progress.
 
 \section copyright Copyright
 
@@ -89,9 +84,9 @@ For commercial usage, please contact the author.
 CFugue is distributed with the hope that it will be useful.
 No warranty of what-so-ever is implied, including MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
- Author: <a href="http://gpalem.web.officelive.com/index.html">Gopalakrishna Palem</a>
+ Author: <a href="http://gopalakrishna.palem.in/">Gopalakrishna Palem</a>
 
- Project: http://musicnote.sourceforge.net
+ Project: http://cfugue.sourceforge.net
 
  Copyright (C) 2009 <a href="http://www.CineFxLabs.com">CineFx Digital Media Pvt Ltd.</a>
 
@@ -120,16 +115,10 @@ No warranty of what-so-ever is implied, including MERCHANTABILITY or FITNESS FOR
         - \ref ancPInvokeExampleParserEvents "Accessing the Parser events"
     - \ref index "Back to main page"
 
-\section secExamplesIntroduction Introduction
-CFugue API is rich and versatile, and can be used from almost any language - C, C++, .Net, COM-compatible... 
-
-\note Initially the Alpha release of CFugue offers only C API (a wrapper over the internal C++ API). C++ API and P/Invoke definitions for .Net compatible clients are retained in the source code for later public release. If you are using the public Alpha release of CFugue, then you have access to only the C API, in which case please check the \ref secCExamples. If you are directly using the code from the SVN, then you will have access to the complete C++ API, in which case you can take advantage of \ref secCplusCplusExamples.
-
 \section secCExamples C Examples
 \subsection ancCExamplePlay Playing the Notes
 <pre class="fragment">
     \#include "MusicNoteLib.h"
-
     void main()
     {		        
         MusicNoteLib::PlayMusicString("C D E F G A B"); <span class="comment">// Play the Music Notes on the default MIDI output port</span>
@@ -138,7 +127,6 @@ CFugue API is rich and versatile, and can be used from almost any language - C, 
 Playing them Carnatic style:
 <pre class="fragment">
     \#include "MusicNoteLib.h"
-
     void main()
     {      
         MusicNoteLib::PlayMusicString("K[MELA_DEFAULT] S R G M P D N"); <span class="comment">// Play the Music Notes on the default MIDI output port</span>
@@ -148,7 +136,6 @@ Playing them Carnatic style:
 \subsection ancCExampleSaveMIDI Saving Music Notes to MIDI output file
 <pre class="fragment">
     \#include "MusicNoteLib.h"
-
     void main()
     {           
         MusicNoteLib::SaveAsMidiFile("Cq Dw Ex", "MidiOutput.midi"); <span class="comment">// Save the Music Notes to Midi file directly, without playing</span>
@@ -161,7 +148,6 @@ The <tt>PlayMusicString()</tt> method plays the music notes on default MIDI outp
 
 <pre class="fragment">
     \#include "MusicNoteLib.h"
-
     void main()
     {
         MusicNoteLib::PlayMusicStringWithOpts(_T("Cq Dw Ex"), <span class="comment">// CFugue MusicString to be played</span>
@@ -181,13 +167,11 @@ Use the <tt>PlayMusicStringCB()</tt> method to add listeners to the parser trace
 Once subscribed, the attached listeners will be invoked during the parse phase. A sample demonstrating the procedure is below.
 <pre class="fragment">
     \#include "MusicNoteLib.h"
-
     void __stdcall OnParseTrace(void* pUserData, const TCHAR* szTraceMsg)
     {
         OutputDebugString(_T("\n"));
         OutputDebugString(szTraceMsg);
     }
-
     void __stdcall OnParseError(void* pUserData, long lErrCode, const TCHAR* szErrorMsg, const TCHAR* szToken);
     {
         OutputDebugString(_T("\nError --> "));
@@ -198,7 +182,6 @@ Once subscribed, the attached listeners will be invoked during the parse phase. 
             OutputDebugString(szToken);
         }
     }
-
     void main()
     {
         MusicNoteLib::PlayMusicStringCB(_T("Cq Dw Ex"), <span class="comment">// CFugue MusicString to be played</span>
@@ -224,35 +207,35 @@ Use <tt>PlayMusicStringWithOptsCB()</tt> method to subscribe handlers and also c
 \subsection ancPlay Playing the Notes
 <pre class="fragment">
     \#include "MusicNoteLib.h"
-
     void main()
     {		
-        MusicNoteLib::Player player; <span class="comment">// Create the Player Object</span>
-        
-        player.Play("C D E F G A B"); <span class="comment">// Play the Music Notes on the default MIDI output port</span>
+        <span class="comment">// Create the Player Object</span>
+        MusicNoteLib::Player player; 
+        <span class="comment">// Play the Music Notes on the default MIDI output port</span>
+        player.Play("C D E F G A B"); 
     }
 </pre>
 Playing them Carnatic style:
 <pre class="fragment">
     \#include "MusicNoteLib.h"
-
     void main()
     {
-        MusicNoteLib::Player player; <span class="comment">// Create the Player Object</span>
-        
-        player.Play("K[MELA_DEFAULT] S R G M P D N"); <span class="comment">// Play the Music Notes on the default MIDI output port</span>
+        <span class="comment">// Create the Player Object</span>
+        MusicNoteLib::Player player; 
+        <span class="comment">// Play the Music Notes on the default MIDI output port</span>
+        player.Play("K[MELA_DEFAULT] S R G M P D N"); 
     }
 </pre>
 
 \subsection ancSaveMIDI Saving Music Notes to MIDI output file
 <pre class="fragment">
     \#include "MusicNoteLib.h"
-
     void main()
-    {   
-        MusicNoteLib::Player player; <span class="comment">// Create the Player Object </span>
-        
-        player.SaveAsMidiFile("Cq Dw Ex", "MidiOutput.midi"); <span class="comment">// Save the Music Notes to Midi file directly, without playing</span>
+    {    
+        <span class="comment">// Create the Player Object </span>
+        MusicNoteLib::Player player;
+        <span class="comment">// Save the Music Notes to Midi file directly, without playing</span>
+        player.SaveAsMidiFile("Cq Dw Ex", "MidiOutput.midi"); 
     }
 </pre>
 Sometimes you might want to play the Notes first on the MIDI output and then save the played 
@@ -260,14 +243,12 @@ content to an output file. You can achieve this using the Player::SaveToMidiFile
 You need to call this method <i>after</i> the call to Player::Play() or Player::PlayAsync().
 <pre class="fragment">
     \#include "MusicNoteLib.h"
-
     void main()
     {   
-        MusicNoteLib::Player player; <span class="comment">// Create the Player Object </span> 
-
+        <span class="comment">// Create the Player Object </span> 
+        MusicNoteLib::Player player; 
         <span class="comment">// Play few Music Notes on MIDI output port</span>
         player.Play("ci di K[MELA_22] Pa M G R"); 
-
         <span class="comment">// Now, save that played content to a MIDI output file</span>
         player.SaveToMidiFile("Output.mid"); 
     }
@@ -282,16 +263,16 @@ instead. It works similar to the Play() method, except that it returns immediate
 
 <pre class="fragment">
     \#include "MusicNoteLib.h"
-
     void main()
     {
-        MusicNoteLib::Player player; <span class="comment">// Create the Player object</span>
-
-        if(player.PlayAsync("Cx Dh Ah.")) <span class="comment">// Start Playing Asynchronously </span>
+        <span class="comment">// Create the Player object</span>
+        MusicNoteLib::Player player; 
+        <span class="comment">// Start Playing Asynchronously </span>
+        if(player.PlayAsync("Cx Dh Ah.")) 
             while(player.IsPlaying()) <span class="comment">// Wait while the play is in progress</span>
                 Sleep(1000);
-
-        player.StopPlay(); <span class="comment">// Match every PlayAsync with a StopPlay</span>
+        <span class="comment">// Match every PlayAsync with a StopPlay</span>
+        player.StopPlay(); 
     }
 </pre>
 At any time after the call to PlayAsync, the Player::IsPlaying() method can be used
@@ -313,14 +294,12 @@ Once subscribed, the attached handlers will be invoked during the parse phase wh
 Play or Save methods is invoked on the player. A sample demonstrating the procedure is below.
 <pre class="fragment">
     \#include "MusicNoteLib.h"
-
     void OnParseTrace(const MusicNoteLib::CParser*, 
                 MusicNoteLib::CParser::TraceEventHandlerArgs* pEvArgs)
     {
         OutputDebugString(_T("\n"));
         OutputDebugString(pEvArgs->szTraceMsg);
     }
-
     void OnParseError(const MusicNoteLib::CParser*,
                 MusicNoteLib::CParser::ErrorEventHandlerArgs* pEvArgs)
     {
@@ -332,15 +311,13 @@ Play or Save methods is invoked on the player. A sample demonstrating the proced
             OutputDebugString(pEvArgs->szToken);
         }
     }
-
     void main()
     {
-        MusicNoteLib::Player player; <span class="comment">// Create the Player Object</span>
-
+        <span class="comment">// Create the Player Object</span>
+        MusicNoteLib::Player player; 
         <span class="comment">// Access the Player's Parser and Subscribe to its Trace and Error Events</span>
         player.Parser().evTrace.Subscribe(&OnParseTrace); 
         player.Parser().evError.Subscribe(&OnParseError);
-
         <span class="comment">// Parse the Notes and Save the content to a MIDI file</span>
         player.SaveAsMidiFile(_T("Cq Dw Ex"), "MidiOutput.midi"); 
      }
@@ -354,7 +331,6 @@ public static class MusicNoteLib
     [DllImport("MusicNoteDll.Dll")]
     public static extern bool PlayMusicString([MarshalAs(UnmanagedType.LPStr)] String szMusicNotes);
 }
-
 public static void Main()
 {    
     MusicNoteLib::PlayMusicString("Cq Dw Ex");<span class="comment">// Play the Music Notes on default MIDI Output Port</span>
@@ -367,7 +343,6 @@ public static class MusicNoteLib
     [DllImport("MusicNoteDll.Dll")]
     public static extern bool SaveAsMidiFile([MarshalAs(UnmanagedType.LPStr)] String szMusicNotes, [MarshalAs(UnmanagedType.LPStr)] String szOutputFilePath);
 }
-
 public static void Main()
 {    
     MusicNoteLib::SaveAsMidiFile("Cq Dw Ex", "MidiOutput.mid");<span class="comment">// Save the Music Notes to a MIDI file</span>
@@ -383,30 +358,26 @@ to a log file or appropriate UI.
 Use the <tt>PlayMusicStringCB()</tt> method to add listeners to the parser trace and error events.
 Once subscribed, the attached listeners will be invoked during the parse phase. A sample demonstrating the procedure is below.
 <pre class="fragment">
-public static class MusicNoteLib
-{
-    public delegate void ParserTraceDelegate(IntPtr userData, [MarshalAs(UnmanagedType.LPStr)] String szTraceMsg);
-    public delegate void ParserErrorDelegate(IntPtr userData, int errCode,
-                                            [MarshalAs(UnmanagedType.LPStr)] String szErrorMsg,
-                                            [MarshalAs(UnmanagedType.LPStr)] String szToken);
-
-    [DllImport("MusicNoteDll.Dll", CallingConvention = CallingConvention.Cdecl)]
-    public static extern void PlayMusicStringCB([MarshalAs(UnmanagedType.LPStr)] String szMusicNotes, 
-                                            [MarshalAs(UnmanagedType.FunctionPtr)] ParserTraceDelegate td,
-                                            [MarshalAs(UnmanagedType.FunctionPtr)] ParserErrorDelegate ed,
-                                            IntPtr userData);
-}
-
+    public static class MusicNoteLib
+    {
+        public delegate void ParserTraceDelegate(IntPtr userData, [MarshalAs(UnmanagedType.LPStr)] String szTraceMsg);
+        public delegate void ParserErrorDelegate(IntPtr userData, int errCode,
+                                                [MarshalAs(UnmanagedType.LPStr)] String szErrorMsg,
+                                                [MarshalAs(UnmanagedType.LPStr)] String szToken);
+        [DllImport("MusicNoteDll.Dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern void PlayMusicStringCB([MarshalAs(UnmanagedType.LPStr)] String szMusicNotes, 
+                                                [MarshalAs(UnmanagedType.FunctionPtr)] ParserTraceDelegate td,
+                                                [MarshalAs(UnmanagedType.FunctionPtr)] ParserErrorDelegate ed,
+                                                IntPtr userData);
+    }
     public void OnParseTrace(IntPtr userData, [MarshalAs(UnmanagedType.LPStr)] String szTraceMsg)
     {
         <span class="comment">// Do something with szTraceMsg ... </span>
     }
-
     public void OnParseError(IntPtr userData, int errCode, [MarshalAs(UnmanagedType.LPStr)] String szErrorMsg, [MarshalAs(UnmanagedType.LPStr)] String szToken)
     {
         <span class="comment">// Do something with szErrorMsg and szToken ... </span>
     }
-
 void main()
 {
     MusicNoteLib.PlayMusicStringWithOptsCB("C D E", <span class="comment">// CFugue MusicString to be played</span>
@@ -460,27 +431,20 @@ Music Notes and MIDI instructions as a sequence of characters (and tokens) in hu
 as opposed to the usual complex binary data byte form. This makes it easy to learn and master. Below is an example of a MusicString supplied to the <i>Play()</i> method to play a Mid-C note and a C-Major chord. (Please refer \ref pageExamples "CFugue API examples" for more such examples.)
 <pre class="fragment">
     \#include "MusicNoteLib.h"
-
     void main()
     {		
-        MusicNoteLib::Player player; <span class="comment">// Create the Player Object</span>
-        
+        MusicNoteLib::Player player; <span class="comment">// Create the Player Object</span>        
         player.Play("C CMaj"); <span class="comment">// Play a Mid-C followed by C-Major Chord </span>
     }
 </pre>
 Few more examples of MusicStrings:
 <pre class="fragment">
-    MusicNoteLib::Player player; <span class="comment">// Create the Player Object</span>
-    
+    MusicNoteLib::Player player; <span class="comment">// Create the Player Object</span>    
     player.Play("I[FLUTE] FMaj"); <span class="comment">// Play the F-Major chord with Flute </span>
-
     player.Play("C D E F G A B"); <span class="comment">// Play all the mid octave notes </span>
     player.Play("K[MELA] S R G M P D N"); <span class="comment">// Play all the mid octave (madhya sthayi) notes in Carnatic Music </span>
-
-    player.Play("C+D+E+F+G+A+B"); <span class="comment">// Play all the mid octave notes in parallel</span>
-    
+    player.Play("C+D+E+F+G+A+B"); <span class="comment">// Play all the mid octave notes in parallel</span>    
     player.Play("CI CI CI GI FI GI D#I. FI. G#I GI. RI"); <span class="comment">// Notes with durations</span>
-
     player.Play("K[HAMSADHWANI]T8S2 ( S' GA' R'  S' R' S' N   PA N S'  RI' RI' )"); <span class="comment">// A piece of Vatapi Ganapathim in double speed </span>
 </pre>
 In the following we discuss at length the details of what constitues a MusicString and how it can be used for creating music with CFugue.
@@ -563,7 +527,7 @@ Similarily, for Carnatic music, CFugue allows <i>R3</i>, <i>G1</i>, <i>D3</i> an
     player.Play("K[MELA] S R G M P D N"); 
 </pre> The K[MELA] directive informs the parser to switch to Carnatic mode of parsing and to interpret the subsequent notes in that mode. For further discussion on this, please refer \ref secInteroperation.
 
-A note can also be specified using its MIDI numeric value directly. Usually, when a note is specified using its name, such as C, D, E .. or S, R, G.., it is treated as a relative note. Its absolute position will be internally re-computed based on the Octave specifiers and the Scale/Raga settings. On the otherhand, when a note is specified with its MIDI numeric value directly, it is treated as an absolute note and will not be affected by the current Scale or Octave settings. An example of such numeric note is:
+Music notes can also be specified using their MIDI numeric value directly. Usually, when a note is specified using its name, such as C, D, E .. or S, R, G.., it is treated as a relative note. Its absolute position will be internally re-computed based on the Octave specifiers and the Scale/Raga settings. On the otherhand, when a note is specified with its MIDI numeric value directly, it is treated as an absolute note and will not be affected by the current Scale or Octave settings. An example of such numeric note is:
 <pre class="fragment">
     <span class="comment">// Play a Mid-C </span>
     player.Play("[60]");
@@ -1264,7 +1228,7 @@ the two notations with same ease.
 
 \note In addition, the same principles can be adapted for Hindustani music also to make it work side by side with Western music.
 
-By default CFugue starts parsing the notes in Western mode. However, ...
+By default CFugue starts parsing the notes in Western mode. However, when it encounters the K[] signature token with Carnatic music mela as key, it switches to Carnatic music parsing mode.
 */
 
 /////////////////////////////////////////////////////////////////
@@ -1274,7 +1238,7 @@ By default CFugue starts parsing the notes in Western mode. However, ...
 \section future The Future
 
 With CFugue still in its infancy, the future of Music Note programming is still shining bright upon it.
-The possibilities of what can be achieved through high-level MIDI note programming is endless. From 
+The possibilities of what can be achieved through high-level MIDI note programming are endless. From 
 automated Music analysis, recognition and generation to experimental cross genre Music research, all 
 are going to benefit immesenly from this work. We have kept all the options open, to ensure we include
 the new developments in the work as and when we discover the scope for improvements.
