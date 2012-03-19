@@ -152,7 +152,7 @@ The <tt>PlayMusicString()</tt> method plays the music notes on default MIDI outp
     {
         MusicNoteLib::PlayMusicStringWithOpts(_T("Cq Dw Ex"), <span class="comment">// CFugue MusicString to be played</span>
                                                 MIDI_MAPPER, <span class="comment">// MIDI Output port</span>
-                                                48 <span class="comment">// MIDI Timer Resolution in MilliSeconds</span>);
+                                                48); <span class="comment">// MIDI Timer Resolution in MilliSeconds</span>
      }
 </pre>
 
@@ -196,7 +196,7 @@ Use <tt>PlayMusicStringWithOptsCB()</tt> method to subscribe handlers and also c
     {
         MusicNoteLib::PlayMusicStringWithOptsCB(_T("Cq Dw Ex"), <span class="comment">// CFugue MusicString to be played</span>
                                                 MIDI_MAPPER, <span class="comment">// MIDI Output port</span>
-                                                48 <span class="comment">// MIDI Timer Resolution in MilliSeconds</span>);
+                                                48, <span class="comment">// MIDI Timer Resolution in MilliSeconds</span>
                                                 OnParseTrace, <span class="comment">// Parse Trace Event Handler</span>
                                                 OnParseError, <span class="comment">// Prase Error Event Handler</span>
                                                 NULL);
@@ -381,8 +381,8 @@ Once subscribed, the attached listeners will be invoked during the parse phase. 
 void main()
 {
     MusicNoteLib.PlayMusicStringWithOptsCB("C D E", <span class="comment">// CFugue MusicString to be played</span>
-                        new MusicNoteLib.ParserTraceDelegate(OnParseTrace), <span class="comment">// Parse Trace Event Handler</span>
-                        new MusicNoteLib.ParserErrorDelegate(OnParseError), <span class="comment">// Prase Error Event Handler</span>
+                                        new MusicNoteLib.ParserTraceDelegate(OnParseTrace), <span class="comment">// Parse Trace Event Handler</span>
+                                        new MusicNoteLib.ParserErrorDelegate(OnParseError), <span class="comment">// Prase Error Event Handler</span>
                                         IntPtr.Zero);
  }
 </pre>
@@ -392,9 +392,9 @@ void main()
 {
     MusicNoteLib.PlayMusicStringWithOptsCB("C D E", <span class="comment">// CFugue MusicString to be played</span>
                                             MIDI_MAPPER, <span class="comment">// MIDI Output port</span>
-                                            48 <span class="comment">// MIDI Timer Resolution in MilliSeconds</span>);
-                        new MusicNoteLib.ParserTraceDelegate(OnParseTrace), <span class="comment">// Parse Trace Event Handler</span>
-                        new MusicNoteLib.ParserErrorDelegate(OnParseError), <span class="comment">// Prase Error Event Handler</span>
+                                            48, <span class="comment">// MIDI Timer Resolution in MilliSeconds</span>
+                                            new MusicNoteLib.ParserTraceDelegate(OnParseTrace), <span class="comment">// Parse Trace Event Handler</span>
+                                            new MusicNoteLib.ParserErrorDelegate(OnParseError), <span class="comment">// Prase Error Event Handler</span>
                                             IntPtr.Zero);
  }
 </pre>
