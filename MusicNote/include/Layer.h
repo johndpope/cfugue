@@ -5,9 +5,9 @@
 	For links to further information, or to contact the author,
 	see <http://cfugue.sourceforge.net/>.
     
-    $LastChangedDate: 2012-03-10 19:11:21 +0530 (Sat, 10 Mar 2012) $
-    $Rev: 174 $
-    $LastChangedBy: krishnapg $
+    $LastChangedDate$
+    $Rev$
+    $LastChangedBy$
 */
 
 #ifndef __LAYER_H__B93236D6_FA2B_4de1_B1F1_908DBA7B7CE4__

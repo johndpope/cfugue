@@ -5,9 +5,9 @@
 	For links to further information, or to contact the author,
 	see <http://cfugue.sourceforge.net/>.
     
-    $LastChangedDate: 2012-03-10 19:11:21 +0530 (Sat, 10 Mar 2012) $
-    $Rev: 174 $
-    $LastChangedBy: krishnapg $
+    $LastChangedDate$
+    $Rev$
+    $LastChangedBy$
 */
 
 #ifndef _TEMPO_H___1A1E8E8A_DFBA_40c7_B45D_7B5EC45BEE4D__
