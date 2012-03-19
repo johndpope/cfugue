@@ -805,11 +805,12 @@ In Carnatic music, durations for the notes are determined automatically based on
 \subsubsection subsubVelocity Velocity
 CFugue supports attack and decay velocities for notes. These values indicate how a note should be played in terms of its "take off" and "landing" volumes. For example, a note with long attack will sound like being built over a period of time, while a note with long decay sounds like a bell or a string that continues to resonate long after it has been struck. 
 
-In CFugue, attack and decay velocities can be specified using the letters <tt>V</tt> and <tt>D</tt>, respectively, followed by a numeric value in the range [0, 127]. Low numeric values indicate quicker attack and decay, while high values signify longer attack and decay. Both are optional and are independent of each other. And the default value, if unspecified, is 64. Below are few examples of valid usage:
+In CFugue, attack and decay velocities can be specified using a pair of <tt>V</tt> followed by a numeric value in the range [0, 127] duo. The first <tt>V</tt> number pair stands for attack velocity, followed by the optional second <tt>V</tt> number pair that stand for decay velocity. Both are optional and are independent of each other. Low numeric values indicate quicker attack (or decay), while high values signify longer attack (or decay). And the default value, if unspecified, is 64. Below are few examples of valid usage:
 <pre class="fragment">
-    player.Play("C6V0D124"); <span class="comment">// C6 note with sharp attack and longer decay </span>
-    player.Play("Bb3qhD0"); <span class="comment">// B-Flat 3rd octave quarter+half duration with default Attack and sharp decay </span>
-    player.Play("Bb3qhA0"); <span class="comment">// B-Flat 3rd octave quarter+half duration with sharp Attack and default decay </span>
+    player.Play("C6V2V124"); <span class="comment">// C6 note with sharp attack 2 and longer decay 124. The first V stands for attack, second V for decay. </span>
+    player.Play("Bb3qhVV3"); <span class="comment">// B-Flat 3rd octave quarter+half duration with default Attack and sharp decay 3. First V value left unspecified, so attack takes default value </span>
+    player.Play("Bb3qhV1"); <span class="comment">// B-Flat 3rd octave quarter+half duration with sharp Attack 1 and default decay. Second V left unspecified, so decay takes default value</span>
+    player.Play("Bb3qh"); <span class="comment">// B-Flat 3rd octave quarter+half duration with default Attack and default decay - No V at all, so both attack and decay take default values</span>
 </pre>
 
 \subsubsection subsubConnectors Connectors
