@@ -175,14 +175,14 @@ namespace MusicNoteLib
 		/// You can ignore this parameter if you are not doing any error handling or if the
 		/// <code>ParseToken</code> is not called multiple times.
 		///
-		/// @return True if success, False in case of any failures.
+		/// @return -1 in case of failures, the number of characters consumed, otherwise.
 		///
-		/// Note that it is possible to have a return value of False, and *pbNonContinuableErrorOccured
+		/// Note that it is possible to have a return value of -1, and *pbNonContinuableErrorOccured
 		/// as True or False. This happens when an event handler responding to the error modifies the 
-		/// error continuability. In any case, return value of false indicates there was an error, but
+		/// error continuability. In any case, return value of -1 indicates there was an error, but
 		/// if *pbNonContinuableErrorOccured is false, then an error event hanlder is asking you to ignore it.
 		/// </Summary>
-		bool ParseToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured = NULL); 
+		int ParseToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured = NULL); 
 
 	public:
 		//typedef void (*TOKEN_HANDLER_PROC)(const TCHAR* );
@@ -290,21 +290,21 @@ namespace MusicNoteLib
 		bool Parse(const TCHAR* szTokens); 
 
 	private:
-		// Token Parserer Methods. Return value indicates success or failure.
-		bool ParseChannelPressureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
-		bool ParseControllerToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
-		bool ParseDictionaryToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
-		bool ParseInstrumentToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
-		bool ParseKeyPressureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
-		bool ParseKeySignatureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
-		bool ParseLayerToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
-		bool ParseMeasureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
-		bool ParseNoteToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
-		bool ParsePitchBendToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
-        bool ParseSpeedModulatorToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
-		bool ParseTempoToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
-		bool ParseTimeToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
-		bool ParseVoiceToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+		// Token Parserer Methods. Return value indicates the number of characters consumed. -1 for failure. 0 for none.
+		int ParseChannelPressureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+		int ParseControllerToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+		int ParseDictionaryToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+		int ParseInstrumentToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+		int ParseKeyPressureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+		int ParseKeySignatureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+		int ParseLayerToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+		int ParseMeasureToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+		int ParseNoteToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+		int ParsePitchBendToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+        int ParseSpeedModulatorToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+		int ParseTempoToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+		int ParseTimeToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
+		int ParseVoiceToken(TCHAR* szToken, bool* pbNonContinuableErrorOccured);
 
 		struct NoteContext : public Note
 		{
