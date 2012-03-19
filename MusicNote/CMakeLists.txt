@@ -14,7 +14,7 @@ SET(PROJECT_DESCRIPTION  "C++ Runtime Environment for MIDI Score Programming")
 SET(PROJECT_COPYRIGHT    "Copyright (C) 2009 Gopalakrishna Palem")
 SET(PROJECT_CONTACT      "Gopalakrishna.Palem@Yahoo.com")
 SET(PROJECT_VENDOR       "Gopalakrishna Palem")
-SET(ORG_WEBSITE          "http://musicnote.sourceforge.net/")
+SET(ORG_WEBSITE          "http://cfugue.sourceforge.net/")
 
 
 #################################

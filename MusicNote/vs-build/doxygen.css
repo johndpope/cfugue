@@ -157,6 +157,12 @@ div.groupText {
 	font-style: italic;
 }
 
+div.title {
+	text-align:center;
+	padding:12px;
+	margin:12px;
+}
+
 body {
 	background: white;
 	color: black;

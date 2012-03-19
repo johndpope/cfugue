@@ -3,7 +3,11 @@
 	Copyright (C) 2009 Gopalakrishna Palem
 
 	For links to further information, or to contact the author,
-	see <http://musicnote.sourceforge.net/>.
+	see <http://cfugue.sourceforge.net/>.
+    
+    $LastChangedDate: 2012-03-10 19:11:21 +0530 (Sat, 10 Mar 2012) $
+    $Rev: 174 $
+    $LastChangedBy: krishnapg $
 */
 
 #ifndef __MUSICNOTEREADER_H__506A239B_50B0_472d_B070_69BFBEF3C6CB__
