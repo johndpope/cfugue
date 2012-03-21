@@ -138,21 +138,21 @@ namespace MusicNoteLib
     }
 
     // copies at most nMaxLimit chars
-    inline TCHAR* CreateToken(const TCHAR* psz, /*int nMaxLimit = INT_MAX, */const TCHAR* szDelim = _T(" \t\n\r")) // returns a new copy - caller need to delete it later
+    inline TCHAR* CreateToken(const TCHAR* psz, int& nTokenLen, const TCHAR* szDelim = _T(" \t\n\r")) // returns a new copy - caller need to delete it later
     {
+        nTokenLen = 0;
         if(psz)
         {
-            //int nCount = 0;
             const TCHAR* pszStart = psz;
-            while(*psz && !IsOneOf(*psz, szDelim) /*&& ++nCount < nMaxLimit*/) psz++; // skip till a delimeter is found
+            while(*psz && !IsOneOf(*psz, szDelim)) psz++; // skip till a delimeter is found
 
             int nLen = (int)(psz - pszStart);
-            TCHAR* pszNewCopy = new TCHAR[nLen + 1]; // allocate new buffer
-            memset(pszNewCopy, 0, sizeof(TCHAR) * (nLen+1));
+            TCHAR* pszNewCopy = new TCHAR[nLen + 4]; // allocate new buffer - add extra \0s for safety in case parser shoots beyond
+            memset(pszNewCopy, 0, sizeof(TCHAR) * (nLen+4));
 
             _tcsncpy(pszNewCopy, pszStart, nLen); // copy the skipped chars
 
-            //if(*psz) psz++;
+            nTokenLen = nLen;
 
             return pszNewCopy;
         }
@@ -166,6 +166,7 @@ namespace MusicNoteLib
 
 		bool bNonContinuableErrorOccured = false;
 
+        int nTokenLen, nReadLen;
         const TCHAR* psz = szTokens;
         do
         {
@@ -173,53 +174,27 @@ namespace MusicNoteLib
 
             EatComments(psz);
 
-            //int nMaxTokenLen = INT_MAX;
-
-            //if(*psz == TOKEN_DOUBLESPEED_START) // we let no space needed after ( 
-            //    nMaxTokenLen = 1;
-
             //// TODO: Add XML Support
             //if(*psz == _T('<'))
             //    ExtractXmlPortion();
-            
-            //TCHAR* szDelim = _T(" \t\n\r()");  // Delimiters - we let ) and ( also be treated as delimeter so they can be seperate tokens
+            nTokenLen=0, nReadLen=0;
 
-            TCHAR* pszToken = CreateToken(psz/*, nMaxTokenLen,*/ /*szDelim*/); // 
+            TCHAR* pszToken = CreateToken(psz, nTokenLen);            
+                
+            if(nTokenLen <= 0 || pszToken == NULL) { bNonContinuableErrorOccured= (pszToken==NULL); break;}
 
-            if(pszToken == NULL) break;
-            
-            int nLen = ParseToken(pszToken, &bNonContinuableErrorOccured);
-
+            while(nReadLen < nTokenLen)
+            {
+                int nLen = ParseToken(pszToken, &bNonContinuableErrorOccured);
+                if(-1 == nLen && true == bNonContinuableErrorOccured)
+                    break;
+                nReadLen += nLen;
+            }
             delete[] pszToken;
 
-            if(-1 == nLen && true == bNonContinuableErrorOccured)
-                return false;
+            psz = psz + nReadLen;
 
-            psz = psz + nLen;
-
-        }while(*psz);             
-
-		//TCHAR* szTokensDup = _tcsdup(szTokens);	// Create a modifiable string
-		//if(szTokensDup == NULL)
-		//{
-		//	Error(CRITICAL_ERROR_MEMORY_ALLOCATION, _T("Memory allocation failure in MusicStringParser::Parse"), szTokens);
-  //          return false;
-		//}
-
-  //      // Remove comments in the string
-
-
-
-  //      for(TCHAR *szState, *szToken = _tcstok_s(szTokensDup, szDelim, &szState);
-  //                          szToken != NULL;
-  //                          szToken = _tcstok_s(NULL, szDelim, &szState))
-  //      {
-  //          if(false == ParseToken(szToken, &bNonContinuableErrorOccured) &&
-		//		true == bNonContinuableErrorOccured)
-  //              return false;
-  //      }
-
-  //      free(szTokensDup); // free the memory allocated by _tcsdup
+        }while(*psz && !bNonContinuableErrorOccured);
 
 		return !bNonContinuableErrorOccured;
 	}
@@ -234,6 +209,7 @@ namespace MusicNoteLib
 
         switch(szUppercaseToken[0])
         {
+        case TOKEN_SEPERATOR: nLen = 1; break;
         case TOKEN_DOUBLESPEED_END:
         case TOKEN_DOUBLESPEED_START: nLen = ParseSpeedModulatorToken(szUppercaseToken, &bNonContinuableErrorOccured); break;
         case TOKEN_START_VOICE: nLen = ParseVoiceToken(szUppercaseToken+1, &bNonContinuableErrorOccured) + 1; break;
@@ -728,7 +704,7 @@ namespace MusicNoteLib
 
 		int nLen = 0, nReadLen = 0;
 
-		while(ctx.existsAnotherNote)
+		while(ctx.existsAnotherNote && *szToken)
 		{
 			Verbose(MString(_T("MusicStringParser::ParseNote: ")) + szToken);
 

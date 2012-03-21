@@ -147,8 +147,8 @@ namespace PlayerTestApp
             if (textBox_Notes.Text.Length != 0)
             {
                 SaveFileDialog dlg = new SaveFileDialog();
-                dlg.DefaultExt = "midi";
-                dlg.FileName = "Output.midi";
+                dlg.DefaultExt = "mid";
+                dlg.FileName = "Output.mid";
                 if(dlg.ShowDialog() != DialogResult.OK) return;
 
                 this.Cursor = Cursors.WaitCursor;
