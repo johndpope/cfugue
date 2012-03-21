@@ -42,6 +42,7 @@ namespace MusicNoteLib
 			TOKEN_START_MEASURE			= _T('|'),  ///< Specifies a Measure token
 			TOKEN_START_DICTIONARY		= _T('$'),  ///< Specifies a Dictionary token
 			TOKEN_START_NOTE			= _T('['),  ///< Specifies a Note token
+            TOKEN_SEPERATOR             = _T('-'),  ///< Specifies a seperator token for readability
 
             // Talam Related
             TOKEN_DOUBLESPEED_START     = _T('('),  ///< Specifies the start of 2x speed
