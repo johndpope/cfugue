@@ -3,7 +3,7 @@
 
 cmake_minimum_required(VERSION 2.6)
 
-PROJECT( MusicNote )
+PROJECT( CFugue )
 
 #################################
 # Project Info
@@ -20,12 +20,12 @@ SET(ORG_WEBSITE          "http://cfugue.sourceforge.net/")
 #################################
 # Setup Build Options
 #################################
-option (BUILD_MUSICNOTE_DLL "Should the DLL be built for MusicNote (Only for Windows)" OFF) 
-option (BUILD_MUSICNOTE_TESTS "Should the Test applications be built for MusicNote" ON) 
-OPTION (VERBOSE_MUSICNOTE_TRACE "Should MusicNote generate Verbose String Parsing Traces" ON)
-SET (BUILD_MUSICNOTE_UNICODE ON CACHE BOOL "Should MusicNote be built with Unicode? (recommended: Yes)")
+option (BUILD_CFUGUE_DLL "Should the DLL be built for CFugue (Only for Windows)" OFF) 
+option (BUILD_CFUGUE_TESTS "Should the Test applications be built for CFugue" ON) 
+OPTION (VERBOSE_CFUGUE_TRACE "Should CFugue generate Verbose String Parsing Traces" ON)
+SET (BUILD_CFUGUE_UNICODE ON CACHE BOOL "Should CFugue be built with Unicode? (recommended: Yes)")
 
-mark_as_advanced(BUILD_MUSICNOTE_DLL)
+mark_as_advanced(BUILD_CFUGUE_DLL)
 
 #################################
 # Compute Values based on Options
@@ -34,15 +34,15 @@ set(Char_Flags "" CACHE INTERNAL "Compiler Character Flags: Unicode/MBCS Options
 set(Char_postfix "" CACHE INTERNAL "Unicode Postfix")
 set(Output_postfix "" CACHE INTERNAL "Debug Postfix")
 
-if(BUILD_MUSICNOTE_UNICODE)
+if(BUILD_CFUGUE_UNICODE)
 	SET(Char_postfix "u")
 	SET(Char_Flags "-DUNICODE -D_UNICODE")
-	message(STATUS "MusicNote: Unicode build is ON")
-else(BUILD_MUSICNOTE_UNICODE)
+	message(STATUS "CFugue: Unicode build is ON")
+else(BUILD_CFUGUE_UNICODE)
 	SET(Char_postfix "")
 	SET(Char_Flags "-D_MBCS")
-	message(STATUS "MusicNote: Unicode build is OFF")
-endif(BUILD_MUSICNOTE_UNICODE)
+	message(STATUS "CFugue: Unicode build is OFF")
+endif(BUILD_CFUGUE_UNICODE)
 
 IF(NOT CMAKE_BUILD_TYPE)
     SET(CMAKE_BUILD_TYPE "Debug" CACHE STRING
@@ -59,7 +59,7 @@ endif()
 		
 SET(CMAKE_DEBUG_POSTFIX "d${Char_postfix}")
 SET(CMAKE_RELEASE_POSTFIX "${Char_postfix}")
-message(STATUS "MusicNote: Output Postfix: ${Output_postfix}${Char_postfix}")
+message(STATUS "CFugue: Output Postfix: ${Output_postfix}${Char_postfix}")
 
 #################################
 # Setup Output Directories
@@ -114,7 +114,7 @@ IF(CMAKE_COMPILER_IS_GNUCC)
   ADD_DEFINITIONS(-std=gnu++0x ) # Add C++0x support for GCC
 ENDIF()
 
-IF(VERBOSE_MUSICNOTE_TRACE)
+IF(VERBOSE_CFUGUE_TRACE)
 	ADD_DEFINITIONS(-DENABLE_TRACING)
 ENDIF()
 
@@ -138,7 +138,7 @@ include_directories( "include" "include/common" )
 # MESSAGE(TODO:Add Doxygen Target for documentation)
 
 #################################
-#### Target: MusicNoteLib ####
+#### Target: CFugueLib ####
 #################################
 SET( MusicNoteLib_Source_Files 
 	src/MusicNoteLib/Chords.cpp
@@ -185,8 +185,7 @@ SET( MusicNoteLib_Header_Files
    )
 SET( MusicNoteLib_UnKnownGroup src/MusicNoteLib/ReadMe.txt    )
 
-add_library(MusicNoteLib   ${MusicNoteLib_Source_Files}  ${MusicNoteLib_Header_Files}  ${MusicNoteLib_UnKnownGroup} )
-#SET_TARGET_PROPERTIES(MusicNoteLib PROPERTIES DEBUG_POSTFIX "d")
+add_library(CFugueLib   ${MusicNoteLib_Source_Files}  ${MusicNoteLib_Header_Files}  ${MusicNoteLib_UnKnownGroup} )
 
 #################################
 #### Target: DLLTestApp ####
@@ -201,10 +200,10 @@ SET( DLLTestApp_Header_Files
    )
 SET( DLLTestApp_UnKnownGroup test/DLLTestApp/ReadMe.txt    )
 
-if (BUILD_MUSICNOTE_TESTS AND BUILD_MUSICNOTE_DLL)
+if (BUILD_CFUGUE_TESTS AND BUILD_CFUGUE_DLL)
 	add_executable(DLLTestApp   ${DLLTestApp_Source_Files}  ${DLLTestApp_Header_Files}  ${DLLTestApp_UnKnownGroup} )
 	SET_TARGET_PROPERTIES(DLLTestApp PROPERTIES DEBUG_POSTFIX "d${Char_postfix}" RELEASE_POSTFIX "${Char_postfix}")
-endif (BUILD_MUSICNOTE_TESTS AND BUILD_MUSICNOTE_DLL)
+endif (BUILD_CFUGUE_TESTS AND BUILD_CFUGUE_DLL)
 
 
 #################################
@@ -219,10 +218,10 @@ SET( StaticLibTestApp_Header_Files
 	test/StaticLibTestApp/targetver.h
    )
 
-if (BUILD_MUSICNOTE_TESTS)
+if (BUILD_CFUGUE_TESTS)
 	add_executable(StaticLibTestApp   ${StaticLibTestApp_Source_Files}  ${StaticLibTestApp_Header_Files} )
 	SET_TARGET_PROPERTIES(StaticLibTestApp PROPERTIES DEBUG_POSTFIX "d${Char_postfix}" RELEASE_POSTFIX "${Char_postfix}")
-endif (BUILD_MUSICNOTE_TESTS )
+endif (BUILD_CFUGUE_TESTS )
 
 
 #################################
@@ -334,28 +333,28 @@ SET( jdkmidi_Dependencies  ${jdkmidi_Librarian} )
 target_link_libraries(jdkmidi  ${jdkmidi_Dependencies})
 
 SET( MusicNoteLib_Dependencies jdkmidi  ${MusicNoteLib_Librarian} )
-target_link_libraries(MusicNoteLib  ${MusicNoteLib_Dependencies})
+target_link_libraries(CFugueLib  ${MusicNoteLib_Dependencies})
 
-install(TARGETS jdkmidi MusicNoteLib RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
+install(TARGETS jdkmidi CFugueLib RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
 
-if (BUILD_MUSICNOTE_TESTS)
-	SET( StaticLibTestApp_Dependencies MusicNoteLib  ${StaticLibTestApp_Librarian} )
+if (BUILD_CFUGUE_TESTS)
+	SET( StaticLibTestApp_Dependencies CFugueLib  ${StaticLibTestApp_Librarian} )
 	target_link_libraries(StaticLibTestApp  ${StaticLibTestApp_Dependencies})
 	install(TARGETS StaticLibTestApp RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
-ENDIF(BUILD_MUSICNOTE_TESTS)
+ENDIF(BUILD_CFUGUE_TESTS)
 
 
 #################################
-#### Target: MusicNoteDLL ####
+#### Target: CFugueDLL ####
 #################################
 
 ADD_SUBDIRECTORY(src/MusicNoteDLL)
 
-if (BUILD_MUSICNOTE_TESTS AND BUILD_MUSICNOTE_DLL AND WIN32)
-	SET( DLLTestApp_Dependencies MusicNoteDLL  ${DLLTestApp_Librarian} )
+if (BUILD_CFUGUE_TESTS AND BUILD_CFUGUE_DLL AND WIN32)
+	SET( DLLTestApp_Dependencies CFugueDLL  ${DLLTestApp_Librarian} )
 	target_link_libraries(DLLTestApp  ${DLLTestApp_Dependencies})
 	install(TARGETS DLLTestApp  RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
-ENDIF(BUILD_MUSICNOTE_TESTS AND BUILD_MUSICNOTE_DLL AND WIN32)
+ENDIF(BUILD_CFUGUE_TESTS AND BUILD_CFUGUE_DLL AND WIN32)
 
 
 
