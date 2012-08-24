@@ -164,7 +164,7 @@ namespace MusicNoteLib
 
         auto waitStatus = m_bgTaskResult.wait_for(std::chrono::milliseconds(0));
 
-        while(waitStatus != true)//std::future_status::ready
+        while(waitStatus != std::future_status::ready)
         {
              waitStatus = m_bgTaskResult.wait_for(std::chrono::milliseconds(500));
         }
