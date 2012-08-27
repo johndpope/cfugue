@@ -65,34 +65,34 @@ message(STATUS "CFugue: Output Postfix: ${Output_postfix}${Char_postfix}")
 # Setup Output Directories
 #################################
 SET (CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG
-  ${PROJECT_SOURCE_DIR}/Bin
+  ${PROJECT_SOURCE_DIR}/bin
   CACHE PATH
   "Destination Directory for output Shared Libraries (Debug Mode)"
   )
 SET (CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE
-  ${PROJECT_SOURCE_DIR}/Bin
+  ${PROJECT_SOURCE_DIR}/bin
   CACHE PATH
   "Destination Directory for output Shared Libraries (Release Mode)"
   )
 
 SET (CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG
-  ${PROJECT_SOURCE_DIR}/Bin
+  ${PROJECT_SOURCE_DIR}/bin
   CACHE PATH
   "Destination Directory for output Executables (Debug Mode)."
   )
 SET (CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE
-  ${PROJECT_SOURCE_DIR}/Bin
+  ${PROJECT_SOURCE_DIR}/bin
   CACHE PATH
   "Destination Directory for output Executables (Release Mode)."
   )
 
 SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG
-  ${PROJECT_SOURCE_DIR}/Lib
+  ${PROJECT_SOURCE_DIR}/lib
   CACHE PATH
   "Destination Directory for output static libraries (Debug Mode)."
   )
 SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE
-  ${PROJECT_SOURCE_DIR}/Lib
+  ${PROJECT_SOURCE_DIR}/lib
   CACHE PATH
   "Destination Directory for output static libraries (Release Mode)."
   )
