@@ -9,21 +9,13 @@ QT       += core gui
 TARGET = SampleUV
 TEMPLATE = app
 
+INCLUDEPATH += ../../src/QtVuMeter/
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    E:/Codebase/qsynthMeter.cpp \
-    E:/Codebase/qvumeter.cpp \
-    E:/Codebase/qvumeter.cpp \
-    E:/Codebase/qsynthMeter.cpp
+    ../../src/QtVuMeter/qvumeter.cpp
 
 HEADERS  += mainwindow.h \
-    E:/Codebase/qsynthMeter.h \
-    E:/Codebase/qsynthAbout.h \
-    E:/Codebase/qvumeter.h \
-    E:/Codebase/qvumeter.h \
-    E:/Codebase/qsynthMeter.h \
-    E:/Codebase/qsynthAbout.h
+    ../../src/QtVuMeter/qvumeter.h
 
 FORMS    += mainwindow.ui
-INCLUDEPATH += e:/codebase
