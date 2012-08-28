@@ -85,7 +85,7 @@ class QUVBar : public QObject
 
 public:
 
-    QUVBar(QString strLabel = "", QObject* pParent = NULL, double min=0, double max = 100);
+    QUVBar(QObject* pParent = NULL, QString strLabel = "", double min=0, double max = 100);
 
 
 signals:
@@ -150,6 +150,14 @@ public:
     */
     void SetBars(QStringList strBarLables, double min=0, double max=100);
 
+    /**
+    <Summary>
+        Sets the number of Bars in the Meter. 
+        Existing bars will be reduced or added to based on nCount.
+    </Summary>
+    */
+    void SetBarCount(int nCount);
+
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
 
@@ -165,6 +173,7 @@ public slots:
 
     void setColorBg(QColor);
     QUVBar* GetBar(int nIndex) const;
+    int  GetBarCount() const;
 
 protected:
 
@@ -172,8 +181,6 @@ protected:
     void paintBorder();
     void paintBar();
     void paintValue();
-
-
 
 private:
 
