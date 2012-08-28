@@ -135,8 +135,6 @@ ENDIF(WIN32)
 
 include_directories( "include" "include/common" )
 
-# MESSAGE(TODO:Add Doxygen Target for documentation)
-
 #################################
 #### Target: CFugueLib ####
 #################################
@@ -187,46 +185,6 @@ SET( MusicNoteLib_UnKnownGroup src/MusicNoteLib/ReadMe.txt    )
 
 add_library(CFugueLib   ${MusicNoteLib_Source_Files}  ${MusicNoteLib_Header_Files}  ${MusicNoteLib_UnKnownGroup} )
 
-#################################
-#### Target: DLLTestApp ####
-#################################
-SET( DLLTestApp_Source_Files 
-	test/DLLTestApp/DLLTestApp.cpp
-	test/DLLTestApp/stdafx.cpp
-   )
-SET( DLLTestApp_Header_Files 
-	test/DLLTestApp/stdafx.h
-	test/DLLTestApp/targetver.h
-   )
-SET( DLLTestApp_UnKnownGroup test/DLLTestApp/ReadMe.txt    )
-
-if (BUILD_CFUGUE_TESTS AND BUILD_CFUGUE_DLL)
-	add_executable(DLLTestApp   ${DLLTestApp_Source_Files}  ${DLLTestApp_Header_Files}  ${DLLTestApp_UnKnownGroup} )
-	SET_TARGET_PROPERTIES(DLLTestApp PROPERTIES DEBUG_POSTFIX "d${Char_postfix}" RELEASE_POSTFIX "${Char_postfix}")
-endif (BUILD_CFUGUE_TESTS AND BUILD_CFUGUE_DLL)
-
-
-#################################
-#### Target: StaticTestApp ####
-#################################
-SET( StaticLibTestApp_Source_Files 
-	test/StaticLibTestApp/SampleApp.cpp
-	test/StaticLibTestApp/stdafx.cpp
-   )
-SET( StaticLibTestApp_Header_Files 
-	test/StaticLibTestApp/stdafx.h
-	test/StaticLibTestApp/targetver.h
-   )
-
-if (BUILD_CFUGUE_TESTS)
-	add_executable(StaticLibTestApp   ${StaticLibTestApp_Source_Files}  ${StaticLibTestApp_Header_Files} )
-	SET_TARGET_PROPERTIES(StaticLibTestApp PROPERTIES DEBUG_POSTFIX "d${Char_postfix}" RELEASE_POSTFIX "${Char_postfix}")
-endif (BUILD_CFUGUE_TESTS )
-
-
-#################################
-#### Target: PlayerTestApp ####
-#################################
 #################################
 #### Target: Documentation ####
 #################################
@@ -337,27 +295,20 @@ target_link_libraries(CFugueLib  ${MusicNoteLib_Dependencies})
 
 install(TARGETS jdkmidi CFugueLib RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
 
-if (BUILD_CFUGUE_TESTS)
-	SET( StaticLibTestApp_Dependencies CFugueLib  ${StaticLibTestApp_Librarian} )
-	target_link_libraries(StaticLibTestApp  ${StaticLibTestApp_Dependencies})
-	install(TARGETS StaticLibTestApp RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
-ENDIF(BUILD_CFUGUE_TESTS)
-
-
 #################################
 #### Target: CFugueDLL ####
 #################################
 
-ADD_SUBDIRECTORY(src/MusicNoteDLL)
-
-if (BUILD_CFUGUE_TESTS AND BUILD_CFUGUE_DLL AND WIN32)
-	SET( DLLTestApp_Dependencies CFugueDLL  ${DLLTestApp_Librarian} )
-	target_link_libraries(DLLTestApp  ${DLLTestApp_Dependencies})
-	install(TARGETS DLLTestApp  RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
+if (BUILD_CFUGUE_TESTS AND BUILD_CFUGUE_DLL AND WIN32)	
+	ADD_SUBDIRECTORY(src/MusicNoteDLL)
 ENDIF(BUILD_CFUGUE_TESTS AND BUILD_CFUGUE_DLL AND WIN32)
 
+#################################
+####         Tests           ####
+#################################
 
+if (BUILD_CFUGUE_TESTS)
+  ADD_SUBDIRECTORY(test)
+endif(BUILD_CFUGUE_TESTS)
 
-
-
-
+# MESSAGE(TODO:Add Doxygen Target for documentation)

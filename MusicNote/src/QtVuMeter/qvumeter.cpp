@@ -60,7 +60,7 @@ QVUMeter::QVUMeter(QStringList strBarLables, QWidget *parent) : QWidget(parent)
     m_nBars = strBarLables.length();
 
     for(int i=0 ; i < m_nBars; ++i)
-        m_Bars.push_back(new QUVBar(strBarLables[i], this));
+        m_Bars.push_back(new QUVBar(this, strBarLables[i]));
 
     m_nTotalWindowWidth = nUnitBarWidth * m_nBars + 2 * nBorderWidth;
 }
@@ -73,7 +73,7 @@ QVUMeter::QVUMeter(QWidget *parent) : QWidget(parent)
     m_nBars = 1;
 
     for(int i=0 ; i < m_nBars; ++i)
-        m_Bars.push_back(new QUVBar("", this));
+        m_Bars.push_back(new QUVBar(this));
 
     m_nTotalWindowWidth = nUnitBarWidth * m_nBars + 2 * nBorderWidth;
 }
@@ -86,7 +86,20 @@ void QVUMeter::SetBars(QStringList strBarLables, double min, double max)
     m_nBars = strBarLables.length();
 
     for(int i=0 ; i < m_nBars; ++i)
-        m_Bars.push_back(new QUVBar(strBarLables[i], this, min, max));
+        m_Bars.push_back(new QUVBar(this, strBarLables[i], min, max));
+
+    m_nTotalWindowWidth = nUnitBarWidth * m_nBars + 2 * nBorderWidth;
+
+    update();
+}
+
+void QVUMeter::SetBarCount(int nCount)
+{
+    while(m_Bars.size() > nCount)
+        m_Bars.removeLast();
+
+    while(m_Bars.size() < nCount)
+        m_Bars.push_back(new QUVBar(this));
 
     m_nTotalWindowWidth = nUnitBarWidth * m_nBars + 2 * nBorderWidth;
 
@@ -225,7 +238,7 @@ void QVUMeter::paintValue()
 
 }
 
-QUVBar::QUVBar(QString strLable, QObject* pParent, double _min, double _max) : QObject(pParent)
+QUVBar::QUVBar(QObject* pParent, QString strLable, double _min, double _max) : QObject(pParent)
 {    
     colText = Qt::white;
     colHigh = Qt::red;
@@ -347,4 +360,9 @@ void QVUMeter::SetMinMaxValues(double nMin, double nMax)
         pBar->setMinValue(nMin);
         pBar->setMaxValue(nMax);
     }
+}
+
+int QVUMeter::GetBarCount() const
+{
+    return m_Bars.size();
 }
