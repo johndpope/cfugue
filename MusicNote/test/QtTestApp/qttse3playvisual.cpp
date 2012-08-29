@@ -40,12 +40,8 @@ QtTse3PlayVisual::QtTse3PlayVisual(QWidget *parent, TSE3::MidiScheduler* pSch, T
 {
     ui->setupUi(this);
     SetupMIDI(/*pSch, pTrans*/);
-    
-    QStringList strList;
-    for(int i=0; i < 16; i++)
-        strList.append(" ");
 
-    ui->VuBar->SetBars(strList, 0, 128);
+    ui->VuBar->SetBarCount(16, 0, 128); // setup 16 bars with values in the range [0,128]
 
     // Register the class for qt signals to work
     qRegisterMetaType<TSE3::MidiCommand>("TSE3::MidiCommand");
@@ -178,7 +174,10 @@ void QtTse3PlayVisual::setPanic(TSE3::Panic *panic)
     panic->setXgReset(false);
 }
 
-void QtTse3PlayVisual::OnPlayerThreadStarted(){ }
+void QtTse3PlayVisual::OnPlayerThreadStarted()
+{
+    
+}
 void QtTse3PlayVisual::OnPlayerThreadFinished() { }
 void QtTse3PlayVisual::OnPlayerThreadTerminated() { }
 void QtTse3PlayVisual::OnMidiCommand(TSE3::MidiCommand c)

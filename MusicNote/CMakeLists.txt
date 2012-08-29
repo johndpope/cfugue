@@ -304,6 +304,11 @@ if (BUILD_CFUGUE_TESTS AND BUILD_CFUGUE_DLL AND WIN32)
 ENDIF(BUILD_CFUGUE_TESTS AND BUILD_CFUGUE_DLL AND WIN32)
 
 #################################
+#### Target: TSE3 ####
+#################################
+	ADD_SUBDIRECTORY(src/3rdparty/tse3)
+
+#################################
 ####         Tests           ####
 #################################
 
