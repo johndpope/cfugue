@@ -37,7 +37,7 @@
 #include <QList>
 #include <QStringList>
 
-class QUVBar : public QObject
+class QVUBar : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QColor colorOfText READ colorOfText WRITE setColorOfText);
@@ -85,7 +85,7 @@ class QUVBar : public QObject
 
 public:
 
-    QUVBar(QObject* pParent = NULL, QString strLabel = "", double min=0, double max = 100);
+    QVUBar(QObject* pParent = NULL, QString strLabel = "", double min=0, double max = 100);
 
 
 signals:
@@ -101,6 +101,7 @@ public slots:
     void setValue(double);
     void setMinValue(double);
     void setMaxValue(double);
+    void setMinMaxValues(double, double);
     void setLable(QString);
 
 
@@ -156,7 +157,7 @@ public:
         Existing bars will be reduced or added to based on nCount.
     </Summary>
     */
-    void SetBarCount(int nCount);
+    void SetBarCount(int nCount, double min=0.0, double max=100.0);
 
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
@@ -172,7 +173,7 @@ signals:
 public slots:
 
     void setColorBg(QColor);
-    QUVBar* GetBar(int nIndex) const;
+    QVUBar* GetBar(int nIndex) const;
     int  GetBarCount() const;
 
 protected:
@@ -189,7 +190,7 @@ private:
     int m_nBars;    // Number of vertical bars to show
     int m_nTotalWindowWidth;
 
-    QList<QUVBar*> m_Bars;
+    QList<QVUBar*> m_Bars;
 
 };
 
