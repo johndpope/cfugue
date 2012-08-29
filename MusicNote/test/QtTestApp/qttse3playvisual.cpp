@@ -176,10 +176,22 @@ void QtTse3PlayVisual::setPanic(TSE3::Panic *panic)
 
 void QtTse3PlayVisual::OnPlayerThreadStarted()
 {
-    
+    ui->pushButton_Start->setEnabled(false);
+    ui->pushButton_Stop->setEnabled(true);
+    ui->pushButton_Load->setEnabled(false);
 }
-void QtTse3PlayVisual::OnPlayerThreadFinished() { }
-void QtTse3PlayVisual::OnPlayerThreadTerminated() { }
+void QtTse3PlayVisual::OnPlayerThreadFinished() 
+{ 
+    ui->pushButton_Start->setEnabled(true);
+    ui->pushButton_Stop->setEnabled(false);
+    ui->pushButton_Load->setEnabled(true);
+}
+void QtTse3PlayVisual::OnPlayerThreadTerminated() 
+{
+    ui->pushButton_Start->setEnabled(true);
+    ui->pushButton_Stop->setEnabled(false);
+    ui->pushButton_Load->setEnabled(true);
+}
 void QtTse3PlayVisual::OnMidiCommand(TSE3::MidiCommand c)
 {
     if (c.status == TSE3::MidiCommands::MidiCommand_NoteOn)

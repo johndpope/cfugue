@@ -11,7 +11,7 @@
 
 #include "stdafx.h"
 #include "resource.h"
-#include "MusicNoteDLL_i.h"
+//#include "MusicNoteDLL_i.h"
 #include "dllmain.h"
 #include "dlldatax.h"
 
