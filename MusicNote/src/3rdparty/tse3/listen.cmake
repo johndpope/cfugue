@@ -58,8 +58,8 @@ Set(listen_CustomBuild_Files   )
 Add_Library(listen STATIC  ${listen_ClInclude_Files} ${listen_ClCompile_Files} ${listen_ResourceCompile_Files} ${listen_Manifest_Files} ${listen_Midl_Files} ${listen_CustomBuild_Files})
 
 set_target_properties(listen PROPERTIES 
-	COMPILE_DEFINITIONS "WIN32;_BIND_TO_CURRENT_CRT_VERSION;"
-	COMPILE_FLAGS " /Zc:wchar_t /Zc:forScope ")
+	COMPILE_DEFINITIONS "${TARGET_COMPILE_DEFS}"
+	COMPILE_FLAGS "${TARGET_COMPILE_FLAGS}")
 
 Set(listen_Dependencies  )
 target_link_libraries(listen ${listen_Dependencies})

@@ -32,8 +32,8 @@ Set(RUNTIME_OUTPUT_DIRECTORY ${ProjDir}/bin)
 Add_Executable(tse3play ${tseplay_ClInclude_Files} ${tseplay_ClCompile_Files} ${tseplay_ResourceCompile_Files} ${tseplay_Manifest_Files} ${tseplay_Midl_Files} ${tseplay_CustomBuild_Files})
 
 set_target_properties(tse3play PROPERTIES 
-	COMPILE_DEFINITIONS "WIN32;_BIND_TO_CURRENT_CRT_VERSION;"
-	COMPILE_FLAGS " /Zc:wchar_t /Zc:forScope ")
+	COMPILE_DEFINITIONS "${TARGET_COMPILE_DEFS}"
+	COMPILE_FLAGS "${TARGET_COMPILE_FLAGS}")
 
 Set(tseplay_Dependencies  WinMM.lib  tse3)
 target_link_libraries(tse3play ${tseplay_Dependencies})

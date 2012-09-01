@@ -43,8 +43,8 @@ Set(ARCHIVE_OUTPUT_DIRECTORY ${ProjDir}/lib)
 Add_Library(cmd STATIC  ${cmd_ClInclude_Files} ${cmd_ClCompile_Files} ${cmd_ResourceCompile_Files} ${cmd_Manifest_Files} ${cmd_Midl_Files} ${cmd_CustomBuild_Files})
 
 set_target_properties(cmd PROPERTIES 
-	COMPILE_DEFINITIONS "WIN32;_BIND_TO_CURRENT_CRT_VERSION;"
-	COMPILE_FLAGS " /Zc:wchar_t /Zc:forScope ")
+	COMPILE_DEFINITIONS "${TARGET_COMPILE_DEFS}"
+	COMPILE_FLAGS "${TARGET_COMPILE_FLAGS}")
 
 Set(cmd_Dependencies  )
 target_link_libraries(cmd ${cmd_Dependencies})

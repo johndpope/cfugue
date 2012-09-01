@@ -136,8 +136,8 @@ Set(tse3_CustomBuild_Files   )
 Add_Library(tse3 STATIC  ${tse3_ClInclude_Files} ${tse3_ClCompile_Files} ${tse3_ResourceCompile_Files} ${tse3_Manifest_Files} ${tse3_Midl_Files} ${tse3_CustomBuild_Files})
 
 set_target_properties(tse3 PROPERTIES 
-	COMPILE_DEFINITIONS "WIN32;_BIND_TO_CURRENT_CRT_VERSION;"
-	COMPILE_FLAGS " /Zc:wchar_t /Zc:forScope ")
+	COMPILE_DEFINITIONS "${TARGET_COMPILE_DEFS}"
+	COMPILE_FLAGS "${TARGET_COMPILE_FLAGS}")
 
 Set(tse3_Dependencies  WinMM.lib ins cmd tse3file)
 target_link_libraries(tse3 ${tse3_Dependencies})
