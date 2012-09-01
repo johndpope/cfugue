@@ -28,8 +28,8 @@ Set(tse3ports_CustomBuild_Files   )
 Add_Executable(tse3ports ${tse3ports_ClInclude_Files} ${tse3ports_ClCompile_Files} ${tse3ports_ResourceCompile_Files} ${tse3ports_Manifest_Files} ${tse3ports_Midl_Files} ${tse3ports_CustomBuild_Files})
 
 set_target_properties(tse3ports PROPERTIES 
-	COMPILE_DEFINITIONS "WIN32;_BIND_TO_CURRENT_CRT_VERSION;"
-	COMPILE_FLAGS " /Zc:wchar_t /Zc:forScope ")
+	COMPILE_DEFINITIONS "${TARGET_COMPILE_DEFS}"
+	COMPILE_FLAGS "${TARGET_COMPILE_FLAGS}")
 
 Set(tse3ports_Dependencies  tse3)
 target_link_libraries(tse3ports ${tse3ports_Dependencies})

@@ -41,8 +41,8 @@ Set(file_CustomBuild_Files   )
 Add_Library(tse3file STATIC  ${file_ClInclude_Files} ${file_ClCompile_Files} ${file_ResourceCompile_Files} ${file_Manifest_Files} ${file_Midl_Files} ${file_CustomBuild_Files})
 
 set_target_properties(tse3file PROPERTIES 
-	COMPILE_DEFINITIONS "WIN32;_BIND_TO_CURRENT_CRT_VERSION;"
-	COMPILE_FLAGS " /Zc:wchar_t /Zc:forScope ")
+	COMPILE_DEFINITIONS "${TARGET_COMPILE_DEFS}"
+	COMPILE_FLAGS "${TARGET_COMPILE_FLAGS}")
 
 Set(file_Dependencies  )
 target_link_libraries(tse3file ${file_Dependencies})

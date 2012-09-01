@@ -30,8 +30,8 @@ Set(RUNTIME_OUTPUT_DIRECTORY ${ProjDir}/bin)
 Add_Executable(tse3MidiFile ${tse3MidiFile_ClInclude_Files} ${tse3MidiFile_ClCompile_Files} ${tse3MidiFile_ResourceCompile_Files} ${tse3MidiFile_Manifest_Files} ${tse3MidiFile_Midl_Files} ${tse3MidiFile_CustomBuild_Files})
 
 set_target_properties(tse3MidiFile PROPERTIES 
-	COMPILE_DEFINITIONS "WIN32;_CONSOLE;_BIND_TO_CURRENT_CRT_VERSION;"
-	COMPILE_FLAGS " /Zc:wchar_t /Zc:forScope ")
+	COMPILE_DEFINITIONS "${TARGET_COMPILE_DEFS}"
+	COMPILE_FLAGS "${TARGET_COMPILE_FLAGS}")
 
 Set(tse3MidiFile_Dependencies  tse3)
 target_link_libraries(tse3MidiFile ${tse3MidiFile_Dependencies})

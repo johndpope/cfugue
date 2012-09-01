@@ -48,6 +48,11 @@ SET(CMAKE_DEBUG_POSTFIX "d${Char_postfix}")
 SET(CMAKE_RELEASE_POSTFIX "${Char_postfix}")
 message(STATUS "Output Postfix: ${Output_postfix}${Char_postfix}")
 
+SET(TARGET_COMPILE_DEFS "${Char_Flags};_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_BIND_TO_CURRENT_CRT_VERSION")
+IF(MSVC)
+  SET(TARGET_COMPILE_FLAGS "/Zc:wchar_t- /Zc:forScope")
+ENDIF(MSVC)
+
 #################################
 # Setup Output Directories
 #################################

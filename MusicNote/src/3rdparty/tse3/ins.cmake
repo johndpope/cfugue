@@ -30,8 +30,8 @@ Set(ins_CustomBuild_Files   )
 Add_Library(ins STATIC  ${ins_ClInclude_Files} ${ins_ClCompile_Files} ${ins_ResourceCompile_Files} ${ins_Manifest_Files} ${ins_Midl_Files} ${ins_CustomBuild_Files})
 
 set_target_properties(ins PROPERTIES 
-	COMPILE_DEFINITIONS "WIN32;_BIND_TO_CURRENT_CRT_VERSION;"
-	COMPILE_FLAGS " /Zc:wchar_t /Zc:forScope ")
+	COMPILE_DEFINITIONS "${TARGET_COMPILE_DEFS}"
+	COMPILE_FLAGS "${TARGET_COMPILE_FLAGS}")
 
 Set(ins_Dependencies  )
 target_link_libraries(ins ${ins_Dependencies})
