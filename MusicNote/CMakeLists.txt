@@ -183,7 +183,7 @@ SET( MusicNoteLib_Header_Files
    )
 SET( MusicNoteLib_UnKnownGroup src/MusicNoteLib/ReadMe.txt    )
 
-add_library(CFugueLib   ${MusicNoteLib_Source_Files}  ${MusicNoteLib_Header_Files}  ${MusicNoteLib_UnKnownGroup} )
+add_library(libCFugue  ${MusicNoteLib_Source_Files}  ${MusicNoteLib_Header_Files}  ${MusicNoteLib_UnKnownGroup} )
 
 #################################
 #### Target: Documentation ####
@@ -291,9 +291,9 @@ SET( jdkmidi_Dependencies  ${jdkmidi_Librarian} )
 target_link_libraries(jdkmidi  ${jdkmidi_Dependencies})
 
 SET( MusicNoteLib_Dependencies jdkmidi  ${MusicNoteLib_Librarian} )
-target_link_libraries(CFugueLib  ${MusicNoteLib_Dependencies})
+target_link_libraries(libCFugue  ${MusicNoteLib_Dependencies})
 
-install(TARGETS jdkmidi CFugueLib RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
+install(TARGETS jdkmidi libCFugue RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
 
 #################################
 #### Target: CFugueDLL ####
