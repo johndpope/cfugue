@@ -5,13 +5,9 @@ cmake_minimum_required(VERSION 2.6)
 
 Message(STATUS "Buliding CFugue Tests")
 
-Set(ProjDir ${CMAKE_CURRENT_SOURCE_DIR})
-
-# Set path to additional CMake modules
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${ProjDir}/../cmake/modules/")
-
 FIND_PACKAGE(Qt4)
-FIND_PACKAGE(Tse3)
+
+Set(ProjDir ${CMAKE_CURRENT_SOURCE_DIR})
 
 include_directories( "${ProjDir}/../include" "${ProjDir}/../include/Common" )
 
@@ -19,6 +15,7 @@ SET(TARGET_COMPILE_DEFS "${Char_Flags};_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_W
 IF(MSVC)
   SET(TARGET_COMPILE_FLAGS "/Zc:wchar_t- /Zc:forScope")
 ENDIF(MSVC)
+
 
 #################################
 #### Target: DLLTestApp ####
@@ -62,6 +59,40 @@ SET( StaticLibTestApp_Header_Files
 	install(TARGETS testCFugueLib RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
 	
 #################################
+#### Target: QtVuMeter       ####
+#################################		
+if(QT4_FOUND)
+INCLUDE(${QT_USE_FILE})
+	include_directories( ${ProjDir}/../"include" ${ProjDir}/../"src" ${CMAKE_CURRENT_BINARY_DIR} ${ProjDir}/../src/QtVuMeter ${ProjDir}/../src/3rdparty/tse3/src)
+	SET(QtVuMeter_HEADERS	${ProjDir}/../src/QtVuMeter/qvumeter.h								
+							${ProjDir}/../src/QtVuMeter/midioutcombobox.h
+							${ProjDir}/../src/QtVuMeter/midiincombobox.h)
+	SET(QtVuMeter_FORMS		)
+	SET(QtVuMeter_SOURCES 	${ProjDir}/../src/QtVuMeter/qvumeter.cpp
+							${ProjDir}/../src/QtVuMeter/midioutcombobox.cpp
+							${ProjDir}/../src/QtVuMeter/midiincombobox.cpp)
+
+	QT4_WRAP_CPP(QtVuMeter_HEADERS_MOC ${QtVuMeter_HEADERS})
+	QT4_WRAP_UI(QtVuMeter_FORMS_HEADERS ${QtVuMeter_FORMS})
+	QT4_ADD_RESOURCES(QtVuMeter_RESOURCES_RCC ${QtVuMeter_RESOURCES})
+
+	SOURCE_GROUP(Qt_Forms		FILES ${QtVuMeter_FORMS})
+	SOURCE_GROUP(Resources		FILES ${QtVuMeter_RESOURCES})
+	SOURCE_GROUP(Header_Files	FILES ${QtVuMeter_HEADERS})
+	SOURCE_GROUP(Translations	FILES ${QtVuMeter_TRANSLATIONS})
+	SOURCE_GROUP(Generated_Files FILES ${QtVuMeter_HEADERS_MOC} ${QtVuMeter_FORMS_HEADERS} ${QtVuMeter_RESOURCES_RCC})
+
+	add_library(libQtVuMeter ${QtVuMeter_HEADERS} ${QtVuMeter_SOURCES} ${QtVuMeter_HEADERS_MOC} ${QtVuMeter_FORMS_HEADERS} ${QtVuMeter_RESOURCES_RCC})
+	set_target_properties(libQtVuMeter PROPERTIES  DEBUG_POSTFIX "d${Char_postfix}" RELEASE_POSTFIX "${Char_postfix}"
+									COMPILE_DEFINITIONS "${TARGET_COMPILE_DEFS}"
+									COMPILE_FLAGS "${TARGET_COMPILE_FLAGS}")
+
+	SET( QtVuMeter_Dependencies libCFugue tse3 ${QT_LIBRARIES} ${QT_QTMAIN_LIBRARY})
+	target_link_libraries(libQtVuMeter  ${QtVuMeter_Dependencies})
+	install(TARGETS libQtVuMeter RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
+endif(QT4_FOUND)
+	
+#################################
 #### Target: SampleVU        ####
 #################################	
 if(QT4_FOUND)
@@ -70,8 +101,7 @@ INCLUDE(${QT_USE_FILE})
 	SET(SampleVU_HEADERS	SampleVU/SampleVU_mainwindow.h ${ProjDir}/../src/QtVuMeter/qvumeter.h)
 	SET(SampleVU_FORMS		SampleVU/SampleVU_mainwindow.ui)
 	SET(SampleVU_SOURCES 	SampleVU/SampleVU_mainwindow.cpp 
-							SampleVU/main.cpp
-							${ProjDir}/../src/QtVuMeter/qvumeter.cpp)
+							SampleVU/main.cpp)
 	SET(SampleVU_RESOURCES	 )
 	SET(SampleVU_TRANSLATIONS )
 
@@ -90,7 +120,7 @@ INCLUDE(${QT_USE_FILE})
 									COMPILE_DEFINITIONS "${TARGET_COMPILE_DEFS}"
 									COMPILE_FLAGS "${TARGET_COMPILE_FLAGS}")
 
-	SET( SampleVU_Dependencies libCFugue ${QT_LIBRARIES} ${QT_QTMAIN_LIBRARY})
+	SET( SampleVU_Dependencies libQtVuMeter libCFugue ${QT_LIBRARIES} ${QT_QTMAIN_LIBRARY})
 	target_link_libraries(SampleVU  ${SampleVU_Dependencies})
 	install(TARGETS SampleVU RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
 endif(QT4_FOUND)
@@ -110,10 +140,7 @@ INCLUDE(${QT_USE_FILE})
 	SET(QtTestApp_FORMS		QtTestApp/qttse3playvisual.ui)
 	SET(QtTestApp_SOURCES 	QtTestApp/QtTse3Play.cpp
 							QtTestApp/qttse3playvisual.cpp
-							QtTestApp/main.cpp
-							${ProjDir}/../src/QtVuMeter/qvumeter.cpp
-							${ProjDir}/../src/QtVuMeter/midioutcombobox.cpp
-							${ProjDir}/../src/QtVuMeter/midiincombobox.cpp)
+							QtTestApp/main.cpp)
 	SET(QtTestApp_RESOURCES	 )
 	SET(QtTestApp_TRANSLATIONS )
 
@@ -132,7 +159,7 @@ INCLUDE(${QT_USE_FILE})
 									COMPILE_DEFINITIONS "${TARGET_COMPILE_DEFS}"
 									COMPILE_FLAGS "${TARGET_COMPILE_FLAGS}")
 
-	SET( QtTestApp_Dependencies libCFugue tse3 ${QT_LIBRARIES} ${QT_QTMAIN_LIBRARY})
+	SET( QtTestApp_Dependencies libQtVuMeter libCFugue tse3 ${QT_LIBRARIES} ${QT_QTMAIN_LIBRARY})
 	target_link_libraries(tse3QtPlayer  ${QtTestApp_Dependencies})
 	install(TARGETS tse3QtPlayer RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
 endif(QT4_FOUND)

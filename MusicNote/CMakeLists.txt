@@ -303,17 +303,23 @@ if (BUILD_CFUGUE_TESTS AND BUILD_CFUGUE_DLL AND WIN32)
 	ADD_SUBDIRECTORY(src/MusicNoteDLL)
 ENDIF(BUILD_CFUGUE_TESTS AND BUILD_CFUGUE_DLL AND WIN32)
 
-#################################
-#### Target: TSE3 ####
-#################################
-	ADD_SUBDIRECTORY(src/3rdparty/tse3)
 
 #################################
 ####         Tests           ####
 #################################
 
 if (BUILD_CFUGUE_TESTS)
+
+	# Set path to additional CMake modules
+	SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/")
+	FIND_PACKAGE(Tse3)
+	if(NOT TSE3_FOUND)
+		Message(STATUS "Building TSE3 from source")
+		ADD_SUBDIRECTORY(src/3rdparty/tse3)
+	endif()
+	
   ADD_SUBDIRECTORY(test)
+  
 endif(BUILD_CFUGUE_TESTS)
 
 # MESSAGE(TODO:Add Doxygen Target for documentation)
