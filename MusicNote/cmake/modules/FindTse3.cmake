@@ -9,6 +9,7 @@
 #
 # Redistribution and use is allowed according to the terms of CarMusTy license.
 # Refer to http://CarMusTy.SourceForge.net
+include(FindPackageHandleStandardArgs)
 
 FIND_PATH(TSE3_INCLUDE_DIR tse3/TSE3.h     
 	PATHS
