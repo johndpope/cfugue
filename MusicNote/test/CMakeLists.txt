@@ -111,6 +111,30 @@ INCLUDE(${QT_USE_FILE})
 endif()
 
 #################################
+#### Setup the Dependencies  ####
+IF(APPLE)
+   FIND_LIBRARY(CARBON_LIBRARY Carbon)
+   FIND_LIBRARY(QUICKTIME_LIBRARY /Developer/SDKs/MacOSX10.7.sdk/System/Library/Frameworks//QuickTime.framework/QuickTime)
+   FIND_LIBRARY(APP_SERVICES_LIBRARY ApplicationServices )
+   FIND_LIBRARY(COREAUDIO_LIBRARY CoreAudio)
+   FIND_LIBRARY(COREMIDI_LIBRARY CoreMIDI)
+   FIND_LIBRARY(CORESERVICES_LIBRARY CoreServices)
+   FIND_LIBRARY(COREFOUNDATION_LIBRARY CoreFoundation )
+   MARK_AS_ADVANCED (CARBON_LIBRARY
+                     QUICKTIME_LIBRARY
+                     APP_SERVICES_LIBRARY
+                     COREAUDIO_LIBRARY
+					 COREMIDI_LIBRARY
+					 CORESERVICES_LIBRARY
+                     COREFOUNDATION_LIBRARY)
+   SET(CFugue_Dependencies ${CARBON_LIBRARY} ${QUICKTIME_LIBRARY} ${APP_SERVICES_LIBRARY} ${COREAUDIO_LIBRARY} ${COREMIDI_LIBRARY} ${CORESERVICES_LIBRARY} ${COREFOUNDATION_LIBRARY})
+ENDIF (APPLE)
+
+IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")	# Linux specific code
+     SET(CFugue_Dependencies asound)
+ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+
+#################################
 #### Target: testCFugueDll   ####
 #################################
 SET( DLLTestApp_Source_Files 
@@ -123,14 +147,14 @@ SET( DLLTestApp_Header_Files
    )
 SET( DLLTestApp_UnKnownGroup ${ProjDir}/DLLTestApp/ReadMe.txt    )
 
-if (BUILD_CFUGUE_TESTS AND BUILD_CFUGUE_DLL)
+if (BUILD_CFUGUE_TESTS AND BUILD_CFUGUE_DLL AND WIN32)
 	add_executable(testCFugueDll   ${DLLTestApp_Source_Files}  ${DLLTestApp_Header_Files}  ${DLLTestApp_UnKnownGroup} )
 	SET_TARGET_PROPERTIES(testCFugueDll PROPERTIES COMPILE_DEFINITIONS "${TARGET_COMPILE_DEFS}" COMPILE_FLAGS "${TARGET_COMPILE_FLAGS}")
 	
 	SET(DLLTestApp_Dependencies MusicNoteDLL  ${DLLTestApp_Librarian} )
 	target_link_libraries(testCFugueDll  ${DLLTestApp_Dependencies})
 	install(TARGETS testCFugueDll RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
-endif (BUILD_CFUGUE_TESTS AND BUILD_CFUGUE_DLL)
+endif (BUILD_CFUGUE_TESTS AND BUILD_CFUGUE_DLL AND WIN32)
 
 
 #################################
@@ -147,7 +171,7 @@ SET( StaticLibTestApp_Header_Files
 
 	add_executable(testCFugueLib   ${StaticLibTestApp_Source_Files}  ${StaticLibTestApp_Header_Files} )
 	SET_TARGET_PROPERTIES(testCFugueLib PROPERTIES COMPILE_DEFINITIONS "${TARGET_COMPILE_DEFS}" COMPILE_FLAGS "${TARGET_COMPILE_FLAGS}")
-	SET(StaticLibTestApp_Dependencies CFugue  ${StaticLibTestApp_Librarian} )
+	SET(StaticLibTestApp_Dependencies CFugue  ${CFugue_Dependencies} ${StaticLibTestApp_Librarian} )
 	target_link_libraries(testCFugueLib  ${StaticLibTestApp_Dependencies})
 	install(TARGETS testCFugueLib RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
 	
@@ -238,12 +262,12 @@ if(QT4_FOUND)
 	SOURCE_GROUP(Translations	FILES ${QtTestApp_TRANSLATIONS})
 	SOURCE_GROUP(Generated_Files FILES ${QtTestApp_HEADERS_MOC} ${QtTestApp_FORMS_HEADERS} ${QtTestApp_RESOURCES_RCC})
 
-	ADD_EXECUTABLE(testTse3QtPlayer WIN32 ${External_HEADERS} ${QtTestApp_HEADERS} ${QtTestApp_SOURCES} ${QtTestApp_HEADERS_MOC} ${QtTestApp_FORMS_HEADERS} ${QtTestApp_RESOURCES_RCC})
-	set_target_properties(testTse3QtPlayer PROPERTIES COMPILE_DEFINITIONS "${TARGET_COMPILE_DEFS}" COMPILE_FLAGS "${TARGET_COMPILE_FLAGS}")
+	ADD_EXECUTABLE(testQtTse3Player WIN32 ${External_HEADERS} ${QtTestApp_HEADERS} ${QtTestApp_SOURCES} ${QtTestApp_HEADERS_MOC} ${QtTestApp_FORMS_HEADERS} ${QtTestApp_RESOURCES_RCC})
+	set_target_properties(testQtTse3Player PROPERTIES COMPILE_DEFINITIONS "${TARGET_COMPILE_DEFS}" COMPILE_FLAGS "${TARGET_COMPILE_FLAGS}")
 
-	SET( QtTestApp_Dependencies QtVuMeter CFugue ${TSE3_LIBRARIES} ${QT_LIBRARIES} ${QT_QTMAIN_LIBRARY})
-	target_link_libraries(testTse3QtPlayer  ${QtTestApp_Dependencies})
-	install(TARGETS testTse3QtPlayer RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
+	SET( QtTestApp_Dependencies QtVuMeter CFugue ${CFugue_Dependencies} ${TSE3_LIBRARIES} ${QT_LIBRARIES} ${QT_QTMAIN_LIBRARY})
+	target_link_libraries(testQtTse3Player  ${QtTestApp_Dependencies})
+	install(TARGETS testQtTse3Player RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
 endif(QT4_FOUND)
 
 #################################

@@ -1057,7 +1057,7 @@ void TSE3PlayVisual::updateBars()
             for (int n = bot; n <= top; n++)
             {
                 // work out colour
-                char *colcode = "37"; // white
+                const char *colcode = "37"; // white
                 if (n > max*2/3)
                     colcode = "31"; // red
                 else if (n > max/3)

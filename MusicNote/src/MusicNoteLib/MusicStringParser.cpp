@@ -123,7 +123,7 @@ namespace MusicNoteLib
     {
         if(psz && *psz == _T('/'))
         {
-            TCHAR* pchEndDelimiter = NULL; int nSkipLen=0;
+            const TCHAR* pchEndDelimiter = NULL; int nSkipLen=0;
             switch(*(psz + 1))
             {
             case _T('*'): pchEndDelimiter = _T("*/"); nSkipLen = 2; break; // this is a /* .. */ style comment
