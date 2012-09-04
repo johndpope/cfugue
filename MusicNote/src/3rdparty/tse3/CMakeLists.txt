@@ -12,7 +12,7 @@ message(STATUS "------ tse3 ---------")
 # Setup Build Options
 #################################
 option (BUILD_TSE3_TESTS "Should the Test applications be built for Tse3" ON) 
-SET (BUILD_TSE3_UNICODE OFF CACHE BOOL "Should TSE3 be built with Unicode? (default: No)")
+SET (TSE3_UNICODE_BUILD OFF CACHE BOOL "Should TSE3 be built with Unicode? (default: No)")
 
 #################################
 # Compute Values based on Options
@@ -21,15 +21,15 @@ set(Char_Flags "" CACHE INTERNAL "Compiler Character Flags: Unicode/MBCS Options
 set(Char_postfix "" CACHE INTERNAL "Unicode Postfix")
 set(Output_postfix "" CACHE INTERNAL "Debug Postfix")
 
-if(BUILD_TSE3_UNICODE)
+if(TSE3_UNICODE_BUILD)
 	SET(Char_postfix "u")
 	SET(Char_Flags "-DUNICODE -D_UNICODE")
 	message(STATUS "Unicode build is ON")
-else(BUILD_TSE3_UNICODE)
+else(TSE3_UNICODE_BUILD)
 	SET(Char_postfix "")
 	SET(Char_Flags "-D_MBCS")
 	message(STATUS "Unicode build is OFF")
-endif(BUILD_TSE3_UNICODE)
+endif(TSE3_UNICODE_BUILD)
 
 IF(NOT CMAKE_BUILD_TYPE)
     SET(CMAKE_BUILD_TYPE "Debug" CACHE STRING
