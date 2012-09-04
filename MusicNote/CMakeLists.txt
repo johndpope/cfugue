@@ -22,8 +22,8 @@ SET(ORG_WEBSITE          "http://cfugue.sourceforge.net/")
 #################################
 option (BUILD_CFUGUE_DLL "Should the DLL be built for CFugue (Only for Windows)" OFF) 
 option (BUILD_CFUGUE_TESTS "Should the Test applications be built for CFugue" ON) 
-OPTION (VERBOSE_CFUGUE_TRACE "Should CFugue generate Verbose String Parsing Traces" ON)
-SET (BUILD_CFUGUE_UNICODE ON CACHE BOOL "Should CFugue be built with Unicode? (recommended: Yes)")
+OPTION (CFUGUE_VERBOSE_TRACE "Should CFugue generate Verbose String Parsing Traces" ON)
+SET (CFUGUE_UNICODE_BUILD ON CACHE BOOL "Should CFugue be built with Unicode? (recommended: Yes)")
 
 mark_as_advanced(BUILD_CFUGUE_DLL)
 
@@ -34,15 +34,15 @@ set(Char_Flags "" CACHE INTERNAL "Compiler Character Flags: Unicode/MBCS Options
 set(Char_postfix "" CACHE INTERNAL "Unicode Postfix")
 set(Output_postfix "" CACHE INTERNAL "Debug Postfix")
 
-if(BUILD_CFUGUE_UNICODE)
+if(CFUGUE_UNICODE_BUILD)
 	SET(Char_postfix "u")
-	SET(Char_Flags "-DUNICODE -D_UNICODE")
+	SET(Char_Flags "UNICODE;_UNICODE")
 	message(STATUS "CFugue: Unicode build is ON")
-else(BUILD_CFUGUE_UNICODE)
+else(CFUGUE_UNICODE_BUILD)
 	SET(Char_postfix "")
-	SET(Char_Flags "-D_MBCS")
+	SET(Char_Flags "_MBCS;")
 	message(STATUS "CFugue: Unicode build is OFF")
-endif(BUILD_CFUGUE_UNICODE)
+endif(CFUGUE_UNICODE_BUILD)
 
 IF(NOT CMAKE_BUILD_TYPE)
     SET(CMAKE_BUILD_TYPE "Debug" CACHE STRING
@@ -108,27 +108,31 @@ mark_as_advanced(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE)
 # Generic Compiler options
 #################################
 
-ADD_DEFINITIONS(${Char_Flags} -D_CRT_SECURE_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS)
+SET(TARGET_COMPILE_DEFS "${Char_Flags};_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;PHTRANSLATE_STATICLIB;_BIND_TO_CURRENT_CRT_VERSION")
 
 IF(CMAKE_COMPILER_IS_GNUCC)
-  ADD_DEFINITIONS(-std=gnu++0x ) # Add C++0x support for GCC
+  SET(TARGET_COMPILE_FLAGS "-std=gnu++0x") # Add C++0x support for GCC
 ENDIF()
 
-IF(VERBOSE_CFUGUE_TRACE)
-	ADD_DEFINITIONS(-DENABLE_TRACING)
+IF(MSVC)
+  SET(TARGET_COMPILE_FLAGS "${TARGET_COMPILE_FLAGS} /Zc:wchar_t- /Zc:forScope")
+ENDIF(MSVC)
+
+IF(CFUGUE_VERBOSE_TRACE)
+	SET(TARGET_COMPILE_DEFS "${TARGET_COMPILE_DEFS};ENABLE_TRACING")
 ENDIF()
 
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
-	ADD_DEFINITIONS(-D__LINUX_ALSASEQ__)
+	SET(TARGET_COMPILE_DEFS "${TARGET_COMPILE_DEFS};__LINUX_ALSASEQ__")
 ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
 IF(APPLE)	# Mac OS X specific code
-	ADD_DEFINITIONS(-D__MACOSX_CORE__)
+	SET(TARGET_COMPILE_DEFS "${TARGET_COMPILE_DEFS};__MACOSX_CORE__")
 	INCLUDE_DIRECTORIES ( /Developer/Headers/FlatCarbon )
 ENDIF(APPLE)
 
 IF(WIN32)	# Windows specific definitions
-	ADD_DEFINITIONS(-D__WINDOWS_MM__)
+	SET(TARGET_COMPILE_DEFS "${TARGET_COMPILE_DEFS};__WINDOWS_MM__")
 ENDIF(WIN32)
 
 #################################
@@ -183,7 +187,8 @@ SET( MusicNoteLib_Header_Files
    )
 SET( MusicNoteLib_UnKnownGroup src/MusicNoteLib/ReadMe.txt    )
 
-add_library(libCFugue  ${MusicNoteLib_Source_Files}  ${MusicNoteLib_Header_Files}  ${MusicNoteLib_UnKnownGroup} )
+add_library(CFugue  ${MusicNoteLib_Source_Files}  ${MusicNoteLib_Header_Files}  ${MusicNoteLib_UnKnownGroup} )
+set_target_properties(CFugue PROPERTIES COMPILE_DEFINITIONS "${TARGET_COMPILE_DEFS}" COMPILE_FLAGS "${TARGET_COMPILE_FLAGS}")
 
 #################################
 #### Target: Documentation ####
@@ -254,7 +259,8 @@ SET( jdkmidi_Header_Files
 	include/jdkmidi/world.h
    )
 
-add_library(jdkmidi   ${jdkmidi_Source_Files}  ${jdkmidi_Header_Files} )
+add_library(jdkmidi  ${jdkmidi_Source_Files}  ${jdkmidi_Header_Files} )
+set_target_properties(jdkmidi PROPERTIES COMPILE_DEFINITIONS "${TARGET_COMPILE_DEFS}" COMPILE_FLAGS "${TARGET_COMPILE_FLAGS}")
 
 #################################
 #Link the targets with their Depenedency Libraries
@@ -291,9 +297,9 @@ SET( jdkmidi_Dependencies  ${jdkmidi_Librarian} )
 target_link_libraries(jdkmidi  ${jdkmidi_Dependencies})
 
 SET( MusicNoteLib_Dependencies jdkmidi  ${MusicNoteLib_Librarian} )
-target_link_libraries(libCFugue  ${MusicNoteLib_Dependencies})
+target_link_libraries(CFugue  ${MusicNoteLib_Dependencies})
 
-install(TARGETS jdkmidi libCFugue RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
+install(TARGETS jdkmidi CFugue RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
 
 #################################
 #### Target: CFugueDLL ####
@@ -316,6 +322,8 @@ if (BUILD_CFUGUE_TESTS)
 	if(NOT TSE3_FOUND)
 		Message(STATUS "Building TSE3 from source")
 		ADD_SUBDIRECTORY(src/3rdparty/tse3)
+		SET (TSE3_LIBRARIES 	tse3)
+		SET (TSE3_INCLUDE_DIR 	"${CMAKE_CURRENT_SOURCE_DIR}/src/3rdparty/tse3/src")
 	endif()
 	
   ADD_SUBDIRECTORY(test)
