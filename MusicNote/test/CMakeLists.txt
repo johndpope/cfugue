@@ -219,12 +219,12 @@ if(QT4_FOUND)
 	SET(External_HEADERS	${ProjDir}/../src/QtVuMeter/qvumeter.h								
 							${ProjDir}/../src/QtVuMeter/midioutcombobox.h
 							${ProjDir}/../src/QtVuMeter/midiincombobox.h
-							QtTestApp/QtTse3Play.h)
-	SET(QtTestApp_HEADERS	QtTestApp/qttse3playvisual.h)
-	SET(QtTestApp_FORMS		QtTestApp/qttse3playvisual.ui)
-	SET(QtTestApp_SOURCES 	QtTestApp/QtTse3Play.cpp
-							QtTestApp/qttse3playvisual.cpp
-							QtTestApp/main.cpp)
+							QtTse3Player/QtTse3Play.h)
+	SET(QtTestApp_HEADERS	QtTse3Player/qttse3playvisual.h)
+	SET(QtTestApp_FORMS		QtTse3Player/qttse3playvisual.ui)
+	SET(QtTestApp_SOURCES 	QtTse3Player/QtTse3Play.cpp
+							QtTse3Player/qttse3playvisual.cpp
+							QtTse3Player/main.cpp)
 	SET(QtTestApp_RESOURCES	 )
 	SET(QtTestApp_TRANSLATIONS )
 
@@ -238,12 +238,12 @@ if(QT4_FOUND)
 	SOURCE_GROUP(Translations	FILES ${QtTestApp_TRANSLATIONS})
 	SOURCE_GROUP(Generated_Files FILES ${QtTestApp_HEADERS_MOC} ${QtTestApp_FORMS_HEADERS} ${QtTestApp_RESOURCES_RCC})
 
-	ADD_EXECUTABLE(tse3QtPlayer WIN32 ${External_HEADERS} ${QtTestApp_HEADERS} ${QtTestApp_SOURCES} ${QtTestApp_HEADERS_MOC} ${QtTestApp_FORMS_HEADERS} ${QtTestApp_RESOURCES_RCC})
-	set_target_properties(tse3QtPlayer PROPERTIES COMPILE_DEFINITIONS "${TARGET_COMPILE_DEFS}" COMPILE_FLAGS "${TARGET_COMPILE_FLAGS}")
+	ADD_EXECUTABLE(testTse3QtPlayer WIN32 ${External_HEADERS} ${QtTestApp_HEADERS} ${QtTestApp_SOURCES} ${QtTestApp_HEADERS_MOC} ${QtTestApp_FORMS_HEADERS} ${QtTestApp_RESOURCES_RCC})
+	set_target_properties(testTse3QtPlayer PROPERTIES COMPILE_DEFINITIONS "${TARGET_COMPILE_DEFS}" COMPILE_FLAGS "${TARGET_COMPILE_FLAGS}")
 
 	SET( QtTestApp_Dependencies QtVuMeter CFugue ${TSE3_LIBRARIES} ${QT_LIBRARIES} ${QT_QTMAIN_LIBRARY})
-	target_link_libraries(tse3QtPlayer  ${QtTestApp_Dependencies})
-	install(TARGETS tse3QtPlayer RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
+	target_link_libraries(testTse3QtPlayer  ${QtTestApp_Dependencies})
+	install(TARGETS testTse3QtPlayer RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
 endif(QT4_FOUND)
 
 #################################
