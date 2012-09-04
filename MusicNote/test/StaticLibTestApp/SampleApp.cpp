@@ -27,16 +27,15 @@
 
 void OnParseTrace(const MusicNoteLib::CParser*, MusicNoteLib::CParser::TraceEventHandlerArgs* pEvArgs)
 {
-    _tprintf(_T("\n\t"));
-	_tprintf(pEvArgs->szTraceMsg);
+    _tprintf(_T("\n\t %s"), pEvArgs->szTraceMsg);
 }
 
 void OnParseError(const MusicNoteLib::CParser*, MusicNoteLib::CParser::ErrorEventHandlerArgs* pEvArgs)
 {
-	_tprintf(_T("\n\t Error --> ")); _tprintf(pEvArgs->szErrMsg);
+	_tprintf(_T("\n\t Error --> %s"), pEvArgs->szErrMsg);
 	if(pEvArgs->szToken)
 	{
-		_tprintf(_T("\t Token: ")); _tprintf(pEvArgs->szToken);
+		_tprintf(_T("\t Token: %s"), pEvArgs->szToken);
 	}
 }
 
@@ -72,9 +71,7 @@ int main(int argc, char* argv[])
 			for(unsigned int i=0; i < nOutPortCount; ++i)
             {
                 Str_Type strName = ToUnicode(MusicNoteLib::GetMidiOutPortName(i));
-                _tprintf(_T("\t %d \t: "), i );
-                _tprintf(strName.c_str());
-                _tprintf(_T("\n"));
+                _tprintf(_T("\t %d \t: %s \n"), i, strName.c_str());
             }
 			//////////////////////////////////////////
 			/// Chose a Midi output port
@@ -84,9 +81,7 @@ int main(int argc, char* argv[])
 		else
 		{
             Str_Type strName = ToUnicode(MusicNoteLib::GetMidiOutPortName(0));
-			_tprintf(_T("\nUsing the MIDI output port: "));
-            _tprintf(strName.c_str());
-            _tprintf(_T("\n"));
+			_tprintf(_T("\nUsing the MIDI output port: %s"), strName.c_str());
 		}
 	}
 	else if(argc == 2)
