@@ -32,6 +32,24 @@
 
 namespace MusicNoteLib
 {
+    /// <Summary>
+    /// Verbose is another mode of tracing where more verbose details of Parsing are reported.
+    /// Verbose mode requires the Tracing to be enabled with ENABLE_TRACING defined apriori.
+    /// Verbose mode reports all possible internal details for the notes being parsed.
+    /// It is possible to limit the Tracing output by defining NO_VERBOSE.
+    /// Using NO_VERBOSE with ENABLE_TRACING will only report significant parsing information and not everything.
+    /// </Summary>
+    #ifndef NO_VERBOSE
+        #define Verbose(x)  MusicStringParser::Trace(x)
+    #else
+        #define Verbose(x)
+    #endif
+    #ifndef NO_WARNINGS
+        #define Warning(x)  MusicStringParser::Trace(x)
+    #else
+        #define Warning(x)
+    #endif
+
 	// Helper Methods
 	template<typename T>
 	inline int LoadValueFromString(const TCHAR* sz, T* pRetVal)
@@ -564,7 +582,7 @@ namespace MusicNoteLib
 
             Verbose(MString(_T(" Talam = ")) + OIL::ToString(nTalam));
         }
-        else { nLen = 0;  Trace(MString(_T(" No Talam Specified !! Using Talam: ")) + OIL::ToString(nTalam));   }
+        else { nLen = 0;  Warning(MString(_T(" No Talam Specified !! Using Talam: ")) + OIL::ToString(nTalam));   }
 
         m_KeySig.SetTalam(nTalam);
 
@@ -587,7 +605,7 @@ namespace MusicNoteLib
 
             Verbose(MString(_T(" Speed = ")) + OIL::ToString(nSpeed));
         }
-        else {  Trace(MString(_T(" No Speed Specified !! Using Speed: ")) + OIL::ToString(nSpeed));   }
+        else {  Warning(MString(_T(" No Speed Specified !! Using Speed: ")) + OIL::ToString(nSpeed));   }
 
         m_KeySig.Speed() = nSpeed;
 
@@ -743,7 +761,7 @@ namespace MusicNoteLib
 			RaiseNoteEvents(ctx);
 		}
 
-		//if(szToken[0] != _T('\0')) Trace(MString(_T("Ignoring: ")) + szToken);
+        //if(szToken[0] != _T('\0')) Warning(MString(_T("Ignoring: ")) + szToken);
 
 		return nReadLen;
 	}
@@ -1158,7 +1176,7 @@ namespace MusicNoteLib
 		//	else
 		//		ctx.octaveNumber = DEFAULT_NONCHORD_OCTAVE;
 		//
-		//	Trace(_T("Choosing Default Octave:") + OIL::ToString(ctx.octaveNumber));
+        //	Warning(_T("Choosing Default Octave:") + OIL::ToString(ctx.octaveNumber));
 		//}
 
 		// Adjust the Notes based on KeySignature
@@ -1211,7 +1229,7 @@ namespace MusicNoteLib
 			else if(ctx.noteNumber < 0)
 				ctx.noteNumber = 0;
 
-			Trace(_T("  Adjusted the value to") + OIL::ToString(ctx.noteNumber) + _T(" and continuing..."));
+            Warning(_T("  Adjusted the value to") + OIL::ToString(ctx.noteNumber) + _T(" and continuing..."));
 		}
 		return 0;
 	}
@@ -1241,7 +1259,7 @@ namespace MusicNoteLib
 				    pszDuration = szToken + 1;
 
 				    // If we have to ignore this error, ignore this / character
-				    Trace(_T(" Ignoring / and proceeding with ") + MString(pszDuration));
+                    Warning(_T(" Ignoring / and proceeding with ") + MString(pszDuration));
 			    }
 		    }
 
@@ -1350,7 +1368,7 @@ namespace MusicNoteLib
 				{
 					MString str(MString(_T("Error while reading Numerator of tuplet")));
 					if(Error(PARSE_ERROR_TUPLET_NUMERATOR, str, pszTuplet)) return -1;
-					Trace(_T("  Defaulting to Numerator Value: ") + OIL::ToString(dNumerator));
+                    Warning(_T("  Defaulting to Numerator Value: ") + OIL::ToString(dNumerator));
 				}
 
 				int nLen = LoadValueFromString(pszTupletRatioMark+1, &dDenominator); // Read the Denominator
@@ -1358,7 +1376,7 @@ namespace MusicNoteLib
 				{
 					MString str(MString(_T("Error while reading Denominator of tuplet")));
 					if(Error(PARSE_ERROR_TUPLET_DENOMINATOR, str, pszTupletRatioMark+1)) return -1;
-					Trace(_T("  Defaulting to Denominator Value: ") + OIL::ToString(dDenominator));
+                    Warning(_T("  Defaulting to Denominator Value: ") + OIL::ToString(dDenominator));
 				}
 
 				pszTuplet = pszTupletRatioMark + 1 + nLen;
@@ -1423,7 +1441,7 @@ namespace MusicNoteLib
 				if(bAttack) ctx.attackVelocity = nVelocity;
 				if(bDecay) ctx.decayVelocity = nVelocity;
 			}
-            else Trace(MString(_T("Unable to find Attack/Decay velocity for note, while parsing: ")) + szToken);
+            else Warning(MString(_T("Unable to find Attack/Decay velocity for note, while parsing: ")) + szToken);
 
 			pszVelocity += nLen;
 		}while(true);	// we can have both attack and decay specified for the same note. so loop again.
@@ -1514,7 +1532,7 @@ namespace MusicNoteLib
 				// if we have to ignore this error, we ignore this [ character and continue
 				pszNumberStart = szToken+1;
 
-				Trace(_T("  Ignoring ") + MacroBracketStart);
+                Warning(_T("  Ignoring ") + MacroBracketStart);
 
                 return 1; // Failure; return the lentgh scanned
 			}
@@ -1528,7 +1546,7 @@ namespace MusicNoteLib
 					if(Error(NumberParseErrorCode, str, szToken)) return -1;
 
 					// if we have to ignore this error, we ignore the whole string between the [ and ]
-					Trace(_T("  Ignoring ") + MString(szToken + 1));
+                    Warning(_T("  Ignoring ") + MString(szToken + 1));
 
 					return (int)(pszEndBracket - szToken) +1; // Failure; return the length consumed
 				}
