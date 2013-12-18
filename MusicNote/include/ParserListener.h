@@ -15,7 +15,7 @@
 
 #include "Common/EventHandler.h"
 
-namespace MusicNoteLib
+namespace CFugue
 {
 	//Forward Declarations
 	class CParser;
@@ -67,6 +67,6 @@ namespace MusicNoteLib
 		inline virtual void OnNoteEvent(const CParser* pParser, const Note* pNote) { } 
 	};
 
-} // namespace MusicNoteLib
+} // namespace CFugue
 
 #endif // __PARSERLISTENER_H__D2514D7C_F971_49d6_B8E0_E892725FEB73__

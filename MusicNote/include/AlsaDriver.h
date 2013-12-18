@@ -21,7 +21,7 @@
 #include <thread> // std::thread
 #include <future> // std::future
 
-namespace MusicNoteLib
+namespace CFugue
 {
 	///<Summary>MIDI Driver for Linux Alsa based machines</Summary>
 	class MIDIDriverAlsa : public jdkmidi::MIDIDriver
@@ -90,6 +90,6 @@ namespace MusicNoteLib
 		//bool timer_open;
 	};
 
-} // namespace MusicNoteLib
+} // namespace CFugue
 
 #endif // __ALSADRIVER_H__9857EC39_234E_411E_9558_EFDA218796AA__

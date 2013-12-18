@@ -18,4 +18,4 @@
 #define MUSICNOTELIB_API __declspec(dllimport)
 #endif
 
-#include "MusicNoteLib.h"
+#include "CFugueLib.h"

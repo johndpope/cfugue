@@ -15,7 +15,7 @@
 
 #include "Dictionary.h"
 
-namespace MusicNoteLib
+namespace CFugue
 {
     /// <Summary>Class representing Carnatic Music Talam</Summary>
     class Talam
@@ -96,6 +96,6 @@ namespace MusicNoteLib
                 
     }; // class Talam
 
-} // namespace MusicNoteLib
+} // namespace CFugue
 
 #endif // _TALAM_H__D487B423_41C7_4ec5_BA4F_EB0D375C7425__

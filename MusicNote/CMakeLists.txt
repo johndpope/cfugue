@@ -20,12 +20,12 @@ SET(ORG_WEBSITE          "http://cfugue.sourceforge.net/")
 #################################
 # Setup Build Options
 #################################
-option (BUILD_CFUGUE_DLL "Should the DLL be built for CFugue (Only for Windows)" OFF) 
-option (BUILD_CFUGUE_TESTS "Should the Test applications be built for CFugue" ON) 
+option (CFUGUE_BUILD_DLL "Should the DLL be built for CFugue (Only for Windows)" OFF) 
+option (CFUGUE_BUILD_TESTS "Should the Test applications be built for CFugue" ON) 
 OPTION (CFUGUE_VERBOSE_TRACE "Should CFugue generate Verbose String Parsing Traces" ON)
 SET (CFUGUE_UNICODE_BUILD ON CACHE BOOL "Should CFugue be built with Unicode? (recommended: Yes)")
 
-mark_as_advanced(BUILD_CFUGUE_DLL)
+mark_as_advanced(CFUGUE_BUILD_DLL)
 
 #################################
 # Compute Values based on Options
@@ -142,24 +142,24 @@ include_directories( "include" "include/common" )
 #################################
 #### Target: CFugueLib ####
 #################################
-SET( MusicNoteLib_Source_Files 
-	src/MusicNoteLib/Chords.cpp
-	src/MusicNoteLib/Dictionary.cpp
-	src/MusicNoteLib/Documentation.cpp
-	src/MusicNoteLib/Instrument.cpp
-	src/MusicNoteLib/MIDIRenderer.cpp
-	src/MusicNoteLib/MusicNoteLib.cpp
-	src/MusicNoteLib/MusicStringParser.cpp
-	src/MusicNoteLib/Parser.cpp
-	src/MusicNoteLib/Player.cpp	
-	src/MusicNoteLib/stdafx.cpp
-	src/MusicNoteLib/MIDIDrivers/AlsaDriver.cpp
-	src/MusicNoteLib/MIDIDrivers/RtMidi.cpp
-	src/MusicNoteLib/MIDIDrivers/MidiDevice.cpp
+SET( CFugueLib_Source_Files 
+	src/CFugueLib/Chords.cpp
+	src/CFugueLib/Dictionary.cpp
+	src/CFugueLib/Documentation.cpp
+	src/CFugueLib/Instrument.cpp
+	src/CFugueLib/MIDIRenderer.cpp
+	src/CFugueLib/CFugueLib.cpp
+	src/CFugueLib/MusicStringParser.cpp
+	src/CFugueLib/Parser.cpp
+	src/CFugueLib/Player.cpp	
+	src/CFugueLib/stdafx.cpp
+	src/CFugueLib/MIDIDrivers/AlsaDriver.cpp
+	src/CFugueLib/MIDIDrivers/RtMidi.cpp
+	src/CFugueLib/MIDIDrivers/MidiDevice.cpp
    )
-SET( MusicNoteLib_Header_Files 
-	src/MusicNoteLib/targetver.h
-	src/MusicNoteLib/stdafx.h
+SET( CFugueLib_Header_Files 
+	src/CFugueLib/targetver.h
+	src/CFugueLib/stdafx.h
 	include/Common/EventHandler.h
 	include/Common/StrUtils.h
 	include/Common/MString.h
@@ -174,7 +174,7 @@ SET( MusicNoteLib_Header_Files
 	include/Layer.h
 	include/MIDIEventManager.h
 	include/MIDIRenderer.h
-	include/MusicNoteLib.h
+	include/CFugueLib.h
 	include/MusicStringParser.h
 	include/Note.h
 	include/Parser.h
@@ -185,9 +185,9 @@ SET( MusicNoteLib_Header_Files
 	include/TimeToken.h
 	include/Voice.h
    )
-SET( MusicNoteLib_UnKnownGroup src/MusicNoteLib/ReadMe.txt    )
+SET( CFugueLib_UnKnownGroup src/CFugueLib/ReadMe.txt    )
 
-add_library(CFugue  ${MusicNoteLib_Source_Files}  ${MusicNoteLib_Header_Files}  ${MusicNoteLib_UnKnownGroup} )
+add_library(CFugue  ${CFugueLib_Source_Files}  ${CFugueLib_Header_Files}  ${CFugueLib_UnKnownGroup} )
 set_target_properties(CFugue PROPERTIES COMPILE_DEFINITIONS "${TARGET_COMPILE_DEFS}" COMPILE_FLAGS "${TARGET_COMPILE_FLAGS}")
 
 #################################
@@ -285,19 +285,19 @@ IF(APPLE)
 					 COREMIDI_LIBRARY
 					 CORESERVICES_LIBRARY
                      COREFOUNDATION_LIBRARY)
-   SET(MusicNoteLib_Librarian ${CARBON_LIBRARY} ${QUICKTIME_LIBRARY} ${APP_SERVICES_LIBRARY} ${COREAUDIO_LIBRARY} ${COREMIDI_LIBRARY} ${CORESERVICES_LIBRARY} ${COREFOUNDATION_LIBRARY})
+   SET(CFugueLib_Librarian ${CARBON_LIBRARY} ${QUICKTIME_LIBRARY} ${APP_SERVICES_LIBRARY} ${COREAUDIO_LIBRARY} ${COREMIDI_LIBRARY} ${CORESERVICES_LIBRARY} ${COREFOUNDATION_LIBRARY})
 ENDIF (APPLE)
 
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")	# Linux specific code
-     SET(MusicNoteLib_Librarian asound)
+     SET(CFugueLib_Librarian asound)
 ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
 
 SET( jdkmidi_Dependencies  ${jdkmidi_Librarian} )
 target_link_libraries(jdkmidi  ${jdkmidi_Dependencies})
 
-SET( MusicNoteLib_Dependencies jdkmidi  ${MusicNoteLib_Librarian} )
-target_link_libraries(CFugue  ${MusicNoteLib_Dependencies})
+SET( CFugueLib_Dependencies jdkmidi  ${CFugueLib_Librarian} )
+target_link_libraries(CFugue  ${CFugueLib_Dependencies})
 
 install(TARGETS jdkmidi CFugue RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
 
@@ -305,16 +305,16 @@ install(TARGETS jdkmidi CFugue RUNTIME DESTINATION bin  LIBRARY DESTINATION bin 
 #### Target: CFugueDLL ####
 #################################
 
-if (BUILD_CFUGUE_TESTS AND BUILD_CFUGUE_DLL AND WIN32)	
-	ADD_SUBDIRECTORY(src/MusicNoteDLL)
-ENDIF(BUILD_CFUGUE_TESTS AND BUILD_CFUGUE_DLL AND WIN32)
+if (CFUGUE_BUILD_TESTS AND CFUGUE_BUILD_DLL AND WIN32)	
+	ADD_SUBDIRECTORY(src/CFugueDLL)
+ENDIF(CFUGUE_BUILD_TESTS AND CFUGUE_BUILD_DLL AND WIN32)
 
 
 #################################
 ####         Tests           ####
 #################################
 
-if (BUILD_CFUGUE_TESTS)
+if (CFUGUE_BUILD_TESTS)
 
 	# Set path to additional CMake modules
 	SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/")
@@ -328,6 +328,6 @@ if (BUILD_CFUGUE_TESTS)
 	
   ADD_SUBDIRECTORY(test)
   
-endif(BUILD_CFUGUE_TESTS)
+endif(CFUGUE_BUILD_TESTS)
 
 # MESSAGE(TODO:Add Doxygen Target for documentation)

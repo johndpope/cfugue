@@ -17,7 +17,7 @@
 #define SLEEP(x)    std::this_thread::sleep_for(std::chrono::milliseconds(x))
 #endif
 
-namespace MusicNoteLib
+namespace CFugue
 {
 	Player::Player(unsigned int nMIDIOutPortID /*= MIDI_MAPPER*/, unsigned int nMIDITimerResMS /*= 20*/)
 		: m_nOutPort(nMIDIOutPortID), m_nTimerRes(nMIDITimerResMS)
@@ -71,4 +71,4 @@ namespace MusicNoteLib
 		return m_Renderer.SaveToFile(szOutputFilePath);
 	}
 
-} // namespace MusicNoteLib
+} // namespace CFugue

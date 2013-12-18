@@ -9,7 +9,7 @@
 #ifndef __POLYPHONICPRESSURE_H__CA14D2EE_2BC0_4448_AA3D_5AC1F14983E9_
 #define __POLYPHONICPRESSURE_H__CA14D2EE_2BC0_4448_AA3D_5AC1F14983E9_
 
-namespace MusicNoteLib
+namespace CFugue
 {
 	class PolyphonicPressure
 	{
@@ -27,6 +27,6 @@ namespace MusicNoteLib
 		/// Returns the Pressure value that should be applied to the Key
 		inline unsigned char GetPressure() const { return uPressure; }
 	};
-} // namespace MusicNoteLib
+} // namespace CFugue
 
 #endif // __POLYPHONICPRESSURE_H__CA14D2EE_2BC0_4448_AA3D_5AC1F14983E9_

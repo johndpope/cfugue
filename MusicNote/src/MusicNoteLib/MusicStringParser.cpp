@@ -30,7 +30,7 @@
 //		No point in parsing in a blocking call. Use external ParserPreference
 //		object to control 'exit on first error', 'Synch/Asynch' behaviors
 
-namespace MusicNoteLib
+namespace CFugue
 {
     /// <Summary>
     /// Verbose is another mode of tracing where more verbose details of Parsing are reported.
@@ -1577,5 +1577,5 @@ namespace MusicNoteLib
 		return (int)(pszNumberStart - szToken) + nStrLen; // return the number of characters consumed
 	}
 
-} // namespace MusicNoteLib
+} // namespace CFugue
 

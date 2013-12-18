@@ -11,9 +11,9 @@
 #ifdef _USRDLL
 #define MUSICNOTELIB_API __declspec(dllexport)
 #endif
-#include "MusicNoteLib.h"
+#include "CFugueLib.h"
 
-namespace MusicNoteLib
+namespace CFugue
 {
     struct PARSETRACEARGS
     {
@@ -22,13 +22,13 @@ namespace MusicNoteLib
         void* lpUserData;
     };
 
-    static void OnParseTrace(const MusicNoteLib::CParser* pParser, MusicNoteLib::CParser::TraceEventHandlerArgs* pEvArgs)
+    static void OnParseTrace(const CFugue::CParser* pParser, CFugue::CParser::TraceEventHandlerArgs* pEvArgs)
     {
         const PARSETRACEARGS* pCallbackData = (const PARSETRACEARGS*) pParser->GetUserData();
         pCallbackData->lpfnTraceProc(pCallbackData->lpUserData, pEvArgs->szTraceMsg);
     }
 
-	static void OnParseError(const MusicNoteLib::CParser* pParser, MusicNoteLib::CParser::ErrorEventHandlerArgs* pEvArgs)
+	static void OnParseError(const CFugue::CParser* pParser, CFugue::CParser::ErrorEventHandlerArgs* pEvArgs)
     {
         const PARSETRACEARGS* pCallbackData = (const PARSETRACEARGS*) pParser->GetUserData();
 		pCallbackData->lpfnErrorProc(pCallbackData->lpUserData, pEvArgs->errCode, pEvArgs->szErrMsg, pEvArgs->szToken);
@@ -38,7 +38,7 @@ extern "C"
 {
     MUSICNOTELIB_API void* GetCarnaticMusicNoteReader()
 	{
-		MusicNoteLib::MusicStringParser Parser;
+		CFugue::MusicStringParser Parser;
 
 		return NULL;
 	}
@@ -54,7 +54,7 @@ extern "C"
         return playerObj.SaveAsMidiFile(szMusicNotes, szOutputFilePath);
     }
 
-    //static void OnParseError(const MusicNoteLib::CParser* pParser, MusicNoteLib::CParser::ErrorEventHandlerArgs* pEvArgs)
+    //static void OnParseError(const CFugue::CParser* pParser, CFugue::CParser::ErrorEventHandlerArgs* pEvArgs)
     //{
 	   // OutputDebugString(_T("\nError --> "));
 	   // OutputDebugString(pEvArgs->szErrMsg);
@@ -113,4 +113,4 @@ extern "C"
 	}
 } // extern "C"
 
-} // namespace MusicNoteLib
+} // namespace CFugue

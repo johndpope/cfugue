@@ -13,7 +13,7 @@
 #include <vector>
 #include <map>
 
-namespace MusicNoteLib
+namespace CFugue
 {
     /// Definition of a Chord entry
     struct ChordDef
@@ -76,7 +76,7 @@ namespace MusicNoteLib
         static unsigned int GetDefaultMatchingChord(const TCHAR* szToken, ChordDef* retVal);
     };
 
-} // namespace MusicNoteLib
+} // namespace CFugue
 
 
 

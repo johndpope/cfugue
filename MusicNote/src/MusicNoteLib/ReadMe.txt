@@ -1,1 +1,1 @@
-MusicNote Library
+CFugue Library

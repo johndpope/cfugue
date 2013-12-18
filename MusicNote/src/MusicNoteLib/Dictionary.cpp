@@ -5,7 +5,7 @@
 #include "KeySignature.h"
 #include "ControllerEvent.h"
 
-namespace MusicNoteLib
+namespace CFugue
 {
 	void PopulateStandardDefinitions(DICTIONARY& dictionaryObj)
 	{
@@ -19,4 +19,4 @@ namespace MusicNoteLib
 		ControllerEvent::PopulateStandardDefinitions(dictionaryObj);
 	}
 
-} // namespace MusicNoteLib
+} // namespace CFugue

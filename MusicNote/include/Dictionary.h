@@ -20,7 +20,7 @@
 #include "Common/StrUtils.h"
 #include <map>
 
-namespace MusicNoteLib
+namespace CFugue
 {
 	/// <Summary>Implements the less operator for Maps with string case-insensitive comparisions </Summary>
 	template<class _Ty>
@@ -39,6 +39,6 @@ namespace MusicNoteLib
 	/// <Summary> Accessor method to Populate standard macro definitions </Summary>
 	void PopulateStandardDefinitions(DICTIONARY& dictionaryObj);
 
-} // namespace MusicNoteLib
+} // namespace CFugue
 
 #endif // __DICTIONARY_H__57D24F57_01B6_4fcd_B92E_7B7849C51407__

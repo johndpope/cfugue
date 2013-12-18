@@ -3,7 +3,7 @@
 
 #include "MusicStringParser.h"
 
-namespace MusicNoteLib
+namespace CFugue
 {
 	//void ReadVoice(const MusicString& ) { }
 	//void ReadTempo(const MusicString& ) { }
@@ -49,6 +49,6 @@ namespace MusicNoteLib
 
 	} // namespace Western
 
-} // namespace MusicNoteLib
+} // namespace CFugue
 
 #endif //__TOKENPARSERS_H__D8FF9EC8_8F24_45ae_A9E5_E93DDD5684B2__

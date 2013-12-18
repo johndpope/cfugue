@@ -18,7 +18,7 @@
  */ 
 #include "Dictionary.h"
 
-namespace MusicNoteLib
+namespace CFugue
 {
     /**
      * Represents MIDI instrument objects. Useful for instrument changes,
@@ -42,6 +42,6 @@ namespace MusicNoteLib
         static void PopulateStandardDefinitions(DICTIONARY& stdDefns);
     };
 
-} // namespace MusicNoteLib
+} // namespace CFugue
 
 #endif // __MUSICINSTRUMENT_H__0823ABB9_BB3E_46a6_84DE_BBA9F4E7F821__

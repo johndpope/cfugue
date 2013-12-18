@@ -15,7 +15,7 @@
 
 #include "jdkmidi/sequencer.h"
 
-namespace MusicNoteLib
+namespace CFugue
 {
     /// <Summary> Takes care of MIDI Events, Tracks and Sequencing </Summary>
     class MIDIEventManager
@@ -227,6 +227,6 @@ namespace MusicNoteLib
 	    }
     };
 
-} // namespace MusicNoteLib 
+} // namespace CFugue 
 
 #endif // __MIDIEVENTMANAGER_H__74C2A3BA_DFCF_4048_BC1D_20E9E04E809A__

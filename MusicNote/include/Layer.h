@@ -13,7 +13,7 @@
 #ifndef __LAYER_H__B93236D6_FA2B_4de1_B1F1_908DBA7B7CE4__
 #define __LAYER_H__B93236D6_FA2B_4de1_B1F1_908DBA7B7CE4__
 
-namespace MusicNoteLib
+namespace CFugue
 {
     /// <Summary>
     /// Represents Layer object for MIDI tracks. A Layer allows multiple notes to be
@@ -31,6 +31,6 @@ namespace MusicNoteLib
         inline unsigned char GetLayer() const { return m_nLayer; }
     };
 
-} // namespace MusicNoteLib
+} // namespace CFugue
 
 #endif // __LAYER_H__B93236D6_FA2B_4de1_B1F1_908DBA7B7CE4__

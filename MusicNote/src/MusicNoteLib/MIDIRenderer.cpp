@@ -13,7 +13,7 @@
 #include "TimeToken.h"
 #include "Voice.h"
 
-namespace MusicNoteLib
+namespace CFugue
 {
     void MIDIRenderer::WaitTillDone()
     {
@@ -104,4 +104,4 @@ namespace MusicNoteLib
     }
 
 
-} // namespace MusicNoteLib
+} // namespace CFugue

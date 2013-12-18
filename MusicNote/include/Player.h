@@ -16,7 +16,7 @@
 #include "MusicStringParser.h"
 #include "MIDIRenderer.h"
 
-namespace MusicNoteLib
+namespace CFugue
 {
     /// <Summary> MIDI Player for Music Strings </Summary>
 	class Player
@@ -58,7 +58,7 @@ namespace MusicNoteLib
         /// </Summary>
         /// Example Usage:
         /** <pre>
-            MusicNoteLib::Player player; // Create the Player Object with the default MIDI output port
+            CFugue::Player player; // Create the Player Object with the default MIDI output port
 
             player.Play(_T("ci di f fi")); // Play the Music Notes
         </pre> */
@@ -82,7 +82,7 @@ namespace MusicNoteLib
         /// </Summary>
         /// Example Usage:
         /** <pre>
-            MusicNoteLib::Player player(nMIDIOutPortID, nMIDITimerResMS); // Create the Player object
+            CFugue::Player player(nMIDIOutPortID, nMIDITimerResMS); // Create the Player object
 
             if(player.PlayAsync(strMusicNotes) // Start Playing Asynchronously
                 while(player.IsPlaying()) // Wait while the play is still in progress
@@ -99,7 +99,7 @@ namespace MusicNoteLib
 		/// </Summary>
         /// Example Usage:
         /** <pre>
-            MusicNoteLib::Player player(nMIDIOutPortID, nMIDITimerResMS); // Create the Player object
+            CFugue::Player player(nMIDIOutPortID, nMIDITimerResMS); // Create the Player object
 
             if(player.PlayAsync(strMusicNotes) // Start Playing Asynchronously
 				player.WaitTillDone(); // wait while the play is in progress
@@ -132,13 +132,13 @@ namespace MusicNoteLib
 		/// </Summary>
         /// Example Usage:
         /** <pre>
-            void OnParseTrace(const MusicNoteLib::CParser*, MusicNoteLib::CParser::TraceEventHandlerArgs* pEvArgs)
+            void OnParseTrace(const CFugue::CParser*, CFugue::CParser::TraceEventHandlerArgs* pEvArgs)
             {
                 OutputDebugString(_T("\n"));
                 OutputDebugString(pEvArgs->szTraceMsg);
             }
 
-            void OnParseError(const MusicNoteLib::CParser*, MusicNoteLib::CParser::ErrorEventHandlerArgs* pEvArgs)
+            void OnParseError(const CFugue::CParser*, CFugue::CParser::ErrorEventHandlerArgs* pEvArgs)
             {
                 OutputDebugString(_T("\nError --> "));
                 OutputDebugString(pEvArgs->szErrMsg);
@@ -149,7 +149,7 @@ namespace MusicNoteLib
                 }
             }
 
-            MusicNoteLib::Player player; // Create the Player Object
+            CFugue::Player player; // Create the Player Object
 
             player.Parser().evTrace.Subscribe(&OnParseTrace); // Subscribe to the Trace Events
             player.Parser().evError.Subscribe(&OnParseError); // Subscribe to the Error Events
@@ -172,7 +172,7 @@ namespace MusicNoteLib
 		/// </Summary>
         /// Example Usage:
         /** <pre>
-            MusicNoteLib::Player player; // Create the Player Object
+            CFugue::Player player; // Create the Player Object
 
             player.Play(_T("ci di f fi")); // Play the Music Notes on MIDI output port
 
@@ -181,6 +181,6 @@ namespace MusicNoteLib
 		bool SaveToMidiFile(const char* szOutputFilePath);
 	};
 
-} // namespace MusicNoteLib
+} // namespace CFugue
 
 #endif // __PLAYER_H__83B70D04_18A9_48ff_B08B_81BF613138DB__

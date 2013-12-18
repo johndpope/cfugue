@@ -14,7 +14,7 @@
 
 using namespace jdkmidi;
 
-namespace MusicNoteLib
+namespace CFugue
 {
 	MIDIDriverAlsa::MIDIDriverAlsa ( int queue_size )
 		:
@@ -199,7 +199,7 @@ namespace MusicNoteLib
 	    }
 	}
 
-} // namespace MusicNoteLib
+} // namespace CFugue
 
 
 

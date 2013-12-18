@@ -8,7 +8,7 @@
 
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by MusicNoteDLL.rc
+// Used by CFugueDLL.rc
 //
 
 #define IDS_PROJNAME                    100

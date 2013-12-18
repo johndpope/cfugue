@@ -13,7 +13,7 @@
 #ifndef _TIME_H__AB00FD0B_E6BC_40cf_B86B_796212E2FA47__
 #define _TIME_H__AB00FD0B_E6BC_40cf_B86B_796212E2FA47__
 
-namespace MusicNoteLib
+namespace CFugue
 {
     /// <Summary>
     /// Represents a timing value. Useful for indicating when certain events are played.
@@ -28,6 +28,6 @@ namespace MusicNoteLib
         inline unsigned long GetTime() const { return m_nTime; }
     };
 
-} // namespace MusicNoteLib
+} // namespace CFugue
 
 #endif // _TIME_H__AB00FD0B_E6BC_40cf_B86B_796212E2FA47__

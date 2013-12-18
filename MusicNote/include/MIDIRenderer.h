@@ -20,22 +20,22 @@
 #include "MidiTimer.h"
 
 #if defined(_WIN32) // this is Windows
-    typedef jdkmidi::MIDIDriverWin32 MusicNoteMIDIDriver;
+    typedef jdkmidi::MIDIDriverWin32 CFugueMIDIDriver;
 #else // this is Linux
 	#include "AlsaDriver.h"
-    typedef MusicNoteLib::MIDIDriverAlsa MusicNoteMIDIDriver;
+    typedef CFugue::MIDIDriverAlsa CFugueMIDIDriver;
 #endif
 
 #ifndef MIDI_MAPPER
 #define MIDI_MAPPER ((unsigned int)-1)
 #endif // MIDI_MAPPER
 
-namespace MusicNoteLib
+namespace CFugue
 {
 	///<Summary>Takes care of Rendering MIDI Output either to a file or to a MIDI out Port</Summary>
 	class MIDIRenderer : MIDIEventManager, public CParserListener
 	{
-		MusicNoteMIDIDriver m_MIDIDriver;
+		CFugueMIDIDriver m_MIDIDriver;
 
 		jdkmidi::MIDIManager m_MIDIManager;
 
@@ -155,6 +155,6 @@ namespace MusicNoteLib
 		bool SaveToFile(const char* szOutputFilePath); //TODO: Add the capatiblity to store custom MIDI Headers
 	};
 
-} // namespace MusicNoteLib
+} // namespace CFugue
 
 #endif // MIDIRENDERER_H__9266AE56_84CB_4662_8328_ED088111CFE0__

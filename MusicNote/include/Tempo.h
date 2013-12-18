@@ -18,7 +18,7 @@
  */ 
 #include "Dictionary.h"
 
-namespace MusicNoteLib
+namespace CFugue
 {
     /// <Summary>
     /// Represents Tempo for a song. This is independent of the individual tracks in a song.
@@ -56,6 +56,6 @@ namespace MusicNoteLib
 
     };
 
-} // namespace MusicNoteLib 
+} // namespace CFugue 
 
 #endif // _TEMPO_H___1A1E8E8A_DFBA_40c7_B45D_7B5EC45BEE4D__
