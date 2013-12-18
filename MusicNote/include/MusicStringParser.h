@@ -18,7 +18,7 @@
 #include "KeySignature.h"
 #include "Chords.h"
 
-namespace MusicNoteLib
+namespace CFugue
 {
 	/// <Summary> Implements a MusicString Parsing functionality </Summary>
 	class MusicStringParser : public CParser
@@ -259,15 +259,15 @@ namespace MusicNoteLib
 		/// </Summary>
         /// Example Usage:
         /** <pre>
-            \#include "MusicNoteLib.h"
+            \#include "CFugueLib.h"
 
-            void OnParseTrace(const MusicNoteLib::CParser*, MusicNoteLib::CParser::TraceEventHandlerArgs* pEvArgs)
+            void OnParseTrace(const CFugue::CParser*, CFugue::CParser::TraceEventHandlerArgs* pEvArgs)
             {
                 OutputDebugString(_T("\n"));
                 OutputDebugString(pEvArgs->szTraceMsg);
             }
 
-            void OnParseError(const MusicNoteLib::CParser*, MusicNoteLib::CParser::ErrorEventHandlerArgs* pEvArgs)
+            void OnParseError(const CFugue::CParser*, CFugue::CParser::ErrorEventHandlerArgs* pEvArgs)
             {
                 OutputDebugString(_T("\nError --> "));
                 OutputDebugString(pEvArgs->szErrMsg);
@@ -278,7 +278,7 @@ namespace MusicNoteLib
                 }
             }
         
-            MusicNoteLib::MusicStringParser Parser; // Create the Parser Object
+            CFugue::MusicStringParser Parser; // Create the Parser Object
             
               Parser.evTrace.Subscribe(&OnParseTrace); // To get notified about the Parse Trace Events
               Parser.evError.Subscribe(&OnParseError); // To get notified about the Parse Error Events
@@ -399,6 +399,6 @@ namespace MusicNoteLib
 
 	};
 
-} // namespace MusicNoteLib
+} // namespace CFugue
 
 #endif // __MUSICNOTEREADER_H__506A239B_50B0_472d_B070_69BFBEF3C6CB__

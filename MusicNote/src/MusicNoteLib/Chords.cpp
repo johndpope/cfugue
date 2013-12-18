@@ -4,7 +4,7 @@
 #include "Chords.h"
 #include <algorithm>
 
-namespace MusicNoteLib
+namespace CFugue
 {
     ///<brief>Standard Chord Definitions</brief>
     /// Each entry in the chord definition holds the chord name, followed by the half-step intervals.
@@ -165,4 +165,4 @@ namespace MusicNoteLib
 		return staticObj.ExtractMatchingChord(szToken, retVal);
 	}
 
-} // namespace MusicNoteLib
+} // namespace CFugue

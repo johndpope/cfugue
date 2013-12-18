@@ -19,7 +19,7 @@
 #include <chrono>
 #endif
 
-namespace MusicNoteLib
+namespace CFugue
 {
 	///<Summary>Plays the role of a pseudo MIDI Timer for MIDI Sequencer</Summary>
 	class MidiTimer
@@ -43,6 +43,6 @@ namespace MusicNoteLib
 		}
 	};
 
-} // namespace MusicNoteLib
+} // namespace CFugue
 
 #endif // _MIDI_TIMER_H__D2A4A592_DAE0_46DC_ADA6_6191407F567E__

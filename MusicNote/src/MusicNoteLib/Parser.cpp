@@ -11,7 +11,7 @@
 #include "ParserListener.h"
 #include "Parser.h"
 
-namespace MusicNoteLib
+namespace CFugue
 {
     void CParser::AddListener(CParserListener* pListener)
     {

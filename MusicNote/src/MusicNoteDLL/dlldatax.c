@@ -13,6 +13,6 @@
 #define ENTRY_PREFIX	Prx
 
 #include "dlldata.c"
-#include "MusicNoteDLL_p.c"
+#include "CFugueDLL_p.c"
 
 #endif //_MERGE_PROXYSTUB

@@ -14,7 +14,7 @@
  */ 
 #include "Dictionary.h"
 
-namespace MusicNoteLib
+namespace CFugue
 {
 	/// Takes care of defining the MIDI Controller Events used in MusicStrings
 	class ControllerEvent
@@ -185,6 +185,6 @@ namespace MusicNoteLib
 		}
 	};
 
-} // namespace MusicNoteLib
+} // namespace CFugue
 
 #endif // __CONTROLLEREVENT_H_501C77B7_6423_4E41_A53D_1516C031BF77

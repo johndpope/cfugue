@@ -11,51 +11,51 @@ IF(MSVC)
 ENDIF(MSVC)
 
 #################################
-#### Target: MusicNoteDLL ####
+#### Target: CFugueDLL ####
 #################################
 include_directories(${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../../include)
 
-SET( MusicNoteDLL_Source_Files 
+SET( CFugueDLL_Source_Files 
 	dlldatax.c
 	dllmain.cpp
-	MusicNoteDLL.cpp
-	MusicNoteDLL.def
-	MusicNoteDLL.idl
-	../MusicNoteLib/MusicNoteLib.cpp
+	CFugueDLL.cpp
+	CFugueDLL.def
+	CFugueDLL.idl
+	../CFugueLib/CFugueLib.cpp
 	stdafx.cpp
    )  
-SET( MusicNoteDLL_Header_Files 
+SET( CFugueDLL_Header_Files 
 	dlldatax.h
 	dllmain.h
-	../../include/MusicNoteDll.h
+	../../include/CFugueDll.h
 	Resource.h
 	stdafx.h
 	targetver.h
    )
-SET( MusicNoteDLL_Resource_Files 
-	#MusicNoteDLL.rc
-	MusicNoteDLL.rgs
+SET( CFugueDLL_Resource_Files 
+	#CFugueDLL.rc
+	CFugueDLL.rgs
    )
-# SET( MusicNoteDLL_Generated_Files 
-	# #${CMAKE_CURRENT_BINARY_DIR}/MusicNoteDLL_p.c
-	# ${CMAKE_CURRENT_BINARY_DIR}/MusicNoteDLL_i.c
-	# ${CMAKE_CURRENT_BINARY_DIR}/MusicNoteDLL_p.h
+# SET( CFugueDLL_Generated_Files 
+	# #${CMAKE_CURRENT_BINARY_DIR}/CFugueDLL_p.c
+	# ${CMAKE_CURRENT_BINARY_DIR}/CFugueDLL_i.c
+	# ${CMAKE_CURRENT_BINARY_DIR}/CFugueDLL_p.h
    # )
-SET( MusicNoteDLL_UnKnownGroup ReadMe.txt    )
+SET( CFugueDLL_UnKnownGroup ReadMe.txt    )
 
 set(BUILD_CFUGUE_DLL TRUE)
 
 if(BUILD_CFUGUE_DLL)
-	add_library(MusicNoteDLL  SHARED   ${MusicNoteDLL_Source_Files}  ${MusicNoteDLL_Header_Files}  ${MusicNoteDLL_Resource_Files}  ${MusicNoteDLL_Generated_Files}  ${MusicNoteDLL_UnKnownGroup} )
-	set_target_properties(MusicNoteDLL PROPERTIES 
+	add_library(CFugueDLL  SHARED   ${CFugueDLL_Source_Files}  ${CFugueDLL_Header_Files}  ${CFugueDLL_Resource_Files}  ${CFugueDLL_Generated_Files}  ${CFugueDLL_UnKnownGroup} )
+	set_target_properties(CFugueDLL PROPERTIES 
 									COMPILE_DEFINITIONS "${TARGET_COMPILE_DEFS}"
 									COMPILE_FLAGS "${TARGET_COMPILE_FLAGS}")	
 	if (WIN32)
-		SET( MusicNoteDLL_Dependencies CFugueLib  ${MusicNoteDLL_Librarian} )
-		target_link_libraries(MusicNoteDLL  ${MusicNoteDLL_Dependencies})
-		install(TARGETS MusicNoteDLL RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
+		SET( CFugueDLL_Dependencies CFugueLib  ${CFugueDLL_Librarian} )
+		target_link_libraries(CFugueDLL  ${CFugueDLL_Dependencies})
+		install(TARGETS CFugueDLL RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
 	ELSE(WIN32)
- 		MESSAGE("MusicNoteDLL is a COM component - only supported on Windows builds !!")
+ 		MESSAGE("CFugueDLL is a COM component - only supported on Windows builds !!")
 	ENDIF(WIN32)
 ENDIF(BUILD_CFUGUE_DLL)
 

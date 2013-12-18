@@ -9,7 +9,7 @@
 #ifndef __CHANNELPRESSURE_H__6DE86217_F83D_430E_8097_406A2E3C2204__
 #define __CHANNELPRESSURE_H__6DE86217_F83D_430E_8097_406A2E3C2204__
 
-namespace MusicNoteLib
+namespace CFugue
 {
 	class ChannelPressure
 	{
@@ -22,6 +22,6 @@ namespace MusicNoteLib
 		inline unsigned char GetPressure() const { return nPressure; }
 	};
 
-} // namespace MusicNoteLib
+} // namespace CFugue
 
 #endif // __CHANNELPRESSURE_H__6DE86217_F83D_430E_8097_406A2E3C2204__

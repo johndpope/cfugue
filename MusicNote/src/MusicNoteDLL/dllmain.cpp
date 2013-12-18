@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #include "resource.h"
 
-//#include "MusicNoteDLL_i.h" // <<- pasted inline for cmake convenience
+//#include "CFugueDLL_i.h" // <<- pasted inline for cmake convenience
 #ifdef __cplusplus
 extern "C"{
 #endif 

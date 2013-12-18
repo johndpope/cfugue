@@ -16,7 +16,7 @@
 #include "stdafx.h"
 #include "stdlib.h"
 
-#include "MusicNoteLib.h"
+#include "CFugueLib.h"
 
 #if defined WIN32 || defined _WIN32
    #define SLEEP( milliseconds ) Sleep( (DWORD) milliseconds )
@@ -25,12 +25,12 @@
   #define SLEEP( milliseconds ) usleep( (unsigned long) (milliseconds * 1000.0) )
 #endif
 
-void OnParseTrace(const MusicNoteLib::CParser*, MusicNoteLib::CParser::TraceEventHandlerArgs* pEvArgs)
+void OnParseTrace(const CFugue::CParser*, CFugue::CParser::TraceEventHandlerArgs* pEvArgs)
 {
     _tprintf(_T("\n\t %s"), pEvArgs->szTraceMsg);
 }
 
-void OnParseError(const MusicNoteLib::CParser*, MusicNoteLib::CParser::ErrorEventHandlerArgs* pEvArgs)
+void OnParseError(const CFugue::CParser*, CFugue::CParser::ErrorEventHandlerArgs* pEvArgs)
 {
 	_tprintf(_T("\n\t Error --> %s"), pEvArgs->szErrMsg);
 	if(pEvArgs->szToken)
@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
 
 	if(argc < 2)
 	{
-		unsigned int nOutPortCount = MusicNoteLib::GetMidiOutPortCount();
+		unsigned int nOutPortCount = CFugue::GetMidiOutPortCount();
 		if(nOutPortCount <= 0)
 			exit(fprintf(stderr, "No MIDI Output Ports found !!"));
 		if(nOutPortCount > 1)
@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
 			/// List the MIDI Ports
 			for(unsigned int i=0; i < nOutPortCount; ++i)
             {
-                Str_Type strName = ToUnicode(MusicNoteLib::GetMidiOutPortName(i));
+                Str_Type strName = ToUnicode(CFugue::GetMidiOutPortName(i));
                 _tprintf(_T("\t %d \t: %s \n"), i, strName.c_str());
             }
 			//////////////////////////////////////////
@@ -80,7 +80,7 @@ int main(int argc, char* argv[])
 		}
 		else
 		{
-            Str_Type strName = ToUnicode(MusicNoteLib::GetMidiOutPortName(0));
+            Str_Type strName = ToUnicode(CFugue::GetMidiOutPortName(0));
 			_tprintf(_T("\nUsing the MIDI output port: %s"), strName.c_str());
 		}
 	}
@@ -100,42 +100,42 @@ int main(int argc, char* argv[])
 	/// C API
 	///
 	_tprintf(_T("\nPlaying Notes.."));
-	MusicNoteLib::PlayMusicStringWithOpts(_T("C D E F G A B"), nPortID, nTimerRes);
+	CFugue::PlayMusicStringWithOpts(_T("C D E F G A B"), nPortID, nTimerRes);
 	_tprintf(_T("    Done"));
 
 	_tprintf(_T("\nPlaying Chrods.."));
-	MusicNoteLib::PlayMusicStringWithOpts(_T("CMajH DMaj EMajH"), nPortID, nTimerRes);
+	CFugue::PlayMusicStringWithOpts(_T("CMajH DMaj EMajH"), nPortID, nTimerRes);
 	_tprintf(_T("    Done"));
 
 	_tprintf(_T("\nPlaying Parallel Notes.."));
-	MusicNoteLib::PlayMusicStringWithOpts(_T("C+D+E+F+G+A+B"), nPortID, nTimerRes);
+	CFugue::PlayMusicStringWithOpts(_T("C+D+E+F+G+A+B"), nPortID, nTimerRes);
 	_tprintf(_T("    Done"));
 
 	_tprintf(_T("\nPlaying Sequential Notes.."));
-	MusicNoteLib::PlayMusicStringWithOpts(_T("B_A_G_F_E_D_C"), nPortID, nTimerRes);
+	CFugue::PlayMusicStringWithOpts(_T("B_A_G_F_E_D_C"), nPortID, nTimerRes);
 	_tprintf(_T("    Done"));
 
 	_tprintf(_T("\nChanging instrument to Flute and to Violin and back to Piano.."));
-	MusicNoteLib::PlayMusicStringWithOpts(_T("C D I[Flute] E F I[Violin] G A I[PIANO] B C6"), nPortID, nTimerRes);
+	CFugue::PlayMusicStringWithOpts(_T("C D I[Flute] E F I[Violin] G A I[PIANO] B C6"), nPortID, nTimerRes);
 	_tprintf(_T("    Done"));
 
 	//////////////////////////////////////////////
 	_tprintf(_T("\nPlaying Carnatic Music.."));
 
 	_tprintf(_T("\nPlaying Kalyani.."));
-	MusicNoteLib::PlayMusicStringWithOpts(_T("K[MELA_65] S R G M P D N S'"), nPortID, nTimerRes);
+	CFugue::PlayMusicStringWithOpts(_T("K[MELA_65] S R G M P D N S'"), nPortID, nTimerRes);
 	_tprintf(_T("    Done"));
 
 	_tprintf(_T("\nPlaying Kharaharapriya.."));
-	MusicNoteLib::PlayMusicStringWithOpts(_T("K[MELA_22] S R G M P D N S'"), nPortID, nTimerRes);
+	CFugue::PlayMusicStringWithOpts(_T("K[MELA_22] S R G M P D N S'"), nPortID, nTimerRes);
 	_tprintf(_T("    Done"));
 
 	_tprintf(_T("\nPlaying Kalyani in Douple speed.."));
-	MusicNoteLib::PlayMusicStringWithOpts(_T("K[MELA_65]S[2] S R G M P D N S'"), nPortID, nTimerRes);
+	CFugue::PlayMusicStringWithOpts(_T("K[MELA_65]S[2] S R G M P D N S'"), nPortID, nTimerRes);
 	_tprintf(_T("    Done"));
 
 	_tprintf(_T("\nPlaying Kharaharapriya in Triple speed.."));
-	MusicNoteLib::PlayMusicStringWithOpts(_T("K[MELA_22]S[3] S R G M P D N S'"), nPortID, nTimerRes);
+	CFugue::PlayMusicStringWithOpts(_T("K[MELA_22]S[3] S R G M P D N S'"), nPortID, nTimerRes);
 	_tprintf(_T("    Done"));
 
 
@@ -145,7 +145,7 @@ int main(int argc, char* argv[])
 	/// C++ API
 	///
 	_tprintf(_T("\nPlaying Middle Octave.."));
-    MusicNoteLib::Player player(nPortID, nTimerRes); // Create the Player Object
+    CFugue::Player player(nPortID, nTimerRes); // Create the Player Object
     player.Play(_T("C D E F G A B")); // Play the Music Notes on the default MIDI output port
 
 	_tprintf(_T("\nPlaying few random notes.."));
@@ -180,7 +180,7 @@ int main(int argc, char* argv[])
 
 	// Uncomment the below to save notes as Midi file
 	//_tprintf(_T("\nSaving to Midi file.."));
-	//MusicNoteLib::SaveAsMidiFile(_T("C D E F G A B"), _T("Output.Mid"));
+	//CFugue::SaveAsMidiFile(_T("C D E F G A B"), _T("Output.Mid"));
 	//_tprintf(_T("\tDone !!"));
 
 	return 0;

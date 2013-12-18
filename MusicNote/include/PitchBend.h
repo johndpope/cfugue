@@ -9,7 +9,7 @@
 #ifndef __PITCHBEND_H__898E3A18_93D1_411D_B7D0_77269C3A0108__
 #define __PITCHBEND_H__898E3A18_93D1_411D_B7D0_77269C3A0108__
 
-namespace MusicNoteLib
+namespace CFugue
 {
 	class PitchBend
 	{

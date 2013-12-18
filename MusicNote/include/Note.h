@@ -13,7 +13,7 @@
 #ifndef __NOTE_H__AA5D5FE9_22AC_4e8c_911A_BB682EC71179__
 #define __NOTE_H__AA5D5FE9_22AC_4e8c_911A_BB682EC71179__
 
-namespace MusicNoteLib
+namespace CFugue
 {
     /// <Summary> Class representing a Musical Note </Summary>
 	struct Note
@@ -58,6 +58,6 @@ namespace MusicNoteLib
 		}
 	};
 
-} // namespace MusicNoteLib
+} // namespace CFugue
 
 #endif // __NOTE_H__AA5D5FE9_22AC_4e8c_911A_BB682EC71179__

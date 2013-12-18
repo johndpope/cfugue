@@ -28,7 +28,7 @@
 #include "Common/EventHandler.h"
 #include "Common/StrUtils.h"
 
-namespace MusicNoteLib
+namespace CFugue
 {
 	// Forward Declarations
 	class ChannelPressure;
@@ -151,7 +151,7 @@ namespace MusicNoteLib
 		/// event and handle the trace events raised by MusicStringParser as the parsing progresses.
 		///
 		/// Unlike the other programming paradigms that teach greedy methods asking you to exit
-		/// the moment any error occurs, MusicNote library fights to live its best before it gives up.
+		/// the moment any error occurs, CFugue library fights to live its best before it gives up.
 		/// So, usually if there is any error in parsing a token, parser does not abort and tries to continue
 		/// parsing the rest of the tokens.
 		/// In case this behavior is not suitable for your application and if you would like to stop the processing
@@ -237,7 +237,7 @@ namespace MusicNoteLib
 #endif // #if ENABLE_TRACING
 	};
 
-} // namespace MusicNoteLib
+} // namespace CFugue
 
 
 

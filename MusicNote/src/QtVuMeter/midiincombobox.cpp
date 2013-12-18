@@ -9,6 +9,6 @@ MidiInComboBox::MidiInComboBox(QWidget *parent) :
 void MidiInComboBox::PopulateDevices()
 {
     this->clear();
-    for(int i=0, nCount = MusicNoteLib::GetMidiInPortCount(); i < nCount; ++i)
-     this->addItem(MusicNoteLib::GetMidiInPortName(i).c_str());
+    for(int i=0, nCount = CFugue::GetMidiInPortCount(); i < nCount; ++i)
+     this->addItem(CFugue::GetMidiInPortName(i).c_str());
 }

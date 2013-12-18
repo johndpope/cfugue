@@ -13,14 +13,14 @@
 #ifndef __MUSICNOTE_LIB_H__EBEE094C_FF6E_43a1_A6CE_D619564F9C6A__
 #define __MUSICNOTE_LIB_H__EBEE094C_FF6E_43a1_A6CE_D619564F9C6A__
 
-/** @file MusicNoteLib.h
- * \brief Main header file for accessing the MusicNote Library
+/** @file CFugueLib.h
+ * \brief Main header file for accessing the CFugue Library
  */
 
 /// <Summary>
 /// This header file can be included directly in your project or through
-/// MusicNoteDll.h of the MusicNoteDll project. If included directly, this
-/// will be built directly as a satic library. If included through MusicNoteDll.h
+/// CFugueDll.h of the CFugueDll project. If included directly, this
+/// will be built directly as a satic library. If included through CFugueDll.h
 /// this will use dllImports through MUSICNOTELIB_API
 /// </Summary>
 #ifndef MUSICNOTELIB_API
@@ -36,7 +36,7 @@
 #define STDCALL  //__attribute__((stdcall))
 #endif
 
-namespace MusicNoteLib /// Music Programming Library
+namespace CFugue /// Music Programming Library
 {
 typedef  void (STDCALL *LPFNTRACEPROC)(void* pUserData, const TCHAR* szTraceMsg);
 typedef  void (STDCALL *LPFNERRORPROC)(void* pUserData, long lErrCode, const TCHAR* szErrorMsg, const TCHAR* szToken);
@@ -109,8 +109,8 @@ extern "C"
     /// </Summary>
     MUSICNOTELIB_API bool SaveAsMidiFile(const TCHAR* szMusicNotes, const char* szOutputFilePath);
 
-    //MUSICNOTELIB_API typedef void (*ParseErrorProc)(const MusicNoteLib::CParser*, MusicNoteLib::CParser::ErrorEventHandlerArgs* pEvArgs);
-    //MUSICNOTELIB_API typedef void (*ParseTraceProc)(const MusicNoteLib::CParser*, MusicNoteLib::CParser::TraceEventHandlerArgs* pEvArgs);
+    //MUSICNOTELIB_API typedef void (*ParseErrorProc)(const CFugue::CParser*, CFugue::CParser::ErrorEventHandlerArgs* pEvArgs);
+    //MUSICNOTELIB_API typedef void (*ParseTraceProc)(const CFugue::CParser*, CFugue::CParser::TraceEventHandlerArgs* pEvArgs);
 
     MUSICNOTELIB_API void Parse(const TCHAR* szNotes, LPFNTRACEPROC traceCallbackProc, void* pUserData);
 
@@ -118,6 +118,6 @@ extern "C"
 
 
 
-} // namespace MusicNoteLib
+} // namespace CFugue
 
 #endif // __MUSICNOTE_LIB_H__EBEE094C_FF6E_43a1_A6CE_D619564F9C6A__

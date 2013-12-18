@@ -1,1 +1,1 @@
-MusicNote Library DLL. This also hosts a COM component - so only build on Windows.
+CFugue Library DLL. This also hosts a COM component - so only build on Windows.

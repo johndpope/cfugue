@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "TokenParsers.h"
 
-namespace MusicNoteLib
+namespace CFugue
 {
 
 
-} // namespace MusicNoteLib
+} // namespace CFugue

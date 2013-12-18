@@ -18,7 +18,7 @@
  */ 
 #include "Talam.h"
 
-namespace MusicNoteLib
+namespace CFugue
 {
     /// <Summary>
     /// \brief Class representing the Key Signature
@@ -580,6 +580,6 @@ namespace MusicNoteLib
 
     };
 
-} // namespace MusicNoteLib
+} // namespace CFugue
 
 #endif // KEYSIGNATURE_H__56751CC1_46A2_4238_BAF1_7884CDA8089B__

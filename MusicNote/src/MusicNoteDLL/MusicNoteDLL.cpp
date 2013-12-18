@@ -6,12 +6,12 @@
 	see <http://musicnote.sourceforge.net/>.
 */
 
-// MusicNoteDLL.cpp : Implementation of DLL Exports.
+// CFugueDLL.cpp : Implementation of DLL Exports.
 
 
 #include "stdafx.h"
 #include "resource.h"
-//#include "MusicNoteDLL_i.h"
+//#include "CFugueDLL_i.h"
 #include "dllmain.h"
 #include "dlldatax.h"
 

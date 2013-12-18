@@ -151,7 +151,7 @@ if (BUILD_CFUGUE_TESTS AND BUILD_CFUGUE_DLL AND WIN32)
 	add_executable(testCFugueDll   ${DLLTestApp_Source_Files}  ${DLLTestApp_Header_Files}  ${DLLTestApp_UnKnownGroup} )
 	SET_TARGET_PROPERTIES(testCFugueDll PROPERTIES COMPILE_DEFINITIONS "${TARGET_COMPILE_DEFS}" COMPILE_FLAGS "${TARGET_COMPILE_FLAGS}")
 	
-	SET(DLLTestApp_Dependencies MusicNoteDLL  ${DLLTestApp_Librarian} )
+	SET(DLLTestApp_Dependencies CFugueDLL  ${DLLTestApp_Librarian} )
 	target_link_libraries(testCFugueDll  ${DLLTestApp_Dependencies})
 	install(TARGETS testCFugueDll RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)
 endif (BUILD_CFUGUE_TESTS AND BUILD_CFUGUE_DLL AND WIN32)

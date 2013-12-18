@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Instrument.h"
 
-namespace MusicNoteLib
+namespace CFugue
 {
     /**
      * Music Instrument Names in String representation
@@ -385,4 +385,4 @@ namespace MusicNoteLib
         stdDefns[_T("OPEN_TRIANGLE"          )] = _T("81");
     }
 
-} // namespace MusicNoteLib
+} // namespace CFugue

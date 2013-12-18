@@ -9,7 +9,7 @@
 #include "MidiDevice.h"
 #include "rtmidi/RtMidi.h"
 
-namespace MusicNoteLib
+namespace CFugue
 {
 	unsigned int GetMidiOutPortCount()
 	{
@@ -55,4 +55,4 @@ namespace MusicNoteLib
 		return strRetList;
 	}
 
-} // namespace MusicNoteLib 
+} // namespace CFugue 

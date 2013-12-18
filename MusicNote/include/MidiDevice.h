@@ -16,7 +16,7 @@
 #include <string>
 #include <vector>
 
-namespace MusicNoteLib
+namespace CFugue
 {
 	/// Returns the number of Output Midi Ports
 	unsigned int GetMidiOutPortCount();
@@ -38,6 +38,6 @@ namespace MusicNoteLib
 	/// Returns the names of all Midi Output Ports available
 	StringList GetMidiOutPortNames();
 
-} // namespace MusicNoteLib
+} // namespace CFugue
 
 #endif // __MIDI_DEVICE_H__6EE03181_DEEC_4771_A660_1597700B5773__

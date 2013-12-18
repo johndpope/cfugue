@@ -11,15 +11,15 @@
 
 #include "stdafx.h"
 
-#include "MusicNoteDll.h"
+#include "CFugueDll.h"
 
-void OnParseTrace(const MusicNoteLib::CParser*, MusicNoteLib::CParser::TraceEventHandlerArgs* pEvArgs)
+void OnParseTrace(const CFugue::CParser*, CFugue::CParser::TraceEventHandlerArgs* pEvArgs)
 {
 	OutputDebugString(_T("\n"));
 	OutputDebugString(pEvArgs->szTraceMsg);
 }
 
-void OnParseError(const MusicNoteLib::CParser*, MusicNoteLib::CParser::ErrorEventHandlerArgs* pEvArgs)
+void OnParseError(const CFugue::CParser*, CFugue::CParser::ErrorEventHandlerArgs* pEvArgs)
 {
 	OutputDebugString(_T("\nError --> "));
 	OutputDebugString(pEvArgs->szErrMsg);
@@ -33,9 +33,9 @@ void OnParseError(const MusicNoteLib::CParser*, MusicNoteLib::CParser::ErrorEven
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	MusicNoteLib::GetCarnaticMusicNoteReader();
+	CFugue::GetCarnaticMusicNoteReader();
 
-	MusicNoteLib::MusicStringParser Parser;
+	CFugue::MusicStringParser Parser;
 
 	// Subscribe to the Events
 	Parser.evTrace.Subscribe(&OnParseTrace);
@@ -109,7 +109,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	if(bSuccess == false) printf("\n Error while parsing IFlute\n");
 
 
-    MusicNoteLib::Player player;
+    CFugue::Player player;
     // Subscribe to the Events
     player.Parser().evTrace.Subscribe(&OnParseTrace);
     player.Parser().evError.Subscribe(&OnParseError);

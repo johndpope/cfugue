@@ -13,7 +13,7 @@
 #ifndef __VOICE_H__4FBD8E09_755B_4f7f_B129_B22444EA8813__
 #define __VOICE_H__4FBD8E09_755B_4f7f_B129_B22444EA8813__
 
-namespace MusicNoteLib
+namespace CFugue
 {
     /// <Summary>
     /// Class that represents Voice changes, also known as <i>track</i> changes
@@ -27,6 +27,6 @@ namespace MusicNoteLib
         inline unsigned char GetVoice() const { return m_nTrack; }
     };
 
-} // namespace MusicNoteLib
+} // namespace CFugue
 
 #endif // __VOICE_H__4FBD8E09_755B_4f7f_B129_B22444EA8813__
