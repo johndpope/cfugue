@@ -14,8 +14,6 @@ include_directories(
 	${ProjDir}/src/   )
 link_directories(   )
 
-message(STATUS "cmd")
-
 Set(cmd_ClInclude_Files
 	${ProjDir}/src/tse3/cmd/Command.h
 	${ProjDir}/src/tse3/cmd/CommandGroup.h

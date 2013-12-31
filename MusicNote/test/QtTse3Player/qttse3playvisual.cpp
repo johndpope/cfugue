@@ -12,31 +12,31 @@
 #include "tse3/Song.h"
 #include "tse3/Track.h"
 
-void PlayerThread::run()
+void CPlayerThread::run()
 {
     try
     {
         m_pVisualDlg->m_pTransport->filter()->setPort(m_pVisualDlg->m_pScheduler->defaultExternalPort());
+        m_pVisualDlg->m_pTransport->setAdaptiveLookAhead(false);
         m_pVisualDlg->m_pTransport->setAutoStop(true);
         TSE3::Clock startClock = (**m_pVisualDlg->m_pPlayable->iterator(0)).time ;
-        m_pVisualDlg->m_pTransport->play(m_pVisualDlg->m_pPlayable, startClock);
+        m_pVisualDlg->m_pTransport->play(m_pVisualDlg->m_pPlayable, 0);//startClock);
         while(m_pVisualDlg->m_pTransport->status() == TSE3::Transport::Playing)
         {
             m_pVisualDlg->m_pTransport->poll();
-            this->msleep(500); //500 ms
+            if(m_pVisualDlg->m_bShouldStopPlay == false)
+                this->msleep(500); //500 ms
         }
         m_pVisualDlg->m_pTransport->stop();
     }
     catch (...)
-    {        
+    {
     }
-        delete m_pVisualDlg->m_pPlayerThread;
-        m_pVisualDlg->m_pPlayerThread = NULL;
 }
 
 QtTse3PlayVisual::QtTse3PlayVisual(QWidget *parent, TSE3::MidiScheduler* pSch, TSE3::Transport* pTrans) :
     QDialog(parent),
-    ui(new Ui::QtTse3PlayVisual), m_pTransport(NULL), m_pScheduler(NULL), m_pMetronome(NULL), m_pPlayable(NULL), m_pLoaderThread(NULL), m_pPlayerThread(NULL)
+    ui(new Ui::QtTse3PlayVisual), m_pTransport(NULL), m_pScheduler(NULL), m_pMetronome(NULL), m_pPlayable(NULL), m_pPlayerThread(NULL)
 {
     ui->setupUi(this);
     SetupMIDI(/*pSch, pTrans*/);
@@ -49,17 +49,12 @@ QtTse3PlayVisual::QtTse3PlayVisual(QWidget *parent, TSE3::MidiScheduler* pSch, T
 
 QtTse3PlayVisual::~QtTse3PlayVisual()
 {
-    if(m_pPlayerThread != NULL)
-    {
-        m_pPlayerThread->quit();
-        delete m_pPlayerThread;
-        m_pPlayerThread = NULL;
-    }
+	on_pushButton_Stop_clicked();
     //if(m_pPlayable != NULL)
     //{
     //    delete m_pPlayable;
     //    m_pPlayable = NULL;
-    //}    
+    //}
     // No need to delete Scheduler and Metronome. Transport will take care of it
     if(m_pTransport != NULL)
     {
@@ -104,7 +99,7 @@ void QtTse3PlayVisual::SetupMIDI(/*TSE3::MidiScheduler* pSch, TSE3::Transport* p
 void QtTse3PlayVisual::on_pushButton_Load_clicked()
 {
     BusyWaitCursor dummy(this);
-    
+
     QString strFilePath = QFileDialog::getOpenFileName(this, "Open a MIDI File to Play", QString(), "MIDI Files (*.mid);;All Files (*.*)");
 
     if(!strFilePath.isEmpty())
@@ -136,8 +131,8 @@ void QtTse3PlayVisual::on_pushButton_Load_clicked()
                             (*pSong)[*i]->filter()->setStatus(false);
                         i++;
                     }
-                }                
-                this->ui->pushButton_Start->setEnabled(true);                
+                }
+                this->ui->pushButton_Start->setEnabled(true);
                 m_strFilePath = strFilePath;
                 ui->label_Status->setText("File: " + m_strFilePath);
             }
@@ -153,13 +148,28 @@ void QtTse3PlayVisual::on_pushButton_Load_clicked()
 
 void QtTse3PlayVisual::on_pushButton_Start_clicked()
 {
-    if(m_pPlayable != NULL)
+    if(m_pPlayable != NULL) // only if already loaded
     {
-        if(m_pPlayerThread != NULL) return;
+        if(m_pPlayerThread != NULL) return; // return if playing something already
 
-        m_pPlayerThread = new PlayerThread(this);
+        m_bShouldStopPlay = false;
+
+        m_pPlayerThread = new CPlayerThread(this);
         m_pPlayerThread->start();
     }
+}
+
+void QtTse3PlayVisual::on_pushButton_Stop_clicked()
+{
+    if(m_pPlayerThread != NULL)
+    {
+    	m_bShouldStopPlay = true;
+    	m_pTransport->stop();
+    	//m_pPlayerThread->quit();
+    	//m_pPlayerThread->wait(1000);
+    	//delete m_pPlayerThread;
+    	//m_pPlayerThread = NULL;
+	}
 }
 
 /**
@@ -180,14 +190,13 @@ void QtTse3PlayVisual::OnPlayerThreadStarted()
     ui->pushButton_Stop->setEnabled(true);
     ui->pushButton_Load->setEnabled(false);
 }
-void QtTse3PlayVisual::OnPlayerThreadFinished() 
-{ 
-    ui->pushButton_Start->setEnabled(true);
-    ui->pushButton_Stop->setEnabled(false);
-    ui->pushButton_Load->setEnabled(true);
-}
-void QtTse3PlayVisual::OnPlayerThreadTerminated() 
+void QtTse3PlayVisual::OnPlayerThreadFinished()
 {
+	OnPlayerThreadTerminated();
+}
+void QtTse3PlayVisual::OnPlayerThreadTerminated()
+{
+	m_pPlayerThread = NULL;
     ui->pushButton_Start->setEnabled(true);
     ui->pushButton_Stop->setEnabled(false);
     ui->pushButton_Load->setEnabled(true);

@@ -111,7 +111,7 @@ mark_as_advanced(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE)
 SET(TARGET_COMPILE_DEFS "${Char_Flags};_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;PHTRANSLATE_STATICLIB;_BIND_TO_CURRENT_CRT_VERSION")
 
 IF(CMAKE_COMPILER_IS_GNUCC)
-  SET(TARGET_COMPILE_FLAGS "-std=gnu++0x") # Add C++0x support for GCC
+  SET(TARGET_COMPILE_FLAGS "-std=gnu++11") # Add C++11 support for GCC
 ENDIF()
 
 IF(MSVC)
@@ -143,12 +143,13 @@ include_directories( "include" "include/common" )
 #### Target: CFugueLib ####
 #################################
 SET( CFugueLib_Source_Files 
+	src/CFugueLib/CFugueLib.cpp
 	src/CFugueLib/Chords.cpp
 	src/CFugueLib/Dictionary.cpp
 	src/CFugueLib/Documentation.cpp
 	src/CFugueLib/Instrument.cpp
-	src/CFugueLib/MIDIRenderer.cpp
-	src/CFugueLib/CFugueLib.cpp
+	src/CFugueLib/MidiRenderer.cpp
+	src/CFugueLib/MidiTimer.cpp
 	src/CFugueLib/MusicStringParser.cpp
 	src/CFugueLib/Parser.cpp
 	src/CFugueLib/Player.cpp	
@@ -172,8 +173,8 @@ SET( CFugueLib_Header_Files
 	include/Instrument.h
 	include/KeySignature.h
 	include/Layer.h
-	include/MIDIEventManager.h
-	include/MIDIRenderer.h
+	include/MidiEventManager.h
+	include/MidiRenderer.h
 	include/CFugueLib.h
 	include/MusicStringParser.h
 	include/Note.h
@@ -321,6 +322,8 @@ if (CFUGUE_BUILD_TESTS)
 	FIND_PACKAGE(Tse3)
 	if(NOT TSE3_FOUND)
 		Message(STATUS "Building TSE3 from source")
+		message(STATUS "Turning TSE3 Unicode ON")	
+		SET (TSE3_UNICODE_BUILD ON CACHE BOOL "CarMusTy requires Unicode to be ON" FORCE)		
 		ADD_SUBDIRECTORY(src/3rdparty/tse3)
 		SET (TSE3_LIBRARIES 	tse3)
 		SET (TSE3_INCLUDE_DIR 	"${CMAKE_CURRENT_SOURCE_DIR}/src/3rdparty/tse3/src")

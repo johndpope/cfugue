@@ -131,7 +131,7 @@ namespace jdkmidi
                    res,
                    res,
                    win32_timer,
-                   ( DWORD ) this,
+                   ( DWORD_PTR ) this,
                    TIME_PERIODIC
                  );
                  
@@ -162,8 +162,8 @@ namespace jdkmidi
       if ( midiInOpen (
              &in_handle,
              id,
-             ( DWORD ) win32_midi_in,
-             ( DWORD ) this,
+             ( DWORD_PTR ) win32_midi_in,
+             ( DWORD_PTR ) this,
              CALLBACK_FUNCTION ) !=0
          )
       {

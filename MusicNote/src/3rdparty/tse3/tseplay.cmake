@@ -15,8 +15,6 @@ include_directories(
 link_directories(
 	${ProjDir}/lib/   )
 
-message(STATUS "tseplay")
-
 Set(tseplay_ClInclude_Files
 	${ProjDir}/src/tse3play/tse3play.h   )
 Set(tseplay_ClCompile_Files

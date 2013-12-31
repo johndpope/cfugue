@@ -14,8 +14,6 @@ include_directories(
 	${ProjDir}/src/   )
 link_directories(   )
 
-message(STATUS "tse3file")
-
 Set(file_ClInclude_Files
 	${ProjDir}/src/tse3/file/Write.h
 	${ProjDir}/src/tse3/file/XML.h   )
