@@ -11,7 +11,7 @@ message(STATUS "------ tse3 ---------")
 #################################
 # Setup Build Options
 #################################
-option (BUILD_TSE3_TESTS "Should the Test applications be built for Tse3" ON) 
+option (TSE3_BUILD_TESTS "Should the Test applications be built for Tse3" ON) 
 SET (TSE3_UNICODE_BUILD OFF CACHE BOOL "Should TSE3 be built with Unicode? (default: No)")
 
 #################################
@@ -23,11 +23,11 @@ set(Output_postfix "" CACHE INTERNAL "Debug Postfix")
 
 if(TSE3_UNICODE_BUILD)
 	SET(Char_postfix "u")
-	SET(Char_Flags "-DUNICODE -D_UNICODE")
+	SET(Char_Flags "UNICODE;_UNICODE")
 	message(STATUS "Unicode build is ON")
 else(TSE3_UNICODE_BUILD)
 	SET(Char_postfix "")
-	SET(Char_Flags "-D_MBCS")
+	SET(Char_Flags "_MBCS")
 	message(STATUS "Unicode build is OFF")
 endif(TSE3_UNICODE_BUILD)
 
@@ -49,9 +49,14 @@ SET(CMAKE_RELEASE_POSTFIX "${Char_postfix}")
 message(STATUS "Output Postfix: ${Output_postfix}${Char_postfix}")
 
 SET(TARGET_COMPILE_DEFS "${Char_Flags};_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_BIND_TO_CURRENT_CRT_VERSION")
+
 IF(MSVC)
   SET(TARGET_COMPILE_FLAGS "/Zc:wchar_t- /Zc:forScope")
 ENDIF(MSVC)
+
+IF(CMAKE_COMPILER_IS_GNUCC)
+  SET(TARGET_COMPILE_FLAGS "-std=gnu++11") # Add C++11 support for GCC
+ENDIF()
 
 #################################
 # Setup Output Directories
@@ -105,8 +110,8 @@ include(ins.cmake)
 include(tse3.cmake)
 #include(listen.cmake)
 
-if(BUILD_TSE3_TESTS)
+if(TSE3_BUILD_TESTS)
 	include(tse3ports.cmake)
 	include(tse3MidiFile.cmake)
 	include(tseplay.cmake)
-endif(BUILD_TSE3_TESTS)
+endif(TSE3_BUILD_TESTS)

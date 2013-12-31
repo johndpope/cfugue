@@ -4,7 +4,7 @@
 
 	For links to further information, or to contact the author,
 	see <http://cfugue.sourceforge.net/>.
-    
+
     $LastChangedDate$
     $Rev$
     $LastChangedBy$
@@ -12,12 +12,6 @@
 
 #ifndef _MIDI_TIMER_H__D2A4A592_DAE0_46DC_ADA6_6191407F567E__
 #define _MIDI_TIMER_H__D2A4A592_DAE0_46DC_ADA6_6191407F567E__
-
-#if defined WIN32 || defined _WIN32
-#include <MMSystem.h>
-#else
-#include <chrono>
-#endif
 
 namespace CFugue
 {
@@ -31,16 +25,13 @@ namespace CFugue
 		/// On other systems it is the time elapsed since epoch.
 		/// @return psuedo time tick offset that is suitable for MIDI sequencer
 		///</Summary>
-		static inline unsigned long CurrentTimeOffset()
-		{
-#if defined WIN32 || defined _WIN32
-			return timeGetTime();
-#else
-			auto t0 = std::chrono::high_resolution_clock::now();			
-			   
-			return std::chrono::duration_cast<std::chrono::milliseconds>(t0.time_since_epoch()).count();
-#endif
-		}
+		static unsigned long CurrentTimeOffset();
+
+		///<Summary>
+		/// Causes the calling thread to sleep
+		/// @param ms sleep duration (in milli-seconds)
+		///</Summary>
+		static void Sleep(unsigned long ms);
 	};
 
 } // namespace CFugue

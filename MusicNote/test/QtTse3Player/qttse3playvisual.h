@@ -11,6 +11,8 @@ namespace Ui {
     class QtTse3PlayVisual;
 }
 
+class CPlayerThread;
+
 class QtTse3PlayVisual : public QDialog,
                          public TSE3::Listener<TSE3::MidiSchedulerListener>
                         // public TSE3::Listener<TSE3::TransportListener>
@@ -36,8 +38,9 @@ public:
 
     TSE3::Playable * m_pPlayable;
 
-    QThread*    m_pLoaderThread;
-    QThread*    m_pPlayerThread;
+    CPlayerThread*  m_pPlayerThread;
+
+    bool m_bShouldStopPlay;
 
     class BusyWaitCursor
     {
@@ -47,6 +50,7 @@ public:
         ~BusyWaitCursor() { m_pDlg->unsetCursor(); }
     };
 private slots:
+	void on_pushButton_Stop_clicked();
     void on_pushButton_Start_clicked();
     void on_pushButton_Load_clicked();
     void OnPlayerThreadStarted();
@@ -58,33 +62,33 @@ private slots:
 };
 
 
- class PlayerThread : public QThread, public TSE3::TransportCallback
+ class CPlayerThread : public QThread, public TSE3::TransportCallback
  {
      Q_OBJECT
 
      QtTse3PlayVisual*  m_pVisualDlg;
  public:
-     PlayerThread(QtTse3PlayVisual* pVisual): m_pVisualDlg(pVisual)
+     CPlayerThread(QtTse3PlayVisual* pVisual): m_pVisualDlg(pVisual)
      {
          connect(this, SIGNAL(started()), m_pVisualDlg, SLOT(OnPlayerThreadStarted()), Qt::QueuedConnection);
          connect(this, SIGNAL(finished()), m_pVisualDlg, SLOT(OnPlayerThreadFinished()), Qt::QueuedConnection);
          connect(this, SIGNAL(terminated()), m_pVisualDlg, SLOT(OnPlayerThreadTerminated()), Qt::QueuedConnection);
-         
+
          connect(this, SIGNAL(OnMidiCommand(TSE3::MidiCommand)), m_pVisualDlg, SLOT(OnMidiCommand(TSE3::MidiCommand)), Qt::QueuedConnection);
 
-         if(m_pVisualDlg->m_pTransport)               
+         if(m_pVisualDlg->m_pTransport)
              m_pVisualDlg->m_pTransport->attachCallback(this);
      }
-     ~PlayerThread() 
+     ~CPlayerThread()
      {
-         if(m_pVisualDlg->m_pTransport) 
+         if(m_pVisualDlg->m_pTransport)
              m_pVisualDlg->m_pTransport->detachCallback(this);
      }
 
      void run();
 
     /** @reimplemented for TSE3::TransportCallback    */
-    virtual void Transport_MidiIn(TSE3::MidiCommand c) { emit OnMidiCommand(c); } 
+    virtual void Transport_MidiIn(TSE3::MidiCommand c) { emit OnMidiCommand(c); }
 
     /** @reimplemented for TSE3::TransportCallback   */
     virtual void Transport_MidiOut(TSE3::MidiCommand c) { emit OnMidiCommand(c); }

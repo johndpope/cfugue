@@ -15,8 +15,6 @@ include_directories(
 link_directories(
 	${ProjDir}/lib   )
 
-message(STATUS "tse3ports")
-
 Set(tse3ports_ClInclude_Files   )
 Set(tse3ports_ClCompile_Files
 	${ProjDir}/src/examples/ports/ports.cpp   )

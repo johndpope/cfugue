@@ -1,6 +1,17 @@
+/*
+	This is part of CFugue, a C++ Runtime for MIDI Score Programming
+	Copyright (C) 2009 Gopalakrishna Palem
+
+	For links to further information, or to contact the author,
+	see <http://cfugue.sourceforge.net/>.
+
+    $LastChangedDate$
+    $Rev$
+    $LastChangedBy$
+*/
+
 #include "stdafx.h"
 #include "jdkmidi/filewritemultitrack.h"
-#include "MIDIRenderer.h"
 #include "Note.h"
 #include "ChannelPressure.h"
 #include "ControllerEvent.h"
@@ -13,14 +24,65 @@
 #include "TimeToken.h"
 #include "Voice.h"
 
+#if defined(_WIN32) // if this is Windows
+    #include "jdkmidi/driverwin32.h"
+    typedef jdkmidi::MIDIDriverWin32 CFugueMIDIDriver;
+#else // this is Linux or Mac
+	#include "AlsaDriver.h"
+	typedef CFugue::MIDIDriverAlsa CFugueMIDIDriver;
+#endif
+#include "MIDIRenderer.h"
+
 namespace CFugue
 {
+    MIDIRenderer::MIDIRenderer(void) :
+        m_pMIDIDriver(new CFugueMIDIDriver(128)), m_MIDIManager(m_pMIDIDriver)
+    {
+    }
+
+    MIDIRenderer::~MIDIRenderer(void)
+    {
+        Clear();
+    }
+
+    void MIDIRenderer::Clear()
+    {
+        EndPlayAsync(); // Stop any current Play in progress
+        m_lFirstNoteTime = 0;
+        MIDIEventManager::Clear(); // Clear the Track content
+    }
+
+    bool MIDIRenderer::BeginPlayAsync(int nMIDIOutPortID, unsigned int nTimerResolutionMS)
+    {
+        m_Sequencer.GoToZero();
+        m_MIDIManager.SetSeq(&m_Sequencer);
+        if(m_pMIDIDriver->OpenMIDIOutPort(nMIDIOutPortID))
+        {
+            m_MIDIManager.SeqPlay(); // Set into Play mode
+            m_MIDIManager.SetTimeOffset(MidiTimer::CurrentTimeOffset()); // Set the initial time offset
+            if(!m_pMIDIDriver->StartTimer(nTimerResolutionMS))
+            {
+                m_MIDIManager.SeqStop(); // Could not set a timer - Lets set into Stop mode
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    void MIDIRenderer::EndPlayAsync()
+    {
+        m_MIDIManager.SeqStop();	// Set into Stop mode
+        m_pMIDIDriver->StopTimer();	// Stop the Timer
+        m_pMIDIDriver->CloseMIDIOutPort();
+    }
+
     void MIDIRenderer::WaitTillDone()
     {
 #if defined WIN32 || defined _WIN32
 		while(IsPlaying()) Sleep(500);
 #else
-        m_MIDIDriver.WaitTillDone();
+        m_pMIDIDriver->WaitTillDone();
 #endif
     }
 

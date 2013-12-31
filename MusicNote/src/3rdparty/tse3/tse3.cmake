@@ -15,8 +15,6 @@ include_directories(
 	${ProjDir}/src   )
 link_directories(   )
 
-message(STATUS "tse3")
-
 Set(tse3_ClInclude_Files
 	${ProjDir}/src/tse3/app/Application.h
 	${ProjDir}/src/tse3/app/Choices.h

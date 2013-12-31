@@ -14,8 +14,6 @@ include_directories(
 	${ProjDir}/src/   )
 link_directories(   )
 
-message(STATUS "ins")
-
 Set(ins_ClInclude_Files
 	${ProjDir}/src/tse3/ins/Destination.h
 	${ProjDir}/src/tse3/ins/Instrument.h   )

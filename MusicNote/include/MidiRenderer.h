@@ -4,7 +4,7 @@
 
 	For links to further information, or to contact the author,
 	see <http://cfugue.sourceforge.net/>.
-    
+
     $LastChangedDate$
     $Rev$
     $LastChangedBy$
@@ -14,28 +14,27 @@
 #define MIDIRENDERER_H__9266AE56_84CB_4662_8328_ED088111CFE0__
 
 #include "jdkmidi/manager.h"
-#include "jdkmidi/driverwin32.h"
 #include "ParserListener.h"
 #include "MIDIEventManager.h"
 #include "MidiTimer.h"
 
-#if defined(_WIN32) // this is Windows
-    typedef jdkmidi::MIDIDriverWin32 CFugueMIDIDriver;
-#else // this is Linux
-	#include "AlsaDriver.h"
-    typedef CFugue::MIDIDriverAlsa CFugueMIDIDriver;
-#endif
-
 #ifndef MIDI_MAPPER
 #define MIDI_MAPPER ((unsigned int)-1)
 #endif // MIDI_MAPPER
+
+namespace jdkmidi   { class MIDIDriverWin32; }
+namespace CFugue    { class MIDIDriverAlsa; }
 
 namespace CFugue
 {
 	///<Summary>Takes care of Rendering MIDI Output either to a file or to a MIDI out Port</Summary>
 	class MIDIRenderer : MIDIEventManager, public CParserListener
 	{
-		CFugueMIDIDriver m_MIDIDriver;
+	    #if defined _WIN32
+		jdkmidi::MIDIDriverWin32* m_pMIDIDriver;
+		#else
+		CFugue::MIDIDriverAlsa* m_pMIDIDriver;
+		#endif
 
 		jdkmidi::MIDIManager m_MIDIManager;
 
@@ -78,25 +77,14 @@ namespace CFugue
 
 	public:
 
-		inline MIDIRenderer(void) :
-			m_MIDIDriver(128), m_MIDIManager(&m_MIDIDriver)
-		{
-		}
+		MIDIRenderer(void);
 
-		inline ~MIDIRenderer(void)
-		{
-            Clear();
-		}
+		~MIDIRenderer(void);
 
 		/// <Summary>
 		/// Clears the current state of the Renderer. Empties all the stored tracks and notes.
 		/// </Summary>
-		inline void Clear()
-		{
-            EndPlayAsync(); // Stop any current Play in progress
-            m_lFirstNoteTime = 0;
-            MIDIEventManager::Clear(); // Clear the Track content
-		}
+		void Clear();
 
 		/// <Summary>
 		/// Starts Rendering the MIDI output to MIDI port.
@@ -105,34 +93,14 @@ namespace CFugue
 		/// @param nTimerResolutionMS is the required minimum resolution for the MIDI timer (in MilliSeconds).
 		/// @return false if Unable to open MIDI port or unable to create timer with specified resolution.
 		/// </Summary>
-		inline bool BeginPlayAsync(int nMIDIOutPortID = MIDI_MAPPER, unsigned int nTimerResolutionMS = 20)
-		{
-			m_Sequencer.GoToZero();
-			m_MIDIManager.SetSeq(&m_Sequencer);
-			if(m_MIDIDriver.OpenMIDIOutPort(nMIDIOutPortID))
-			{
-				m_MIDIManager.SeqPlay(); // Set into Play mode
-				m_MIDIManager.SetTimeOffset(MidiTimer::CurrentTimeOffset()); // Set the initial time offset
-				if(!m_MIDIDriver.StartTimer(nTimerResolutionMS))
-				{
-					m_MIDIManager.SeqStop(); // Could not set a timer - Lets set into Stop mode
-					return false;
-				}
-				return true;
-			}
-			return false;
-		}
+		bool BeginPlayAsync(int nMIDIOutPortID = MIDI_MAPPER, unsigned int nTimerResolutionMS = 20);
+
 
 		/// <Summary>
 		/// Stops Rendering the MIDI output to MIDI port.
 		/// Each BeingPlayAsync call should have a matching EndPlayAsync call.
 		/// </Summary>
-		inline void EndPlayAsync()
-		{
-			m_MIDIManager.SeqStop();	// Set into Stop mode
-			m_MIDIDriver.StopTimer();	// Stop the Timer
-			m_MIDIDriver.CloseMIDIOutPort();
-		}
+		void EndPlayAsync();
 
 		/// <Summary>
 		/// After starting MIDI play with BeginPlayAsync(), use WaitTillDone()

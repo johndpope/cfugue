@@ -14,8 +14,6 @@ include_directories(
 	${ProjDir}/src/   )
 link_directories(   )
 
-message(STATUS "listen")
-
 Set(listen_ClInclude_Files
 	${ProjDir}/src/tse3/listen/app/Modified.h
 	${ProjDir}/src/tse3/listen/app/PartSelection.h

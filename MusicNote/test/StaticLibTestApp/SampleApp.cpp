@@ -18,13 +18,6 @@
 
 #include "CFugueLib.h"
 
-#if defined WIN32 || defined _WIN32
-   #define SLEEP( milliseconds ) Sleep( (DWORD) milliseconds )
-#else
-  #include <unistd.h>
-  #define SLEEP( milliseconds ) usleep( (unsigned long) (milliseconds * 1000.0) )
-#endif
-
 void OnParseTrace(const CFugue::CParser*, CFugue::CParser::TraceEventHandlerArgs* pEvArgs)
 {
     _tprintf(_T("\n\t %s"), pEvArgs->szTraceMsg);
@@ -152,7 +145,7 @@ int main(int argc, char* argv[])
 	// Asynchronous Play
 	if(player.PlayAsync(_T("Cx Dh Ah."))) // Start Playing Asynchronously
     while(player.IsPlaying()) // Wait while the play is in progress
-        SLEEP(1000);
+        CFugue::MidiTimer::Sleep(1000);
 	player.StopPlay(); // Match every PlayAsync with a StopPlay
 
 	_tprintf(_T("\nSubscribing to Player parser events..."));
