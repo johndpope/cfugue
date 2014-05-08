@@ -62,7 +62,6 @@ Set(tse3_ClInclude_Files
 	${ProjDir}/src/tse3/TSE3MDL.h
 	${ProjDir}/src/tse3/plt/Factory.h
 	${ProjDir}/src/tse3/plt/midiswis.h
-	${ProjDir}/src/tse3/plt/Win32.h
 	${ProjDir}/src/tse3/util/Demidify.h
 	${ProjDir}/src/tse3/util/MidiScheduler.h
 	${ProjDir}/src/tse3/util/MulDiv.h
@@ -116,7 +115,6 @@ Set(tse3_ClCompile_Files
 	${ProjDir}/src/tse3/TSE2MDL.cpp
 	${ProjDir}/src/tse3/TSE3.cpp
 	${ProjDir}/src/tse3/TSE3MDL.cpp
-	${ProjDir}/src/tse3/plt/Win32.cpp
 	${ProjDir}/src/tse3/util/Demidify.cpp
 	${ProjDir}/src/tse3/util/MidiScheduler.cpp
 	${ProjDir}/src/tse3/util/MulDiv.cpp
@@ -131,13 +129,36 @@ Set(tse3_Manifest_Files   )
 Set(tse3_Midl_Files   )
 Set(tse3_CustomBuild_Files   )
 
+if(WIN32)
+	Set(tse3_ClCompile_Files ${tse3_ClCompile_Files} ${ProjDir}/src/tse3/plt/Win32.cpp)
+	Set(tse3_ClInclude_Files ${tse3_ClInclude_Files} ${ProjDir}/src/tse3/plt/Win32.h)
+	Set(tse3_Plt_Dependencies WinMM.lib)
+else()
+	Message(FATAL_ERROR "TSE3: Build from source is not supported on this platform. Try installing libtse3-dev package")
+endif()
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")	# Linux specific code
+	# Its not worth doing the below for us. Linux supports libtse3-dev package, get it
+	Set(TARGET_COMPILE_DEFS "HAVE_ALSA_ASOUNDLIB_H=1;${TARGET_COMPILE_DEFS};")
+	Set(tse3_ClCompile_Files ${tse3_ClCompile_Files} 
+							${ProjDir}/src/tse3/plt/Alsa-0.5.cpp
+							${ProjDir}/src/tse3/plt/Arts.cpp
+							${ProjDir}/src/tse3/plt/Factory_Unix.cpp
+							${ProjDir}/src/tse3/plt/OSS.cpp)
+	Set(tse3_ClInclude_Files ${tse3_ClInclude_Files} 
+							${ProjDir}/src/tse3/plt/Alsa.h
+							${ProjDir}/src/tse3/plt/Arts.h
+							${ProjDir}/src/tse3/plt/Factory.h
+							${ProjDir}/src/tse3/plt/OSS.h)
+endif()
+
 Add_Library(tse3 STATIC  ${tse3_ClInclude_Files} ${tse3_ClCompile_Files} ${tse3_ResourceCompile_Files} ${tse3_Manifest_Files} ${tse3_Midl_Files} ${tse3_CustomBuild_Files})
 
 set_target_properties(tse3 PROPERTIES 
 	COMPILE_DEFINITIONS "${TARGET_COMPILE_DEFS}"
 	COMPILE_FLAGS "${TARGET_COMPILE_FLAGS}")
 
-Set(tse3_Dependencies  WinMM.lib ins cmd tse3file)
+Set(tse3_Dependencies ${tse3_Plt_Dependencies} ins cmd tse3file)
 target_link_libraries(tse3 ${tse3_Dependencies})
 
 install(TARGETS tse3 RUNTIME DESTINATION bin  LIBRARY DESTINATION bin ARCHIVE DESTINATION lib)

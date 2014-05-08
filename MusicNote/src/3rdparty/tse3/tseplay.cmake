@@ -33,6 +33,10 @@ set_target_properties(tse3play PROPERTIES
 	COMPILE_DEFINITIONS "${TARGET_COMPILE_DEFS}"
 	COMPILE_FLAGS "${TARGET_COMPILE_FLAGS}")
 
-Set(tseplay_Dependencies  WinMM.lib  tse3)
+if(WIN32)
+	Set(tseplay_Dependencies  WinMM.lib)
+endif()
+
+Set(tseplay_Dependencies  ${tseplay_Dependencies} tse3)
 target_link_libraries(tse3play ${tseplay_Dependencies})
 

@@ -307,7 +307,7 @@ void Win32MidiScheduler::impl_tx(MidiEvent e)
     data->port = hMidi[e.data.port].out;
     data->e    = e.data;
     data->sch  = this;
-    timeSetEvent(msecs-timeGetTime(), 10, &callback, (DWORD) data, TIME_ONESHOT);
+    timeSetEvent(msecs-timeGetTime(), 10, &callback, (DWORD_PTR) data, TIME_ONESHOT);
   } else
     tx(e.data);
 }
