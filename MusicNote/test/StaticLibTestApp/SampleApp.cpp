@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
 			for(unsigned int i=0; i < nOutPortCount; ++i)
             {
                 std::string portName = CFugue::GetMidiOutPortName(i);
-                _tprintf(_T("\t %d \t: %s \n"), i, portName.c_str());
+				std::wcout << "\t" << i << "\t: " << portName.c_str() << "\n";
             }
 			//////////////////////////////////////////
 			/// Chose a Midi output port
@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
 		else
 		{
             std::string portName = CFugue::GetMidiOutPortName(0);
-			_tprintf(_T("\nUsing the MIDI output port: %s"), portName.c_str());
+			std::wcout << "\nUsing the MIDI output port: " << portName.c_str();
 		}
 	}
 	else if(argc == 2)
