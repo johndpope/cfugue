@@ -1,0 +1,12 @@
+TSE3 Examples
+=============
+
+If there are any other examples you would like to see included with TSE3,
+please contact the author.
+
+See also the Examples.html file in the "doc" directory.
+
+    contents Displays the contents of a standard MIDI file
+    midifile Plays a standard MIDI file
+    ports    Prints a list of available MIDI ports on your system
+    scale    Simple program to play a scale

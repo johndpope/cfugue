@@ -1,0 +1,69 @@
+\documentclass{article}
+\usepackage{ifthen}
+\usepackage{times}
+\usepackage{makeidx}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+%\usepackage[shell]{dottex}
+
+\makeindex
+
+\lstset{language=c++,basicstyle=\small,frame=shadowbox,showstringspaces=false,numbers=left,numberstyle=\tiny,columns=fullflexible,breaklines}
+
+\newcommand{\figurejpg}[2]{\begin{figure}\caption{#1}\label{#2}\begin{center}\includegraphics[width=.9\columnwidth]{\topdir/docs/#2.jpg}\end{center}\end{figure}}
+\newcommand{\figureeps}[2]{\begin{figure}\caption{#1}\label{#2}\begin{center}\includegraphics[width=.9\columnwidth]{\topdir/docs/#2.eps}\end{center}\end{figure}}
+
+\newcommand{\figurestart}[2]{\begin{figure}\caption{#1}\label{#2}\begin{center}}
+\newcommand{\figureend}{\end{center}\end{figure}}
+
+\newcommand{\email}[1]{\href{mailto:#1}{$<$#1$>$}}
+\newcommand{\website}[1]{\href{#1}{#1}}
+
+\newcommand{\lstsrcexample}[2]{\newpage\lstinputlisting[caption={#1}]{\topdir/example/#2}}
+\newcommand{\lstsrctest}[2]{\newpage\lstinputlisting[caption={#1}]{\topdir/test/#2}}
+\newcommand{\lstsrc}[2]{\newpage\lstinputlisting[caption={#1}]{\topdir/src/#2}}
+\newcommand{\lstheader}[2]{\newpage\lstinputlisting[caption={#1}]{\topdir/include/#2}}
+
+\newcommand{\setpdfinfo}[2]{
+\hypersetup{
+    bookmarks=true,   % show bookmarks bar?
+    unicode=false,    % non-Latin characters in bookmarks
+    pdftoolbar=true,  % show in toolbar?
+    pdfmenubar=true,  % show menu?
+    pdffitwindow=true,% page fit to window when opened
+    pdftitle={#1},    % title
+    pdfauthor={#2},     % author
+    pdfsubject={},   % subject of the document
+    pdfnewwindow=true,% links in new window
+    pdfkeywords={}, % list of keywords
+    colorlinks=true, % false: boxed links; true: colored links
+    linkcolor=blue,    % color of internal links
+    citecolor=green,  % color of links to bibliography
+    filecolor=magenta,% color of file links
+    urlcolor=cyan     % color of external links
+}
+}
+
+\newcommand{\jdkstitle}[4]{
+\begin{titlepage}
+\begin{center}
+%\includegraphics[width=.9\columnwidth]{\topdir/docs/jdks-logo.pdf}\\[1cm]
+\textsc{\large J.D. Koftinoff Software, Ltd.}\\
+\website{http://www.jdkoftinoff.com/}\\[1cm]
+\textsc{\large #1}\\[1cm]
+\website{#4}
+\vfill{
+#2 \email{#3}\\
+\textsc{\today}
+}
+\end{center}
+\end{titlepage}
+\tableofcontents
+\listoftables
+\listoffigures
+\lstlistoflistings
+\newpage
+}
+
+%
