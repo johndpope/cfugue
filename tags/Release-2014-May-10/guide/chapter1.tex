@@ -1,0 +1,31 @@
+\chapter{Getting Started with CFugue}
+
+CFugue is a high level music programming library for C/C++ developers. It makes it possible to play music notes directly from high level programs, such as C++, COM, C\# and ASP.Net applications, without ever having to deal with the low-level MIDI complexities. The abstraction it provides you lets you concentrate on programming the \emph{Music} rather than worry about the MIDI nuances.
+
+In this chapter, we discuss how to get started with using CFugue in your own applications.
+
+\section{Downloading CFugue}
+CFugue is an open-source project available for free download at: \url{http://sourceforge.net/projects/musicnote/}. As a developer, you have two options for downloading: You can either download the pre-built libraries and link your code to them or get the complete CFugue source code and build your code with it.
+
+The first option of linking against the pre-built libraries should suffice for many. You can choose the second option of building against the CFugue code, if you want to contribute to CFugue development or if you would like to step into the CFugue code to see how it works.
+
+\section{Using CFugue with your code}
+For C/C++ programmers, Whether you are using pre-built libraries or building the CFugue project yourself, you need two files to start using CFugue in your code: the MusicNote header file and the MusicNote library file. Since CFugue supports both static linking and dynamic linking, the names of these files differ based on how you are linking.
+
+For static linking, \emph{MusicNoteLib.h} is the header file and \emph{MusicNoteLib.lib} is the library file. And for dynamic linking, \emph{MusicNoteDll.h} is the header file while \emph{MusicNoteDll.lib} is the library file. Note that for dynamic linking, you will also need \emph{MusicNoteDll.dll} to be present in the DLL search path.
+
+Once you have the appropriate files downloaded and ready, \emph{\#include} the header file in your code and specify the library file in the list of linker inputs \footnote{please refer your compiler's command line options for more specific details on how to do this}, and you are all set to go.
+
+\section{Your first CFugue application}
+CFugue is all about creating music in your own application. Doing this is as simple as writing plain music notes. Here is an example that demonstrates this simplicity.
+\begin{lstlisting}[frame=shadowbox,caption={Code to play middle octave},label=FirstApp]
+  #include "MusicNoteLib.h"    
+  
+  void main()
+  {      
+      MusicNoteLib::Player player;  // Create the Player Object      
+      
+      player.Play("C D E F G A B"); // Play the Music Notes
+  }
+\end{lstlisting}
+The above code plays the Middle octave quarter notes on the default MIDI output port.
