@@ -23,8 +23,6 @@
 #include "TimeToken.h"
 #include "Voice.h"
 
-#include "Trace.h"
-
 #include "math.h"
 
 //TODO: Use C++0x Futures as asynchronous constructs for the Parsing.
