@@ -1,0 +1,512 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="UnicodeDebug|Win32">
+      <Configuration>UnicodeDebug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="UnicodeDebug|x64">
+      <Configuration>UnicodeDebug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="UnicodeRelease|Win32">
+      <Configuration>UnicodeRelease</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="UnicodeRelease|x64">
+      <Configuration>UnicodeRelease</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>../lib/</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>../lib/</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>../lib/</OutDir>
+    <TargetName>$(ProjectName)_$(Platform)d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>../lib/</OutDir>
+    <TargetName>$(ProjectName)_$(Platform)du</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>../lib/</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
+    <OutDir>../lib/</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>../lib/</OutDir>
+    <TargetName>$(ProjectName)_$(Platform)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>../lib/</OutDir>
+    <TargetName>$(ProjectName)_$(Platform)u</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>../../../include;../src</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+    <Lib>
+      <AdditionalDependencies>WinMM.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>../src</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+    <Lib>
+      <AdditionalDependencies>WinMM.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>../src;../../../../include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+    <Lib>
+      <AdditionalDependencies>WinMM.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>../src;../../../../include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+    <Lib>
+      <AdditionalDependencies>WinMM.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>../src</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>../src</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>../src;../../../../include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>../src;../../../../include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\tse3\app\Application.cpp" />
+    <ClCompile Include="..\src\tse3\app\Choices.cpp" />
+    <ClCompile Include="..\src\tse3\app\Modified.cpp" />
+    <ClCompile Include="..\src\tse3\app\PartDisplay.cpp" />
+    <ClCompile Include="..\src\tse3\app\PartSelection.cpp" />
+    <ClCompile Include="..\src\tse3\app\Record.cpp" />
+    <ClCompile Include="..\src\tse3\app\TrackSelection.cpp" />
+    <ClCompile Include="..\src\tse3\DisplayParams.cpp" />
+    <ClCompile Include="..\src\tse3\Error.cpp" />
+    <ClCompile Include="..\src\tse3\FileBlockParser.cpp" />
+    <ClCompile Include="..\src\tse3\Filter.cpp" />
+    <ClCompile Include="..\src\tse3\FlagTrack.cpp" />
+    <ClCompile Include="..\src\tse3\KeySigTrack.cpp" />
+    <ClCompile Include="..\src\tse3\Metronome.cpp" />
+    <ClCompile Include="..\src\tse3\Midi.cpp" />
+    <ClCompile Include="..\src\tse3\MidiCommandFilter.cpp" />
+    <ClCompile Include="..\src\tse3\MidiData.cpp" />
+    <ClCompile Include="..\src\tse3\MidiEcho.cpp" />
+    <ClCompile Include="..\src\tse3\MidiFile.cpp" />
+    <ClCompile Include="..\src\tse3\MidiFilter.cpp" />
+    <ClCompile Include="..\src\tse3\MidiMapper.cpp" />
+    <ClCompile Include="..\src\tse3\MidiParams.cpp" />
+    <ClCompile Include="..\src\tse3\MidiScheduler.cpp" />
+    <ClCompile Include="..\src\tse3\Mixer.cpp" />
+    <ClCompile Include="..\src\tse3\Mutex.cpp" />
+    <ClCompile Include="..\src\tse3\Notifier.cpp" />
+    <ClCompile Include="..\src\tse3\Panic.cpp" />
+    <ClCompile Include="..\src\tse3\Part.cpp" />
+    <ClCompile Include="..\src\tse3\Phrase.cpp" />
+    <ClCompile Include="..\src\tse3\PhraseEdit.cpp" />
+    <ClCompile Include="..\src\tse3\PhraseList.cpp" />
+    <ClCompile Include="..\src\tse3\Playable.cpp" />
+    <ClCompile Include="..\src\tse3\plt\Win32.cpp" />
+    <ClCompile Include="..\src\tse3\RepeatTrack.cpp" />
+    <ClCompile Include="..\src\tse3\Serializable.cpp" />
+    <ClCompile Include="..\src\tse3\Song.cpp" />
+    <ClCompile Include="..\src\tse3\TempoTrack.cpp" />
+    <ClCompile Include="..\src\tse3\test.cpp" />
+    <ClCompile Include="..\src\tse3\TimeSigTrack.cpp" />
+    <ClCompile Include="..\src\tse3\Track.cpp" />
+    <ClCompile Include="..\src\tse3\Transport.cpp" />
+    <ClCompile Include="..\src\tse3\TSE2MDL.cpp" />
+    <ClCompile Include="..\src\tse3\TSE3.cpp" />
+    <ClCompile Include="..\src\tse3\TSE3MDL.cpp" />
+    <ClCompile Include="..\src\tse3\util\Demidify.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|x64'">$(IntDir)util/</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\src\tse3\util\MidiScheduler.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|x64'">$(IntDir)util/</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\src\tse3\util\MulDiv.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|x64'">$(IntDir)util/</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\src\tse3\util\NoteNumber.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|x64'">$(IntDir)util/</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\src\tse3\util\Phrase.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|x64'">$(IntDir)util/</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\src\tse3\util\PowerQuantise.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|x64'">$(IntDir)util/</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\src\tse3\util\Snap.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|x64'">$(IntDir)util/</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\src\tse3\util\Song.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|x64'">$(IntDir)util/</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\src\tse3\util\Track.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|Win32'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(IntDir)util/</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|x64'">$(IntDir)util/</ObjectFileName>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\tse3\app\Application.h" />
+    <ClInclude Include="..\src\tse3\app\Choices.h" />
+    <ClInclude Include="..\src\tse3\app\Modified.h" />
+    <ClInclude Include="..\src\tse3\app\PartDisplay.h" />
+    <ClInclude Include="..\src\tse3\app\PartSelection.h" />
+    <ClInclude Include="..\src\tse3\app\Record.h" />
+    <ClInclude Include="..\src\tse3\app\TrackSelection.h" />
+    <ClInclude Include="..\src\tse3\DisplayParams.h" />
+    <ClInclude Include="..\src\tse3\Error.h" />
+    <ClInclude Include="..\src\tse3\EventTrack.h" />
+    <ClInclude Include="..\src\tse3\FileBlockParser.h" />
+    <ClInclude Include="..\src\tse3\Filter.h" />
+    <ClInclude Include="..\src\tse3\FlagTrack.h" />
+    <ClInclude Include="..\src\tse3\KeySigTrack.h" />
+    <ClInclude Include="..\src\tse3\Metronome.h" />
+    <ClInclude Include="..\src\tse3\Midi.h" />
+    <ClInclude Include="..\src\tse3\MidiCommandFilter.h" />
+    <ClInclude Include="..\src\tse3\MidiData.h" />
+    <ClInclude Include="..\src\tse3\MidiEcho.h" />
+    <ClInclude Include="..\src\tse3\MidiFile.h" />
+    <ClInclude Include="..\src\tse3\MidiFilter.h" />
+    <ClInclude Include="..\src\tse3\MidiMapper.h" />
+    <ClInclude Include="..\src\tse3\MidiParams.h" />
+    <ClInclude Include="..\src\tse3\MidiScheduler.h" />
+    <ClInclude Include="..\src\tse3\Mixer.h" />
+    <ClInclude Include="..\src\tse3\Mutex.h" />
+    <ClInclude Include="..\src\tse3\Notifier.h" />
+    <ClInclude Include="..\src\tse3\Panic.h" />
+    <ClInclude Include="..\src\tse3\Part.h" />
+    <ClInclude Include="..\src\tse3\Phrase.h" />
+    <ClInclude Include="..\src\tse3\PhraseEdit.h" />
+    <ClInclude Include="..\src\tse3\PhraseList.h" />
+    <ClInclude Include="..\src\tse3\Playable.h" />
+    <ClInclude Include="..\src\tse3\plt\Factory.h" />
+    <ClInclude Include="..\src\tse3\plt\midiswis.h" />
+    <ClInclude Include="..\src\tse3\plt\Win32.h" />
+    <ClInclude Include="..\src\tse3\Progress.h" />
+    <ClInclude Include="..\src\tse3\RepeatTrack.h" />
+    <ClInclude Include="..\src\tse3\Serializable.h" />
+    <ClInclude Include="..\src\tse3\Song.h" />
+    <ClInclude Include="..\src\tse3\TempoTrack.h" />
+    <ClInclude Include="..\src\tse3\TimeSigTrack.h" />
+    <ClInclude Include="..\src\tse3\Track.h" />
+    <ClInclude Include="..\src\tse3\Transport.h" />
+    <ClInclude Include="..\src\tse3\TSE2MDL.h" />
+    <ClInclude Include="..\src\tse3\TSE3.h" />
+    <ClInclude Include="..\src\tse3\TSE3MDL.h" />
+    <ClInclude Include="..\src\tse3\util\Demidify.h" />
+    <ClInclude Include="..\src\tse3\util\MidiScheduler.h" />
+    <ClInclude Include="..\src\tse3\util\MulDiv.h" />
+    <ClInclude Include="..\src\tse3\util\NoteNumber.h" />
+    <ClInclude Include="..\src\tse3\util\Phrase.h" />
+    <ClInclude Include="..\src\tse3\util\PowerQuantise.h" />
+    <ClInclude Include="..\src\tse3\util\Snap.h" />
+    <ClInclude Include="..\src\tse3\util\Song.h" />
+    <ClInclude Include="..\src\tse3\util\Track.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
