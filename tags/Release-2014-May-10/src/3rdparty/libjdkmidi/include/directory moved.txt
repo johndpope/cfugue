@@ -1,0 +1,3 @@
+the jdkmidi directory in this folder is moved to ..\..\include directory: /MusicNote/include/jdkmidi
+
+On svn this is: https://musicnote.svn.sourceforge.net/svnroot/musicnote/MusicNote/include/jdkmidi/

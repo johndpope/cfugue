@@ -1,0 +1,18 @@
+// MusicNoteDLL.idl : IDL source for MusicNoteDLL
+//
+
+// This file will be processed by the MIDL tool to
+// produce the type library (MusicNoteDLL.tlb) and marshalling code.
+
+import "oaidl.idl";
+import "ocidl.idl";
+
+[
+	uuid(75949D24-4E69-4C98-BE8D-51797D673E73),
+	version(1.0),
+	helpstring("MusicNoteDLL 1.0 Type Library")
+]
+library MusicNoteDLLLib
+{
+	importlib("stdole2.tlb");
+};
