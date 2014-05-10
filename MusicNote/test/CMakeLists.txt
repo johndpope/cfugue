@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 2.6)
 Message(STATUS "Buliding CFugue Tests")
 
 if(NOT QT4_FOUND)
-	FIND_PACKAGE(Qt4)
+#	FIND_PACKAGE(Qt4)
 endif()
 
 Set(ProjDir ${CMAKE_CURRENT_SOURCE_DIR})
