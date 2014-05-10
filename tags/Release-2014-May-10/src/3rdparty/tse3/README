@@ -1,0 +1,20 @@
+TSE3 Library README
+===================
+
+Welcome to the TSE3 library, a sophisticated sequencer engine.
+
+The TSE3 homepage is http://TSE3.sourceforge.net.
+
+TSE3 documentation is provided in HTML format in the "doc" directory. To obtain
+a fully formatted version of this documentation you need to build the TSE3
+library. However, you can still read the files in a browser or text editor
+prior to building (look at "doc/src/*.html.in"). The "doc/README" file has more
+information.
+
+Alternatively, you can view the documentation online at the TSE3 homepage.
+
+In particular, please read "doc/Feedback.html" before sending any bug reports.
+
+Also, you may like to read "doc/Build.html" for more information on building the
+library.
+
