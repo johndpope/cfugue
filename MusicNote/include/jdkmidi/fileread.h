@@ -124,18 +124,18 @@ namespace jdkmidi
       virtual void    mf_program ( const MIDITimedMessage &msg );
       virtual void    mf_chan_after ( const MIDITimedMessage &msg );
       virtual void    mf_control ( const MIDITimedMessage &msg );
-      virtual void    mf_sysex ( MIDIClockTime time, const MIDISystemExclusive &ex );
+      virtual void    mf_sysex ( MIDITickMS time, const MIDISystemExclusive &ex );
       
-      virtual void    mf_arbitrary ( MIDIClockTime time, int len, unsigned char *data );
-      virtual void    mf_metamisc ( MIDIClockTime time, int, int, unsigned char *  );
-      virtual void    mf_seqnum ( MIDIClockTime time, int );
-      virtual void    mf_smpte ( MIDIClockTime time, int, int, int, int, int );
-      virtual void    mf_timesig ( MIDIClockTime time, int, int, int, int );
-      virtual void    mf_tempo ( MIDIClockTime time, unsigned long tempo );
-      virtual void    mf_keysig ( MIDIClockTime time, int, int );
-      virtual void    mf_sqspecific ( MIDIClockTime time, int, unsigned char * );
-      virtual void    mf_text ( MIDIClockTime time, int, int, unsigned char * );
-      virtual void    mf_eot ( MIDIClockTime time );
+      virtual void    mf_arbitrary ( MIDITickMS time, int len, unsigned char *data );
+      virtual void    mf_metamisc ( MIDITickMS time, int, int, unsigned char *  );
+      virtual void    mf_seqnum ( MIDITickMS time, int );
+      virtual void    mf_smpte ( MIDITickMS time, int, int, int, int, int );
+      virtual void    mf_timesig ( MIDITickMS time, int, int, int, int );
+      virtual void    mf_tempo ( MIDITickMS time, unsigned long tempo );
+      virtual void    mf_keysig ( MIDITickMS time, int, int );
+      virtual void    mf_sqspecific ( MIDITickMS time, int, unsigned char * );
+      virtual void    mf_text ( MIDITickMS time, int, int, unsigned char * );
+      virtual void    mf_eot ( MIDITickMS time );
       
 //
 // the following methods are to be overridden for your specific purpose
@@ -150,8 +150,8 @@ namespace jdkmidi
 //
 // Higher level dispatch functions
 //
-      virtual void UpdateTime ( MIDIClockTime delta_time );
-      virtual void    MetaEvent ( MIDIClockTime time, int type, int len, unsigned char *buf );
+      virtual void UpdateTime ( MIDITickMS delta_time );
+      virtual void    MetaEvent ( MIDITickMS time, int type, int len, unsigned char *buf );
       virtual void    ChanMessage ( const MIDITimedMessage &msg );
       
   };
@@ -190,7 +190,7 @@ namespace jdkmidi
       
     protected:
       int  no_merge;
-      MIDIClockTime   cur_time;
+      MIDITickMS   cur_time;
       int  skip_init;
       unsigned long   to_be_read;
       int   cur_track;

@@ -127,22 +127,22 @@ namespace CFugue
     // We maintain the supplied Timer Resolution by adjusting the sleep duration
 	bool AlsaDriverThreadProc(MIDIDriverAlsa* pAlsaDriver, int nTimerResMS)
 	{
-	    unsigned long nBefore, nAfter;
-	    unsigned int nElapsed, nTimeToSleep;
+		MidiTimer::TimePoint tBefore, tAfter;
+	    unsigned long nElapsed, nTimeToSleep;
 
 	    while(true)
 	    {
-            nBefore = MidiTimer::CurrentTimeOffset();
+            tBefore = MidiTimer::Now();
 
-            if(pAlsaDriver->TimeTick(nBefore) == false) break;
+            if(pAlsaDriver->TimeTick(tBefore) == false) break;
 
-            nAfter = MidiTimer::CurrentTimeOffset();
+            tAfter = MidiTimer::Now();
 
-            nElapsed = nAfter - nBefore;
+			nElapsed = std::chrono::duration_cast<MidiTimer::Duration>(tAfter - tBefore).count();
 
             nTimeToSleep = (nElapsed > nTimerResMS ? 0 : nTimerResMS - nElapsed);
 
-            std::this_thread::sleep_for(std::chrono::milliseconds(nTimeToSleep));
+            MidiTimer::Sleep(nTimeToSleep);
 	    }
 
         return true;

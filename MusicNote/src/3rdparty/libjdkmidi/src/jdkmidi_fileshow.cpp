@@ -98,18 +98,18 @@ namespace jdkmidi
     }
   }
   
-  void MIDIFileShow::show_time ( MIDIClockTime time )
+  void MIDIFileShow::show_time ( MIDITickMS time )
   {
     if ( division>0 )
     {
-      unsigned long beat = time/division;
-      unsigned long clk = time%division;
+      long long beat = time.count()/division;
+      long long clk = time.count()%division;
       
-      fprintf ( out, "Time: %6ld:%3ld    ", beat, clk );
+      fprintf ( out, "Time: %6lld:%3lld    ", beat, clk );
     }
     else
     {
-      fprintf ( out, "Time: %9ld     ", time );
+      fprintf ( out, "Time: %9ld     ", time.count() );
     }
   }
   
@@ -174,7 +174,7 @@ namespace jdkmidi
     fprintf ( out, "%s\n", msg.MsgToText ( buf ) );
   }
   
-  void    MIDIFileShow::mf_sysex ( MIDIClockTime time, const MIDISystemExclusive &ex )
+  void    MIDIFileShow::mf_sysex ( MIDITickMS time, const MIDISystemExclusive &ex )
   {
     show_time ( time );
     fprintf ( out, "SysEx     Length=%d\n", ex.GetLength() );
@@ -188,7 +188,7 @@ namespace jdkmidi
     fprintf ( out, "\n" );
   }
   
-  void    MIDIFileShow::mf_arbitrary ( MIDIClockTime time, int len, unsigned char *data  )
+  void    MIDIFileShow::mf_arbitrary ( MIDITickMS time, int len, unsigned char *data  )
   {
     show_time ( time );
     fprintf ( out, "RAW MIDI DATA    Length=%d\n", len );
@@ -202,7 +202,7 @@ namespace jdkmidi
     fprintf ( out, "\n" );
   }
   
-  void    MIDIFileShow::mf_metamisc ( MIDIClockTime time, int type, int len, unsigned char *data  )
+  void    MIDIFileShow::mf_metamisc ( MIDITickMS time, int type, int len, unsigned char *data  )
   {
     show_time ( time );
     
@@ -217,14 +217,14 @@ namespace jdkmidi
     fprintf ( out, "\n" );
   }
   
-  void    MIDIFileShow::mf_seqnum ( MIDIClockTime time, int num )
+  void    MIDIFileShow::mf_seqnum ( MIDITickMS time, int num )
   {
     show_time ( time );
     
     fprintf ( out, "Sequence Number  %d\n", num );
   }
   
-  void    MIDIFileShow::mf_smpte ( MIDIClockTime time, int a, int b, int c, int d, int e )
+  void    MIDIFileShow::mf_smpte ( MIDITickMS time, int a, int b, int c, int d, int e )
   {
     show_time ( time );
     
@@ -232,7 +232,7 @@ namespace jdkmidi
   }
   
   void    MIDIFileShow::mf_timesig (
-    MIDIClockTime time,
+    MIDITickMS time,
     int num,
     int denom_power,
     int midi_clocks_per_metronome,
@@ -249,7 +249,7 @@ namespace jdkmidi
   }
   
   
-  void    MIDIFileShow::mf_tempo ( MIDIClockTime time, unsigned long tempo )
+  void    MIDIFileShow::mf_tempo ( MIDITickMS time, unsigned long tempo )
   {
     show_time ( time );
     
@@ -257,7 +257,7 @@ namespace jdkmidi
               ( 60000000.0/ ( double ) tempo ), tempo );
   }
   
-  void    MIDIFileShow::mf_keysig ( MIDIClockTime time, int sf, int mi )
+  void    MIDIFileShow::mf_keysig ( MIDITickMS time, int sf, int mi )
   {
     show_time ( time );
     
@@ -274,7 +274,7 @@ namespace jdkmidi
       fprintf ( out, "%d Sharps\n", sf );
   }
   
-  void    MIDIFileShow::mf_sqspecific ( MIDIClockTime time, int len, unsigned char *data )
+  void    MIDIFileShow::mf_sqspecific ( MIDITickMS time, int len, unsigned char *data )
   {
     show_time ( time );
     
@@ -290,7 +290,7 @@ namespace jdkmidi
     
   }
   
-  void    MIDIFileShow::mf_text ( MIDIClockTime time, int type, int len, unsigned char *txt )
+  void    MIDIFileShow::mf_text ( MIDITickMS time, int type, int len, unsigned char *txt )
   {
     static const char * text_event_names[16] =
     {
@@ -320,7 +320,7 @@ namespace jdkmidi
     fprintf ( out, "TEXT   %s  '%s'\n", text_event_names[type], ( char * ) txt );
   }
   
-  void    MIDIFileShow::mf_eot ( MIDIClockTime time )
+  void    MIDIFileShow::mf_eot ( MIDITickMS time )
   {
     show_time ( time );
     fprintf ( out, "End Of Track\n" );

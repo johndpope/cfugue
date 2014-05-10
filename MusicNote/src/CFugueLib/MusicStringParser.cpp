@@ -13,6 +13,7 @@
 #include "stdafx.h"
 #include "MusicStringParser.h"
 #include "ChannelPressure.h"
+#include "Chords.h"
 #include "ControllerEvent.h"
 #include "Instrument.h"
 #include "Layer.h"
@@ -22,7 +23,7 @@
 #include "TimeToken.h"
 #include "Voice.h"
 
-#include "Chords.h"
+#include "Trace.h"
 
 #include "math.h"
 
@@ -31,7 +32,15 @@
 //		object to control 'exit on first error', 'Synch/Asynch' behaviors
 
 namespace CFugue
-{
+{	
+	//struct _ssHolder
+	//{
+	//	static MString ss; //TODO: Single-threaded quick Hack for traces. Doesn't work multi-threaded
+	//};
+	//decltype(_ssHolder::ss) _ssHolder::ss; // static class member definition
+	//#define SSOBJ()		_ssHolder::ss
+	//#define MAKESTR(x)	((decltype(SSOBJ())&)(SSOBJ() << x))
+
     /// <Summary>
     /// Verbose is another mode of tracing where more verbose details of Parsing are reported.
     /// Verbose mode requires the Tracing to be enabled with ENABLE_TRACING defined apriori.
@@ -40,12 +49,12 @@ namespace CFugue
     /// Using NO_VERBOSE with ENABLE_TRACING will only report significant parsing information and not everything.
     /// </Summary>
     #ifndef NO_VERBOSE
-        #define Verbose(x)  MusicStringParser::Trace(x)
+		#define Verbose(x)  { MString _str; _str << x; MusicStringParser::Trace(_str); }
     #else
         #define Verbose(x)
     #endif
     #ifndef NO_WARNINGS
-        #define Warning(x)  MusicStringParser::Trace(x)
+		#define Warning(x)  { MString _str; _str << x; MusicStringParser::Trace(_str); }
     #else
         #define Warning(x)
     #endif
@@ -223,7 +232,7 @@ namespace CFugue
 
         TCHAR* szUppercaseToken = _tcsupr(szToken); // convert the string to upper case
 
-        Verbose(MString(_T("MusicStringParser::ParseToken: ")) + szUppercaseToken);
+        Verbose(_T("MusicStringParser::ParseToken: ") << szUppercaseToken);
 
         switch(szUppercaseToken[0])
         {
@@ -299,7 +308,8 @@ namespace CFugue
 
         if(nSpeed > 6 || nSpeed <= 0)
         {
-			MString str(_T("Speed ") + OIL::ToString(nSpeed) + _T(" is beyond the range [1, 6]"));
+			MString str;
+			str << _T("Speed ") << nSpeed << _T(" is beyond the range [1, 6]");
             if(Error(PARSE_ERROR_SPEED_MAXLIMIT, str, szToken)) { *pbNonContinuableErrorOccured = true; return -1;}; // if we should stop processing any further
 			if(nSpeed <= 0)
                 nSpeed = 1;
@@ -309,7 +319,7 @@ namespace CFugue
 
         m_KeySig.Speed() = nSpeed;
 
-		Verbose(MString(_T("MusicStringParser::ParseSpeedModulatorToken Speed = ")) + OIL::ToString(m_KeySig.Speed()));
+		Verbose(_T("MusicStringParser::ParseSpeedModulatorToken Speed = ") << m_KeySig.Speed());
 
         return 1;
     }
@@ -322,11 +332,12 @@ namespace CFugue
 		if(nLen == -1) { *pbNonContinuableErrorOccured = true; return -1; } // Some irrevocable error occured
 		if(bSuccess)
 		{
-			Verbose(MString(_T("MusicStringParser::ParseVoiceToken: Voice = ")) + OIL::ToString(nVoice));
+			Verbose(_T("MusicStringParser::ParseVoiceToken: Voice = ") << nVoice);
 
 			if(nVoice > 15)
 			{
-				MString str(_T("Voice ") + OIL::ToString(nVoice) + _T(" is beyond the range [0, 15]"));
+				MString str;
+				str << _T("Voice ") << nVoice << _T(" is beyond the range [0, 15]");
                 if(Error(PARSE_ERROR_VOICE_MAXLIMIT, str, szToken)) { *pbNonContinuableErrorOccured = true; return -1;}; // if we should stop processing any further
 				nVoice = 15; // if we need to continue despite the error, ceil the value
 			}
@@ -348,7 +359,7 @@ namespace CFugue
 		if(nLen == -1) { *pbNonContinuableErrorOccured = true; return -1; } // Some irrevocable error occured
 		if(bSuccess)
 		{
-			Verbose(MString(_T("MusicStringParser::ParseTempoToken: Tempo = ")) + OIL::ToString(nTempo));
+			Verbose(_T("MusicStringParser::ParseTempoToken: Tempo = ") << nTempo);
 
 			Tempo tempoObj(nTempo);
 
@@ -367,7 +378,7 @@ namespace CFugue
 		if(nLen == -1) { *pbNonContinuableErrorOccured = true; return -1; } // Some irrevocable error occured
 		if(bSuccess)
 		{
-			Verbose(MString(_T("MusicStringParser::ParseTimeToken: Time = ")) + OIL::ToString(nTime));
+			Verbose(_T("MusicStringParser::ParseTimeToken: Time = ") << nTime);
 
 			Time timeObj(nTime);
 
@@ -386,7 +397,7 @@ namespace CFugue
 		if(nLen == -1) { *pbNonContinuableErrorOccured = true; return -1; } // Some irrevocable error occured
 		if(bSuccess)
 		{
-			Verbose(MString(_T("MusicStringParser::ParseChannelPressureToken: Pressure = ")) + OIL::ToString(nPressure));
+			Verbose(_T("MusicStringParser::ParseChannelPressureToken: Pressure = ") << nPressure);
 
 			ChannelPressure cpObj((unsigned char) nPressure);
 
@@ -410,7 +421,7 @@ namespace CFugue
 		if(nLen == -1) { *pbNonContinuableErrorOccured = true; return -1; } // Some irrevocable error occured
 		if(bSuccess)
 		{
-			Verbose(MString(_T("MusicStringParser::ParseInstrumentToken: Instrument = ")) + OIL::ToString(nInstrument));
+			Verbose(_T("MusicStringParser::ParseInstrumentToken: Instrument = ") << nInstrument);
 
 			Instrument instrumentObj((unsigned char) nInstrument);
 
@@ -453,7 +464,7 @@ namespace CFugue
 		if(nLen == -1) { *pbNonContinuableErrorOccured = true; return -1; } // Some irrevocable error occured
 		if(bSuccess)
 		{
-			Verbose(MString(_T("MusicStringParser::ParseKeyPressureToken: Key = ") + OIL::ToString(ctx.noteNumber) + (" Pressure = ")) + OIL::ToString(nKeyPressure));
+			Verbose(_T("MusicStringParser::ParseKeyPressureToken: Key = ") << ctx.noteNumber << " Pressure = " << nKeyPressure);
 
 			PolyphonicPressure ppObj((unsigned char) ctx.noteNumber, (unsigned char) nKeyPressure);
 
@@ -473,7 +484,7 @@ namespace CFugue
 		if(nLen == -1) { *pbNonContinuableErrorOccured = true; return -1; } // Some irrevocable error occured
 		if(bSuccess)
 		{
-			Verbose(MString(_T("MusicStringParser::ParseLayerToken: Layer = ")) + OIL::ToString(nLayer));
+			Verbose(_T("MusicStringParser::ParseLayerToken: Layer = ") << nLayer);
 
 			Layer layerObj((unsigned char) nLayer);
 
@@ -522,12 +533,13 @@ namespace CFugue
 
 			    if(nValue > 72 || nValue <= 0) // Ensure the Range. Valid Range: [1, 72]
 			    {
-				    MString str(_T("KeySignature ") + OIL::ToString(nValue) + _T(" is beyond the range [0~14 / 64~78 / 129~200]"));
+					MString str;
+					str << _T("KeySignature ") << nValue << _T(" is beyond the range [0~14 / 64~78 / 129~200]");
                     if(Error(PARSE_ERROR_KEYSIGNATURE_MAXLIMIT, str, szToken)) { *pbNonContinuableErrorOccured = true; return -1;}; // if we should stop processing any further
                     nValue = KeySignature::DEFAULT_RAGAM; // if we need to continue despite the error, use default Value
 			    }
 
-			    Verbose(MString(_T(" Mela = ")) + OIL::ToString(nValue));
+			    Verbose(_T(" Mela = ") << nValue);
 
                 m_KeySig.SetRagam(nValue);
 
@@ -539,12 +551,13 @@ namespace CFugue
 
                 if(nValue >= 64) nValue = nValue - 64;
 
-			    Verbose(MString(_T(" KeySignature = ")) + OIL::ToString(nValue)
-                    + MString(_T(" Scale = ")) + (bScale == KeySignature::MAJOR_SCALE ? _T("Major") : _T("Minor")) );
+			    Verbose(_T(" KeySignature = ") << nValue << 
+						_T(" Scale = ") << (bScale == KeySignature::MAJOR_SCALE ? _T("Major") : _T("Minor")) );
 
 			    if(nValue >= 15) // Ensure the Range. Valid Range: [0, 14]
 			    {
-				    MString str(_T("KeySignature ") + OIL::ToString(nValue) + _T(" is beyond the range [0~14 / 64~78 / 129~200]"));
+					MString str;
+					str << _T("KeySignature ") << nValue << _T(" is beyond the range [0~14 / 64~78 / 129~200]");
                     if(Error(PARSE_ERROR_KEYSIGNATURE_MAXLIMIT, str, szToken)) { *pbNonContinuableErrorOccured = true; return -1;}; // if we should stop processing any further
                     nValue = KeySignature::DEFAULT_KEY; // if we need to continue despite the error, use Default Key
 			    }
@@ -573,16 +586,17 @@ namespace CFugue
             {
                 if(nTalam > 35) // Ensure Range
 	            {
-		            MString str(_T("Talam ") + OIL::ToString(nTalam) + _T(" is beyond the range [0 ~ 35]"));
+					MString str;
+					str << _T("Talam ") << nTalam << _T(" is beyond the range [0 ~ 35]");
                     if(Error(PARSE_ERROR_TALAM_MAXLIMIT, str, szToken)) { *pbNonContinuableErrorOccured = true; return -1;}; // if we should stop processing any further
                     nTalam = m_KeySig.GetTalam(); // if we need to continue despite the error, use existing Value
 	            }
                 nReadLen += nLen;
             }
 
-            Verbose(MString(_T(" Talam = ")) + OIL::ToString(nTalam));
+            Verbose(_T(" Talam = ") << nTalam);
         }
-        else { nLen = 0;  Warning(MString(_T(" No Talam Specified !! Using Talam: ")) + OIL::ToString(nTalam));   }
+        else { nLen = 0;  Warning(_T(" No Talam Specified !! Using Talam: ") << nTalam);   }
 
         m_KeySig.SetTalam(nTalam);
 
@@ -596,16 +610,17 @@ namespace CFugue
             {
                 if(nSpeed > 6) // Ensure Range
 	            {
-		            MString str(_T("Speed ") + OIL::ToString(nSpeed) + _T(" is beyond the range [1 ~ 6]"));
+					MString str;
+					str << _T("Speed ") << nSpeed <<  _T(" is beyond the range [1 ~ 6]");
                     if(Error(PARSE_ERROR_SPEED_MAXLIMIT, str, szToken)) { *pbNonContinuableErrorOccured = true; return -1;}; // if we should stop processing any further
                     nSpeed = m_KeySig.Speed(); // if we need to continue despite the error, use existing Value
 	            }
                 nReadLen += nLen;
             }
 
-            Verbose(MString(_T(" Speed = ")) + OIL::ToString(nSpeed));
+            Verbose(_T(" Speed = ") << nSpeed);
         }
-        else {  Warning(MString(_T(" No Speed Specified !! Using Speed: ")) + OIL::ToString(nSpeed));   }
+        else {  Warning(_T(" No Speed Specified !! Using Speed: ") << nSpeed );   }
 
         m_KeySig.Speed() = nSpeed;
 
@@ -660,8 +675,8 @@ namespace CFugue
 
                 nReadLen = (int)(pszValue + nLen - szToken);
 
-				Verbose(MString(_T("MusicStringParser::ParseControllerToken: [")) + OIL::ToString(nControllerCoarse) + MString(_T("]=")) + OIL::ToString(coarseValue));
-				Verbose(MString(_T("MusicStringParser::ParseControllerToken: [")) + OIL::ToString(nControllerFine) + MString(_T("]=")) + OIL::ToString(fineValue));
+				Verbose(_T("MusicStringParser::ParseControllerToken: [") << nControllerCoarse << _T("]=") + coarseValue);
+				Verbose(_T("MusicStringParser::ParseControllerToken: [") << nControllerFine << _T("]=") << fineValue);
 			}
 			else
 			{
@@ -674,7 +689,7 @@ namespace CFugue
 
                 nReadLen = (int)(pszValue + nLen - szToken);
 
-				Verbose(MString(_T("MusicStringParser::ParseControllerToken: [")) + pszKey + MString(_T("]=")) + pszValue);
+				Verbose(_T("MusicStringParser::ParseControllerToken: [") << pszKey << _T("]=") << pszValue);
 			}
 		}
 
@@ -687,7 +702,7 @@ namespace CFugue
 		OIL::CEventHandlerArgs args;
 		RaiseEvent(&evMeasure, &args);
 
-		Verbose(MString(_T("MusicStringParser::ParseMeasureToken")));
+		Verbose(_T("MusicStringParser::ParseMeasureToken"));
 		return 0;
 	}
 
@@ -697,7 +712,8 @@ namespace CFugue
 		TCHAR* pszAssignSymbol = _tcschr(szToken, ASSIGNMENT_SYMBOL); // Find the Equals sign
 		if(pszAssignSymbol == NULL)
 		{
-			MString str(ASSIGNMENT_SYMBOL + MString(_T(" Symbol Not found")));
+			MString str;
+			str << ASSIGNMENT_SYMBOL << _T(" Symbol Not found");
             if(Error(PARSE_ERROR_MISSING_ASSIGNMENT, str, szToken)) { *pbNonContinuableErrorOccured = true; return -1; }
 			return 0;
 		}
@@ -709,7 +725,7 @@ namespace CFugue
 
 		m_Dictionary[pszKey] = pszValue; // Create or Update the value
 
-		Verbose(MString(_T("MusicStringParser::ParseDictionaryToken: Defined [")) + pszKey + MString(_T("]=")) + pszValue);
+		Verbose(_T("MusicStringParser::ParseDictionaryToken: Defined [") << pszKey << _T("]=") << pszValue);
 
 		return (int) (_tcslen(pszKey) + _tcslen(pszValue) + 1);
 	}
@@ -724,7 +740,7 @@ namespace CFugue
 
 		while(ctx.existsAnotherNote && *szToken)
 		{
-			Verbose(MString(_T("MusicStringParser::ParseNote: ")) + szToken);
+			Verbose(_T("MusicStringParser::ParseNote: ") << szToken);
 
 			DecideSequentialOrParallel(ctx);
 
@@ -838,7 +854,7 @@ namespace CFugue
 		{
 			ctx.isNumeric = true;
 			ctx.noteNumber = nNoteNumber;
-			Verbose(_T("Numeric Note with value: ") +	OIL::ToString(ctx.noteNumber));
+			Verbose(_T("Numeric Note with value: ") << ctx.noteNumber);
 		}
 
 		return nLen; // Number of characters consumed
@@ -923,11 +939,13 @@ namespace CFugue
 		    default:
 			    {
                     ctx.isRest = true; // treat the unknown notes as rest notes
-				    return Error(PARSE_ERROR_LETTER_NOTE, MString(_T("Invalid Note: ")) + pszToken[0], pszToken) ? -1 : 1;
+					MString str;
+					str << _T("Invalid Note: ") << pszToken[0];
+				    return Error(PARSE_ERROR_LETTER_NOTE, str, pszToken) ? -1 : 1;
 			    }
             }
 
-		    Verbose(_T("Note number within octave: ") + OIL::ToString(ctx.noteNumber));
+		    Verbose(_T("Note number within octave: ") << ctx.noteNumber);
 
 		    return (int)(pszToken - szToken); // return the number of characters read
         }
@@ -945,7 +963,9 @@ namespace CFugue
 		default:
 			{
                 ctx.isRest = true; // treat the unknown notes as rest notes
-				return Error(PARSE_ERROR_LETTER_NOTE, MString(_T("Invalid Note: ")) + szToken[0], szToken) ? -1 : 1;
+				MString str;
+				str << _T("Invalid Note: ") << szToken[0];
+				return Error(PARSE_ERROR_LETTER_NOTE, str, szToken) ? -1 : 1;
 			}
 		}
 
@@ -963,7 +983,7 @@ namespace CFugue
 			}
 		}
 
-		Verbose(_T("Note number within octave: ") + OIL::ToString(ctx.noteNumber));
+		Verbose(_T("Note number within octave: ") << ctx.noteNumber);
 
 		return (int)(pszSymbol - szToken); // return the number of characters read
 	}
@@ -1018,14 +1038,15 @@ namespace CFugue
 
         if(ctx.octaveNumber < 0 || ctx.octaveNumber > 10) // Octave not within range
         {
-			MString str(_T("Octave ") + OIL::ToString(ctx.octaveNumber) + _T(" is beyond the range [0, 10]"));
+			MString str;
+			str << _T("Octave ") << ctx.octaveNumber << _T(" is beyond the range [0, 10]");
 			if(Error(PARSE_ERROR_OCTAVE_MAXLIMIT, str, szToken)) return -1; // if we should stop processing any further, return -1
 
             if(ctx.octaveNumber < 0) ctx.octaveNumber = 0;
             else if(ctx.octaveNumber > 10) ctx.octaveNumber = 10;
         }
 
-		Verbose( _T("Octave Number: ") + OIL::ToString(ctx.octaveNumber));
+		Verbose( _T("Octave Number: ") << ctx.octaveNumber);
 
 		return nLen; // Number of characters consumed here
 	}
@@ -1044,7 +1065,7 @@ namespace CFugue
         if(nChordNameLen > 0)
         {
             ctx.isChord = true;
-            Verbose(_T("ParseNoteChord: Found Chord ") + MString(ctx.chord.szChordName));
+            Verbose(_T("ParseNoteChord: Found Chord ") << ctx.chord.szChordName);
         }
 
         return nChordNameLen;
@@ -1115,12 +1136,12 @@ namespace CFugue
         {
             if(nInversionRootNote == -1) // if No Root note specified, inversion is based on number of carets
             {
-                Verbose(_T("Chord Inversion based on count: ") + OIL::ToString(nInversionCount));
+                Verbose(_T("Chord Inversion based on count: ") << nInversionCount);
                 // Increase each halfstep before the inversion by 12, the total number of halfsteps in an octave
                 ctx.noteNumber += 12;
                 for(int i = nInversionCount -1; i < ctx.chord.nIntervalCount; ++i)
                 {
-                    Verbose(_T("  Inverting ") + OIL::ToString(ctx.chord.Intervals[i]) + _T(" to be ") + OIL::ToString(ctx.chord.Intervals[i] - 12));
+                    Verbose(_T("  Inverting ") << ctx.chord.Intervals[i] << _T(" to be ") << (ctx.chord.Intervals[i] - 12));
                     ctx.chord.Intervals[i] -= 12;
                 }
             }
@@ -1135,7 +1156,7 @@ namespace CFugue
                 }
 
                 // Otherwise, InversionRootNote could be a numeric value, such as [60]
-                Verbose(_T("Chord Inversion is based on note: ") + OIL::ToString(nInversionRootNote));
+                Verbose(_T("Chord Inversion is based on note: ") << nInversionRootNote);
 
                 if((nInversionRootNote  > ctx.noteNumber + ctx.chord.Intervals[ctx.chord.nIntervalCount -1])
                     || (nInversionRootNote < ctx.noteNumber))
@@ -1143,19 +1164,19 @@ namespace CFugue
                     if(Error(PARSE_ERROR_CHORDINV_MAXLIMIT, _T("Chord Inversion Root Note is beyond range"), szToken))
                         return -1;
 
-                    Verbose(_T("  Adjusted the inversion root note to be ") + OIL::ToString(ctx.noteNumber) + _T(" and continuing..."));
+                    Verbose(_T("  Adjusted the inversion root note to be ") << ctx.noteNumber <<_T(" and continuing..."));
 
                     nInversionRootNote = ctx.noteNumber;
                 }
 
-                Verbose(_T(" Inverting ") + OIL::ToString(ctx.noteNumber) + _T(" to be ") + OIL::ToString(ctx.noteNumber + 12));
+                Verbose(_T(" Inverting ") << ctx.noteNumber << _T(" to be ") << (ctx.noteNumber + 12));
                 ctx.noteNumber += 12;
 
                 for(int i=0; i < ctx.chord.nIntervalCount; ++ i)
                 {
                     if(ctx.noteNumber + ctx.chord.Intervals[i] >= nInversionRootNote + 12)
                     {
-                        Verbose(_T("  Inverting ") + OIL::ToString(ctx.chord.Intervals[i]) + _T(" to be ") + OIL::ToString(ctx.chord.Intervals[i] - 12));
+                        Verbose(_T("  Inverting ") << ctx.chord.Intervals[i] << _T(" to be ") << (ctx.chord.Intervals[i] - 12));
                         ctx.chord.Intervals[i] -= 12;
                     }
                 }
@@ -1208,19 +1229,20 @@ namespace CFugue
             }
         }
 
-        Verbose(_T("After adjusting for Key, Note Number=") + OIL::ToString(ctx.noteNumber));
+        Verbose(_T("After adjusting for Key, Note Number=") << ctx.noteNumber);
 
 		if(!ctx.isNumeric) // if this is a non-numeric note, compute its value from octave and local note value
 		{
 			ctx.noteNumber = (ctx.octaveNumber * 12) + ctx.noteNumber;
 
-			Verbose(_T("Computed Note Number:") + OIL::ToString(ctx.noteNumber));
+			Verbose(_T("Computed Note Number:") << ctx.noteNumber);
 		}
 
 		// Check the limits
 		if(ctx.noteNumber > 127 || ctx.noteNumber < 0)
 		{
-			MString str(_T("Computed Note Number") + OIL::ToString(ctx.noteNumber) + _T(" is going beyond the range [0, 127]"));
+			MString str;
+			str << _T("Computed Note Number") << ctx.noteNumber << _T(" is going beyond the range [0, 127]");
 			if(Error(PARSE_ERROR_NOTEVALUE_MAXLIMIT, str, NULL)) return -1; // if we should stop processing any further, return -1
 
 			// if we need to continue despite the error, ceil or floor the value
@@ -1229,7 +1251,7 @@ namespace CFugue
 			else if(ctx.noteNumber < 0)
 				ctx.noteNumber = 0;
 
-            Warning(_T("  Adjusted the value to") + OIL::ToString(ctx.noteNumber) + _T(" and continuing..."));
+            Warning(_T("  Adjusted the value to") << ctx.noteNumber << _T(" and continuing..."));
 		}
 		return 0;
 	}
@@ -1253,13 +1275,13 @@ namespace CFugue
 			    }
 			    else
 			    {
-				    MString str(MString(_T("Error while reading Numeric Duration Value")));
+				    MString str(_T("Error while reading Numeric Duration Value"));
 				    if(Error(PARSE_ERROR_DURATION_VALUE, str, szToken)) return -1;
 
 				    pszDuration = szToken + 1;
 
 				    // If we have to ignore this error, ignore this / character
-                    Warning(_T(" Ignoring / and proceeding with ") + MString(pszDuration));
+                    Warning(_T(" Ignoring / and proceeding with ") << pszDuration);
 			    }
 		    }
 
@@ -1278,7 +1300,7 @@ namespace CFugue
 		if(ctx.decimalDuration == 0)
 			ctx.decimalDuration = 1.0 / 4.0;
 
-		Verbose(_T("Decimal Duration is: ") + OIL::ToString(ctx.decimalDuration));
+		Verbose(_T("Decimal Duration is: ") << ctx.decimalDuration);
 
 		// Scan for any optional Tuplet specifications
 		int nTupletLen = ParseTuplet(pszDuration, ctx);
@@ -1286,7 +1308,7 @@ namespace CFugue
 
 		ctx.duration = (long) (128.0 * ctx.decimalDuration);	//TODO: Compute the duration based on the current Tempo
 
-		Verbose(_T("Actual Duration is: ") + OIL::ToString(ctx.duration));
+		Verbose(_T("Actual Duration is: ") << ctx.duration);
 
 		return (int)(pszDuration - szToken) + nTupletLen; // Return the number of characters consumed
 	}
@@ -1368,15 +1390,15 @@ namespace CFugue
 				{
 					MString str(MString(_T("Error while reading Numerator of tuplet")));
 					if(Error(PARSE_ERROR_TUPLET_NUMERATOR, str, pszTuplet)) return -1;
-                    Warning(_T("  Defaulting to Numerator Value: ") + OIL::ToString(dNumerator));
+                    Warning(_T("  Defaulting to Numerator Value: ") << dNumerator);
 				}
 
 				int nLen = LoadValueFromString(pszTupletRatioMark+1, &dDenominator); // Read the Denominator
 				if(nLen == 0)
 				{
-					MString str(MString(_T("Error while reading Denominator of tuplet")));
+					MString str(_T("Error while reading Denominator of tuplet"));
 					if(Error(PARSE_ERROR_TUPLET_DENOMINATOR, str, pszTupletRatioMark+1)) return -1;
-                    Warning(_T("  Defaulting to Denominator Value: ") + OIL::ToString(dDenominator));
+                    Warning(_T("  Defaulting to Denominator Value: ") << dDenominator);
 				}
 
 				pszTuplet = pszTupletRatioMark + 1 + nLen;
@@ -1386,8 +1408,8 @@ namespace CFugue
 
 			ctx.decimalDuration *= tupletRatio;
 
-			Verbose(_T("Tuplet Ratio is: ") + OIL::ToString((unsigned int)dNumerator) + _T(":") + OIL::ToString((unsigned int)dDenominator));
-			Verbose(_T("Decimal Duration after applying Tuplet: ") + OIL::ToString(ctx.decimalDuration));
+			Verbose(_T("Tuplet Ratio is: ") << (unsigned int)dNumerator << _T(":") << (unsigned int)dDenominator);
+			Verbose(_T("Decimal Duration after applying Tuplet: ") << ctx.decimalDuration);
 
 			return (int)(pszTuplet - szToken); // return number of characters consumed
 		}
@@ -1425,7 +1447,7 @@ namespace CFugue
             case NOTE_VELOCITY_DECAY: if(m_KeySig.GetMode()==KeySignature::WESTERN) { bDecay = true; break; }
 			default:
 				{
-					Verbose(_T("Attack Velocity: ") + OIL::ToString(ctx.attackVelocity) + _T(" Decay Velocity: ") + OIL::ToString(ctx.decayVelocity));
+					Verbose(_T("Attack Velocity: ") << (int)ctx.attackVelocity << _T(" Decay Velocity: ") << (int)ctx.decayVelocity);
 					return (int)(pszVelocity - szToken);
 				}
 			}
@@ -1441,7 +1463,7 @@ namespace CFugue
 				if(bAttack) ctx.attackVelocity = nVelocity;
 				if(bDecay) ctx.decayVelocity = nVelocity;
 			}
-            else Warning(MString(_T("Unable to find Attack/Decay velocity for note, while parsing: ")) + szToken);
+            else Warning(_T("Unable to find Attack/Decay velocity for note, while parsing: ") <<  szToken);
 
 			pszVelocity += nLen;
 		}while(true);	// we can have both attack and decay specified for the same note. so loop again.
@@ -1458,7 +1480,7 @@ namespace CFugue
 		{
 		case NOTE_CONNECTOR_SEQUENTIAL: ctx.anotherIsSequential = true; return 1;
 		case NOTE_CONNECTOR_PARALLEL: ctx.anotherIsParallel = true; return 1;
-		default: Verbose(_T("No Connector Notes Found in: ") + MString(szToken)); break;
+		default: Verbose(_T("No Connector Notes Found in: ") << szToken); break;
 		}
 
 		ctx.existsAnotherNote = false;
@@ -1526,13 +1548,14 @@ namespace CFugue
 			TCHAR* pszEndBracket = _tcschr(szToken, MacroBracketEnd);
 			if(pszEndBracket == NULL)
 			{
-				MString str(MString(_T("No Matching ")) + MacroBracketEnd + _T(" found for ") + MacroBracketStart);
+				MString str;
+				str << _T("No Matching ") << MacroBracketEnd << _T(" found for ") << MacroBracketStart;
 				if(Error(MacroReadErrorCode, str, szToken)) return -1;
 
 				// if we have to ignore this error, we ignore this [ character and continue
 				pszNumberStart = szToken+1;
 
-                Warning(_T("  Ignoring ") + MacroBracketStart);
+                Warning(_T("  Ignoring ") << MacroBracketStart);
 
                 return 1; // Failure; return the lentgh scanned
 			}
@@ -1542,11 +1565,12 @@ namespace CFugue
 
 				if(false == GetValueFromDictionary(szToken + 1, pRetVal)) // Convert the string between [ and ] to Number
 				{
-					MString str(_T("Unable to retrieve Number from ") + MString(szToken+1));
+					MString str;
+					str << _T("Unable to retrieve Number from ") << (szToken + 1);
 					if(Error(NumberParseErrorCode, str, szToken)) return -1;
 
 					// if we have to ignore this error, we ignore the whole string between the [ and ]
-                    Warning(_T("  Ignoring ") + MString(szToken + 1));
+                    Warning(_T("  Ignoring ") << (szToken + 1));
 
 					return (int)(pszEndBracket - szToken) +1; // Failure; return the length consumed
 				}

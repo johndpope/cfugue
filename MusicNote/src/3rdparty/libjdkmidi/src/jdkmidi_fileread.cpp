@@ -43,7 +43,7 @@ namespace jdkmidi
 {
 
 
-  void MIDIFileEvents::UpdateTime ( MIDIClockTime delta_time )
+  void MIDIFileEvents::UpdateTime ( MIDITickMS delta_time )
   {
   
   }
@@ -92,7 +92,7 @@ namespace jdkmidi
     }
   }
   
-  void  MIDIFileEvents::MetaEvent ( MIDIClockTime time, int type, int leng, unsigned char *m )
+  void  MIDIFileEvents::MetaEvent ( MIDITickMS time, int type, int leng, unsigned char *m )
   {
   
     switch  ( type )
@@ -170,7 +170,7 @@ namespace jdkmidi
   
   }
   
-  void    MIDIFileEvents::mf_eot ( MIDIClockTime time )
+  void    MIDIFileEvents::mf_eot ( MIDITickMS time )
   {
   
   }
@@ -189,7 +189,7 @@ namespace jdkmidi
   }
   
   void    MIDIFileEvents::mf_arbitrary (
-    MIDIClockTime time,
+    MIDITickMS time,
     int a,
     unsigned char *s )
   {
@@ -197,7 +197,7 @@ namespace jdkmidi
   }
   
   void    MIDIFileEvents::mf_metamisc (
-    MIDIClockTime time,
+    MIDITickMS time,
     int a,
     int b,
     unsigned char *s )
@@ -206,14 +206,14 @@ namespace jdkmidi
   }
   
   void    MIDIFileEvents::mf_seqnum (
-    MIDIClockTime time,
+    MIDITickMS time,
     int a )
   {
   
   }
   
   void    MIDIFileEvents::mf_smpte (
-    MIDIClockTime time,
+    MIDITickMS time,
     int a,
     int b,
     int c,
@@ -224,7 +224,7 @@ namespace jdkmidi
   }
   
   void    MIDIFileEvents::mf_timesig (
-    MIDIClockTime time,
+    MIDITickMS time,
     int a,
     int b,
     int c,
@@ -234,14 +234,14 @@ namespace jdkmidi
   }
   
   void    MIDIFileEvents::mf_tempo (
-    MIDIClockTime time,
+    MIDITickMS time,
     unsigned long a )
   {
   
   }
   
   void    MIDIFileEvents::mf_keysig (
-    MIDIClockTime time,
+    MIDITickMS time,
     int a,
     int b )
   {
@@ -249,7 +249,7 @@ namespace jdkmidi
   }
   
   void    MIDIFileEvents::mf_sqspecific (
-    MIDIClockTime time,
+    MIDITickMS time,
     int a,
     unsigned char *s )
   {
@@ -257,7 +257,7 @@ namespace jdkmidi
   }
   
   void    MIDIFileEvents::mf_text (
-    MIDIClockTime time,
+    MIDITickMS time,
     int a,
     int b,
     unsigned char *s )
@@ -306,7 +306,7 @@ namespace jdkmidi
   }
   
   void    MIDIFileEvents::mf_sysex (
-    MIDIClockTime time,
+    MIDITickMS time,
     const MIDISystemExclusive &ex
   )
   {
@@ -327,7 +327,7 @@ namespace jdkmidi
       event_handler ( event_handler_ )
   {
     no_merge=0;
-    cur_time=0;
+    cur_time=MIDITickMS::zero();
     skip_init=1;
     to_be_read=0;
     msg_index=0;
@@ -468,13 +468,13 @@ namespace jdkmidi
       return;
       
     to_be_read=Read32Bit();
-    cur_time=0;
+    cur_time=MIDITickMS::zero();
     
     event_handler->mf_starttrack ( cur_track );
     
     while ( to_be_read > 0 && !abort_parse )
     {
-      unsigned long deltat=ReadVariableNum();
+      MIDITickMS deltat = MIDITickMS(ReadVariableNum());
       
       event_handler->UpdateTime ( deltat );
       

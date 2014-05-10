@@ -36,8 +36,8 @@ namespace jdkmidi
       :
       driver ( drv ),
       sequencer ( seq_ ),
-      sys_time_offset ( 0 ),
-      seq_time_offset ( 0 ),
+      sys_time_offset ( MIDITickMS::zero() ),
+      seq_time_offset ( MIDITickMS::zero() ),
       play_mode ( false ),
       stop_mode ( true ),
       notifier ( n ),
@@ -56,8 +56,8 @@ namespace jdkmidi
   void MIDIManager::Reset()
   {
     SeqStop();
-    sys_time_offset = 0;
-    seq_time_offset = 0;
+	sys_time_offset = MIDIClockTime();
+    seq_time_offset = MIDITickMS::zero();
     play_mode = false;
     stop_mode = true;
     
@@ -92,23 +92,23 @@ namespace jdkmidi
   
   
 // to set and get the system time offset
-  void MIDIManager::SetTimeOffset ( unsigned long off )
+  void MIDIManager::SetTimeOffset(MIDITick::time_point off)
   {
     sys_time_offset = off;
   }
   
-  unsigned long MIDIManager::GetTimeOffset()
+  MIDITick::time_point MIDIManager::GetTimeOffset()
   {
     return sys_time_offset;
   }
   
 // to set and get the sequencer time offset
-  void MIDIManager::SetSeqOffset ( unsigned long seqoff )
+  void MIDIManager::SetSeqOffset(MIDITickMS seqoff)
   {
     seq_time_offset = seqoff;
   }
   
-  unsigned long MIDIManager::GetSeqOffset()
+  MIDITickMS MIDIManager::GetSeqOffset()
   {
     return seq_time_offset;
   }
@@ -180,7 +180,7 @@ namespace jdkmidi
     return repeat_play_mode && play_mode;
   }
   
-  bool MIDIManager::TimeTick ( unsigned long sys_time_ )
+  bool MIDIManager::TimeTick(MIDITick::time_point sys_time_)
   {
     if ( play_mode )
     {
@@ -194,10 +194,10 @@ namespace jdkmidi
     return false;
   }
   
-  bool MIDIManager::TimeTickPlayMode ( unsigned long sys_time_ )
-  {
-    double sys_time = ( double ) sys_time_ - ( double ) sys_time_offset;
-    float next_event_time = 0.0;
+  bool MIDIManager::TimeTickPlayMode(MIDITick::time_point currentSysTime)
+  {	  
+	auto sys_time_Diff = std::chrono::duration_cast<std::chrono::milliseconds>(currentSysTime - sys_time_offset);
+    MIDITickMS next_event_time;
     int ev_track;
     MIDITimedBigMessage ev;
     
@@ -216,14 +216,14 @@ namespace jdkmidi
       
       // our current raw system time is now the new system time offset
       
-      sys_time_offset = sys_time_;
+      sys_time_offset = currentSysTime;
       
-      sys_time = 0;
+	  sys_time_Diff = MIDITickMS::zero();
       
       // the sequencer time offset now must be reset to the
       // time in milliseconds of the sequence start point
       
-      seq_time_offset = ( unsigned long ) sequencer->GetCurrentTimeInMs();
+	  seq_time_offset = sequencer->GetCurrentTimeInMs();
     }
     
     // find all events that exist before or at this time,
@@ -235,7 +235,7 @@ namespace jdkmidi
     
     while (
       sequencer->GetNextEventTimeMs ( &next_event_time )
-      && ( next_event_time-seq_time_offset ) <=sys_time
+      && ( next_event_time-seq_time_offset ) <=sys_time_Diff
       && driver->CanOutputMessage()
       && ( --output_count ) >0
     )
@@ -284,7 +284,7 @@ namespace jdkmidi
     return true;
   }
   
-  bool MIDIManager::TimeTickStopMode ( unsigned long sys_time_ )
+  bool MIDIManager::TimeTickStopMode(MIDITick::time_point sys_time_)
   {
 	  return true;
   }

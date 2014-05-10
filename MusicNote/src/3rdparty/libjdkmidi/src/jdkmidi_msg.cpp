@@ -844,7 +844,7 @@ namespace jdkmidi
   
   void MIDITimedMessage::Clear()
   {
-    time=0;
+    time=MIDITickMS::zero();
     MIDIMessage::Clear();
   }
   
@@ -867,7 +867,7 @@ namespace jdkmidi
   
   const MIDITimedMessage &MIDITimedMessage::operator = ( const MIDIMessage & m )
   {
-    time=0;
+    time=MIDITickMS::zero();
     MIDIMessage::operator = ( m );
     return *this;
   }
@@ -876,7 +876,7 @@ namespace jdkmidi
 // 'Get' methods
 //
 
-  MIDIClockTime MIDITimedMessage::GetTime() const
+  MIDITickMS MIDITimedMessage::GetTime() const
   {
     return time;
   }
@@ -885,7 +885,7 @@ namespace jdkmidi
 // 'Set' methods
 //
 
-  void MIDITimedMessage::SetTime ( MIDIClockTime t )
+  void MIDITimedMessage::SetTime ( MIDITickMS t )
   {
     time=t;
   }
@@ -957,7 +957,7 @@ namespace jdkmidi
   
   void MIDIDeltaTimedMessage::Clear()
   {
-    dtime=0;
+    dtime=MIDITickMS::zero();
     MIDIMessage::Clear();
   }
   
@@ -980,7 +980,7 @@ namespace jdkmidi
   
   const MIDIDeltaTimedMessage &MIDIDeltaTimedMessage::operator = ( const MIDIMessage &m )
   {
-    dtime=0;
+    dtime=MIDITickMS::zero();
     MIDIMessage::operator = ( m );
     return *this;
   }
@@ -989,7 +989,7 @@ namespace jdkmidi
 // 'Get' methods
 //
 
-  MIDIClockTime MIDIDeltaTimedMessage::GetDeltaTime() const
+  MIDITickMS MIDIDeltaTimedMessage::GetDeltaTime() const
   {
     return dtime;
   }
@@ -998,7 +998,7 @@ namespace jdkmidi
 // 'Set' methods
 //
 
-  void MIDIDeltaTimedMessage::SetDeltaTime ( MIDIClockTime t )
+  void MIDIDeltaTimedMessage::SetDeltaTime ( MIDITickMS t )
   {
     dtime=t;
   }
@@ -1043,7 +1043,7 @@ namespace jdkmidi
   
   void MIDITimedBigMessage::Clear()
   {
-    time=0;
+    time=MIDITickMS::zero();
     MIDIBigMessage::Clear();
   }
   
@@ -1079,7 +1079,7 @@ namespace jdkmidi
   
   const MIDITimedBigMessage &MIDITimedBigMessage::operator = ( const MIDIMessage & m )
   {
-    time=0;
+    time=MIDITickMS::zero();
     MIDIBigMessage::operator = ( m );
     return *this;
   }
@@ -1088,7 +1088,7 @@ namespace jdkmidi
 // 'Get' methods
 //
 
-  MIDIClockTime MIDITimedBigMessage::GetTime() const
+  MIDITickMS MIDITimedBigMessage::GetTime() const
   {
     return time;
   }
@@ -1097,11 +1097,15 @@ namespace jdkmidi
 // 'Set' methods
 //
 
-  void MIDITimedBigMessage::SetTime ( MIDIClockTime t )
+  void MIDITimedBigMessage::SetTime ( unsigned long t )
   {
-    time=t;
+    time= MIDITickMS(t);
   }
   
+  void MIDITimedBigMessage::SetTime(MIDITickMS t)
+  {
+	  time = t;
+  }
   
   
   int  MIDITimedBigMessage::CompareEvents (
@@ -1185,7 +1189,7 @@ namespace jdkmidi
   
   void MIDIDeltaTimedBigMessage::Clear()
   {
-    dtime=0;
+    dtime=MIDITickMS::zero();
     MIDIBigMessage::Clear();
   }
   
@@ -1221,7 +1225,7 @@ namespace jdkmidi
   
   const MIDIDeltaTimedBigMessage &MIDIDeltaTimedBigMessage::operator = ( const MIDIMessage &m )
   {
-    dtime=0;
+    dtime=MIDITickMS::zero();
     MIDIBigMessage::operator = ( m );
     return *this;
   }
@@ -1230,7 +1234,7 @@ namespace jdkmidi
 // 'Get' methods
 //
 
-  MIDIClockTime MIDIDeltaTimedBigMessage::GetDeltaTime() const
+  MIDITickMS MIDIDeltaTimedBigMessage::GetDeltaTime() const
   {
     return dtime;
   }
@@ -1239,7 +1243,7 @@ namespace jdkmidi
 // 'Set' methods
 //
 
-  void MIDIDeltaTimedBigMessage::SetDeltaTime ( MIDIClockTime t )
+  void MIDIDeltaTimedBigMessage::SetDeltaTime ( MIDITickMS t )
   {
     dtime=t;
   }

@@ -262,11 +262,11 @@ namespace jdkmidi
       
       MIDISequencerTrackState *track_state[64];
       MIDIMultiTrackIterator iterator;
-      MIDIClockTime cur_clock;
-      float cur_time_ms;
+      MIDITickMS cur_clock;
+	  MIDITickMS cur_time_ms;
       int cur_beat;
       int cur_measure;
-      MIDIClockTime next_beat_time;
+      MIDITickMS next_beat_time;
   };
   
   class MIDISequencer
@@ -283,8 +283,8 @@ namespace jdkmidi
       void ResetTrack ( int trk );
       void ResetAllTracks();
       
-      MIDIClockTime GetCurrentMIDIClockTime() const;
-      double GetCurrentTimeInMs() const;
+      MIDITickMS GetCurrentMIDIClockTime() const;
+      MIDITickMS GetCurrentTimeInMs() const;
       int GetCurrentBeat() const;
       int GetCurrentMeasure() const;
       
@@ -313,12 +313,12 @@ namespace jdkmidi
       void SetSoloMode ( bool m, int trk=-1 );
       
       void GoToZero();
-      bool GoToTime ( MIDIClockTime time_clk );
-      bool GoToTimeMs ( float time_ms );
+      bool GoToTime ( MIDITickMS time_clk );
+      bool GoToTimeMs ( MIDITickMS time_ms );
       bool GoToMeasure ( int measure, int beat=0 );
       
-      bool GetNextEventTimeMs ( float *t );
-      bool GetNextEventTime ( MIDIClockTime *t );
+	  bool GetNextEventTimeMs(MIDITickMS *t);
+      bool GetNextEventTime ( MIDITickMS *t );
       bool GetNextEvent ( int *tracknum, MIDITimedBigMessage *msg );
       
       void ScanEventsAtThisTime();

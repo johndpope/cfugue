@@ -17,7 +17,7 @@
  * \brief Declares Dictionary type used by the Parsers
  */ 
 
-#include "Common/StrUtils.h"
+#include "Common/MString.h"
 #include <map>
 
 namespace CFugue

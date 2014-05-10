@@ -26,7 +26,7 @@
 #endif // ifndef ENABLE_TRACING
 
 #include "Common/EventHandler.h"
-#include "Common/StrUtils.h"
+#include "Common/_TChar.h"	// On Non win32 platforms we use a local TChar.h
 
 namespace CFugue
 {

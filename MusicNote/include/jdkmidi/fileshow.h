@@ -47,7 +47,7 @@ namespace jdkmidi
       
     protected:
     
-      virtual void show_time ( MIDIClockTime time );
+      virtual void show_time ( MIDITickMS time );
       
       virtual void    mf_error ( const char * );
       
@@ -68,18 +68,18 @@ namespace jdkmidi
       virtual void    mf_program ( const MIDITimedMessage &msg  );
       virtual void    mf_chan_after ( const MIDITimedMessage &msg  );
       virtual void    mf_control ( const MIDITimedMessage &msg  );
-      virtual void    mf_sysex ( MIDIClockTime time, const MIDISystemExclusive &ex );
+      virtual void    mf_sysex ( MIDITickMS time, const MIDISystemExclusive &ex );
       
-      virtual void    mf_arbitrary ( MIDIClockTime time, int len, unsigned char *data  );
-      virtual void    mf_metamisc ( MIDIClockTime time, int, int, unsigned char *  );
-      virtual void    mf_seqnum ( MIDIClockTime time, int    );
-      virtual void    mf_smpte ( MIDIClockTime time, int, int, int, int, int );
-      virtual void    mf_timesig ( MIDIClockTime time, int, int, int, int );
-      virtual void    mf_tempo ( MIDIClockTime time, unsigned long tempo   );
-      virtual void    mf_keysig ( MIDIClockTime time, int, int    );
-      virtual void    mf_sqspecific ( MIDIClockTime time, int, unsigned char *   );
-      virtual void    mf_text ( MIDIClockTime time, int, int, unsigned char * );
-      virtual void    mf_eot ( MIDIClockTime time );
+      virtual void    mf_arbitrary ( MIDITickMS time, int len, unsigned char *data  );
+      virtual void    mf_metamisc ( MIDITickMS time, int, int, unsigned char *  );
+      virtual void    mf_seqnum ( MIDITickMS time, int    );
+      virtual void    mf_smpte ( MIDITickMS time, int, int, int, int, int );
+      virtual void    mf_timesig ( MIDITickMS time, int, int, int, int );
+      virtual void    mf_tempo ( MIDITickMS time, unsigned long tempo   );
+      virtual void    mf_keysig ( MIDITickMS time, int, int    );
+      virtual void    mf_sqspecific ( MIDITickMS time, int, unsigned char *   );
+      virtual void    mf_text ( MIDITickMS time, int, int, unsigned char * );
+      virtual void    mf_eot ( MIDITickMS time );
       
       FILE *out;
       int division;

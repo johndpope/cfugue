@@ -103,7 +103,7 @@ namespace jdkmidi
       {
         return cur_event_track;
       }
-      MIDIClockTime GetCurrentTime() const
+      MIDITickMS GetCurrentTime() const
       {
         return cur_time;
       }
@@ -111,11 +111,11 @@ namespace jdkmidi
       void Reset();
       int FindTrackOfFirstEvent();
       
-      MIDIClockTime cur_time;
+      MIDITickMS cur_time;
       int cur_event_track;
       int num_tracks;
       int *next_event_number;
-      MIDIClockTime *next_event_time;
+      MIDITickMS *next_event_time;
   };
   
   class MIDIMultiTrackIterator
@@ -126,9 +126,9 @@ namespace jdkmidi
       virtual ~MIDIMultiTrackIterator();
       
       
-      void GoToTime ( MIDIClockTime time );
+      void GoToTime ( MIDITickMS time );
       
-      bool GetCurEventTime ( MIDIClockTime *t ) const;
+      bool GetCurEventTime ( MIDITickMS *t ) const;
       bool GetCurEvent ( int *track, MIDITimedBigMessage **msg ) const;
       bool GoToNextEvent();
       

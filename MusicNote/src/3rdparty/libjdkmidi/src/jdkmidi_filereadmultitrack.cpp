@@ -119,7 +119,7 @@ namespace jdkmidi
   
   
   
-  void    MIDIFileReadMultiTrack::mf_sysex ( MIDIClockTime time, const MIDISystemExclusive &ex )
+  void    MIDIFileReadMultiTrack::mf_sysex ( MIDITickMS time, const MIDISystemExclusive &ex )
   {
     MIDITimedMessage msg;
     
@@ -133,32 +133,32 @@ namespace jdkmidi
   
   
   
-  void    MIDIFileReadMultiTrack::mf_arbitrary ( MIDIClockTime time, int len, unsigned char *data )
+  void    MIDIFileReadMultiTrack::mf_arbitrary ( MIDITickMS time, int len, unsigned char *data )
   {
     // ignore arbitrary byte strings
   }
   
   
-  void    MIDIFileReadMultiTrack::mf_metamisc ( MIDIClockTime time, int, int, unsigned char *  )
+  void    MIDIFileReadMultiTrack::mf_metamisc ( MIDITickMS time, int, int, unsigned char *  )
   {
     // ignore miscellaneous meta events
   }
   
   
-  void    MIDIFileReadMultiTrack::mf_seqnum ( MIDIClockTime time, int )
+  void    MIDIFileReadMultiTrack::mf_seqnum ( MIDITickMS time, int )
   {
     // ignore sequence number events
   }
   
   
-  void    MIDIFileReadMultiTrack::mf_smpte ( MIDIClockTime time, int, int, int, int, int )
+  void    MIDIFileReadMultiTrack::mf_smpte ( MIDITickMS time, int, int, int, int, int )
   {
     // ignore smpte events
   }
   
   
   void    MIDIFileReadMultiTrack::mf_timesig (
-    MIDIClockTime time,
+    MIDITickMS time,
     int num,
     int denom_power,
     int clks_per_metro,
@@ -183,7 +183,7 @@ namespace jdkmidi
   }
   
   
-  void    MIDIFileReadMultiTrack::mf_tempo ( MIDIClockTime time, unsigned long tempo )
+  void    MIDIFileReadMultiTrack::mf_tempo ( MIDITickMS time, unsigned long tempo )
   {
     unsigned long tempo_bpm_times_32;
     
@@ -209,7 +209,7 @@ namespace jdkmidi
   }
   
   
-  void    MIDIFileReadMultiTrack::mf_keysig ( MIDIClockTime time, int c, int v )
+  void    MIDIFileReadMultiTrack::mf_keysig ( MIDITickMS time, int c, int v )
   {
     MIDITimedMessage msg;
     
@@ -220,13 +220,13 @@ namespace jdkmidi
   }
   
   
-  void    MIDIFileReadMultiTrack::mf_sqspecific ( MIDIClockTime time, int, unsigned char * )
+  void    MIDIFileReadMultiTrack::mf_sqspecific ( MIDITickMS time, int, unsigned char * )
   {
     // ignore any sequencer specific messages
   }
   
   
-  void    MIDIFileReadMultiTrack::mf_text ( MIDIClockTime time, int type, int len, unsigned char *s )
+  void    MIDIFileReadMultiTrack::mf_text ( MIDITickMS time, int type, int len, unsigned char *s )
   {
     MIDITimedMessage msg;
     
@@ -245,7 +245,7 @@ namespace jdkmidi
   }
   
   
-  void    MIDIFileReadMultiTrack::mf_eot ( MIDIClockTime time )
+  void    MIDIFileReadMultiTrack::mf_eot ( MIDITickMS time )
   {
     MIDITimedMessage msg;
     

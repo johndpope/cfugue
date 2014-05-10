@@ -77,8 +77,8 @@ namespace jdkmidi
       void Reset();
       
       void GoToMeasure ( int measure, int beat=0 );
-      void GoToTime ( MIDIClockTime t );
-      void Play ( int clock_offset = 0 );
+      void GoToTime ( MIDITickMS t );
+      void Play ( MIDITickMS clock_offset = MIDITickMS::zero() );
       void RepeatPlay ( bool enable, int start_measure, int end_measure );
       void Pause();
       void Stop();
@@ -141,7 +141,7 @@ namespace jdkmidi
       
       MIDISequencer seq;
       
-      MIDIClockTime marker_times[1024];
+      MIDITickMS marker_times[1024];
       int num_markers;
       
       MIDIManager mgr;

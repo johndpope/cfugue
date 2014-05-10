@@ -123,7 +123,9 @@ IF(CFUGUE_VERBOSE_TRACE)
 ENDIF()
 
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
+	FIND_PACKAGE(ALSA REQUIRED)
 	SET(TARGET_COMPILE_DEFS "${TARGET_COMPILE_DEFS};__LINUX_ALSASEQ__")
+	INCLUDE_DIRECTORIES (ALSA_INCLUDE_DIRS)
 ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
 IF(APPLE)	# Mac OS X specific code
@@ -149,7 +151,6 @@ SET( CFugueLib_Source_Files
 	src/CFugueLib/Documentation.cpp
 	src/CFugueLib/Instrument.cpp
 	src/CFugueLib/MidiRenderer.cpp
-	src/CFugueLib/MidiTimer.cpp
 	src/CFugueLib/MusicStringParser.cpp
 	src/CFugueLib/Parser.cpp
 	src/CFugueLib/Player.cpp	
@@ -162,7 +163,6 @@ SET( CFugueLib_Header_Files
 	src/CFugueLib/targetver.h
 	src/CFugueLib/stdafx.h
 	include/Common/EventHandler.h
-	include/Common/StrUtils.h
 	include/Common/MString.h
 	include/rtmidi/RtMidi.h
 	include/rtmidi/RtError.h
@@ -290,7 +290,7 @@ IF(APPLE)
 ENDIF (APPLE)
 
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")	# Linux specific code
-     SET(CFugueLib_Librarian asound)
+     SET(CFugueLib_Librarian ${ALSA_LIBRARIES} pthread)
 ENDIF(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
 
 
@@ -321,12 +321,17 @@ if (CFUGUE_BUILD_TESTS)
 	SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/")
 	FIND_PACKAGE(Tse3)
 	if(NOT TSE3_FOUND)
-		Message(STATUS "Building TSE3 from source")
-		message(STATUS "Turning TSE3 Unicode ON")	
-		SET (TSE3_UNICODE_BUILD ON CACHE BOOL "CarMusTy requires Unicode to be ON" FORCE)		
-		ADD_SUBDIRECTORY(src/3rdparty/tse3)
-		SET (TSE3_LIBRARIES 	tse3)
-		SET (TSE3_INCLUDE_DIR 	"${CMAKE_CURRENT_SOURCE_DIR}/src/3rdparty/tse3/src")
+		if(WIN32)
+			Message(STATUS "Building TSE3 from source")
+			message(STATUS "Turning TSE3 Unicode ON")	
+			SET (TSE3_UNICODE_BUILD ON CACHE BOOL "CarMusTy requires Unicode to be ON" FORCE)		
+			ADD_SUBDIRECTORY(src/3rdparty/tse3)
+			SET (TSE3_LIBRARIES 	tse3)
+			SET (TSE3_INCLUDE_DIR 	"${CMAKE_CURRENT_SOURCE_DIR}/src/3rdparty/tse3/src")
+		else()
+			# We do NOT support building TSE3 from source on non-windows system
+			Message(STATUS "To enable TSE3 support, install the package: libtse3-dev")
+		endif()
 	endif()
 	
   ADD_SUBDIRECTORY(test)

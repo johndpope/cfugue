@@ -59,7 +59,7 @@ namespace CFugue
         if(m_pMIDIDriver->OpenMIDIOutPort(nMIDIOutPortID))
         {
             m_MIDIManager.SeqPlay(); // Set into Play mode
-            m_MIDIManager.SetTimeOffset(MidiTimer::CurrentTimeOffset()); // Set the initial time offset
+            m_MIDIManager.SetTimeOffset(MidiTimer::Now()); // Set the initial time offset
             if(!m_pMIDIDriver->StartTimer(nTimerResolutionMS))
             {
                 m_MIDIManager.SeqStop(); // Could not set a timer - Lets set into Stop mode

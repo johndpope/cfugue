@@ -438,7 +438,7 @@ namespace jdkmidi
           else // is it a track name event?
             if ( ( msg->GetMetaType() ==META_TRACK_NAME
                    || msg->GetMetaType() ==META_INSTRUMENT_NAME
-                   || ( !got_good_track_name && msg->GetMetaType() ==META_GENERIC_TEXT && msg->GetTime() ==0 )
+                   || ( !got_good_track_name && msg->GetMetaType() ==META_GENERIC_TEXT && msg->GetTime() == MIDITickMS::zero() )
                  )
                  &&
                  msg->GetSysEx() )
@@ -503,11 +503,11 @@ namespace jdkmidi
       multitrack ( m ),
       num_tracks ( m->GetNumTracks() ),
       iterator ( m ),
-      cur_clock ( 0 ),
+      cur_clock ( MIDITickMS::zero() ),
       cur_time_ms ( 0 ),
       cur_beat ( 0 ),
       cur_measure ( 0 ),
-      next_beat_time ( 0 )
+      next_beat_time ( MIDITickMS::zero() )
   {
   
     for ( int i=0; i<num_tracks; ++i )
@@ -639,12 +639,12 @@ namespace jdkmidi
     state = *s;
   }
   
-  MIDIClockTime MIDISequencer::GetCurrentMIDIClockTime() const
+  MIDITickMS MIDISequencer::GetCurrentMIDIClockTime() const
   {
     return state.cur_clock;
   }
   
-  double MIDISequencer::GetCurrentTimeInMs() const
+  MIDITickMS MIDISequencer::GetCurrentTimeInMs() const
   {
     return state.cur_time_ms;
   }
@@ -728,15 +728,15 @@ namespace jdkmidi
       state.track_state[i]->GoToZero();
     }
     
-    state.iterator.GoToTime ( 0 );
+    state.iterator.GoToTime ( MIDITickMS::zero() );
     
-    state.cur_time_ms = 0.0;
-    state.cur_clock = 0;
+    state.cur_time_ms = MIDITickMS::zero();
+    state.cur_clock = MIDITickMS::zero();
     
 // state.next_beat_time = state.multitrack->GetClksPerBeat();
-    state.next_beat_time =
+	state.next_beat_time = MIDITickMS(
       state.multitrack->GetClksPerBeat()
-      * 4 / ( state.track_state[0]->timesig_denominator );
+      * 4 / ( state.track_state[0]->timesig_denominator ));
       
     // examine all the events at this specific time
     // and update the track states to reflect this time
@@ -744,7 +744,7 @@ namespace jdkmidi
     ScanEventsAtThisTime();
   }
   
-  bool MIDISequencer::GoToTime ( MIDIClockTime time_clk )
+  bool MIDISequencer::GoToTime ( MIDITickMS time_clk )
   {
     // temporarily disable the gui notifier
     
@@ -755,7 +755,7 @@ namespace jdkmidi
       state.notifier->SetEnable ( false );
     }
     
-    if ( time_clk < state.cur_clock || time_clk==0 )
+    if ( time_clk < state.cur_clock || time_clk== MIDITickMS::zero() )
     {
       // start from zero if desired time is before where we are
       for ( int i=0; i<state.num_tracks; ++i )
@@ -763,21 +763,21 @@ namespace jdkmidi
         state.track_state[i]->GoToZero();
       }
       
-      state.iterator.GoToTime ( 0 );
+      state.iterator.GoToTime ( MIDITickMS::zero() );
       
-      state.cur_time_ms = 0.0;
-      state.cur_clock = 0;
+      state.cur_time_ms = MIDITickMS::zero();
+      state.cur_clock = MIDITickMS::zero();
 //  state.next_beat_time = state.multitrack->GetClksPerBeat();
-      state.next_beat_time =
+	  state.next_beat_time = MIDITickMS(
         state.multitrack->GetClksPerBeat()
-        * 4 / ( state.track_state[0]->timesig_denominator );
+        * 4 / ( state.track_state[0]->timesig_denominator ));
         
       state.cur_beat = 0;
       state.cur_measure = 0;
       
     }
     
-    MIDIClockTime t=0;
+    MIDITickMS t;
     int trk;
     MIDITimedBigMessage ev;
     
@@ -812,7 +812,7 @@ namespace jdkmidi
     
   }
   
-  bool MIDISequencer::GoToTimeMs ( float time_ms )
+  bool MIDISequencer::GoToTimeMs ( MIDITickMS time_ms )
   {
     // temporarily disable the gui notifier
     
@@ -823,7 +823,7 @@ namespace jdkmidi
       state.notifier->SetEnable ( false );
     }
     
-    if ( time_ms < state.cur_time_ms || time_ms==0.0 )
+    if ( time_ms < state.cur_time_ms || time_ms==MIDITickMS::zero() )
     {
       // start from zero if desired time is before where we are
       for ( int i=0; i<state.num_tracks; ++i )
@@ -831,20 +831,20 @@ namespace jdkmidi
         state.track_state[i]->GoToZero();
       }
       
-      state.iterator.GoToTime ( 0 );
+      state.iterator.GoToTime ( MIDITickMS::zero());
       
-      state.cur_time_ms = 0.0;
-      state.cur_clock = 0;
+      state.cur_time_ms = MIDITickMS::zero();
+      state.cur_clock = MIDITickMS::zero();
 //  state.next_beat_time = state.multitrack->GetClksPerBeat();
-      state.next_beat_time =
+	  state.next_beat_time = MIDITickMS(
         state.multitrack->GetClksPerBeat()
-        * 4 / ( state.track_state[0]->timesig_denominator );
+        * 4 / ( state.track_state[0]->timesig_denominator ));
         
       state.cur_beat = 0;
       state.cur_measure = 0;
     }
     
-    float t=0;
+    MIDITickMS t;
     int trk;
     MIDITimedBigMessage ev;
     
@@ -895,20 +895,20 @@ namespace jdkmidi
         state.track_state[i]->GoToZero();
       }
       
-      state.iterator.GoToTime ( 0 );
+      state.iterator.GoToTime ( MIDITickMS::zero() );
       
-      state.cur_time_ms = 0.0;
-      state.cur_clock = 0;
+      state.cur_time_ms = MIDITickMS::zero();
+      state.cur_clock = MIDITickMS::zero();
       state.cur_beat = 0;
       state.cur_measure = 0;
 //  state.next_beat_time = state.multitrack->GetClksPerBeat();
-      state.next_beat_time =
+	  state.next_beat_time = MIDITickMS(
         state.multitrack->GetClksPerBeat()
-        * 4 / ( state.track_state[0]->timesig_denominator );
+        * 4 / ( state.track_state[0]->timesig_denominator ));
         
     }
     
-    MIDIClockTime t=0;
+    MIDITickMS t;
     int trk;
     MIDITimedBigMessage ev;
     
@@ -954,16 +954,16 @@ namespace jdkmidi
   
   
   
-  bool MIDISequencer::GetNextEventTimeMs ( float *t )
+  bool MIDISequencer::GetNextEventTimeMs(MIDITickMS *t)
   {
-    MIDIClockTime ct;
+    MIDITickMS ct;
     bool f = GetNextEventTime ( &ct );
     
     if ( f )
     {
       // calculate delta time from last event time
       
-      double delta_clocks = ( double ) ( ct - state.cur_clock );
+		auto delta_clocks = (ct - state.cur_clock).count();
       
       // calculate tempo in milliseconds per clock
       
@@ -977,11 +977,11 @@ namespace jdkmidi
         
         // calculate delta time in milliseconds
         
-        float delta_ms = float ( delta_clocks * ms_per_clock );
+        float delta_ms = delta_clocks * ms_per_clock;
         
         // return it added with the current time in ms.
         
-        *t = delta_ms + state.cur_time_ms;
+        *t = MIDITickMS((long long)delta_ms) + state.cur_time_ms;
       }
       else
       {
@@ -992,7 +992,7 @@ namespace jdkmidi
     return f;
   }
   
-  bool MIDISequencer::GetNextEventTime ( MIDIClockTime *t )
+  bool MIDISequencer::GetNextEventTime ( MIDITickMS *t )
   {
     // ask the iterator for the current event time
     bool f = state.iterator.GetCurEventTime ( t );
@@ -1015,7 +1015,7 @@ namespace jdkmidi
   
   bool MIDISequencer::GetNextEvent ( int *tracknum, MIDITimedBigMessage *msg )
   {
-    MIDIClockTime t;
+    MIDITickMS t;
     
     
     // ask the iterator for the current event time
@@ -1023,8 +1023,8 @@ namespace jdkmidi
     {
       // move current time forward one event
       
-      MIDIClockTime new_clock;
-      float new_time_ms=0.0f;
+      MIDITickMS new_clock;
+      MIDITickMS new_time_ms;
       
       GetNextEventTime ( &new_clock );
       GetNextEventTimeMs ( &new_time_ms );
@@ -1074,9 +1074,9 @@ namespace jdkmidi
         // denom=1  (2)  ---> 4/2 midi file beats per symbolic beat
         // denom=0  (1)  ---> 4/1 midi file beats per symbolic beat
         
-        state.next_beat_time +=
+		state.next_beat_time += MIDITickMS(
           state.multitrack->GetClksPerBeat()
-          * 4 / ( state.track_state[0]->timesig_denominator );
+          * 4 / ( state.track_state[0]->timesig_denominator ));
           
         state.cur_beat = new_beat;
         state.cur_measure = new_measure;
@@ -1180,11 +1180,11 @@ namespace jdkmidi
     
     // process all messages up to and including this time only
     
-    MIDIClockTime orig_clock = state.cur_clock;
-    double orig_time_ms = state.cur_time_ms;
+    MIDITickMS orig_clock = state.cur_clock;
+    MIDITickMS orig_time_ms = state.cur_time_ms;
     
     
-    MIDIClockTime t=0;
+    MIDITickMS t;
     int trk;
     MIDITimedBigMessage ev;
     
@@ -1202,7 +1202,7 @@ namespace jdkmidi
     
     // and current time
     state.cur_clock = orig_clock;
-    state.cur_time_ms = float ( orig_time_ms );
+    state.cur_time_ms =  orig_time_ms;
     
     state.cur_measure=prev_measure;
     state.cur_beat = prev_beat;
