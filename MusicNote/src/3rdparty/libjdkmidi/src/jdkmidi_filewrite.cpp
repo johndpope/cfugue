@@ -92,7 +92,7 @@ namespace jdkmidi
     file_length=0;
     error=0;
     track_length=0;
-    track_time=0;
+    track_time=MIDITickMS::zero();
     running_status=0;
     track_position=0;
   }
@@ -164,7 +164,7 @@ namespace jdkmidi
     
     track_position=file_length;
     track_length=0;
-    track_time=0;
+    track_time=MIDITickMS::zero();
     running_status=0;
     
     WriteCharacter ( ( unsigned char ) 'M' );
@@ -204,11 +204,11 @@ namespace jdkmidi
     return cnt;
   }
   
-  void MIDIFileWrite::WriteDeltaTime ( unsigned long abs_time )
+  void MIDIFileWrite::WriteDeltaTime ( MIDITickMS abs_time )
   {
     ENTER ( "void MIDIFileWrite::WriteDeltaTime()" );
     
-    long dtime=abs_time-track_time;
+    long dtime= (long)((abs_time-track_time).count());
     if ( dtime<0 )
     {
 //  Error( "Events out of order" );
@@ -354,7 +354,7 @@ namespace jdkmidi
   }
   
   void MIDIFileWrite::WriteEvent (
-    unsigned long time,
+    MIDITickMS time,
     const MIDISystemExclusive *e
   )
   {
@@ -375,7 +375,7 @@ namespace jdkmidi
     running_status=0;
   }
   
-  void MIDIFileWrite::WriteEvent ( unsigned long time, unsigned short text_type, const char *text )
+  void MIDIFileWrite::WriteEvent ( MIDITickMS time, unsigned short text_type, const char *text )
   {
     ENTER ( "void MIDIFileWrite::WriteEvent()" );
     
@@ -398,7 +398,7 @@ namespace jdkmidi
     running_status=0;
   }
   
-  void MIDIFileWrite::WriteMetaEvent ( unsigned long time, unsigned char type, const unsigned char *data, long length )
+  void MIDIFileWrite::WriteMetaEvent ( MIDITickMS time, unsigned char type, const unsigned char *data, long length )
   {
     ENTER ( "void MIDIFileWrite::WriteMetaEvent()" );
     
@@ -418,7 +418,7 @@ namespace jdkmidi
     running_status=0;
   }
   
-  void MIDIFileWrite::WriteTempo ( unsigned long time, long tempo )
+  void MIDIFileWrite::WriteTempo ( MIDITickMS time, long tempo )
   {
     ENTER ( "void MIDIFileWrite::WriteTempo()" );
     
@@ -432,7 +432,7 @@ namespace jdkmidi
     running_status=0;
   }
   
-  void MIDIFileWrite::WriteKeySignature ( unsigned long time, char sharp_flat, char minor )
+  void MIDIFileWrite::WriteKeySignature ( MIDITickMS time, char sharp_flat, char minor )
   {
     ENTER ( "void MIDIFileWrite::WriteKeySignature()" );
     
@@ -447,7 +447,7 @@ namespace jdkmidi
   }
   
   void MIDIFileWrite::WriteTimeSignature (
-    unsigned long time,
+    MIDITickMS time,
     char numerator,
     char denominator_power,
     char midi_clocks_per_metronome,
@@ -467,13 +467,13 @@ namespace jdkmidi
     running_status=0;
   }
   
-  void MIDIFileWrite::WriteEndOfTrack ( unsigned long time )
+  void MIDIFileWrite::WriteEndOfTrack ( MIDITickMS time )
   {
     ENTER ( "void MIDIFileWrite::WriteEndOfTrack()" );
     
     if ( within_track==true )
     {
-      if ( time==0 )
+      if ( time==MIDITickMS::zero() )
         time=track_time;
       WriteDeltaTime ( time );
       WriteCharacter ( ( unsigned char ) 0xff );  // Meta-Event

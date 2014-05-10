@@ -145,7 +145,7 @@ namespace jdkmidi
     return true;
   }
   
-  bool MIDIDriver::TimeTick ( unsigned long sys_time )
+  bool MIDIDriver::TimeTick ( MIDIClockTime sys_time )
   {
 	  bool hasMoreEventsToPump = true;
 

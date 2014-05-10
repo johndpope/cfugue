@@ -66,7 +66,7 @@ namespace jdkmidi
       
       const MIDITrack *t = multitrack->GetTrack ( i );
       
-      MIDIClockTime last_event_time=0;
+      MIDITickMS last_event_time;
       
       writer.WriteTrackHeader ( 0 ); // will be rewritten later
       
@@ -92,7 +92,7 @@ namespace jdkmidi
           }
         }
       }
-      writer.WriteEndOfTrack ( 0 );
+      writer.WriteEndOfTrack ( MIDITickMS::zero() );
       writer.RewriteTrackLength();
     }
     

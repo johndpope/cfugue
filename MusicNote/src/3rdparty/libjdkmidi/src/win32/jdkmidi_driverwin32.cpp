@@ -257,7 +257,7 @@ namespace jdkmidi
   {
     MIDIDriverWin32 *self = ( MIDIDriverWin32 * ) dwUser;
     
-    self->TimeTick ( timeGetTime() );
+    self->TimeTick ( std::chrono::steady_clock::now() );
   }
   
   void CALLBACK MIDIDriverWin32::win32_midi_in (
@@ -278,7 +278,7 @@ namespace jdkmidi
       msg.SetByte1 ( ( unsigned char ) ( ( dwParam1>>8 ) &0xff ) );
       msg.SetByte2 ( ( unsigned char ) ( ( dwParam1>>16 ) &0xff ) );
       
-      msg.SetTime ( timeGetTime() );
+      msg.SetTime ( MIDITick::MilliSeconds(timeGetTime() ));
       
       self->HardwareMsgIn ( msg );
     }

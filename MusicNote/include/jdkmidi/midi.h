@@ -36,11 +36,13 @@
 #define JDKMIDI_MIDI_H
 
 #include "jdkmidi/world.h"
+#include "jdkmidi/tick.h"
 
 namespace jdkmidi
 {
 
-  typedef unsigned long MIDIClockTime;
+	typedef MIDITick::time_point MIDIClockTime;
+	typedef MIDITick::MilliSeconds MIDITickMS;
   
   ///
   /// MIDI Status bytes

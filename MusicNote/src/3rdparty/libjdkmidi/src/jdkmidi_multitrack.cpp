@@ -123,7 +123,7 @@ namespace jdkmidi
     cur_event_track=0;
     
     next_event_number = new int [num_tracks];
-    next_event_time = new MIDIClockTime [num_tracks];
+    next_event_time = new MIDITickMS [num_tracks];
     
     Reset();
     
@@ -134,7 +134,7 @@ namespace jdkmidi
     num_tracks = m.num_tracks;
     cur_event_track = m.cur_event_track;
     next_event_number = new int [num_tracks];
-    next_event_time = new MIDIClockTime [num_tracks];
+    next_event_time = new MIDITickMS [num_tracks];
     cur_time = m.cur_time;
     
     for ( int i=0; i<num_tracks; ++i )
@@ -160,7 +160,7 @@ namespace jdkmidi
       
       num_tracks = m.num_tracks;
       next_event_number = new int [num_tracks];
-      next_event_time = new MIDIClockTime [num_tracks];
+      next_event_time = new MIDITickMS [num_tracks];
     }
     
     cur_time = m.cur_time;
@@ -177,18 +177,18 @@ namespace jdkmidi
   
   void MIDIMultiTrackIteratorState::Reset()
   {
-    cur_time = 0;
+    cur_time = MIDITickMS::zero();
     cur_event_track = 0;
     for ( int i=0; i<num_tracks; ++i )
     {
       next_event_number[i] = 0;
-      next_event_time[i] = 0xffffffff;
+      next_event_time[i] = MIDITickMS::max();
     }
   }
   
   int MIDIMultiTrackIteratorState::FindTrackOfFirstEvent()
   {
-    MIDIClockTime minimum_time=0xffffffff;
+    MIDITickMS minimum_time=MIDITickMS::max();
     int minimum_time_track=-1;
     
     
@@ -234,7 +234,7 @@ namespace jdkmidi
   {
   }
   
-  void MIDIMultiTrackIterator::GoToTime ( MIDIClockTime time )
+  void MIDIMultiTrackIterator::GoToTime ( MIDITickMS time )
   {
     // start at time 0
     
@@ -296,7 +296,7 @@ namespace jdkmidi
     
   }
   
-  bool MIDIMultiTrackIterator::GetCurEventTime ( MIDIClockTime *t ) const
+  bool MIDIMultiTrackIterator::GetCurEventTime ( MIDITickMS *t ) const
   {
     // if there is a next event, then set *t to the time of the event and return true
     

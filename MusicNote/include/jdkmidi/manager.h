@@ -58,12 +58,12 @@ namespace jdkmidi
       
       
       // to set and get the system time offset
-      void SetTimeOffset ( unsigned long off );
-      unsigned long GetTimeOffset();
+	  void SetTimeOffset(MIDITick::time_point off);
+	  MIDITick::time_point GetTimeOffset();
       
       // to set and get the sequencer time offset
-      void SetSeqOffset ( unsigned long seqoff );
-      unsigned long GetSeqOffset();
+	  void SetSeqOffset(MIDITickMS seqoff);
+	  MIDITickMS GetSeqOffset();
       
       
       // to manage the playback of the sequencer
@@ -82,19 +82,19 @@ namespace jdkmidi
       bool IsSeqRepeat() const;
       
       // inherited from MIDITick
-      virtual bool TimeTick ( unsigned long sys_time );
+	  virtual bool TimeTick(MIDITick::time_point sys_time);
       
     protected:
     
-      virtual bool TimeTickPlayMode ( unsigned long sys_time_ );
-      virtual bool TimeTickStopMode ( unsigned long sys_time_ );
+	  virtual bool TimeTickPlayMode(MIDITick::time_point sys_time_);
+	  virtual bool TimeTickStopMode(MIDITick::time_point sys_time_);
       
       MIDIDriver *driver;
       
       MIDISequencer *sequencer;
       
-      unsigned long sys_time_offset;
-      unsigned long seq_time_offset;
+	  MIDITick::time_point sys_time_offset;
+	  MIDITickMS seq_time_offset;
       
       volatile bool play_mode;
       volatile bool stop_mode;

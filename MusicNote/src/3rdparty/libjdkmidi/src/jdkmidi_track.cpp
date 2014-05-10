@@ -119,7 +119,7 @@ namespace jdkmidi
     int cur_trk2ev=0;
     int num_trk2ev = src2->GetNumEvents();
     
-    MIDIClockTime last_data_end_time=0;
+    MIDITickMS last_data_end_time = MIDITickMS::zero();
     
     while (
       cur_trk1ev<num_trk1ev
@@ -528,7 +528,7 @@ namespace jdkmidi
     }
   }
   
-  bool MIDITrack::FindEventNumber ( MIDIClockTime time, int *event_num ) const
+  bool MIDITrack::FindEventNumber ( MIDITickMS time, int *event_num ) const
   {
     ENTER ( "MIDITrack::FindEventNumber( int , int * )" );
     

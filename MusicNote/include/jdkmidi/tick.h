@@ -24,18 +24,23 @@
 #ifndef JDKMIDI_TICK_H
 #define JDKMIDI_TICK_H
 
+#include <chrono>
+
 namespace jdkmidi
 {
   class MIDITick
   {
     public:
+		typedef std::chrono::steady_clock::time_point time_point;
+		typedef std::chrono::milliseconds MilliSeconds;
+
       MIDITick()
       {
       }
       
       virtual ~MIDITick();
       // Returns True if more events are pending. False if all events are pumped and done.
-      virtual bool TimeTick ( unsigned long sys_time ) = 0;
+      virtual bool TimeTick ( time_point sys_time ) = 0;
   };
 }
 

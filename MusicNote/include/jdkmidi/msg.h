@@ -483,13 +483,13 @@ namespace jdkmidi
       // 'Get' methods
       //
       
-      MIDIClockTime GetTime() const;
+      MIDITickMS GetTime() const;
       
       //
       // 'Set' methods
       //
       
-      void SetTime ( MIDIClockTime t );
+      void SetTime ( MIDITickMS t );
       
       
       //
@@ -504,7 +504,7 @@ namespace jdkmidi
     protected:
     
     
-      MIDIClockTime time;
+      MIDITickMS time;
   };
   
   
@@ -539,17 +539,17 @@ namespace jdkmidi
       // 'Get' methods
       //
       
-      MIDIClockTime GetDeltaTime() const;
+      MIDITickMS GetDeltaTime() const;
       
       //
       // 'Set' methods
       //
       
-      void SetDeltaTime ( MIDIClockTime t );
+      void SetDeltaTime ( MIDITickMS t );
       
       
     protected:
-      MIDIClockTime dtime;
+      MIDITickMS dtime;
   };
   
   
@@ -592,13 +592,15 @@ namespace jdkmidi
       // 'Get' methods
       //
       
-      MIDIClockTime GetTime() const;
+      MIDITickMS GetTime() const;
       
       //
       // 'Set' methods
       //
       
-      void SetTime ( MIDIClockTime t );
+      void SetTime ( unsigned long t );
+
+	  void SetTime (MIDITickMS t);
       
       //
       // Compare method, for sorting. Not just comparing time.
@@ -610,7 +612,7 @@ namespace jdkmidi
       );
       
     protected:
-      MIDIClockTime time;
+      MIDITickMS time;
   };
   
   
@@ -652,17 +654,17 @@ namespace jdkmidi
       // 'Get' methods
       //
       
-      MIDIClockTime GetDeltaTime() const;
+      MIDITickMS GetDeltaTime() const;
       
       //
       // 'Set' methods
       //
       
-      void SetDeltaTime ( MIDIClockTime t );
+      void SetDeltaTime ( MIDITickMS t );
       
       
     protected:
-      MIDIClockTime dtime;
+      MIDITickMS dtime;
   };
   
 }

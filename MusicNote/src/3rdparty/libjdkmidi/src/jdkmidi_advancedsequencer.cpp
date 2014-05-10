@@ -196,17 +196,17 @@ namespace jdkmidi
     
   }
   
-  void AdvancedSequencer::GoToTime ( MIDIClockTime t )
+  void AdvancedSequencer::GoToTime ( MIDITickMS t )
   {
     if ( mgr.IsSeqPlay() )
     {
       Stop();
-      seq.GoToTime ( t+1 );
+      seq.GoToTime ( ++t);
       Play();
     }
     else
     {
-      seq.GoToTime ( t+1 );
+      seq.GoToTime ( ++t );
     }
     
   }
@@ -259,7 +259,7 @@ namespace jdkmidi
   }
   
   
-  void AdvancedSequencer::Play ( int clock_offset )
+  void AdvancedSequencer::Play (  MIDITickMS clock_offset )
   {
     if ( !file_loaded )
     {
@@ -279,15 +279,15 @@ namespace jdkmidi
       seq.GoToMeasure ( repeat_start_measure );
     }
     
-    MIDIClockTime cur_time = seq.GetCurrentMIDIClockTime();
+    MIDITickMS cur_time = seq.GetCurrentMIDIClockTime();
     
-    if ( ( long ) cur_time>-clock_offset )
+    if ( cur_time >-clock_offset )
       cur_time+=clock_offset;
       
     seq.GoToTime ( cur_time );
     
-    mgr.SetSeqOffset ( ( unsigned long ) seq.GetCurrentTimeInMs() );
-    mgr.SetTimeOffset ( 0 );
+    mgr.SetSeqOffset ( seq.GetCurrentTimeInMs());
+    mgr.SetTimeOffset ( MIDIClockTime() );
     
     mgr.SeqPlay();
   }
@@ -653,14 +653,14 @@ namespace jdkmidi
     list->clear();
     int cnt=0;
     
-    int measure=0;
-    int beat=0;
+    long long measure=0;
+    long long beat=0;
     
     int timesig_numerator=4;
     int timesig_denominator=4;
     
-    MIDIClockTime last_beat_time=0;
-    MIDIClockTime last_event_time=0;
+    MIDITickMS last_beat_time;
+    MIDITickMS last_event_time;
     int clks_per_beat=tracks.GetClksPerBeat();
     
     for ( int i=0; i<t->GetNumEvents(); ++i )
@@ -671,7 +671,7 @@ namespace jdkmidi
       {
         // how many beats have gone by since the last event?
         
-        long beats_gone_by = ( m->GetTime()-last_beat_time ) /clks_per_beat;
+        long long beats_gone_by = ( m->GetTime()-last_beat_time ).count() /clks_per_beat;
         
         if ( beats_gone_by>0 )
         {
@@ -680,7 +680,7 @@ namespace jdkmidi
           // carry over beat overflow to measure
           measure += beat/timesig_numerator;
           beat = beat%timesig_numerator;
-          last_beat_time += ( clks_per_beat * beats_gone_by );
+          last_beat_time += MIDITickMS( clks_per_beat * beats_gone_by );
         }
         
         
@@ -704,7 +704,7 @@ namespace jdkmidi
             buf[ m->GetSysEx()->GetLength() ] = '\0';
             FixQuotes ( buf );
             
-            sprintf ( line, "%03d:%d        %s", measure+1, beat+1, buf );
+            sprintf ( line, "%03lld:%lld        %s", measure+1, beat+1, buf );
             list->push_back ( std::string ( line ) );
             marker_times[ cnt++ ] = m->GetTime();
           }
@@ -727,9 +727,9 @@ namespace jdkmidi
     // find marker with largest time that
     // is before cur_time
     
-    MIDIClockTime cur_time = seq.GetCurrentMIDIClockTime();
+    MIDITickMS cur_time = seq.GetCurrentMIDIClockTime();
     
-    cur_time+=20;
+    cur_time+=MIDITickMS(20);
     
     int last=-1;
     

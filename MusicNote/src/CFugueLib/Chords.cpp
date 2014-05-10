@@ -48,7 +48,13 @@ namespace CFugue
         {_T("DOM7>5<9"),    {4,8,10,13,0,0,0,0,0,0,0,0,0,0,0,0},    4},
         {_T("DOM759"),      {4,8,10,15,0,0,0,0,0,0,0,0,0,0,0,0},    4},
         {_T("DOM7>5>9"),    {4,8,10,15,0,0,0,0,0,0,0,0,0,0,0,0},    4},
-  };
+	};
+
+#ifndef _countof
+	// helper function to find the size of array
+	template < typename T, size_t N >
+	inline size_t _countof(T(&arr)[N])	{ return std::extent< T[N] >::value; }
+#endif
 
     // Return if the first element is greater than the second
     template<typename T>

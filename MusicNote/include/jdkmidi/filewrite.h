@@ -115,7 +115,7 @@ namespace jdkmidi
       }
       void    ResetTrackTime()
       {
-        track_time=0;
+        track_time=MIDITickMS::zero();
       }
       
       void    WriteFileHeader (
@@ -127,22 +127,22 @@ namespace jdkmidi
       void    WriteTrackHeader ( unsigned long length );
       
       void    WriteEvent ( const MIDITimedMessage &m );
-      void    WriteEvent ( unsigned long time, const MIDISystemExclusive *e );
-      void    WriteEvent ( unsigned long time, unsigned short text_type, const char *text );
+      void    WriteEvent ( MIDITickMS time, const MIDISystemExclusive *e );
+      void    WriteEvent ( MIDITickMS time, unsigned short text_type, const char *text );
       void WriteEvent ( const MIDITimedBigMessage &m );
       
-      void    WriteMetaEvent ( unsigned long time, unsigned char type, const unsigned char *data, long length );
-      void    WriteTempo ( unsigned long time, long tempo );
-      void    WriteKeySignature ( unsigned long time, char sharp_flat, char minor );
+      void    WriteMetaEvent ( MIDITickMS time, unsigned char type, const unsigned char *data, long length );
+      void    WriteTempo ( MIDITickMS time, long tempo );
+      void    WriteKeySignature ( MIDITickMS time, char sharp_flat, char minor );
       void    WriteTimeSignature (
-        unsigned long time,
+        MIDITickMS time,
         char numerator=4,
         char denominator_power=2,
         char midi_clocks_per_metronome=24,
         char num_32nd_per_midi_quarter_note=8
       );
       
-      void    WriteEndOfTrack ( unsigned long time );
+      void    WriteEndOfTrack ( MIDITickMS time );
       
       virtual void    RewriteTrackLength();
       
@@ -173,14 +173,14 @@ namespace jdkmidi
       
       int    WriteVariableNum ( unsigned long n );
       
-      void    WriteDeltaTime ( unsigned long time );
+      void    WriteDeltaTime ( MIDITickMS time );
       
     private:
       bool error;
       bool within_track;
       unsigned long   file_length;
       unsigned long   track_length;
-      unsigned long   track_time;
+      MIDITickMS   track_time;
       unsigned long   track_position;
       uchar   running_status;
       

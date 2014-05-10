@@ -155,7 +155,7 @@ namespace jdkmidi
       
       bool MakeEventNoOp ( int event_num );
       
-      bool FindEventNumber ( MIDIClockTime time, int *event_num ) const;
+      bool FindEventNumber ( MIDITickMS time, int *event_num ) const;
       
       int GetBufferSize() const;
       int GetNumEvents() const;
