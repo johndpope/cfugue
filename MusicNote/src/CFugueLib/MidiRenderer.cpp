@@ -31,7 +31,7 @@
 	#include "AlsaDriver.h"
 	typedef CFugue::MIDIDriverAlsa CFugueMIDIDriver;
 #endif
-#include "MIDIRenderer.h"
+#include "MidiRenderer.h"
 
 namespace CFugue
 {
