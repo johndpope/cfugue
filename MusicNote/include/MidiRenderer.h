@@ -15,7 +15,7 @@
 
 #include "jdkmidi/manager.h"
 #include "ParserListener.h"
-#include "MIDIEventManager.h"
+#include "MidiEventManager.h"
 #include "MidiTimer.h"
 
 #ifndef MIDI_MAPPER

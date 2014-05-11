@@ -14,7 +14,7 @@
 #define __PLAYER_H__83B70D04_18A9_48ff_B08B_81BF613138DB__
 
 #include "MusicStringParser.h"
-#include "MIDIRenderer.h"
+#include "MidiRenderer.h"
 
 namespace CFugue
 {
