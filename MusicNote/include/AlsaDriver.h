@@ -13,6 +13,9 @@
 #ifndef __ALSADRIVER_H__9857EC39_234E_411E_9558_EFDA218796AA__
 #define __ALSADRIVER_H__9857EC39_234E_411E_9558_EFDA218796AA__
 
+/** @file AlsaDriver.h
+ * \brief Declares MIDIDriverAlsa class for CFugue
+ */
 #include "rtmidi/RtMidi.h"
 #include "jdkmidi/msg.h"
 #include "jdkmidi/driver.h"

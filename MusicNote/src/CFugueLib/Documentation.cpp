@@ -88,7 +88,7 @@ No warranty of what-so-ever is implied, including MERCHANTABILITY or FITNESS FOR
 
  Project: http://cfugue.sourceforge.net
 
- Copyright (C) 2009 <a href="http://www.CineFxLabs.com">CineFx Digital Media Pvt Ltd.</a>
+ Copyright (C) 2009 <a href="http://cenacle.co.in">Cenacle Research India Private Limited</a>
 
 */
 

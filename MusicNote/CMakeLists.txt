@@ -169,6 +169,7 @@ SET( CFugueLib_Header_Files
 	include/MidiDevice.h
 	include/AlsaDriver.h
 	include/MidiTimer.h
+	include/ControllerEvent.h
 	include/Dictionary.h
 	include/Instrument.h
 	include/KeySignature.h

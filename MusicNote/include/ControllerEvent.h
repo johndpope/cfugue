@@ -1,15 +1,19 @@
 /*
-	This is part of CFugue, the C++ Runtime for MIDI Score Programming
+	This is part of CFugue, a C++ Runtime for MIDI Score Programming
 	Copyright (C) 2009 Gopalakrishna Palem
 
 	For links to further information, or to contact the author,
-	see <http://musicnote.sourceforge.net/>.
+	see <http://cfugue.sourceforge.net/>.
+    
+    $LastChangedDate$
+    $Rev$
+    $LastChangedBy$
 */
 
 #ifndef __CONTROLLEREVENT_H_501C77B7_6423_4E41_A53D_1516C031BF77
 #define __CONTROLLEREVENT_H_501C77B7_6423_4E41_A53D_1516C031BF77
 
-/** @file ControllerEvents.h 
+/** @file ControllerEvent.h 
  * \brief Declares MIDI Controller Events used in MusicStrings
  */ 
 #include "Dictionary.h"

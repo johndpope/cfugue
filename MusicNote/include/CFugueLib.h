@@ -36,7 +36,7 @@
 #define STDCALL  //__attribute__((stdcall))
 #endif
 
-namespace CFugue /// Music Programming Library
+namespace CFugue /// The C++ Midi Music Programming Library, by Cenacle Research
 {
 typedef  void (STDCALL *LPFNTRACEPROC)(void* pUserData, const TCHAR* szTraceMsg);
 typedef  void (STDCALL *LPFNERRORPROC)(void* pUserData, long lErrCode, const TCHAR* szErrorMsg, const TCHAR* szToken);
