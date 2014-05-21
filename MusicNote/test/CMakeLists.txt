@@ -102,7 +102,7 @@ include_directories("${ProjDir}/../include"
 					"${ProjDir}/../include/Common" 
 					"${ProjDir}/../src" 
 					"${ProjDir}/../src/QtVuMeter"
-					 ${TSE3_INCLUDE_DIR}
+					#${TSE3_INCLUDE_DIR}
 					"${CMAKE_CURRENT_BINARY_DIR}"
 					"${ProjDir}/../src/3rdparty/tse3/src"	# for tse3play
 					)
